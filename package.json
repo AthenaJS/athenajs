@@ -1,0 +1,34 @@
+{
+  "name": "athenajs",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AthenaJS/athenajs.git"
+  },
+  "description": "AthenaJS is a framework for building 2D games using HTML 5",
+  "author": "Nicolas Ramz",
+  "license": "MIT",
+  "main": "dist/athenajs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --watch",
+    "build": "webpack --config webpack.production.config.js",
+    "build-docs": "documentation build js/** --watch --config docs/documentation.yml --github --shallow -f html -o docs"
+  },
+  "devDependencies": {
+    "documentation": "4.0.0-beta.19",
+    "babel-core": "6.24.1",
+    "babel-loader": "6.4.1",
+    "babel-preset-es2015": "6.24.1",
+    "circular-dependency-plugin": "2.0.0",
+    "exports-loader": "0.6.4",
+    "imports-loader": "0.7.1",
+    "webpack": "2.3.3",
+    "webpack-notifier": "1.5.0"
+  },
+  "dependencies": {
+    "es6-promise": "4.1.0",
+    "whatwg-fetch": "2.0.3",
+    "web-audio-daw": "2.3.1"
+  }
+}

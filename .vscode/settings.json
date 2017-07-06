@@ -1,0 +1,18 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+	"javascript.validate.enable": true,  
+  "jshint.enable": false,
+  "jshint.options": {
+    "esversion": 6,
+    "esnext": true
+  },
+	"editor.insertSpaces": true,
+	"editor.tabSize": 4,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/.happypack": true
+    }    
+}
