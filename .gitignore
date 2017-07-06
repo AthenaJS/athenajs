@@ -1,7 +1,7 @@
 *.bak
 .bak
 .DS_Store
-dist
+build
 node_modules
 .brackets.json
 bower_components

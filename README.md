@@ -1,6 +1,6 @@
-# AthenaJS is a framework for building 2D games using HTML 5
+# AthenaJS is a framework for building 2D games using HTML5
 
-AthenaJS is a complete framework for building HTML 5 2D games.
+AthenaJS is a complete framework for building HTML5 2D games.
 
 Although its development is not finished yet, AthenaJS already supports the following features:
 
