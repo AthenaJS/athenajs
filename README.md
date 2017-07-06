@@ -130,7 +130,7 @@ npm link athenajs
 
 This will add a link from your project to the global athenajs link that was just created.
 
-## Licence
+## License
 
 Copyright (c) Nicolas Ramz.
 
