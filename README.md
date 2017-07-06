@@ -87,11 +87,11 @@ Of course, you can write your own objects by simply extending the base `GfxObjec
 
 In the end, here is a very simple game that just renders a circle onto the screen:
 
-````
+````javascript
 const myGame = new AthenaJS.Game({
     name: 'first-game',
     width: 320,
-    height: 200    
+    height: 200
 }),
 myScene = new AthenaJS.Scene();
 
