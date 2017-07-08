@@ -620,7 +620,7 @@ import Deferred from 'Core/Deferred';
          * @private
          */
         draw(destCtx, debug) {
-            if (!this.visible) {
+            if (!this.visible || !this.image || !this.currentAnimName) {
                 return;
             }
 

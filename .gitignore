@@ -2,6 +2,7 @@
 .bak
 .DS_Store
 build
+dist
 node_modules
 .brackets.json
 bower_components

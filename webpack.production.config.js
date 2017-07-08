@@ -10,7 +10,7 @@ module.exports = {
     ],
     output: {
         path: __dirname,
-        filename: "dist/athena.min.js",
+        filename: "dist/athena.js",
         pathinfo: true,
         library: 'AthenaJS',
         libraryTarget: 'umd'

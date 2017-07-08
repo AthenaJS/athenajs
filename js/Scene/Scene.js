@@ -167,7 +167,6 @@ class Scene {
             let def = new Deferred();
             this.hudScene.load().then(() => {
                 this.loadResources(this.resources).then(() => {
-                    debugger;
                     def.resolve();
                 })
             });
@@ -256,9 +255,16 @@ class Scene {
      * @param {number} [layerNum=0] Defines the layer number where to add the objects.
      */
     addObject(objects, layerType, layerNum) {
+        // attempt to add an object on a scene not ready, we load it and postpone the add once it's ready
+        if (!this.loaded) {
+            this.onStart(() => {
+                this.addObject(objects, layerType, layerNum);
+            });
+
+            return;
+        }
+
         console.log('[scene ' + this.name + '] ' + 'addObject', objects, layerType, layerNum);
-        // var layer = null,
-        //     that = this;
 
         let type = layerType || 'front',
             num = layerNum || 0,
@@ -281,7 +287,6 @@ class Scene {
 
         // console.log('[scene ' + this.name + '] ' + layerNum, layerType, layer, this.layers);
 
-        debugger;
         if (Array.isArray(objects)) {
             for (let obj of objects) {
                 console.log('[scene ' + this.name + '] ' + 'pushing', obj);

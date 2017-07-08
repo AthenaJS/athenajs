@@ -1,6 +1,6 @@
 {
     "name": "athenajs",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "repository": {
         "type": "git",
         "url": "https://github.com/AthenaJS/athenajs.git"
@@ -16,6 +16,9 @@
         "game",
         "map",
         "tile"
+    ],
+    "files": [
+        "dist"
     ],
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",

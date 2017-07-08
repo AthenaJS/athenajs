@@ -122,28 +122,6 @@ class Game{
 
 
     /**
-     * Load resources associated with the game
-     * TODO: DESCRIBE
-     * 
-     * @param {array} res An array of resources to load.
-     * @param {function} [progressCb=undefined] A progress callback function that gets called after each resource has been loaded
-     * @returns {Deferred} `this.readyDef`
-     * @obsolete
-     * 
-     */
-    // loadResources(res, progressCb/*, doneCb, failCb*/) {
-    //     console.log('[Game] loading Resources...');
-    //     this.readyDef = ResourceManager.addResources(res);
-
-    //     // this.readyDef.done(this.cacheImages.bind(this));
-
-    //     ResourceManager.loadResources('any', progressCb);
-
-    //     return this.readyDef;
-    // }
-
-
-    /**
      * Creates a new display
      * 
      * TODO: DESCRIBE
