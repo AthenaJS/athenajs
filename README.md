@@ -49,7 +49,7 @@ in your html file:
 </script>
 ````
 
-**using npm**
+**ES6 using npm**
 
 Install the athenajs module:
 ````bash
@@ -88,21 +88,23 @@ Of course, you can write your own objects by simply extending the base `GfxObjec
 In the end, here is a very simple game that just renders a circle onto the screen:
 
 ````javascript
-const myGame = new AthenaJS.Game({
+import { Game, Scene, Circle } from 'athenajs';
+
+// create a new game
+const myGame = new Game({
     name: 'first-game',
     width: 320,
     height: 200
 }),
-myScene = new AthenaJS.Scene();
+// create a new empty scene
+myScene = new Scene(),
+// create a new circle object
+circle = new Circle({w: 20, h: 20});
 
-myGame.onReady(function() {
-    this.setScene(myScene);
-});
-
-myScene.scene.onStart(function() {
-    const circle = new AthenaJS.Circle({w: 20, h: 20});
-    this.addObject(circle);
-});
+// add the object onto the scene
+myScene.addObject(circle);
+// play this scene
+myGame.setScene(myScene);
 ````
 
 ## Documentation

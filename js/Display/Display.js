@@ -68,6 +68,7 @@ class Display {
             }).css({
                 'width': this.width + 'px',
                 'height': this.height + 'px',
+                'position': 'absolute',
                 zIndex: i
             }).appendTo(this.target)[0].getContext(this.type);
 
@@ -80,6 +81,7 @@ class Display {
         }).css({
             'width': this.width + 'px',
             'height': this.height + 'px',
+            'position': 'absolute',
             zIndex: i + 1
         }).appendTo(this.target)[0].getContext(this.type);
 
