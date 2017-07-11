@@ -233,8 +233,6 @@ class Sprite extends GfxObject {
         let animations = anims || this._settings.animations,
             lastName;
 
-        if (this.type === 'lifemetter') { }
-
         if (!this.loaded) {
             this.initProperties();
         }
