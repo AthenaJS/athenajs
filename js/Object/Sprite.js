@@ -233,26 +233,26 @@ class Sprite extends GfxObject {
         let animations = anims || this._settings.animations,
             lastName;
 
+        if (this.type === 'lifemetter') { }
+
         if (!this.loaded) {
             this.initProperties();
+        }
 
+        Object.keys(animations).forEach((name) => {
+            let animation = animations[name];
+            this.animations[name] = animation;
+            lastName = name;
+            // handle flip of sprites
+            if (animation.flipFrom) {
+                this.updateFlipAnimation(animation, animation.flipFrom, animation.flipType);
+            }
+        });
+
+        if (!this.loaded) {
             this.loaded = true;
-
-            Object.keys(animations).forEach((name) => {
-                let animation = animations[name];
-                this.animations[name] = animation;
-                lastName = name;
-                // handle flip of sprites
-                if (animation.flipFrom) {
-                    this.updateFlipAnimation(animation, animation.flipFrom, animation.flipType);
-                }
-            })
-
             // by default, the last animation becames the current one
             this.setAnimation(lastName);
-        } else {
-            // debugger;
-            // console.warn('attempt to load already loaded animations');
         }
     }
 
