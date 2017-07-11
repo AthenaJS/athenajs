@@ -49,6 +49,9 @@ class Scene {
 
         this.map = null;
 
+        this.mapOffsetX = 0;
+        this.mapOffsetY = 0;
+
         this.loaded = false;
 
         this.running = false;
@@ -236,13 +239,20 @@ class Scene {
      * @param {Map|Object} map The `Map` to use: it can be an instance of a Map inheriting class or
      * an options Object that will be used to create a new {Map} instance
      * 
+     * @param {number=0} x x offset where to start drawing the map onto the scene
+     * @param {number=0} y y offset where to start drawing the map onto the scene
+     * 
      */
-    setMap(map) {
+    setMap(map, x = 0, y = 0) {
         if (map instanceof Map) {
             this.map = map;
         } else {
             this.map = new Map(map);
         }
+
+        this.mapOffsetX = x;
+        this.mapOffsetY = y;
+
         // debug stuff
         window.currentMap = this.map;
     }
@@ -318,7 +328,7 @@ class Scene {
         }
 
         this.display.clearScreen(destCtx);
-        this.map.draw(destCtx, false);
+        this.map.draw(destCtx, false, this.mapOffsetX, this.mapOffsetY);
     }
 
     /**
@@ -329,8 +339,7 @@ class Scene {
      * @private
      */
     drawMapObjects(destCtx) {
-        console.log('drawObjects');
-        this.map.drawObjects(destCtx);
+        this.map.drawObjects(destCtx, this.mapOffsetX, this.mapOffsetY);
     }
 
     /**
