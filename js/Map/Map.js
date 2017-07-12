@@ -22,8 +22,8 @@ window.maps = {};
  * @param {number} options.tileHeight The height of a tile
  * @param {number} options.width The full width of the map
  * @param {number} options.height The full height of the map
- * @param {number} options.viewportW The width of the viewport: it is usually the same as the game width
- * @param {number} options.viewportH The height of the viewport: it is usually the same as the game height
+ * @param {number} options.viewportW The width of the viewport: it is usually the same as the game width. Default = map.width
+ * @param {number} options.viewportH The height of the viewport: it is usually the same as the game height. Default = map.height
  * @param {ArrayBuffer} options.buffer The buffer containing width \* height bytes container tile numbers followed by width*height bytes for the tile behaviors
  * @example
  * var map = new Map({
@@ -59,8 +59,8 @@ class Map {
         // defines viewport window: used for scrolling
         this.viewportX = options.viewportX || 0;
         this.viewportY = options.viewportY || 0;
-        this.viewportW = options.viewportW || 0;
-        this.viewportH = options.viewportH || 0;
+        this.viewportW = options.viewportW || this.width;
+        this.viewportH = options.viewportH || this.height;
 
         // when scrolling we set a new target and keep track of previous start x & y
         this.viewportTargetX = this.viewportTargetY = this.viewportSpeedX = this.viewsportSpeedY = this.viewportStartX = this.viewportStartY = 0;
@@ -977,6 +977,7 @@ class Map {
 	 * @private
 	 */
     draw(ctx, showHidden, mapOffsetX = 0, mapOffsetY = 0) {
+        debugger;
         let i, j, max, max2,
             tileNum = 0,
             x = 0,
@@ -1050,7 +1051,7 @@ class Map {
         let windowNum = ((Math.abs(this.viewportX) / this.viewportW) | 0) + ((Math.abs(this.viewportY) / this.viewportH) | 0),
             window = this.windows[windowNum];
 
-        if (window.displayed === false) {
+        if (window && window.displayed === false) {
             window.displayed = true;
             window.items.forEach((item, i) => {
                 let obj = RM.newResourceFromPool(item.type, item.spriteOptions);
