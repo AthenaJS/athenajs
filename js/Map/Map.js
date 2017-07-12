@@ -977,6 +977,7 @@ class Map {
 	 * @private
 	 */
     draw(ctx, showHidden, mapOffsetX = 0, mapOffsetY = 0) {
+        debugger;
         let i, j, max, max2,
             tileNum = 0,
             x = 0,
@@ -1434,12 +1435,16 @@ class Map {
 	 * @private
 	 */
     _createTiles(tilesArray) {
+        debugger;
         // TODO: replace with map()
         let tiles = [];
 
         tilesArray.forEach((tileDesc) => {
             tiles.push(new Tile(tileDesc));
         });
+
+        // set map to dirty so that it is drawn
+        this.isDirty = true;
 
         return tiles;
     }
