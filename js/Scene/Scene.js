@@ -7,7 +7,7 @@ import Tile from 'Map/Tile';
 import NM from 'Notification/NotificationManager';
 
 import Deferred from 'Core/Deferred';
-/*jshint devel: true, bitwise: false*/
+/*jshint devel: true, bitwise: false*/  
 // debug
 window.scenes = {};
 
@@ -131,7 +131,6 @@ class Scene {
      */
     loadResources(res, progressCb/*, doneCb, failCb*/) {
         console.log('[scene ' + this.name + '] ' + 'loading Resources...');
-
         if (!this.loaded) {
             console.log('[scene ' + this.name + '] ' + ' seems like the scene needs to be loaded: goooo!');
             this.readyDef = ResourceManager.addResources(res);
@@ -166,6 +165,7 @@ class Scene {
      */
     load() {
         console.log('[Scene ' + this.name + '] load()');
+        debugger;
         if (this.hudScene && !this.hudScene.loaded) {
             let def = new Deferred();
             this.hudScene.load().then(() => {
