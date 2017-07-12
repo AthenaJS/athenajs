@@ -977,11 +977,17 @@ class Map {
 	 * @private
 	 */
     draw(ctx, showHidden, mapOffsetX = 0, mapOffsetY = 0) {
-        debugger;
         let i, j, max, max2,
             tileNum = 0,
             x = 0,
             y = 0;
+
+        // no tiles defined, nothing to render
+        if (!this.tiles.length) {
+            // set isDirty to true to prevent running into this method until some tiles have been set
+            this.isDirty = false;
+            return;
+        }
 
         if (!this.srcBitmap) {
             // console.log('[Map] no bitmap, need to get the source');
