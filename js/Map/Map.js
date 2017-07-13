@@ -42,7 +42,6 @@ class Map {
 
         // image url used for the map graphic tiles
         this.src = options.src;
-
         // tiles and map width
         this.tileWidth = options.tileWidth || 64;
         this.tileHeight = options.tileHeight || 32;
@@ -51,7 +50,8 @@ class Map {
 
         // DEBUG: usually tiles are loaded from binary files and set as ArrayBuffer
         // but previously tiles could be set from a JSON text file
-        this.tiles = options.tiles && this._createTiles(options.tiles) || [];
+        this.setTiles(options.tiles);
+        // this.tiles = options.tiles && this._createTiles(options.tiles) || [];
 
         this.triggers = options.triggers || {};
         this.windows = options.windows || {};
@@ -977,7 +977,6 @@ class Map {
 	 * @private
 	 */
     draw(ctx, showHidden, mapOffsetX = 0, mapOffsetY = 0) {
-        debugger;
         let i, j, max, max2,
             tileNum = 0,
             x = 0,
@@ -1427,7 +1426,7 @@ class Map {
 
 
 	/**
-	 * DEPRECATED: Creates tiles from an array of tiles description
+	 * Creates tiles from an array of tiles description
 	 * 
 	 * @param {any} tilesArray
 	 * @returns array of tile objects
@@ -1435,7 +1434,6 @@ class Map {
 	 * @private
 	 */
     _createTiles(tilesArray) {
-        debugger;
         // TODO: replace with map()
         let tiles = [];
 
@@ -1443,12 +1441,25 @@ class Map {
             tiles.push(new Tile(tileDesc));
         });
 
-        // set map to dirty so that it is drawn
-        this.isDirty = true;
-
         return tiles;
     }
 
+    /**
+     * Set new tiles for the map
+     * 
+     * @param {Array=undefined} tiles The tile descriptions
+     * 
+     */
+    setTiles(tiles) {
+        if (tiles && tiles.length) {
+            this.tiles = this._createTiles(tiles);
+        } else {
+            this.tiles = [];
+        }
+
+        // set map to dirty so that it is drawn
+        this.isDirty = true;
+    }
 
 	/**
 	 * WIP & NOT TESTED: some code to allow resizing a map, was to be used in map editor
