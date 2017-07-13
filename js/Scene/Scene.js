@@ -7,7 +7,7 @@ import Tile from 'Map/Tile';
 import NM from 'Notification/NotificationManager';
 
 import Deferred from 'Core/Deferred';
-/*jshint devel: true, bitwise: false*/  
+/*jshint devel: true, bitwise: false*/
 // debug
 window.scenes = {};
 
@@ -451,7 +451,7 @@ class Scene {
             else
                 this.map.resume();
 
-            // force render of the map in any way
+            // always force the render of the map
             this.map.isDirty = true;
         }
 
