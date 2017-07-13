@@ -100,7 +100,7 @@ class Map {
         this.enemies = [];
         this.platforms = [];
 
-        this.name = options.name;
+        this.name = options.name || 'map' + new Date().getTime();
 
         // calculate the number of rows/cols depending on the viewport window
         this._calcNumTiles(false);
@@ -203,6 +203,7 @@ class Map {
 	 * 
 	 */
     reset() {
+        debugger;
         this.masterObject = null;
 
         // remove objects from the map and empty collision groups
@@ -294,6 +295,7 @@ class Map {
 	 * 
 	 */
     addObject(obj) {
+        debugger;
         if (!obj.image) {
             obj.setImage(RM.getResourceById(obj.imageSrc));
         }
@@ -1083,6 +1085,7 @@ class Map {
 	 * @private
 	 */
     drawObjects(ctx, mapOffsetX = 0, mapOffsetY = 0) {
+        debugger;
         let i,
             j,
             max = this.objects.length,
