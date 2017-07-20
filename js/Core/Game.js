@@ -21,8 +21,8 @@ import Dom from 'Core/Dom';
  * @param {number} [options.height=768] The height of the game display.
  * @param {Object} [options.resources] An optionnal array of resources of the form:``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
  * 
- */    
-class Game{
+ */
+class Game {
     constructor(options = {}) {
         console.log('[Game] Init()'/*, options*/);
 
@@ -39,8 +39,8 @@ class Game{
 
         if (this.showFps) {
             fpscounter({
-                    width: 50,
-                    height: 50
+                width: 50,
+                height: 50
             });
         }
 
@@ -83,6 +83,10 @@ class Game{
 
         // listen for all events
         this.bindEvents('*');
+
+        if (options.scene) {
+            this.setScene(options.scene);
+        }
     }
 
 
@@ -171,7 +175,7 @@ class Game{
             this.stopScene();
             this.scene.stop();
         }
-        
+
         if (scene) {
             debugger;
             this.scene = scene;
@@ -291,11 +295,11 @@ class Game{
             this.scene.load().then(() => {
                 console.log('[Game] Scene', that.scene.name, 'loaded: starting run & render loops');
                 // setTimeout(function() {
-                    debugger;
-                    that.scene.start();
-                    debugger;
-                    that._runSceneLoop();
-                    that._renderSceneLoop();
+                debugger;
+                that.scene.start();
+                debugger;
+                that._runSceneLoop();
+                that._renderSceneLoop();
                 // }, 0);
             });
         } else {
@@ -323,7 +327,7 @@ class Game{
             this.timeout = null;
         }
     }
-    
+
 }
 
 export default Game;
