@@ -944,12 +944,12 @@ class Map {
             ctx.drawImage(this.srcBitmap,
                 currentTile.offsetX,
                 currentTile.offsetY,
-                this.tileWidth,
-                this.tileHeight,
+                currentTile.width,
+                currentTile.height,
                 x,
                 y,
-                this.tileWidth,
-                this.tileHeight);
+                currentTile.width,
+                currentTile.height);
         }
     }
 
