@@ -108,6 +108,8 @@ class Map {
         // sets map data buffer
         this.setBuffer(options.buffer);
 
+        // TODO: init buffer with zeros if not specified ?
+
         this.dataUrl = options.dataUrl;
 		/*
 				this.map = options.map || new Array(this.numCols * this.numRows);
@@ -1085,7 +1087,6 @@ class Map {
 	 * @private
 	 */
     drawObjects(ctx, mapOffsetX = 0, mapOffsetY = 0) {
-        debugger;
         let i,
             j,
             max = this.objects.length,
