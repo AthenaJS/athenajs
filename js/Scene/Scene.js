@@ -429,31 +429,34 @@ class Scene {
      * Resume the scene playback
      */
     resume() {
-        this.start(true);
+        this.start();
+        if (this.map) {
+            this.map.resume();
+        }
     }
 
     /**
      * Starts the scene
      * 
-     * @param {boolean} [doNotResetMap=false] set to false if you don't want the map associated with the scene to have
-     * its objects reset. This is useful when pausing the game for example.
+     * @param {Boolean=false} resetMap set true to reset the map objects when starting the scene
+     * 
      */
-    start(doNotResetMap) {
+    start(resetMap = false) {
         if (!this.loaded) {
             console.warn('[Scene] start() attempt to start a scene that has not been loaded yet. Start failed.');
         }
 
         this.running = true;
 
-        if (this.map) {
-            if (!doNotResetMap)
-                this.map.reset();
-            else
-                this.map.resume();
+        // if (this.map) {
+        //     if (!doNotResetMap)
+        //         this.map.reset();
+        //     else
+        //         this.map.resume();
 
-            // always force the render of the map
-            this.map.isDirty = true;
-        }
+        //     // always force the render of the map
+        //     this.map.isDirty = true;
+        // }
 
         // reset layers too
         this.backgrounds.length = 0;
@@ -473,7 +476,11 @@ class Scene {
         this.playTime = null;
 
         if (this.hudScene) {
-            this.hudScene.start();
+            this.hudScene.start(resetMap);
+        }
+
+        if (this.map && resetMap) {
+            this.map.reset();
         }
 
         this._startCallbacks.forEach((cb) => {
@@ -482,7 +489,8 @@ class Scene {
     }
 
     /***
-     * stop the scene: TODO MERGE
+     * Stops the current scene
+     * 
      */
     stop() {
         this.running = false;
