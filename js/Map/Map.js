@@ -188,6 +188,8 @@ class Map {
 
         this.masterObject.x = this.startX;
         this.masterObject.y = this.startY;
+
+        this.isDirty = true;
     }
 
 
