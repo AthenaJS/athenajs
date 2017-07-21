@@ -299,7 +299,6 @@ class Map {
 	 * 
 	 */
     addObject(obj) {
-        debugger;
         if (!obj.image) {
             obj.setImage(RM.getResourceById(obj.imageSrc));
         }
@@ -385,7 +384,7 @@ class Map {
         this.objects.forEach(function (obj) {
             // moving platforms must be moved before any other object
             // so they are moved in Map.movePlatforms() first
-            if (obj.collideGroup !== 3) {
+            if (obj.collideGroup !== 3 && obj.moving) {
                 obj.move();
 
                 // TODO: set platform() if object reached a platform
@@ -400,7 +399,9 @@ class Map {
 	 */
     movePlatforms() {
         this.platforms.forEach(function (obj) {
-            obj.move();
+            if (obj.moving) {
+                obj.move();
+            }
         });
     }
 
