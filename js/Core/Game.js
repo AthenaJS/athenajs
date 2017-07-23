@@ -163,13 +163,13 @@ class Game {
 
 
     /**
-     * Sets a new scene as the current scene, autostarting it optionnaly
+     * Sets a new scene as the current scene
      * 
      * @param {Scene} scene instance to set as current Scene
-     * @param {Boolean} autoStart should the scene autostart
+     * @param {Boolean=false} resetMap set to true to reset the map
      * 
      */
-    setScene(scene, autoStart) {
+    setScene(scene, resetMap = false) {
         if (this.scene) {
             console.log('need to stop scene');
             this.stopScene();
@@ -177,19 +177,14 @@ class Game {
         }
 
         if (scene) {
-            debugger;
             this.scene = scene;
 
             this.scene.setDisplay(this.display);
 
             this.display.clearDisplay();
 
-            console.log('**autoStart', autoStart);
-            if (autoStart !== false) {
-                this.startScene();
-            } else {
-                debugger;
-            }
+            console.log('**resetMap', resetMap);
+            this.startScene(resetMap);
         } else {
             console.warn('attempt to set non-existing scene:', scene);
         }
@@ -282,25 +277,22 @@ class Game {
     /**
      * Starts the current scene
      * 
+     * @param {Boolean=false} resetMap resets the map associated to the map
+     * 
      * - loads the scene if not already loaded
      * - once it's loaded calls scene.start() and start both event & render loops
      * 
      */
-    startScene() {
+    startScene(resetMap = false) {
         console.log('[Game] startScene');
-        var that = this;
 
         if (this.scene) {
             console.log('[Game] loading scene');
             this.scene.load().then(() => {
-                console.log('[Game] Scene', that.scene.name, 'loaded: starting run & render loops');
-                // setTimeout(function() {
-                debugger;
-                that.scene.start();
-                debugger;
-                that._runSceneLoop();
-                that._renderSceneLoop();
-                // }, 0);
+                console.log('[Game] Scene', this.scene.name, 'loaded: starting run & render loops');
+                this.scene.start(resetMap);
+                this._runSceneLoop();
+                this._renderSceneLoop();
             });
         } else {
             console.log('[Game] nothing to start: no scene selected!!');
