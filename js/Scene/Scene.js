@@ -165,7 +165,6 @@ class Scene {
      */
     load() {
         console.log('[Scene ' + this.name + '] load()');
-        debugger;
         if (this.hudScene && !this.hudScene.loaded) {
             let def = new Deferred();
             this.hudScene.load().then(() => {

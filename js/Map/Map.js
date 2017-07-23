@@ -181,6 +181,7 @@ class Map {
 	 * 
 	 */
     resume() {
+        debugger;
         console.log('avant', this.masterObject.running, this.masterObject.currentAnimName);
         this.masterObject.reset();
         console.log('apres', this.masterObject.running, this.masterObject.currentAnimName);
@@ -224,7 +225,7 @@ class Map {
 
         // reset triggers
         for (const id in this.triggers) {
-            this.triggers[id].trigerred = false;
+            this.triggers[id].triggered = false;
         }
 
         // reset mapEvent switches states too (fixes switch that automatically triggers)
@@ -248,6 +249,9 @@ class Map {
 
         this.lastCol = this.firstCol + this.numViewportCols;
         this.lastRow = this.firstRow + this.numViewportRows;
+
+        this.startX = this.options.startX || 0;
+        this.startY = this.options.startY || 0;
 
         this.isDirty = true;
     }
@@ -701,8 +705,6 @@ class Map {
             for (j = pos1.y; j <= max2; j++) {
                 trigger = this.triggers[j * this.numCols + i];
                 if (trigger && !trigger.triggered) {
-                    // remove it so it cannot be triggered again: what if we want to run the map again ?
-                    // this.triggers[j * this.numCols + i] = null;
                     triggers.push(trigger);
                 }
             }
