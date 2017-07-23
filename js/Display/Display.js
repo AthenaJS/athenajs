@@ -112,7 +112,7 @@ class Display {
 
         // execute pre fx
         // TODO: here we have to make some hack to pre-render all buffers into a single one
-        // then aply fx on this one, then render this one onto for-most layer
+        // then aply fx on this one, then render this one onto foremost layer
         this.executeFx(this.layers[0], null, scene, null, 'pre');
 
         // TODO: all CTX ?
@@ -129,7 +129,7 @@ class Display {
         }
 
         // TODO: here we have to make some hack to pre-render all buffers into a single one
-        // then apply fx on this one, then render this one onto for-most layer
+        // then apply fx on this one, then render this one onto foremost layer
         /* HACK */
         if (Object.keys(this.fxQueue['post']).length) {
             this.clearScreen(this.fxCtx);
