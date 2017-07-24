@@ -180,10 +180,11 @@ class Scene {
     }
 
     /**
-     * Simple debug method: this be redefined for specific games
+     * Simple debug method: only toggles map boxes for now
      */
     debug() {
-        console.log('[scene ' + this.name + '] ' + 'debug() default scene debug does nothing!');
+        // console.log('[scene ' + this.name + '] ' + 'debug() default scene debug does nothing!');
+        this.map && this.map.debug(!this.map.isDebug);
     }
 
     /**

@@ -87,8 +87,54 @@ class Game {
         if (options.scene) {
             this.setScene(options.scene);
         }
+
+        if (this.debug) {
+            document.addEventListener('keyup', (event) => {
+                if (event.keyCode === 68) {
+
+                    if (this.scene) {
+                        this.scene.debug();
+                        this.scene.map && this.toggleTileInspector(this.scene.map);
+                    }
+                }
+            });
+        }
     }
 
+    toggleTileInspector(map) {
+        if (map.isDebug) {
+            if (!this.tileInspector) {
+                this.moveHandler = (event) => {
+                    console.log(event.offsetX, event.offsetY);
+                    const map = this.scene.map;
+                    const offsetX = event.offsetX > 0 ? event.offsetX : 0;
+                    const offsetY = event.offsetY > 0 ? event.offsetY : 0;
+                    const pos = map.getTilePos(offsetX, offsetY);
+                    this.tileInspector.html(`${pos.x}, ${pos.y}<br />Type: ${map.tileTypes[pos.x + pos.y * map.numCols]}`).css({
+                        left: (pos.x * map.tileWidth) + 'px',
+                        top: (pos.y * map.tileHeight) + 'px'
+                    });
+                };
+
+                this.tileInspector = new Dom('div').css({
+                    border: '1px dotted white',
+                    'background-color': 'rgba(0,0,0,.7)',
+                    color: 'white',
+                    width: `${map.tileWidth}px`,
+                    height: `${map.tileHeight}px`,
+                    'z-index': 10,
+                    position: 'absolute',
+                    'pointer-events': 'none'
+                }).appendTo(this.target);
+            }
+            this.tileInspector.show();
+            this.target.addEventListener('mousemove', this.moveHandler, false);
+        } else {
+            debugger;
+            this.target.removeEventListener('mousemove', this.moveHandler);
+            this.tileInspector.hide();
+        }
+    }
 
     /**
      * Get ready for events from NotificationManager
@@ -201,7 +247,7 @@ class Game {
     _renderSceneLoop(time) {
         var scene = this.scene;
 
-        if (this.debug !== true && this.running) {
+        if (this.running) {
             // if we are playing events, set on each frame
             // TODO: maybe we could throttle it for 1/2 frame
             if (Input.playingEvents) {
@@ -244,7 +290,7 @@ class Game {
 
         scene.run();
 
-        if (this.debug !== true && this.running) {
+        if (this.running) {
             this.timeout = setTimeout(this._runSceneLoop.bind(this), 16);
         }
     }
@@ -290,6 +336,7 @@ class Game {
             console.log('[Game] loading scene');
             this.scene.load().then(() => {
                 console.log('[Game] Scene', this.scene.name, 'loaded: starting run & render loops');
+                debugger;
                 this.scene.start(resetMap);
                 this._runSceneLoop();
                 this._renderSceneLoop();
