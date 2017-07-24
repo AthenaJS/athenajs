@@ -29,7 +29,7 @@ Object.assign(Dom.prototype, {
      * 
      * @memberof Dom#
      */
-    css: function(prop, val) {
+    css: function (prop, val) {
         if (typeof prop === 'object') {
             this.forEach((node) => {
                 const style = node.style;
@@ -43,7 +43,7 @@ Object.assign(Dom.prototype, {
                 node.style[prop] = val;
             })
         }
-        return this;        
+        return this;
     },
 
     /**
@@ -55,7 +55,7 @@ Object.assign(Dom.prototype, {
      * 
      * @memberof Dom#
      */
-    appendTo: function(selector) {
+    appendTo: function (selector) {
         const target = typeof selector === 'object' && selector || document.querySelector(selector);
 
         if (target) {
@@ -75,8 +75,8 @@ Object.assign(Dom.prototype, {
      * @returns {Dom} `this`
      * 
      * @memberof Dom#
-     */    
-    attr: function(att, val) {
+     */
+    attr: function (att, val) {
         if (typeof att === 'object') {
             this.forEach((node) => {
                 for (const name in att) {
@@ -99,8 +99,8 @@ Object.assign(Dom.prototype, {
      * @returns {Dom} `this`
      * 
      * @memberof Dom#
-     */    
-    addClass: function(name) {
+     */
+    addClass: function (name) {
         this.forEach((node) => {
             node.classList.add(name);
         });
@@ -115,8 +115,8 @@ Object.assign(Dom.prototype, {
      * @returns {Dom} `this`
      * 
      * @memberof Dom#
-     */    
-    html: function(html) {
+     */
+    html: function (html) {
         this.forEach((node) => node.innerHTML = html);
 
         return this;
@@ -128,7 +128,7 @@ Object.assign(Dom.prototype, {
      * 
      * @memberof Dom#
      */
-    show: function() {
+    show: function () {
         this.forEach(node => {
             node.style.display = 'block';
         });
@@ -140,11 +140,11 @@ Object.assign(Dom.prototype, {
      * 
      * @memberof Dom#
      */
-    hide: function() {
+    hide: function () {
         this.forEach(node => {
-            node.style.display = 'node';
+            node.style.display = 'none';
         });
-    }    
+    }
 });
 
 export default Dom;
