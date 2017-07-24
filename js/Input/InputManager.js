@@ -15,7 +15,7 @@
  * { 32: true, 40: false}
  * 
  */
-export default {
+const InputManager = {
     /**
      * A list of common keyCodes
      */
@@ -81,6 +81,8 @@ export default {
     _init: function (gameRef) {
         this.gameRef = gameRef;
 
+        this._generateKeyCodes();
+
         this._installInputModeSwitchHandler();
 
         this._installKBEventHandlers();
@@ -88,6 +90,16 @@ export default {
         // this._initVirtualJoystick();
 
         this.setInputMode(this.inputMode);
+    },
+    /**
+     * generates key char from key codes
+     * 
+     * @private
+     */
+    _generateKeyCodes: function () {
+        for (let i = 65; i < 91; ++i) {
+            this.keys[String.fromCharCode(i)] = i;
+        }
     },
     /**
      * Private handler that is supposed to detect touchEvent and automatically switch between keyboard & touch
@@ -540,3 +552,7 @@ export default {
         this.keyCb = {};
     }
 };
+
+window.InputManager = InputManager;
+
+export default InputManager;
