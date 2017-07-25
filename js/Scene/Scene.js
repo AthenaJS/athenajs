@@ -5,6 +5,7 @@ import Text from 'Object/Text';
 import Map from 'Map/Map';
 import Tile from 'Map/Tile';
 import NM from 'Notification/NotificationManager';
+import Dom from 'Core/Dom';
 
 import Deferred from 'Core/Deferred';
 /*jshint devel: true, bitwise: false*/
@@ -412,7 +413,7 @@ class Scene {
     }
 
     /**
-     * You can set a static background image independently of the layers/
+     * You can set a static background image independently of the layers
      * 
      * @param {Image|String} The image to set as background
      * @obsolete
@@ -421,9 +422,9 @@ class Scene {
         this.backgroundImage = image;
         // todo: hardcoded for now
         if (image instanceof Image) {
-            new Dom('.main').css('backgroundImage', 'url(' + image.src + ')');
+            new Dom(this.display.target).css('backgroundImage', 'url(' + image.src + ')');
         } else {
-            new Dom('.main').css('backgroundImage', 'url(' + image + ')');
+            new Dom(this.display.target).css('backgroundImage', 'url(' + image + ')');
         }
     }
 
