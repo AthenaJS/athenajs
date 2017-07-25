@@ -31,9 +31,6 @@ class Game {
 
         const target = options.target && new Dom(options.target);
 
-        // DOM element to use for the game (it will be cleared)
-        this.target = target && target.length && target[0] || new Dom('div').appendTo('body')[0];
-
         // weather to display FPS
         this.showFps = typeof options.showFps !== 'undefined' ? options.showFps : false;
 
@@ -46,6 +43,12 @@ class Game {
 
         this.width = options.width || 1024;
         this.height = options.height || 768;
+
+        // DOM element to use for the game (it will be cleared)
+        this.target = target && target.length && target[0] || new Dom('div').css({
+            width: `${this.width}px`,
+            height: `${this.height}px`
+        }).appendTo('body')[0];
 
         this.resources = options.resources;
 
