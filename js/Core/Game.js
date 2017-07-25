@@ -109,30 +109,61 @@ class Game {
                     const map = this.scene.map;
                     const offsetX = event.offsetX > 0 ? event.offsetX : 0;
                     const offsetY = event.offsetY > 0 ? event.offsetY : 0;
-                    const pos = map.getTilePos(offsetX, offsetY);
-                    this.tileInspector.html(`${pos.x}, ${pos.y}<br />Type: ${map.tileTypes[pos.x + pos.y * map.numCols]}`).css({
-                        left: (pos.x * map.tileWidth) + 'px',
-                        top: (pos.y * map.tileHeight) + 'px'
-                    });
+                    const mapOffsetX = this.scene.mapOffsetX,
+                        mapOffsetY = this.scene.mapOffsetY,
+                        mapWidth = map.viewportW,
+                        mapHeight = map.viewportH;
+
+                    if (event.offsetX < mapOffsetX || event.offsetX > (mapOffsetX+mapWidth) || event.offsetY < mapOffsetY || event.offsetY > (mapOffsetY+mapHeight)) {
+                        this.tileInspector.hide();
+                        this.tileHover.hide();
+                    } else {
+                        const pos = map.getTilePos(offsetX - mapOffsetX, offsetY - mapOffsetY);
+                        if (pos) {
+                            this.tileInspector.html(`${pos.x}, ${pos.y}<br />Type: ${map.tileTypes[pos.x + pos.y * map.numCols]}`).css({
+                                left: 0,
+                                top: 0
+                            });                            
+                            this.tileInspector.show();
+                            this.tileHover.css({
+                                left: ((pos.x * map.tileWidth) + mapOffsetX) + 'px',
+                                top: ((pos.y * map.tileHeight) + mapOffsetY) + 'px'
+                            }).show();
+                        } else {
+                            this.tileInspector.hide();
+                            this.tileHover.hide();
+                        }
+                    }
                 };
 
                 this.tileInspector = new Dom('div').css({
                     border: '1px dotted white',
                     'background-color': 'rgba(0,0,0,.7)',
                     color: 'white',
-                    width: `${map.tileWidth}px`,
-                    height: `${map.tileHeight}px`,
                     'z-index': 10,
                     position: 'absolute',
                     'pointer-events': 'none'
                 }).appendTo(this.target);
+
+                this.tileHover = new Dom('div').css({
+                    border: '1px dotted white',                    
+                    width: `${this.scene.map.tileWidth}px`,
+                    height: `${this.scene.map.tileHeight}px`,
+                    'background-color': 'rgba(255,0,0,.4)',
+                    position: 'absolute',
+                    top: 0,
+                    left: 0
+                }).appendTo(this.target);
+
+                // TODO: do not change position if != static
+                new Dom(this.target).css('position', 'relative');
             }
             this.tileInspector.show();
             this.target.addEventListener('mousemove', this.moveHandler, false);
         } else {
-            debugger;
             this.target.removeEventListener('mousemove', this.moveHandler);
             this.tileInspector.hide();
+            this.tileHover.hide();
         }
     }
 
