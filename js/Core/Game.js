@@ -108,7 +108,6 @@ class Game {
         if (map.isDebug) {
             if (!this.tileInspector) {
                 this.moveHandler = (event) => {
-                    console.log(event.offsetX, event.offsetY);
                     const map = this.scene.map;
                     const offsetX = event.offsetX > 0 ? event.offsetX : 0;
                     const offsetY = event.offsetY > 0 ? event.offsetY : 0;
@@ -154,8 +153,10 @@ class Game {
                     height: `${this.scene.map.tileHeight}px`,
                     'background-color': 'rgba(255,0,0,.4)',
                     position: 'absolute',
+                    'z-index': 10,
                     top: 0,
-                    left: 0
+                    left: 0,
+                    'pointer-events': 'none'
                 }).appendTo(this.target);
 
                 // TODO: do not change position if != static
