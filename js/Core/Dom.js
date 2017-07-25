@@ -10,7 +10,9 @@
  * @constructor 
  */
 function Dom(selector) {
-    if (selector.match(/^#|\./)) {
+    if (selector instanceof HTMLElement) {
+        this.push(selector);
+    } else if (selector.match(/^#|\./)) {
         this.push(...document.querySelectorAll(selector));
     } else {
         this.push(document.createElement(selector));
@@ -30,19 +32,26 @@ Object.assign(Dom.prototype, {
      * @memberof Dom#
      */
     css: function (prop, val) {
-        if (typeof prop === 'object') {
-            this.forEach((node) => {
-                const style = node.style;
+            if (typeof prop === 'object') {
+                this.forEach((node) => {
+                    const style = node.style;
 
-                for (const name in prop) {
-                    style[name] = prop[name];
+                    for (const name in prop) {
+                        style[name] = prop[name];
+                    }
+                });
+            } else if (typeof val === 'undefined') {
+                if (this.length) {
+                    return this[0].style[prop];
+                } else {
+                    return null;
                 }
-            });
-        } else {
-            this.forEach((node) => {
-                node.style[prop] = val;
-            })
-        }
+            } else {
+                this.forEach((node) => {
+                    node.style[prop] = val;
+                });
+            }
+
         return this;
     },
 
