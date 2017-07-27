@@ -209,14 +209,18 @@ class GfxObject {
   /**
    * Moves the object to a new destination.
    * 
-   * @param {number} The new horizontal position.
-   * @param {number} The new vertical position.
+   * @param {number} x The new horizontal position.
+   * @param {number} y The new vertical position.
+   * @param {number=0} duration The duration of the move, 0 to have the object move immediately to new position
    * 
    * @returns {GfxObject} this
    */
-  moveTo(x, y) {
-    this.x = x;
-    this.y = y;
+  moveTo(x, y, duration = 0) {
+    if (duration === 0) {
+      this.x = x;
+      this.y = y;
+    }
+
     this._onMove();
 
     return this;
@@ -266,7 +270,6 @@ class GfxObject {
   move() {
     if (this.moving) {
       if (!this.behavior) {
-        // TODO: check map to see if we can move
         this.x += this.vx;
         this.y += this.vy;
 
@@ -517,7 +520,7 @@ class GfxObject {
     for (var i in this.fxQueue) {
       return false;
     }
-    
+
     return true;
   }
 
