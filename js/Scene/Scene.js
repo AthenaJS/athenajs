@@ -201,8 +201,10 @@ class Scene {
     }
 
     onStart(cb) {
-        this._startCallbacks.push(cb.bind(this));
-        if (this.running) {
+        console.log('onStart');
+        if (!this.running) {
+            this._startCallbacks.push(cb.bind(this));
+        } else {
             cb();
         }
     }
@@ -266,8 +268,10 @@ class Scene {
      * @param {number} [layerNum=0] Defines the layer number where to add the objects.
      */
     addObject(objects, layerType, layerNum) {
+        console.log('addObject');
         // attempt to add an object on a scene not ready, we load it and postpone the add once it's ready
         if (!this.loaded) {
+            console.log('addObject: later');
             this.onStart(() => {
                 this.addObject(objects, layerType, layerNum);
             });
@@ -446,6 +450,7 @@ class Scene {
      */
     start(resetMap = false) {
         if (!this.loaded) {
+            return;
             console.warn('[Scene] start() attempt to start a scene that has not been loaded yet. Start failed.');
         }
 

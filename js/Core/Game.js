@@ -116,16 +116,16 @@ class Game {
                         mapWidth = map.viewportW,
                         mapHeight = map.viewportH;
 
-                    if (event.offsetX < mapOffsetX || event.offsetX > (mapOffsetX+mapWidth) || event.offsetY < mapOffsetY || event.offsetY > (mapOffsetY+mapHeight)) {
+                    if (event.offsetX < mapOffsetX || event.offsetX > (mapOffsetX + mapWidth) || event.offsetY < mapOffsetY || event.offsetY > (mapOffsetY + mapHeight)) {
                         this.tileInspector.hide();
                         this.tileHover.hide();
                     } else {
                         const pos = map.getTilePos(offsetX - mapOffsetX, offsetY - mapOffsetY);
                         if (pos) {
-                            this.tileInspector.html(`${pos.x}, ${pos.y}<br />Type: ${map.tileTypes[pos.x + pos.y * map.numCols]}`).css({
+                            this.tileInspector.html(`${pos.x}, ${pos.y}<br />Type: ${map.tileBehaviors[pos.x + pos.y * map.numCols]}`).css({
                                 left: 0,
                                 top: 0
-                            });                            
+                            });
                             this.tileInspector.show();
                             this.tileHover.css({
                                 left: ((pos.x * map.tileWidth) + mapOffsetX) + 'px',
@@ -148,7 +148,7 @@ class Game {
                 }).appendTo(this.target);
 
                 this.tileHover = new Dom('div').css({
-                    border: '1px dotted white',                    
+                    border: '1px dotted white',
                     width: `${this.scene.map.tileWidth}px`,
                     height: `${this.scene.map.tileHeight}px`,
                     'background-color': 'rgba(255,0,0,.4)',
@@ -371,7 +371,6 @@ class Game {
             console.log('[Game] loading scene');
             this.scene.load().then(() => {
                 console.log('[Game] Scene', this.scene.name, 'loaded: starting run & render loops');
-                debugger;
                 this.scene.start(resetMap);
                 this._runSceneLoop();
                 this._renderSceneLoop();

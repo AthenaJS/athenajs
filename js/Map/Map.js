@@ -50,7 +50,7 @@ class Map {
 
         // DEBUG: usually tiles are loaded from binary files and set as ArrayBuffer
         // but previously tiles could be set from a JSON text file
-        this.setTiles(options.tiles);
+        this.addTileSet(options.tiles);
         // this.tiles = options.tiles && this._createTiles(options.tiles) || [];
 
         this.triggers = options.triggers || {};
@@ -269,7 +269,7 @@ class Map {
         let size = this.numCols * this.numRows;
 
         this.map = new Uint8Array(buffer, 0, size);
-        this.tileTypes = new Uint8Array(buffer, size);
+        this.tileBehaviors = new Uint8Array(buffer, size);
     }
 
 
@@ -600,8 +600,8 @@ class Map {
     fallTest(x, y) {
         let pos = this.getTilePos(x, y);
 
-        // return (!(this.tileTypes[pos.x + pos.y * this.numCols] & 1));
-        return this.tileTypes[pos.x + pos.y * this.numCols] === Tile.TYPE.WALL;
+        // return (!(this.tileBehaviors[pos.x + pos.y * this.numCols] & 1));
+        return this.tileBehaviors[pos.x + pos.y * this.numCols] === Tile.TYPE.WALL;
     }
 
 
@@ -746,7 +746,7 @@ class Map {
             for (let i = tilePos.y * this.tileHeight; i < spriteYMax; i += this.tileHeight, tilePos.y++) {
                 // DISABLE WALL COLLISIONS
                 // TODO: add a parameter to toggle collisions at runtime
-                if (this.tileTypes[tilePos.y * this.numCols + tilePos.x] === tileTypes) {
+                if (this.tileBehaviors[tilePos.y * this.numCols + tilePos.x] === tileTypes) {
                     found = true;
                     break;
                 }
@@ -791,7 +791,7 @@ class Map {
 
         // while (!found && minY <= sprite.vy) {
         // 	for (let i = tilePos.x * this.tileWidth; i < spriteXMax; i += this.tileWidth) {
-        // 		if (this.tileTypes[tilePos.y * this.numCols + tilePos.x] === tileTypes) {
+        // 		if (this.tileBehaviors[tilePos.y * this.numCols + tilePos.x] === tileTypes) {
         // 			found = true;
         // 			break;
         // 		}
@@ -815,7 +815,7 @@ class Map {
     // 		while (!found && minX <= sprite.vx) {
     // 			// check full sprite's height for a collision
     // 			for (let i = tilePos.y * this.tileHeight; i < spriteYMax; i += this.tileHeight, tilePos.y++) {
-    // 				if (this.tileTypes[tilePos.y * this.numCols + tilePos.x] === tileTypes) {
+    // 				if (this.tileBehaviors[tilePos.y * this.numCols + tilePos.x] === tileTypes) {
     // 					found = true;
     // 					break;
     // 				}
@@ -897,7 +897,7 @@ class Map {
 
         for (i = pos1.x; i <= max1; i++) {
             for (j = pos1.y; j <= max2; j++) {
-                tileType = this.tileTypes[j * this.numCols + i];
+                tileType = this.tileBehaviors[j * this.numCols + i];
                 if (tileType === types) {
                     return {
                         x: i,
@@ -1347,11 +1347,11 @@ class Map {
             for (j = this.firstCol, max2 = this.lastCol, x = 0; j < max2; j++) {
                 w = (this.viewportX && j === this.firstCol) ? this.scrollTileOffsetX : this.tileWidth;
                 h = (this.viewPortY && i === this.firstRow) ? this.scrollTileOffsetY : this.tileHeight;
-                if (this.tileTypes[i * this.numCols + j] > 1) {
-                    // if (this.tileTypes[i * this.numCols + j] > 1) {
+                if (this.tileBehaviors[i * this.numCols + j] > 1) {
+                    // if (this.tileBehaviors[i * this.numCols + j] > 1) {
                     // 	debugger;
                     // }
-                    ctx.fillStyle = styles[this.tileTypes[i * this.numCols + j]];
+                    ctx.fillStyle = styles[this.tileBehaviors[i * this.numCols + j]];
                     ctx.beginPath();
                     ctx.moveTo(x, y);
                     ctx.lineTo(x + w, y);
@@ -1454,12 +1454,12 @@ class Map {
     }
 
     /**
-     * Set new tiles for the map
+     * adds a new tileset for the map
      * 
      * @param {Array=undefined} tiles The tile descriptions
      * 
      */
-    setTiles(tiles) {
+    addTileSet(tiles) {
         if (tiles && tiles.length) {
             this.tiles = this._createTiles(tiles);
         } else {
@@ -1468,6 +1468,29 @@ class Map {
 
         // set map to dirty so that it is drawn
         this.isDirty = true;
+    }
+
+    /**
+     * updates individual tile & tile behavior
+     * 
+     * @param {Number} col the column of the tile to update
+     * @param {Number} row the row of the tile to update
+     * @param {Number=-1} tileNum the new tile number to use, the previous one will be kept if tileNum === -1
+     * @param {Number=-1} behavior the new tile behavior, the previous value will be kept if behavior === -1
+     * 
+     */
+    updateTile(col, row, tileNum = -1, behavior = -1) {
+        var pos = row * this.numCols + col;
+
+        if (tileNum) {
+            this.map[pos] = tileNum;
+            this.isDirty = true;
+        }
+
+        if (behavior > -1) {
+            this.isDirty = true;
+            this.tileBehaviors[pos] = behavior;
+        }
     }
 
 	/**
@@ -1521,7 +1544,7 @@ class Map {
             // create new buffer for map tiles + behaviors
             buffer = new ArrayBuffer(numCols * numRows * 2),
                 map = new Uint8Array(buffer, 0, numRows * numCols),
-                tileTypes = new Uint8Array(buffer, numRows * numCols, numRows * numCols);
+                tileBehaviors = new Uint8Array(buffer, numRows * numCols, numRows * numCols);
 
             // new buffer is automatically filled with zeros
             // so we only need to copy existing tiles/behaviors into the new
@@ -1529,7 +1552,7 @@ class Map {
             for (let y = diffRows; y < numRows; y++) {
                 for (let x = 0; x < this.numCols; x++) {
                     map[(y * numCols) + x] = this.map[(y * numCols) + x];
-                    tileTypes[(y * numCols) + x] = this.tileTypes[(y * numCols) + x];
+                    tileBehaviors[(y * numCols) + x] = this.tileBehaviors[(y * numCols) + x];
 
                     if (this.triggers[(y * numCols) + x]) {
                         item = Object.assign({}, true, this.triggers[(y * numCols) + x]);
