@@ -122,7 +122,7 @@ class Game {
                     } else {
                         const pos = map.getTilePos(offsetX - mapOffsetX, offsetY - mapOffsetY);
                         if (pos) {
-                            this.tileInspector.html(`${pos.x}, ${pos.y}<br />Type: ${map.tileBehaviors[pos.x + pos.y * map.numCols]}`).css({
+                            this.tileInspector.html(`${pos.x}, ${pos.y}<br />[${map.map[pos.x + pos.y * map.numCols]}, ${map.tileBehaviors[pos.x + pos.y * map.numCols]}]`).css({
                                 left: 0,
                                 top: 0
                             });

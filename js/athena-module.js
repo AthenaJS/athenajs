@@ -18,6 +18,7 @@ export { default as Circle } from 'Object/Circle';
 export { default as NotificationManager } from 'Notification/NotificationManager';
 
 export { default as Map } from 'Map/Map';
+export { default as Tile } from 'Map/Tile';
 export { default as MapEvent } from 'Map/MapEvent';
 
 export { default as FX } from 'FX/FX';

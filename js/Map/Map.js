@@ -118,6 +118,7 @@ class Map {
 
         this.reverse = false;
 
+        // viewport bounds
         this.firstRow = this.lastRow = this.firstCol = this.lastCol = 0;
 
         this.isDebug = false;
@@ -1041,7 +1042,7 @@ class Map {
 
             /* This should be done in another canvas */
             if (this.isDebug === true) {
-                this.showTileBehaviors(ctx, showHidden);
+                this.showTileBehaviors(ctx, showHidden, mapOffsetX, mapOffsetY);
             }
 
             this.addNewObjectsFromWindow();
@@ -1328,7 +1329,7 @@ class Map {
 	 * @param {CanvasContext} ctx The canvas context to render outline on.
 	 * 
 	 */
-    showTileBehaviors(ctx) {
+    showTileBehaviors(ctx, showHidden, mapOffsetX = 0, mapOffsetY = 0) {
         let i, j, max, max2,
             x = 0,
             y = 0,
@@ -1343,8 +1344,8 @@ class Map {
 
         i = j = max = max2 = 0;
 
-        for (i = this.firstRow, max = this.lastRow, y = 0; i < max; i++) {
-            for (j = this.firstCol, max2 = this.lastCol, x = 0; j < max2; j++) {
+        for (i = this.firstRow, max = this.lastRow, y = mapOffsetY; i < max; i++) {
+            for (j = this.firstCol, max2 = this.lastCol, x = mapOffsetX; j < max2; j++) {
                 w = (this.viewportX && j === this.firstCol) ? this.scrollTileOffsetX : this.tileWidth;
                 h = (this.viewPortY && i === this.firstRow) ? this.scrollTileOffsetY : this.tileHeight;
                 if (this.tileBehaviors[i * this.numCols + j] > 1) {
