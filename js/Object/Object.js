@@ -246,6 +246,21 @@ class GfxObject {
   }
 
   /**
+   * Stops the object from moving, optionnaly immediately going to target position
+   * 
+   * @param {Boolean=false} gotoTarget set to true to go to the target position
+   */
+  cancelMoveTo(gotoTarget = false) {
+    if (this.moving) {
+      this.moving = false;
+      if (gotoTarget) {
+        this.x = this.targetX;
+        this.y = this.targetY;
+      }
+    }
+  }
+
+  /**
    * Centers the object into the scene.
    * 
    * @returns {GfxObject} this
