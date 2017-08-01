@@ -384,13 +384,14 @@ class Map {
 	/**
 	 * Move movable objects into the map
 	 * 
+     * @param {Number} timestamp current time
 	 */
-    moveObjects() {
+    moveObjects(timestamp) {
         this.objects.forEach(function (obj) {
             // moving platforms must be moved before any other object
             // so they are moved in Map.movePlatforms() first
             if (obj.collideGroup !== 3 && obj.movable) {
-                obj.move();
+                obj.move(timestamp);
 
                 // TODO: set platform() if object reached a platform
             }
@@ -401,11 +402,12 @@ class Map {
 	 * Move platform objects onto the map: they must be moved before normal objects are moved 
 	 * so that movable objects move related to the platforms
 	 * 
+     * @param {Number} current time
 	 */
-    movePlatforms() {
+    movePlatforms(timestamp) {
         this.platforms.forEach(function (obj) {
             if (obj.movable) {
-                obj.move();
+                obj.move(timestamp);
             }
         });
     }
@@ -417,15 +419,18 @@ class Map {
 	 *  - checks for triggers (that could spawn new objects onto the map)
 	 *  - move platforms and objects
 	 * 
+     * @param {Number} timestamp current time
 	 */
-    move() {
-        let currentTime = new Date().getTime(),
-            ellapsedTime = currentTime - this.startMoveTime,
-            t = ellapsedTime / this.duration,
-            moveProgress;
+    move(timestamp) {
+        let ellapsedTime = 0,
+            t = 0,
+            moveProgress = 0;
 
         // TODO: handle end/begining of map reach
         if (this.moving === true) {
+            ellapsedTime = timestamp - this.startMoveTime;
+            t = ellapsedTime / this.duration;
+
             if (ellapsedTime >= this.duration) {
                 this.moving = false;
                 this.viewportX = this.viewportTargetX;
@@ -447,10 +452,10 @@ class Map {
         }
 
         // first move platforms
-        this.movePlatforms();
+        this.movePlatforms(timestamp);
 
         // then move normal objects
-        this.moveObjects();
+        this.moveObjects(timestamp);
     }
 
 
