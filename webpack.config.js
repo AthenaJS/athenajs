@@ -3,6 +3,8 @@ var path = require('path'),
     WebpackNotifierPlugin = require('webpack-notifier'),
     CircularDependencyPlugin = require('circular-dependency-plugin');
 
+console.log(path.join(__dirname, './docs/assets/athenajs.png'));
+
 module.exports = {
     entry: [
         './js/athena-module.js'
@@ -39,7 +41,8 @@ module.exports = {
         new WebpackNotifierPlugin({
             alwaysNotify: true,
             skipFirstNotification: true,
-            title: 'AthenaJS'
+            title: 'AthenaJS',
+            contentImage: path.join(__dirname, './docs/assets/athenajs.png')
         })
     ]
 };
