@@ -391,7 +391,7 @@ class Scene {
             let layer = this.layers[i];
             for (let j = 0, max2 = layer.length; j < max2; j++) {
                 let obj = layer[j];
-                if (obj.moving) {
+                if (obj.movable) {
                     obj.move();
                 }
             }
