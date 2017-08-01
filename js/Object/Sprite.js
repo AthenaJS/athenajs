@@ -1,6 +1,7 @@
 import GfxObject from 'Object/Object';
 import Input from 'Input/InputManager';
 import Deferred from 'Core/Deferred';
+import RM from 'Resource/ResourceManager';
 
 /*jshint devel: true, bitwise: false*/
 /**
@@ -152,9 +153,7 @@ class Sprite extends GfxObject {
      * })
      */
     addAnimation(name, source, options = {}) {
-        let animations = {},
-            def = new Deferred(),
-            img = new Image();
+        let animations = {};
 
         animations[name] = Object.assign({
             frameDuration: 1,
@@ -162,62 +161,59 @@ class Sprite extends GfxObject {
             frames: []
         }, options);
 
-        this.imageSrc = img.src = source;
-        this.setImage(img);
-
-        img.onload = function () {
-            let x = options.offsetX || 0,
-                y = options.offsetY || 0,
-                i = 0,
-                numFrames = options.numFrames || 0,
-                frames = animations[name].frames,
-                frameHeight = options.frameHeight || this.naturalHeight,
-                frameSpace = options.frameWidth + (options.frameSpacing || 0);
-
-            if (numFrames) {
-                while (i < numFrames) {
-                    frames.push({
-                        offsetX: x,
-                        offsetY: y,
-                        w: options.frameWidth,
-                        h: frameHeight,
-                        hitBox: {
-                            x: 0,
-                            y: 0,
-                            x2: options.frameWidth - 1,
-                            y2: frameHeight - 1
-                        }
-                    });
-                    x += frameSpace;
-                    i++;
-                }
-            } else {
-                while (x < this.naturalWidth) {
-                    frames.push({
-                        offsetX: x,
-                        offsetY: y,
-                        w: options.frameWidth,
-                        h: frameHeight,
-                        hitBox: {
-                            x: 0,
-                            y: 0,
-                            x2: options.frameWidth - 1,
-                            y2: frameHeight - 1
-                        }
-                    });
-                    x += frameSpace;
-                }
-            }
-
-            def.resolve();
-
-        }.bind(img);
-
-        def.promise.then(() => {
-            this.load(animations);
+        RM.loadImage({
+            src: source,
+            id: source,
+            type: 'image'
+        }).then((img) => {
+            this.setImage(img);
         });
 
-        return def.promise;
+        let x = options.offsetX || 0,
+            y = options.offsetY || 0,
+            i = 0,
+            numFrames = options.numFrames || 0,
+            frames = animations[name].frames,
+            frameHeight = options.frameHeight,
+            frameSpace = options.frameWidth + (options.frameSpacing || 0);
+
+            while (i < numFrames) {
+                frames.push({
+                    offsetX: x,
+                    offsetY: y,
+                    w: options.frameWidth,
+                    h: frameHeight,
+                    hitBox: {
+                        x: 0,
+                        y: 0,
+                        x2: options.frameWidth - 1,
+                        y2: frameHeight - 1
+                    }
+                });
+                x += frameSpace;
+                i++;
+            }
+
+            if (numFrames) {
+                this.load(animations);
+            }
+            // } else {
+            //     while (x < this.naturalWidth) {
+            //         frames.push({
+            //             offsetX: x,
+            //             offsetY: y,
+            //             w: options.frameWidth,
+            //             h: frameHeight,
+            //             hitBox: {
+            //                 x: 0,
+            //                 y: 0,
+            //                 x2: options.frameWidth - 1,
+            //                 y2: frameHeight - 1
+            //             }
+            //         });
+            //         x += frameSpace;
+            //     }
+            // }
     }
 
     /**

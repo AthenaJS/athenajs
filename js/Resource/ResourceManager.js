@@ -308,16 +308,15 @@ import Dom from 'Core/Dom';
          * starts loading an image
          * 
          * @param {Object} res an Object describing the resource to load
-         * @param {String} gpName the name of the group that the resource came from
+         * @param {String=undefined} gpName the name of the group that the resource came from, set to undefined to load a single resource
          * 
          * @returns {Deferred} a new promise that will be resolved when the file has been loaded.
-         * @private
          */
-        loadImage: function(res, gpName) {
+        loadImage: function(res, gpName = undefined) {
             let img = new Image(),
                 that = this,
                 def = new Deferred(),
-                gp = that.resources[gpName];
+                gp = gpName && that.resources[gpName];
 
             // console.log('[RM] loading image', res.src);
 
@@ -328,8 +327,8 @@ import Dom from 'Core/Dom';
                 res.elt = img;
                 res.img = this;
                 res.loaded = true;
-                that._resLoaded(gpName);
-                def.resolve(true);
+                gpName && that._resLoaded(gpName);
+                def.resolve(gpName && true || img);
 
                 // console.log('[RM] loaded image', res.src);
             };
