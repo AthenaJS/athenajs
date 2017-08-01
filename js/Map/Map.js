@@ -389,7 +389,7 @@ class Map {
         this.objects.forEach(function (obj) {
             // moving platforms must be moved before any other object
             // so they are moved in Map.movePlatforms() first
-            if (obj.collideGroup !== 3 && obj.moving) {
+            if (obj.collideGroup !== 3 && obj.movable) {
                 obj.move();
 
                 // TODO: set platform() if object reached a platform
@@ -404,7 +404,7 @@ class Map {
 	 */
     movePlatforms() {
         this.platforms.forEach(function (obj) {
-            if (obj.moving) {
+            if (obj.movable) {
                 obj.move();
             }
         });

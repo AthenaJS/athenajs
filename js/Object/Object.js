@@ -66,7 +66,7 @@ class GfxObject {
       vy: 0,
       scale: 1.0,
       angle: 0,
-      moving: true,
+      movable: true,
       gravity: 0,
       data: {},
       path: null,
@@ -84,7 +84,7 @@ class GfxObject {
             y: options.y || 0,
             scale: options.scale || 1.0,
             angle: 0,
-            moving: typeof options.moving !== 'undefined' ? options.moving : true,
+            movable: typeof options.movable !== 'undefined' ? options.movable : true,
             gravity: typeof options.gravity !== 'undefined' ? options.gravity : 0,
             data: options.data || {},
             path: null,
@@ -128,7 +128,7 @@ class GfxObject {
   /**
    * Resets the map, used when player lost for example.
    * 
-   * `speed`,  `visible`, `canCollide`, `plane`, `x`, `y`, `scale`, `angle`, `moving`,
+   * `speed`,  `visible`, `canCollide`, `plane`, `x`, `y`, `scale`, `angle`, `movable`,
    * `vx` , `vy`, `gravity`, `wave`
    * 
    */
@@ -141,7 +141,7 @@ class GfxObject {
     this.y = this._settings.y;
     this.scale = this._settings.scale;
     this.angle = this._settings.angle;
-    this.moving = this._settings.moving;
+    this.movable = this._settings.movable;
 
     this.data = this._settings.data;
 
@@ -268,7 +268,7 @@ class GfxObject {
    * @private
    */
   move() {
-    if (this.moving) {
+    if (this.movable) {
       if (!this.behavior) {
         this.x += this.vx;
         this.y += this.vy;
