@@ -289,8 +289,10 @@ class Game {
                 Input.nextRecordedEvents();
             }
 
+            // schedule a call for next frame
             this.animFrame = window.requestAnimationFrame(this._renderSceneLoop.bind(this));
 
+            // render the scone onto the current display
             this.display.renderScene(scene);
 
             // TODO: hudScene drawing is hardcoded into display
@@ -323,7 +325,7 @@ class Game {
             this.running = true;
         }
 
-        scene.run();
+        scene.run(new Date().getTime());
 
         if (this.running) {
             this.timeout = setTimeout(this._runSceneLoop.bind(this), 16);
