@@ -376,9 +376,11 @@ class Scene {
      * 
      * It is automatically called by the run method after each frame.
      * 
+     * @param {Number} timestamp current time
+     * 
      * @private
      */
-    moveSceneObjects() {
+    moveSceneObjects(timestamp) {
         // var i, j,
         //     max, max2,
         //     obj = null,
@@ -392,7 +394,7 @@ class Scene {
             for (let j = 0, max2 = layer.length; j < max2; j++) {
                 let obj = layer[j];
                 if (obj.movable) {
-                    obj.move();
+                    obj.move(timestamp);
                 }
             }
         }
@@ -556,15 +558,17 @@ class Scene {
      * The run loop is where scene elements are moved and collisions are checked.
      * 
      * The map, if there is one, is also updated here (viewport, new objects, etc)
+     * 
+     * @param {Number} timestamp current times
      */
-    run() {
-        this.moveSceneObjects();
+    run(timestamp) {
+        this.moveSceneObjects(timestamp);
 
         // user-loop: put user interaction here
         // move map, and sprites found onto the map
         if (this.map) {
-            this.map.move();
-            this.map.checkCollisions();
+            this.map.move(timestamp);
+            this.map.checkCollisions(timestamp);
         }
     }
 

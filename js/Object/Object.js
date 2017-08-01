@@ -49,6 +49,9 @@ class GfxObject {
 
     this.master = options.master || false;
 
+    this.moving = false;
+    this.easing = FX.getEasing(options.easing || 'linear');
+
     if (options.behavior) {
       console.log('need to set move to', options.behavior);
       this.setBehavior(options.behavior, options.behaviorOptions);
@@ -142,6 +145,8 @@ class GfxObject {
     this.scale = this._settings.scale;
     this.angle = this._settings.angle;
     this.movable = this._settings.movable;
+    // reset moving status
+    this.moving = false;
 
     this.data = this._settings.data;
 
@@ -216,12 +221,26 @@ class GfxObject {
    * @returns {GfxObject} this
    */
   moveTo(x, y, duration = 0) {
-    if (duration === 0) {
-      this.x = x;
-      this.y = y;
-    }
+    if (!this.moving) {
+      if (duration === 0) {
+        this.x = x;
+        this.y = y;
+        this._onMove();
+      } else {
+        console.log('moveTo from', this.x, 'to', x);
 
-    this._onMove();
+        this.targetX = x;
+        this.targetY = y;
+        this.duration = duration;
+
+        this.startMoveTime = new Date().getTime();
+        this.targetDistanceX = x - this.x | 0;
+        this.targetDistanceY = y - this.y | 0;
+        this.targetStartX = this.x;
+        this.targetStartY = this.y;
+        this.moving = true;
+      }
+    }
 
     return this;
   }
@@ -265,18 +284,39 @@ class GfxObject {
    * Called on each move loop and used to move the object using its (optional) behavior or its
    * vx and vy properties.
    * 
+   * @param {Number} timestamp the current time
    * @private
    */
-  move() {
+  move(timestamp) {
     if (this.movable) {
-      if (!this.behavior) {
-        this.x += this.vx;
-        this.y += this.vy;
+      if (this.moving === true) {
+        let ellapsedTime = timestamp - this.startMoveTime,
+          t = ellapsedTime / this.duration,
+          moveProgress = 0;
 
-        // gravity impacts velocity
-        this.vy -= this.gravity;
+        if (ellapsedTime >= this.duration) {
+          this.moving = false;
+          this.x = this.targetX;
+          this.y = this.targetY;
+          // TODO: send endMove event ?
+        } else {
+          moveProgress = this.easing(t, ellapsedTime, 0, 1, this.duration);
+
+          // console.log('moving', this.viewportX);
+
+          this.x = this.targetStartX + moveProgress * this.targetDistanceX | 0;
+          this.y = this.targetStartY + moveProgress * this.targetDistanceY | 0;
+        }
       } else {
-        this.behavior.onMove();
+        if (!this.behavior) {
+          this.x += this.vx;
+          this.y += this.vy;
+
+          // gravity impacts velocity
+          this.vy -= this.gravity;
+        } else {
+          this.behavior.onMove();
+        }
       }
 
       if (this.children.length) {
