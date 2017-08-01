@@ -120,7 +120,7 @@ class Game {
                         this.tileInspector.hide();
                         this.tileHover.hide();
                     } else {
-                        const pos = map.getTilePos(offsetX - mapOffsetX, offsetY - mapOffsetY);
+                        const pos = map.getTilePos(offsetX - mapOffsetX - map.viewportX, offsetY - mapOffsetY - map.viewportY);
                         if (pos) {
                             this.tileInspector.html(`${pos.x}, ${pos.y}<br />[${map.map[pos.x + pos.y * map.numCols]}, ${map.tileBehaviors[pos.x + pos.y * map.numCols]}]`).css({
                                 left: 0,
@@ -128,8 +128,8 @@ class Game {
                             });
                             this.tileInspector.show();
                             this.tileHover.css({
-                                left: ((pos.x * map.tileWidth) + mapOffsetX) + 'px',
-                                top: ((pos.y * map.tileHeight) + mapOffsetY) + 'px'
+                                left: ((pos.x * map.tileWidth) + mapOffsetX + map.viewportX) + 'px',
+                                top: ((pos.y * map.tileHeight) + mapOffsetY + map.viewportY) + 'px'
                             }).show();
                         } else {
                             this.tileInspector.hide();
