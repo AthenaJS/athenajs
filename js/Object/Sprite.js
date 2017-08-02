@@ -177,43 +177,43 @@ class Sprite extends GfxObject {
             frameHeight = options.frameHeight,
             frameSpace = options.frameWidth + (options.frameSpacing || 0);
 
-            while (i < numFrames) {
-                frames.push({
-                    offsetX: x,
-                    offsetY: y,
-                    w: options.frameWidth,
-                    h: frameHeight,
-                    hitBox: {
-                        x: 0,
-                        y: 0,
-                        x2: options.frameWidth - 1,
-                        y2: frameHeight - 1
-                    }
-                });
-                x += frameSpace;
-                i++;
-            }
+        while (i < numFrames) {
+            frames.push({
+                offsetX: x,
+                offsetY: y,
+                w: options.frameWidth,
+                h: frameHeight,
+                hitBox: {
+                    x: 0,
+                    y: 0,
+                    x2: options.frameWidth - 1,
+                    y2: frameHeight - 1
+                }
+            });
+            x += frameSpace;
+            i++;
+        }
 
-            if (numFrames) {
-                this.load(animations);
-            }
-            // } else {
-            //     while (x < this.naturalWidth) {
-            //         frames.push({
-            //             offsetX: x,
-            //             offsetY: y,
-            //             w: options.frameWidth,
-            //             h: frameHeight,
-            //             hitBox: {
-            //                 x: 0,
-            //                 y: 0,
-            //                 x2: options.frameWidth - 1,
-            //                 y2: frameHeight - 1
-            //             }
-            //         });
-            //         x += frameSpace;
-            //     }
-            // }
+        if (numFrames) {
+            this.load(animations);
+        }
+        // } else {
+        //     while (x < this.naturalWidth) {
+        //         frames.push({
+        //             offsetX: x,
+        //             offsetY: y,
+        //             w: options.frameWidth,
+        //             h: frameHeight,
+        //             hitBox: {
+        //                 x: 0,
+        //                 y: 0,
+        //                 x2: options.frameWidth - 1,
+        //                 y2: frameHeight - 1
+        //             }
+        //         });
+        //         x += frameSpace;
+        //     }
+        // }
     }
 
     /**
@@ -473,6 +473,22 @@ class Sprite extends GfxObject {
      */
     getHitBox() {
         return this.currentFrame.hitBox;
+    }
+
+    /**
+     * Returns hitbox position
+     * 
+     * returns {Object} the hitbox position using current sprite position
+     */
+    getHitBox2() {
+        const box = this.currentFrame.hitBox;
+
+        return {
+            x: this.x + box.x,
+            x2: this.x + box.x2,
+            y: this.y + box.y,
+            y2: this.y + box.y2
+        };
     }
 
     /**
