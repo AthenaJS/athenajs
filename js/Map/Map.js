@@ -723,22 +723,28 @@ class Map {
         let hit = false,
             box = sprite.getHitBox2(),
             isLeft = distance < 0,
-            tilePos = this.getTilePos(isLeft ? box.x : box.x2, box.y),
+            step = isLeft ? -this.tileWidth : this.tileWidth,
+            max = isLeft ? -1 : 1,
+            tilePos = this.getTilePos(isLeft ? box.x + max : box.x2 + max, box.y),
             startY = tilePos.y,
-            endY = startY + Math.floor((box.y2 - box.y) / this.map.tileHeight),
-            step = isLeft ? 1 : -1,
-            max = distance,
+            endY = startY + Math.floor((box.y2 - box.y) / this.tileHeight),
             j = 0;
 
-        while (!hit && Math.abs(max) <= Math.abs(vx)) {
-            for (j = startY; j < endY; ++j) {
-                hit = this.getTileBehaviorAtIndex(tilePos.x, j) === tileType;
+        while (!hit && Math.abs(max) < Math.abs(distance)) {
+            for (j = startY; j <= endY; ++j) {
+                hit = hit || (this.getTileBehaviorAtIndex(tilePos.x, j) === tileType);
             }
-            max += step;
-            tilePos = this.getTilePos(isLeft ? box.x : box.x2, box.y);
+            if (!hit) {
+                max += step;
+                tilePos = this.getTilePos(isLeft ? box.x + max : box.x2 + max, box.y);
+            }
         }
 
-        return max;
+        if (!hit) {
+            return distance;
+        } else {
+            return Math.abs(max) > 1 ? max - step : 0;
+        }
     }
 
 	/**
