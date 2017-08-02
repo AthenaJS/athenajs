@@ -276,13 +276,17 @@ class GfxObject {
   /**
    * Sets a new behavior to the object: this will be called in the move loop
    * 
-   * @param {String} name The name of the behavior to use.
-   * @param {Object} options The options of the behavior (may depend on the behavior type)
+   * @param {String|Behavior} behavior Either the name of a standard behavior or a Behavior class to use.
+   * @param {Object={}} options The options of the behavior (may depend on the behavior type)
    * 
    * @related {Behavior}
    */
-  setBehavior(name, options) {
-    this.behavior = new (Behaviors.getBehavior(name))(this, Input, options);
+  setBehavior(behavior, options = {}) {
+    if (typeof behavior === 'string') {
+      this.behavior = new (Behaviors.getBehavior(name))(this, Input, options);
+    } else {
+      this.behavior = new behavior(this, Input, options);
+    }
   }
 
   /**
