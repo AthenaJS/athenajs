@@ -719,6 +719,28 @@ class Map {
         return triggers;
     }
 
+    getMaxDistanceToTile(sprite, distance, tileType) {
+        let hit = false,
+            box = sprite.getHitBox2(),
+            isLeft = distance < 0,
+            tilePos = this.getTilePos(isLeft ? box.x : box.x2, box.y),
+            startY = tilePos.y,
+            endY = startY + Math.floor((box.y2 - box.y) / this.map.tileHeight),
+            step = isLeft ? 1 : -1,
+            max = distance,
+            j = 0;
+
+        while (!hit && Math.abs(max) <= Math.abs(vx)) {
+            for (j = startY; j < endY; ++j) {
+                hit = this.getTileBehaviorAtIndex(tilePos.x, j) === tileType;
+            }
+            max += step;
+            tilePos = this.getTilePos(isLeft ? box.x : box.x2, box.y);
+        }
+
+        return max;
+    }
+
 	/**
 	 * Calculates and sets the object's next x position using its current x, vx and
 	 * avoids tileTypes tiles (ie: walls, moving platforms)
@@ -1158,6 +1180,18 @@ class Map {
         tileNum = this.map[this.numCols * j + i];
 
         return this.tiles[tileNum];
+    }
+
+    /**
+     * Get the behavior at specified index
+     * 
+     * @param {Number} col The col number
+     * @param {Number} row The row number
+     * 
+     * @returns {Number} The behavior found at position (col, row)
+     */
+    getTileBehaviorAtIndex(col, row) {
+        return this.tileBehaviors[this.numCols * row + col];
     }
 
 	/**
