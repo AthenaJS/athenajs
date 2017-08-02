@@ -15,6 +15,8 @@ export { default as Hud } from 'Object/Hud';
 export { default as BitmapText } from 'Object/BitmapText';
 export { default as Circle } from 'Object/Circle';
 
+export { default as Behavior } from 'Object/Behavior/Behavior';
+
 export { default as NotificationManager } from 'Notification/NotificationManager';
 
 export { default as Map } from 'Map/Map';
