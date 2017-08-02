@@ -317,8 +317,6 @@ class GfxObject {
         } else {
           moveProgress = this.easing(t, ellapsedTime, 0, 1, this.duration);
 
-          // console.log('moving', this.viewportX);
-
           this.x = this.targetStartX + moveProgress * this.targetDistanceX | 0;
           this.y = this.targetStartY + moveProgress * this.targetDistanceY | 0;
         }
@@ -330,7 +328,7 @@ class GfxObject {
           // gravity impacts velocity
           this.vy -= this.gravity;
         } else {
-          this.behavior.onMove();
+          this.behavior.onMove(timestamp);
         }
       }
 
@@ -339,10 +337,6 @@ class GfxObject {
           child.move();
         });
       }
-
-      // TODO: check map to see if we can move
-      /*                this.x += this.vx;
-                  this.y += this.vy;                */
     }
   }
 
