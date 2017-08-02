@@ -6,15 +6,15 @@ export default class Circle extends GfxObject{
 
         this.w = options.w || 0;
         this.h = options.h || 0;
-        this.x = options.x || this.w / 2;
-        this.y = options.y || this.h / 2;
+        this.x = options.x || 0;
+        this.y = options.y || 0;
         this.radius = options.radius || this.w / 2;
         this.color = options.color || "red";
     }
 
     draw(ctx, debug) {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
+        ctx.arc(this.x + this.w/2, this.y + this.h/2, this.radius, 0, 2 * Math.PI);
         ctx.fillStyle = this.color;
         ctx.fill();
     }
