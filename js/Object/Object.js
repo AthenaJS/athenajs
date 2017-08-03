@@ -324,6 +324,10 @@ class GfxObject {
           this.x = this.targetStartX + moveProgress * this.targetDistanceX | 0;
           this.y = this.targetStartY + moveProgress * this.targetDistanceY | 0;
         }
+        // in addition to moving, we need to call the behavior that may cancel current move ?
+        // if (this.behavior) {
+        //   this.behavior.onMove(timestamp);
+        // }
       } else {
         if (!this.behavior) {
           this.x += this.vx;

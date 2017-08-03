@@ -719,7 +719,44 @@ class Map {
         return triggers;
     }
 
-    getMaxDistanceToTile(sprite, distance, tileType) {
+    /**
+     * Compares a source matrix with map behaviors, looking for hits
+     * 
+     * @param {Array} buffer the source buffer: 0 === empty, 1 === full
+     * @param {Number} width the width of each element in the source
+     * @param {Number} x the x target in pixels to start checking inside the map
+     * @param {Number} y the y target in pixels to start checking inside the map
+     * @param {Number} behavior the behavior to check for
+     * 
+     * @returns {Bolean} true if one or more hits were found, false otherwise
+     */
+    checkMatrixForCollision(buffer, width, x, y, behavior) {
+        let rows = buffer.length / width,
+            i = j = 0,
+            pos = this.getTilePos(x, y),
+            hit = false;
+
+        // TODO: get row/col
+
+        for (i = 0; i < rows; ++i) {
+            for (j = 0; j < width; ++j) {
+                hit = hit || (buffer[i * width + j] && this.getTileBehaviorAtIndex(pos.x, j) === behavior);
+            }
+        }
+
+        return hit;
+    }
+
+    /**
+     * This method returns min(next `Behavior` tile, distance)
+     * 
+     * @param {Sprite} sprite the sprite to check distance with
+     * @param {Number} distance the maximum (x) distance in pixels
+     * @param {Number} behavior the behavior we want to check for
+     * 
+     * Returns the minimum distance
+     */
+    getMaxDistanceToTile(sprite, distance, behavior) {
         let hit = false,
             box = sprite.getHitBox2(),
             isLeft = distance < 0,
@@ -732,7 +769,7 @@ class Map {
 
         while (!hit && Math.abs(max) < Math.abs(distance)) {
             for (j = startY; j <= endY; ++j) {
-                hit = hit || (this.getTileBehaviorAtIndex(tilePos.x, j) === tileType);
+                hit = hit || (this.getTileBehaviorAtIndex(tilePos.x, j) === behavior);
             }
             if (!hit) {
                 max += step;
