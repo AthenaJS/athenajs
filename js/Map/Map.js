@@ -108,13 +108,7 @@ class Map {
         // sets map data buffer
         this.setBuffer(options.buffer);
 
-        // TODO: init buffer with zeros if not specified ?
-
         this.dataUrl = options.dataUrl;
-		/*
-				this.map = options.map || new Array(this.numCols * this.numRows);
-                this.tileTypes = options.tileTypes || new Array(this.numCols * this.numRows);
-				*/
 
         this.reverse = false;
 
@@ -271,6 +265,7 @@ class Map {
 
         this.map = new Uint8Array(buffer, 0, size);
         this.tileBehaviors = new Uint8Array(buffer, size);
+        this.buffer = buffer;
     }
 
 
@@ -1578,120 +1573,142 @@ class Map {
         }
     }
 
-	/**
-	 * WIP & NOT TESTED: some code to allow resizing a map, was to be used in map editor
-	 * 
-	 * @param {string} direction Where to extend the map, can be 'bottomLeft', 'bottomRight', 'topLeft', 'topRight'
-	 * @param {Object} options
-	 * 
-	 * @private
-	 */
-    resize(direction, options) {
-		/*
-			only increases size for now (decrease means we may loose some objects,...)
-			direction:
-			'topleft' == top -> bottom, left -> right (option = {newWidth, newHeight})
-			'topright' == top -> bottom, right -> left (option = {newWidth, newHeight})
-			'bottomleft' == bottom -> top, left -> right (option = {newWidth, newHeight})
-			'bottomright' == bottom -> top, right -> left (option = {newWidth, newHeight})
-			'center' == center -> each side (option = {newSize})
-		*/
-        let buffer = null,
-            triggers = {},
-            itemBlocks = {},
-            map = null,
-            tileTypes = null,
-            item = null,
-            items = null;
+    /**
+     * shifts map from top to bottom
+     * 
+     * @param {Number} startLine Where to start the copy
+     * @param {Number} height How many lines to shift
+     * @param {Number} tile tile to use for new lines
+     * @param {Number} behavior behavior to use for new lines
+     */
+    shift(startLine, height, tile, behavior) {
+        const tiles = new Uint8Array(this.buffer, 0, startLine * numCols),
+            behaviors = new Uint8Array(this.buffer, 0, this.numCols * this.numRows + startLine * numCols),
+            dstOffset = height * this.numCols;
 
-        // TODO: should we allow changing viewpPort size as well ?
-		/*				this.width = width;
-						this.height = height;
-						this.viewportW = vpWidth;
-						this.viewportH = vpHeight;
-						this.viewportX = 0;
-						this.viewportY = 0;*/
+        this.map.set(tiles, offset);
+        this.tileBehaviors.set(behaviors, offset)
 
-        if (direction === 'bottomleft') {
-            let diffWidth = options.newWidth - this.width,
-                diffHeight = options.newHeight - this.height,
-                numCols = options.newWidth / this.tileWidth | 0,
-                numRows = options.newHeight / this.tileHeight | 0,
-                diffCols = numCols - this.numCols,
-                diffRows = numRows - this.numRows,
-                oldBlockX = this.width / this.viewportW | 0,
-                oldBlockY = this.height / this.viewportH | 0,
-                newBlockX = options.newWidth / this.viewportW | 0,
-                newBlockY = options.newHeight / this.viewportH | 0,
-                newBlocksX = newBlockX - oldBlockX,
-                newBlocksY = newBlockY - oldBlockY;
+        this.isDirty = true;
+    }
 
-            // create new buffer for map tiles + behaviors
-            buffer = new ArrayBuffer(numCols * numRows * 2),
-                map = new Uint8Array(buffer, 0, numRows * numCols),
-                tileBehaviors = new Uint8Array(buffer, numRows * numCols, numRows * numCols);
+    // empy new lines
+}
 
-            // new buffer is automatically filled with zeros
-            // so we only need to copy existing tiles/behaviors into the new
-            // buffer at the correct position
-            for (let y = diffRows; y < numRows; y++) {
-                for (let x = 0; x < this.numCols; x++) {
-                    map[(y * numCols) + x] = this.map[(y * numCols) + x];
-                    tileBehaviors[(y * numCols) + x] = this.tileBehaviors[(y * numCols) + x];
+/**
+ * WIP & NOT TESTED: some code to allow resizing a map, was to be used in map editor
+ * 
+ * @param {string} direction Where to extend the map, can be 'bottomLeft', 'bottomRight', 'topLeft', 'topRight'
+ * @param {Object} options
+ * 
+ * @private
+ */
+resize(direction, options) {
+    /*
+        only increases size for now (decrease means we may loose some objects,...)
+        direction:
+        'topleft' == top -> bottom, left -> right (option = {newWidth, newHeight})
+        'topright' == top -> bottom, right -> left (option = {newWidth, newHeight})
+        'bottomleft' == bottom -> top, left -> right (option = {newWidth, newHeight})
+        'bottomright' == bottom -> top, right -> left (option = {newWidth, newHeight})
+        'center' == center -> each side (option = {newSize})
+    */
+    let buffer = null,
+        triggers = {},
+        itemBlocks = {},
+        map = null,
+        tileTypes = null,
+        item = null,
+        items = null;
 
-                    if (this.triggers[(y * numCols) + x]) {
-                        item = Object.assign({}, true, this.triggers[(y * numCols) + x]);
+    // TODO: should we allow changing viewpPort size as well ?
+    /*				this.width = width;
+                    this.height = height;
+                    this.viewportW = vpWidth;
+                    this.viewportH = vpHeight;
+                    this.viewportX = 0;
+                    this.viewportY = 0;*/
+
+    if (direction === 'bottomleft') {
+        let diffWidth = options.newWidth - this.width,
+            diffHeight = options.newHeight - this.height,
+            numCols = options.newWidth / this.tileWidth | 0,
+            numRows = options.newHeight / this.tileHeight | 0,
+            diffCols = numCols - this.numCols,
+            diffRows = numRows - this.numRows,
+            oldBlockX = this.width / this.viewportW | 0,
+            oldBlockY = this.height / this.viewportH | 0,
+            newBlockX = options.newWidth / this.viewportW | 0,
+            newBlockY = options.newHeight / this.viewportH | 0,
+            newBlocksX = newBlockX - oldBlockX,
+            newBlocksY = newBlockY - oldBlockY;
+
+        // create new buffer for map tiles + behaviors
+        buffer = new ArrayBuffer(numCols * numRows * 2),
+            map = new Uint8Array(buffer, 0, numRows * numCols),
+            tileBehaviors = new Uint8Array(buffer, numRows * numCols, numRows * numCols);
+
+        // new buffer is automatically filled with zeros
+        // so we only need to copy existing tiles/behaviors into the new
+        // buffer at the correct position
+        for (let y = diffRows; y < numRows; y++) {
+            for (let x = 0; x < this.numCols; x++) {
+                map[(y * numCols) + x] = this.map[(y * numCols) + x];
+                tileBehaviors[(y * numCols) + x] = this.tileBehaviors[(y * numCols) + x];
+
+                if (this.triggers[(y * numCols) + x]) {
+                    item = Object.assign({}, true, this.triggers[(y * numCols) + x]);
+                    if (item.spriteOptions) {
+                        item.spriteOptions.y += diffHeight;
+                    }
+                    triggers[(y * numCols) + x] = item;
+                }
+            }
+        }
+
+        this.setBuffer(buffer);
+        this.width = options.newWidth;
+        this.height = options.newHeight;
+
+        this.triggers = triggers;
+
+        this._calcNumTiles();
+
+        // this was the easiest part, now we need to update triggers and mapblocks
+        // if needed, we simply create new blocks, but do not modify blocks (we would
+        // need to move each item depending on position, this is too much work)
+        // simply add existing blocks, new ones are empty so should not be added
+        for (let y = newBlocksY; y < newBlockY; ++y) {
+            for (let x = 0; x < oldBlockX; ++x) {
+                if (this.windows[y * oldBlockX + x]) {
+                    items = this.windows[y * oldBlockX + x].items;
+
+                    for (let num = 0; num < items.length; ++num) {
+                        item = Object.assign({}, items[num]);
+                        // we consider x and y are always set
                         if (item.spriteOptions) {
                             item.spriteOptions.y += diffHeight;
                         }
-                        triggers[(y * numCols) + x] = item;
                     }
+
+                    // TODO: since we're doing this.windows = mapItemBlocks we
+                    // should copy and not only get references of each element
+                    itemBlocks[y * oldBlockX + x] = {
+                        displayed: false,
+                        items: items.slice(0)
+                    };
                 }
             }
-
-            this.setBuffer(buffer);
-            this.width = options.newWidth;
-            this.height = options.newHeight;
-
-            this.triggers = triggers;
-
-            this._calcNumTiles();
-
-            // this was the easiest part, now we need to update triggers and mapblocks
-            // if needed, we simply create new blocks, but do not modify blocks (we would
-            // need to move each item depending on position, this is too much work)
-            // simply add existing blocks, new ones are empty so should not be added
-            for (let y = newBlocksY; y < newBlockY; ++y) {
-                for (let x = 0; x < oldBlockX; ++x) {
-                    if (this.windows[y * oldBlockX + x]) {
-                        items = this.windows[y * oldBlockX + x].items;
-
-                        for (let num = 0; num < items.length; ++num) {
-                            item = Object.assign({}, items[num]);
-                            // we consider x and y are always set
-                            if (item.spriteOptions) {
-                                item.spriteOptions.y += diffHeight;
-                            }
-                        }
-
-                        // TODO: since we're doing this.windows = mapItemBlocks we
-                        // should copy and not only get references of each element
-                        itemBlocks[y * oldBlockX + x] = {
-                            displayed: false,
-                            items: items.slice(0)
-                        };
-                    }
-                }
-            }
-
-            this.windows = itemBlocks;
-
-            // that's all folks !
-            // TODO: test me!
-        } else {
-            throw 'resize not support for direction' + direction;
         }
+
+        this.windows = itemBlocks;
+
+        // that's all folks !
+        // TODO: test me!
+    } else {
+        throw 'resize not support for direction' + direction;
     }
+}
 };
 
 export default Map;
