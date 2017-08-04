@@ -723,24 +723,26 @@ class Map {
      * Compares a source matrix with map behaviors, looking for hits
      * 
      * @param {Array} buffer the source buffer: 0 === empty, 1 === full
-     * @param {Number} width the width of each element in the source
+     * @param {Number} matrixWidth the width of the matrix, in pixels
      * @param {Number} x the x target in pixels to start checking inside the map
      * @param {Number} y the y target in pixels to start checking inside the map
      * @param {Number} behavior the behavior to check for
      * 
      * @returns {Bolean} true if one or more hits were found, false otherwise
      */
-    checkMatrixForCollision(buffer, width, x, y, behavior) {
-        let rows = buffer.length / width,
-            i = j = 0,
+    checkMatrixForCollision(buffer, matrixWidth, x, y, behavior) {
+        let cols = matrixWidth / this.tileWidth,
+            rows = buffer.length / cols,
+            i = 0,
+            j = 0,
             pos = this.getTilePos(x, y),
             hit = false;
 
         // TODO: get row/col
 
         for (i = 0; i < rows; ++i) {
-            for (j = 0; j < width; ++j) {
-                hit = hit || (buffer[i * width + j] && this.getTileBehaviorAtIndex(pos.x, j) === behavior);
+            for (j = 0; j < cols; ++j) {
+                hit = hit || (buffer[i * cols + j] && (this.getTileBehaviorAtIndex(pos.x + j, i) === behavior));
             }
         }
 
