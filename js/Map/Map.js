@@ -719,8 +719,8 @@ class Map {
      * 
      * @param {Array} buffer the source buffer: 0 === empty, 1 === full
      * @param {Number} matrixWidth the width of the matrix, in pixels
-     * @param {Number} x the x target in pixels to start checking inside the map
-     * @param {Number} y the y target in pixels to start checking inside the map
+     * @param {Number} x the x index to start checking inside the map
+     * @param {Number} y the y index to start checking inside the map
      * @param {Number} behavior the behavior to check for
      * 
      * @returns {Bolean} true if one or more hits were found, false otherwise
@@ -730,20 +730,11 @@ class Map {
             rows = buffer.length / cols,
             i = 0,
             j = 0,
-            pos = this.getTileIndexFromPixel(x, y),
             hit = false;
-
-        if (x % this.tileWidth) {
-            cols++;
-        }
-
-        if (y % this.tileHeight) {
-            rows++;
-        }
 
         for (i = 0; i < rows; ++i) {
             for (j = 0; j < cols; ++j) {
-                hit = hit || (buffer[i * cols + j] && (this.getTileBehaviorAtIndex(pos.x + j, i) === behavior));
+                hit = hit || (buffer[i * cols + j] && (this.getTileBehaviorAtIndex(x + j, y + i) === behavior));
             }
         }
 
