@@ -260,6 +260,9 @@ class Game {
         if (scene) {
             this.scene = scene;
 
+            // debug
+            window.currentScene = scene;
+
             this.scene.setDisplay(this.display);
 
             this.display.clearDisplay();
