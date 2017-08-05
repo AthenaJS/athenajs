@@ -118,11 +118,9 @@ class GfxObject {
     }
 
     if (options.scene) {
-      debugger;
       options.scene.addObject(this);
       return;
     } else if (options.map) {
-      debugger;
       return;
       options.map.addObject(this);
     }
@@ -269,8 +267,7 @@ class GfxObject {
       }
 
       pos = map.getTilePixelPos(pos.x, pos.y);
-
-      this.moveTo(pos.x, pos.y, duration);
+      this.moveTo(pos.x, pos.y);
     }
   }
 
@@ -312,7 +309,7 @@ class GfxObject {
    */
   setBehavior(behavior, options = {}) {
     if (typeof behavior === 'string') {
-      this.behavior = new (Behaviors.getBehavior(name))(this, Input, options);
+      this.behavior = new (Behaviors.getBehavior(behavior))(this, Input, options);
     } else {
       this.behavior = new behavior(this, Input, options);
     }
