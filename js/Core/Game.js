@@ -120,7 +120,7 @@ class Game {
                         this.tileInspector.hide();
                         this.tileHover.hide();
                     } else {
-                        const pos = map.getTilePos(offsetX - mapOffsetX - map.viewportX, offsetY - mapOffsetY - map.viewportY);
+                        const pos = map.getTileIndexFromPixel(offsetX - mapOffsetX - map.viewportX, offsetY - mapOffsetY - map.viewportY);
                         if (pos) {
                             this.tileInspector.html(`${pos.x}, ${pos.y}<br />[${map.map[pos.x + pos.y * map.numCols]}, ${map.tileBehaviors[pos.x + pos.y * map.numCols]}]`).css({
                                 left: 0,

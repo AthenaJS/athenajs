@@ -599,7 +599,7 @@ class Map {
 	 * @related {Tile}
 	 */
     fallTest(x, y) {
-        let pos = this.getTilePos(x, y);
+        let pos = this.getTileIndexFromPixel(x, y);
 
         // return (!(this.tileBehaviors[pos.x + pos.y * this.numCols] & 1));
         return this.tileBehaviors[pos.x + pos.y * this.numCols] === Tile.TYPE.WALL;
@@ -692,10 +692,10 @@ class Map {
 	 * @private
 	 */
     getTriggersForBox(x, y, x2, y2) {
-        let pos1 = this.getTilePos(x, y),
-            pos2 = this.getTilePos(x2, y),
-            pos3 = this.getTilePos(x, y2),
-            /* pos4 = this.getTilePos(x2, y2), */
+        let pos1 = this.getTileIndexFromPixel(x, y),
+            pos2 = this.getTileIndexFromPixel(x2, y),
+            pos3 = this.getTileIndexFromPixel(x, y2),
+            /* pos4 = this.getTileIndexFromPixel(x2, y2), */
             max1 = pos2.x,
             max2 = pos3.y,
             i, j,
@@ -730,10 +730,16 @@ class Map {
             rows = buffer.length / cols,
             i = 0,
             j = 0,
-            pos = this.getTilePos(x, y),
+            pos = this.getTileIndexFromPixel(x, y),
             hit = false;
 
-        // TODO: get row/col
+        if (x % this.tileWidth) {
+            cols++;
+        }
+
+        if (y % this.tileHeight) {
+            rows++;
+        }
 
         for (i = 0; i < rows; ++i) {
             for (j = 0; j < cols; ++j) {
@@ -759,7 +765,7 @@ class Map {
             isLeft = distance < 0,
             step = isLeft ? -this.tileWidth : this.tileWidth,
             max = isLeft ? -1 : 1,
-            tilePos = this.getTilePos(isLeft ? box.x + max : box.x2 + max, box.y),
+            tilePos = this.getTileIndexFromPixel(isLeft ? box.x + max : box.x2 + max, box.y),
             startY = tilePos.y,
             endY = startY + Math.floor((box.y2 - box.y) / this.tileHeight),
             j = 0;
@@ -770,7 +776,7 @@ class Map {
             }
             if (!hit) {
                 max += step;
-                tilePos = this.getTilePos(isLeft ? box.x + max : box.x2 + max, box.y);
+                tilePos = this.getTileIndexFromPixel(isLeft ? box.x + max : box.x2 + max, box.y);
             }
         }
 
@@ -804,7 +810,7 @@ class Map {
             spriteYMax = sprite.y + hitBox.y2,
             startX = left ? sprite.x + hitBox.x - 1 : sprite.x + hitBox.x2 + 1,
             startY = sprite.y + hitBox.y,
-            tilePos = this.getTilePos(startX, startY),
+            tilePos = this.getTileIndexFromPixel(startX, startY),
             found = false,
             minX = left ? startX : 0;
         //
@@ -825,7 +831,7 @@ class Map {
             }
             startX = left ? ((tilePos.x * this.tileWidth) - 1) : tilePos.x * this.tileWidth;
 
-            tilePos = this.getTilePos(startX, startY);
+            tilePos = this.getTileIndexFromPixel(startX, startY);
         }
         // console.log('end test');
 
@@ -853,7 +859,7 @@ class Map {
             spriteXMax = sprite.x + hitBox.x2,
             startX = sprite.x + hitBox.x,
             startY = sprite.y + hitBox.x2 + 1,
-            tilePos = this.getTilePos(startX, startY),
+            tilePos = this.getTileIndexFromPixel(startX, startY),
             found = false,
             minY = 0;
 
@@ -874,7 +880,7 @@ class Map {
     // 		spriteYMax = sprite.y + hitBox.y2,
     // 		startX = sprite.x + hitBox.x2 + 1,
     // 		startY = sprite.y + hitBox.y,
-    // 		tilePos = this.getTilePos(startX, startY),
+    // 		tilePos = this.getTileIndexFromPixel(startX, startY),
     // 		found = false,
     // 		minX = 0;
 
@@ -895,7 +901,7 @@ class Map {
     // 			}
     // 			startX = tilePos.x * this.tileWidth;
 
-    // 			tilePos = this.getTilePos(startX, startY);
+    // 			tilePos = this.getTileIndexFromPixel(startX, startY);
     // 		}
     // 		// console.log('end test');
 
@@ -955,9 +961,9 @@ class Map {
 	 * 
 	 */
     hitObjectTest(x, y, x2, y2, types) {
-        let pos1 = this.getTilePos(x, y),
-            pos2 = this.getTilePos(x2, y),
-            pos3 = this.getTilePos(x, y2),
+        let pos1 = this.getTileIndexFromPixel(x, y),
+            pos2 = this.getTileIndexFromPixel(x2, y),
+            pos3 = this.getTileIndexFromPixel(x, y2),
             max1 = pos2.x,
             max2 = pos3.y,
             i, j,
@@ -1242,7 +1248,7 @@ class Map {
 	 * @returns {Object} Object with i, j tile index
 	 * 
 	 */
-    getTilePos(x, y) {
+    getTileIndexFromPixel(x, y) {
         let i,
             j;
 
@@ -1252,6 +1258,20 @@ class Map {
         return {
             x: i,
             y: j
+        };
+    }
+
+    /**
+     * Returns the pixel position of the specified tile
+     *
+     * @param {Number} col tile column
+     * @param {Number} row tile row
+     * @returns {Object} an object with x & y properties set with tile pixel position
+     */
+    getTilePixelPos(col, row) {
+        return {
+            y: row * this.tileHeight,
+            x: col * this.tileWidth
         };
     }
 
@@ -1592,123 +1612,120 @@ class Map {
         this.isDirty = true;
     }
 
-    // empy new lines
-}
+    /**
+     * WIP & NOT TESTED: some code to allow resizing a map, was to be used in map editor
+     * 
+     * @param {string} direction Where to extend the map, can be 'bottomLeft', 'bottomRight', 'topLeft', 'topRight'
+     * @param {Object} options
+     * 
+     * @private
+     */
+    resize(direction, options) {
+        /*
+            only increases size for now (decrease means we may loose some objects,...)
+            direction:
+            'topleft' == top -> bottom, left -> right (option = {newWidth, newHeight})
+            'topright' == top -> bottom, right -> left (option = {newWidth, newHeight})
+            'bottomleft' == bottom -> top, left -> right (option = {newWidth, newHeight})
+            'bottomright' == bottom -> top, right -> left (option = {newWidth, newHeight})
+            'center' == center -> each side (option = {newSize})
+        */
+        let buffer = null,
+            triggers = {},
+            itemBlocks = {},
+            map = null,
+            tileTypes = null,
+            item = null,
+            items = null;
 
-/**
- * WIP & NOT TESTED: some code to allow resizing a map, was to be used in map editor
- * 
- * @param {string} direction Where to extend the map, can be 'bottomLeft', 'bottomRight', 'topLeft', 'topRight'
- * @param {Object} options
- * 
- * @private
- */
-resize(direction, options) {
-    /*
-        only increases size for now (decrease means we may loose some objects,...)
-        direction:
-        'topleft' == top -> bottom, left -> right (option = {newWidth, newHeight})
-        'topright' == top -> bottom, right -> left (option = {newWidth, newHeight})
-        'bottomleft' == bottom -> top, left -> right (option = {newWidth, newHeight})
-        'bottomright' == bottom -> top, right -> left (option = {newWidth, newHeight})
-        'center' == center -> each side (option = {newSize})
-    */
-    let buffer = null,
-        triggers = {},
-        itemBlocks = {},
-        map = null,
-        tileTypes = null,
-        item = null,
-        items = null;
+        // TODO: should we allow changing viewpPort size as well ?
+        /*				this.width = width;
+                        this.height = height;
+                        this.viewportW = vpWidth;
+                        this.viewportH = vpHeight;
+                        this.viewportX = 0;
+                        this.viewportY = 0;*/
 
-    // TODO: should we allow changing viewpPort size as well ?
-    /*				this.width = width;
-                    this.height = height;
-                    this.viewportW = vpWidth;
-                    this.viewportH = vpHeight;
-                    this.viewportX = 0;
-                    this.viewportY = 0;*/
+        if (direction === 'bottomleft') {
+            let diffWidth = options.newWidth - this.width,
+                diffHeight = options.newHeight - this.height,
+                numCols = options.newWidth / this.tileWidth | 0,
+                numRows = options.newHeight / this.tileHeight | 0,
+                diffCols = numCols - this.numCols,
+                diffRows = numRows - this.numRows,
+                oldBlockX = this.width / this.viewportW | 0,
+                oldBlockY = this.height / this.viewportH | 0,
+                newBlockX = options.newWidth / this.viewportW | 0,
+                newBlockY = options.newHeight / this.viewportH | 0,
+                newBlocksX = newBlockX - oldBlockX,
+                newBlocksY = newBlockY - oldBlockY;
 
-    if (direction === 'bottomleft') {
-        let diffWidth = options.newWidth - this.width,
-            diffHeight = options.newHeight - this.height,
-            numCols = options.newWidth / this.tileWidth | 0,
-            numRows = options.newHeight / this.tileHeight | 0,
-            diffCols = numCols - this.numCols,
-            diffRows = numRows - this.numRows,
-            oldBlockX = this.width / this.viewportW | 0,
-            oldBlockY = this.height / this.viewportH | 0,
-            newBlockX = options.newWidth / this.viewportW | 0,
-            newBlockY = options.newHeight / this.viewportH | 0,
-            newBlocksX = newBlockX - oldBlockX,
-            newBlocksY = newBlockY - oldBlockY;
+            // create new buffer for map tiles + behaviors
+            buffer = new ArrayBuffer(numCols * numRows * 2),
+                map = new Uint8Array(buffer, 0, numRows * numCols),
+                tileBehaviors = new Uint8Array(buffer, numRows * numCols, numRows * numCols);
 
-        // create new buffer for map tiles + behaviors
-        buffer = new ArrayBuffer(numCols * numRows * 2),
-            map = new Uint8Array(buffer, 0, numRows * numCols),
-            tileBehaviors = new Uint8Array(buffer, numRows * numCols, numRows * numCols);
+            // new buffer is automatically filled with zeros
+            // so we only need to copy existing tiles/behaviors into the new
+            // buffer at the correct position
+            for (let y = diffRows; y < numRows; y++) {
+                for (let x = 0; x < this.numCols; x++) {
+                    map[(y * numCols) + x] = this.map[(y * numCols) + x];
+                    tileBehaviors[(y * numCols) + x] = this.tileBehaviors[(y * numCols) + x];
 
-        // new buffer is automatically filled with zeros
-        // so we only need to copy existing tiles/behaviors into the new
-        // buffer at the correct position
-        for (let y = diffRows; y < numRows; y++) {
-            for (let x = 0; x < this.numCols; x++) {
-                map[(y * numCols) + x] = this.map[(y * numCols) + x];
-                tileBehaviors[(y * numCols) + x] = this.tileBehaviors[(y * numCols) + x];
-
-                if (this.triggers[(y * numCols) + x]) {
-                    item = Object.assign({}, true, this.triggers[(y * numCols) + x]);
-                    if (item.spriteOptions) {
-                        item.spriteOptions.y += diffHeight;
-                    }
-                    triggers[(y * numCols) + x] = item;
-                }
-            }
-        }
-
-        this.setBuffer(buffer);
-        this.width = options.newWidth;
-        this.height = options.newHeight;
-
-        this.triggers = triggers;
-
-        this._calcNumTiles();
-
-        // this was the easiest part, now we need to update triggers and mapblocks
-        // if needed, we simply create new blocks, but do not modify blocks (we would
-        // need to move each item depending on position, this is too much work)
-        // simply add existing blocks, new ones are empty so should not be added
-        for (let y = newBlocksY; y < newBlockY; ++y) {
-            for (let x = 0; x < oldBlockX; ++x) {
-                if (this.windows[y * oldBlockX + x]) {
-                    items = this.windows[y * oldBlockX + x].items;
-
-                    for (let num = 0; num < items.length; ++num) {
-                        item = Object.assign({}, items[num]);
-                        // we consider x and y are always set
+                    if (this.triggers[(y * numCols) + x]) {
+                        item = Object.assign({}, true, this.triggers[(y * numCols) + x]);
                         if (item.spriteOptions) {
                             item.spriteOptions.y += diffHeight;
                         }
+                        triggers[(y * numCols) + x] = item;
                     }
-
-                    // TODO: since we're doing this.windows = mapItemBlocks we
-                    // should copy and not only get references of each element
-                    itemBlocks[y * oldBlockX + x] = {
-                        displayed: false,
-                        items: items.slice(0)
-                    };
                 }
             }
+
+            this.setBuffer(buffer);
+            this.width = options.newWidth;
+            this.height = options.newHeight;
+
+            this.triggers = triggers;
+
+            this._calcNumTiles();
+
+            // this was the easiest part, now we need to update triggers and mapblocks
+            // if needed, we simply create new blocks, but do not modify blocks (we would
+            // need to move each item depending on position, this is too much work)
+            // simply add existing blocks, new ones are empty so should not be added
+            for (let y = newBlocksY; y < newBlockY; ++y) {
+                for (let x = 0; x < oldBlockX; ++x) {
+                    if (this.windows[y * oldBlockX + x]) {
+                        items = this.windows[y * oldBlockX + x].items;
+
+                        for (let num = 0; num < items.length; ++num) {
+                            item = Object.assign({}, items[num]);
+                            // we consider x and y are always set
+                            if (item.spriteOptions) {
+                                item.spriteOptions.y += diffHeight;
+                            }
+                        }
+
+                        // TODO: since we're doing this.windows = mapItemBlocks we
+                        // should copy and not only get references of each element
+                        itemBlocks[y * oldBlockX + x] = {
+                            displayed: false,
+                            items: items.slice(0)
+                        };
+                    }
+                }
+            }
+
+            this.windows = itemBlocks;
+
+            // that's all folks !
+            // TODO: test me!
+        } else {
+            throw 'resize not support for direction' + direction;
         }
-
-        this.windows = itemBlocks;
-
-        // that's all folks !
-        // TODO: test me!
-    } else {
-        throw 'resize not support for direction' + direction;
     }
-}
 };
 
 export default Map;
