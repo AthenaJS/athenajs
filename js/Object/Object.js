@@ -246,6 +246,35 @@ class GfxObject {
   }
 
   /**
+   * Moves the object by snapping it to the map tiles
+   *
+   * @param {Boolean} isLeft should we snap to the left? 
+   * @param {Boolean} isUp should we snap to the right?
+   * @param {Number=0} duration the duration of the snap move in ms
+   */
+  snapToMap(isLeft, isUp, duration = 0) {
+    if (!this.currentMap) {
+      return;
+    } else {
+      const map = this.currentMap;
+      let pos = map.getTileIndexFromPixel(this.x, this.y);
+
+      // TODO: check boundaries
+      if (this.x % map.tileWidth && !isLeft) {
+        pos.x++;
+      }
+
+      if (this.y % map.tileHeight && !isUp) {
+        pos.y++;
+      }
+
+      pos = map.getTilePixelPos(pos.x, pos.y);
+
+      this.moveTo(pos.x, pos.y, duration);
+    }
+  }
+
+  /**
    * Stops the object from moving, optionnaly immediately going to target position
    * 
    * @param {Boolean=false} gotoTarget set to true to go to the target position
