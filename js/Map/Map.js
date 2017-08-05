@@ -1582,7 +1582,7 @@ class Map {
     updateTile(col, row, tileNum = -1, behavior = -1) {
         var pos = row * this.numCols + col;
 
-        if (tileNum) {
+        if (tileNum > -1) {
             this.map[pos] = tileNum;
             this.isDirty = true;
         }
@@ -1602,9 +1602,9 @@ class Map {
      * @param {Number} behavior behavior to use for new lines
      */
     shift(startLine, height, tile, behavior) {
-        const tiles = new Uint8Array(this.buffer, 0, startLine * numCols),
-            behaviors = new Uint8Array(this.buffer, 0, this.numCols * this.numRows + startLine * numCols),
-            dstOffset = height * this.numCols;
+        const tiles = new Uint8Array(this.buffer, 0, startLine * this.numCols),
+            behaviors = new Uint8Array(this.buffer, this.numCols * this.numRows, startLine * this.numCols),
+            offset = height * this.numCols;
 
         this.map.set(tiles, offset);
         this.tileBehaviors.set(behaviors, offset)
