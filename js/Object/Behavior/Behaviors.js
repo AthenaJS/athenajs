@@ -4,29 +4,29 @@ import PlayerMove from 'Object/Behavior/PlayerMove';
 import InOut from 'Object/Behavior/InOut';
 import Path from 'Object/Behavior/Path';
 import WeaponMove from 'Object/Behavior/WeaponMove';
- 
-    /*jshint devel: true, bitwise: false*/   
-    let behaviors = {};
 
-    class Behaviors {
-        constructor() {}
-        
-        addBehavior(behaviorName, moveFn) {
-            behaviors[behaviorName] = moveFn;
-        }
+/*jshint devel: true, bitwise: false*/
+let behaviors = {};
 
-        getBehavior(behaviorName) {
-            return behaviors[behaviorName];
-        }
-    };
-    
-    let inst = new Behaviors();
+class Behaviors {
+    constructor() { }
 
-    inst.addBehavior('ground', GroundMove);
-    inst.addBehavior('inout', InOut);
-    inst.addBehavior('simplefall', SimpleFall);
-    inst.addBehavior('weapon', WeaponMove);
-    inst.addBehavior('player', PlayerMove);
-    inst.addBehavior('path', Path);
+    addBehavior(behaviorName, moveFn) {
+        behaviors[behaviorName] = moveFn;
+    }
 
-    export default inst;
+    getBehavior(behaviorName) {
+        return behaviors[behaviorName];
+    }
+};
+
+let inst = new Behaviors();
+
+inst.addBehavior('ground', GroundMove);
+inst.addBehavior('inout', InOut);
+inst.addBehavior('simplefall', SimpleFall);
+inst.addBehavior('weapon', WeaponMove);
+inst.addBehavior('player', PlayerMove);
+inst.addBehavior('path', Path);
+
+export default inst;
