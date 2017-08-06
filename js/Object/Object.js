@@ -1,6 +1,7 @@
 import FX from 'FX/FX';
 import Behaviors from 'Object/Behavior/Behaviors';
 import Input from 'Input/InputManager';
+import NM from 'Notification/NotificationManager';
 import AM from 'Audio/AudioManager';
 import Deferred from 'Core/Deferred';
 
@@ -798,6 +799,15 @@ class GfxObject {
   // does nothing by default, must be redefined if needed
   setImage(image) {
 
+  }
+
+  /**
+   * 
+   * @param {String} id name of the event to send
+   * @param {Object} data data to send with the event, default = empty object
+   */
+  notify(id, data = {}) {
+    NM.notify(`${this.type}:${id}`, data);
   }
 
   /**
