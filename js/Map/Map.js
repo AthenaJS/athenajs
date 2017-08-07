@@ -1562,6 +1562,21 @@ class Map {
     }
 
     /**
+     * Clears the whole map with specified tile number & behavior
+     * 
+     * @param {Number = 0} tileNum Tile number to use for the whole map
+     * @param {Number = 1} behavior Behavior number to use for the whole map
+     */
+    clear(tileNum = 0, behavior = Tile.TYPE.AIR) {
+        for (let i = 0; i < this.numCols; ++i) {
+            for (let j = 0; j < this.numRows; ++j) {
+                this.map[j * this.numCols + i] = tileNum;
+                this.tileBehaviors[j * this.numCols + i] = behavior;
+            }
+        }
+    }
+
+    /**
      * updates individual tile & tile behavior
      * 
      * @param {Number} col the column of the tile to update
