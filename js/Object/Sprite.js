@@ -161,6 +161,11 @@ class Sprite extends GfxObject {
             frames: []
         }, options);
 
+        if (!options.frameWidth || !options.frameHeight || !options.numFrames) {
+            console.error('Parameter missing: frameWidth, frameHeight, numFrames are all required!');
+            return;
+        }
+
         RM.loadImage({
             src: source,
             id: source,
