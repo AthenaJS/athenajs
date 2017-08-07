@@ -99,6 +99,8 @@ class Game {
                         this.scene.debug();
                         this.scene.map && this.toggleTileInspector(this.scene.map);
                     }
+                } else if (event.keyCode === 70) {
+                    this.toggleFullscreen();
                 }
             });
         }
@@ -205,6 +207,11 @@ class Game {
         AudioManager.toggleSound(bool);
     }
 
+    toggleFullscreen() {
+        if (this.display) {
+            this.display.toggleFullscreen();
+        }
+    }
 
     /**
      * Creates a new display
