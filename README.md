@@ -109,7 +109,7 @@ myGame.setScene(myScene);
 
 ## Documentation
 
-- [Documenation](https://athenajs.github.io/athenajs-documentation/)
+- [Documentation](https://athenajs.github.io/athenajs-documentation/)
 - [Samples](https://github.com/AthenaJS/athenajs-samples)
 
 ## Contributing
