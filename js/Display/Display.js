@@ -31,13 +31,17 @@ class Display {
 
         this.prefix = prefix.lowercase;
 
-        this.target = target || new Dom('div').attr('id', 'display_' + options.name).appendTo('body');
+        this.target = target || new Dom('div').attr('id', 'display_' + options.name).appendTo('body')[0];
         this.width = options.width;
         this.height = options.height;
 
         this.type = options.type || '2d';
 
         this.fxCtx = null;
+
+        this.isFullscreen = false;
+
+        this._addFullscreenEvents();
 
         this._createLayers();
 
@@ -56,6 +60,74 @@ class Display {
         ctx['imageSmoothingEnabled'] = false;
 
         return ctx;
+    }
+
+    _addFullscreenEvents() {
+        const target = this.target;
+
+        target.addEventListener('webkitfullscreenchange', this._onFullscreenChange.bind(this), false);
+        target.addEventListener('mozfullscreenchange', this._onFullscreenChange.bind(this), false);
+        target.addEventListener('fullscreenchange', this._onFullscreenChange.bind(this), false);
+        target.addEventListener('MSFullscreenChange', this._onFullscreenChange.bind(this), false);
+    }
+
+    _onFullscreenChange() {
+        var fullscreenElement = document.webkitFullscreenElement || document.fullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+
+        this.isFullscreen = fullscreenElement === this.target;
+
+        if (!this.isFullscreen) {
+            new Dom(this.target).css({
+                'transform': 'scale(1.0, 1.0)'
+            });
+        } else {
+            const size = this._getFullScreenSize(this.width, this.height);
+            new Dom(this.target).css({
+                'transform': `scale(${size.scaleX}, ${size.scaleY})`
+            });
+        }
+    }
+
+    /**
+     * 
+     * @param {Number} width initial width of the screen
+     * @param {Number} height initial height of the screen
+     * 
+     * @returns {Object} with new width, height, and x/y scale ratios
+     */
+    _getFullScreenSize(width, height) {
+        var ratio = width / height,
+            screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+            screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
+        // use height as base since it's 
+        if (ratio > 0) {
+            var newHeight = screenHeight,
+                newWidth = newHeight * ratio;
+        } else {
+            var newWidth = screenWidth,
+                newHeight = newWidth * ratio;
+        }
+
+        return {
+            w: newWidth,
+            h: newHeight,
+            scaleX: newWidth / width,
+            scaleY: newHeight / height
+        }
+    }
+
+    toggleFullscreen() {
+        this.isFullscreen = !this.isFullscreen;
+
+        if (this.isFullscreen) {
+            this.target.requestFullScreen = this.target.requestFullscreen || this.target.webkitRequestFullscreen || this.target.mozRequestFullScreen || this.target.msRequestFullscreen;
+            if (this.target.requestFullScreen) {
+                this.target.requestFullScreen();
+            } else {
+                console.warn('Fullscreen support not detected.');
+            }
+        }
     }
 
     _createLayers() {
