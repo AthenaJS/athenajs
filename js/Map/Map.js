@@ -172,10 +172,10 @@ class Map {
 
 	/**
 	 * Resets the master's position to the map.startX/startY position & resets its animation state:
-	 * usually called when player loses a life and needs to be positionned at checkpoint
+	 * usually called when player loses a life and needs to be positionned at a checkpoint
 	 * 
 	 */
-    resume() {
+    respawn() {
         debugger;
         console.log('avant', this.masterObject.running, this.masterObject.currentAnimName);
         this.masterObject.reset();
@@ -203,7 +203,6 @@ class Map {
 	 * 
 	 */
     reset() {
-        debugger;
         this.masterObject = null;
 
         // remove objects from the map and empty collision groups
@@ -1370,6 +1369,8 @@ class Map {
 
         // No need to call setTimeout if delay is zero
         if (delay) {
+            // FIXME: if the game is paused before the setTimeout is called
+            // sprite will be added right after in unpaused, potentially before the delay
             setTimeout(() => {
                 this.addObject(sprite);
             }, delay);

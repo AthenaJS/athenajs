@@ -88,7 +88,6 @@ class Game {
         this.bindEvents('*');
 
         if (options.scene) {
-            debugger;
             this.setScene(options.scene);
         }
 
@@ -104,6 +103,8 @@ class Game {
                     this.toggleFullscreen();
                 } else if (event.keyCode === 80) {
                     this.togglePause();
+                } else if (event.keyCode === 82) {
+                    this.setScene(this.scene);
                 }
             });
         }
@@ -274,7 +275,6 @@ class Game {
     }
 
     _startScene() {
-        debugger;
         console.log('[Game] _startScene()');
         const hudScene = this.scene.hudScene;
         this.display.clearAllScreens();
