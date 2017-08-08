@@ -173,14 +173,10 @@ class Scene {
             // }
 
             this.readyDef.then(() => {
-                // if (this.hudScene) {
-                //     this.hudScene.load();
-                // }
                 this.loaded = true;
+                debugger;
+                this._onLoad();
             });
-
-            // this.readyDef.then(this.cacheImages.bind(this));
-            this.readyDef.then(this._onLoad.bind(this));
 
             ResourceManager.loadResources('any', progressCb);
         } else {
@@ -589,6 +585,17 @@ class Scene {
         if (this.hudScene) {
             this.hudScene.stop();
         }
+    }
+
+    /**
+     * Called when the scene is paused. This may happen for several reasons:
+     * - browser tab is hidden
+     * - debug is enabled and user pressed the p key
+     * 
+     * @param {Boolean} isRunning 
+     */
+    pause(isRunning) {
+
     }
 
     /**
