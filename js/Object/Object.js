@@ -224,7 +224,7 @@ class GfxObject {
       if (duration === 0) {
         this.x = x;
         this.y = y;
-        this._onMove();
+        this._onUpdate();
       } else {
         console.log('moveTo from', this.x, 'to', x);
 
@@ -333,7 +333,7 @@ class GfxObject {
    * @param {Number} timestamp the current time
    * @private
    */
-  move(timestamp) {
+  update(timestamp) {
     if (this.movable) {
       if (this.moving === true) {
         let ellapsedTime = timestamp - this.startMoveTime,
@@ -353,7 +353,7 @@ class GfxObject {
         }
         // in addition to moving, we need to call the behavior that may cancel current move ?
         // if (this.behavior) {
-        //   this.behavior.onMove(timestamp);
+        //   this.behavior.onUpdate(timestamp);
         // }
       } else {
         if (!this.behavior) {
@@ -363,13 +363,13 @@ class GfxObject {
           // gravity impacts velocity
           this.vy -= this.gravity;
         } else {
-          this.behavior.onMove(timestamp);
+          this.behavior.onUpdate(timestamp);
         }
       }
 
       if (this.children.length) {
         this.children.forEach((child) => {
-          child.move();
+          child.update();
         });
       }
     }
@@ -588,7 +588,7 @@ class GfxObject {
    * 
    * @private
    */
-  _onMove() {
+  _onUpdate() {
     const args = [this.x, this.y];
     this.moveHandlers.forEach((callback) => callback(...args));
   }

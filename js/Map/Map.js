@@ -386,7 +386,7 @@ class Map {
             // moving platforms must be moved before any other object
             // so they are moved in Map.movePlatforms() first
             if (obj.collideGroup !== 3 && obj.movable) {
-                obj.move(timestamp);
+                obj.update(timestamp);
 
                 // TODO: set platform() if object reached a platform
             }
@@ -402,7 +402,7 @@ class Map {
     movePlatforms(timestamp) {
         this.platforms.forEach(function (obj) {
             if (obj.movable) {
-                obj.move(timestamp);
+                obj.update(timestamp);
             }
         });
     }
@@ -416,7 +416,7 @@ class Map {
 	 * 
      * @param {Number} timestamp current time
 	 */
-    move(timestamp) {
+    update(timestamp) {
         let ellapsedTime = 0,
             t = 0,
             moveProgress = 0;
@@ -535,7 +535,7 @@ class Map {
 	/**
 	 * Sets a new destination for the viewport: this method doesn't not set it immediately
 	 * but sets a new target instead: if not already moving, new move will happen at each
-	 * render inside the map.move() method
+	 * render inside the map.update) method
 	 * 
 	 * @param {number} x The horizontal position to move the viewport at.
 	 * @param {number} y The vertical position to move the viewport at.
