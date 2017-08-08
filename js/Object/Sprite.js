@@ -125,12 +125,12 @@ class Sprite extends GfxObject {
         this.isDebug = isDebug;
     }
 
-    /**
-     * Resets the sprite to its default settings
-     */
-    reset() {
-        super.reset();
-    }
+    // /**
+    //  * Resets the sprite to its default settings
+    //  */
+    // reset() {
+    //     super.reset();
+    // }
 
     /**
      * Adds a new animation to the sprite

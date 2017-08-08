@@ -105,8 +105,8 @@ class BitmapText extends GfxObject {
 	/**
 	 * Resets the bitmapFont to its default options
 	 */
-	reset() {
-		super.reset();
+	_reset() {
+		super._reset();
 		this.setTextPosition();
 	}
 	/*		getCharCodes: function(str) {
