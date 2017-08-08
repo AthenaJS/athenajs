@@ -88,6 +88,7 @@ class Game {
         this.bindEvents('*');
 
         if (options.scene) {
+            debugger;
             this.setScene(options.scene);
         }
 
@@ -239,48 +240,79 @@ class Game {
 
 
     /**
-     * Calls when game is ready: DESCRIBE
-     * 
-     * @param {any} cb 
-     * 
-     */
-    onReady(cb) {
-        console.log('**this', this);
-        cb.apply(this);
-    }
-
-
-    /**
      * Sets a new scene as the current scene
      * 
      * @param {Scene} scene instance to set as current Scene
      * @param {Boolean=false} resetMap set to true to reset the map
      * 
      */
-    setScene(scene, resetMap = false) {
+    setScene(scene) {
+        console.log('[Game] setScene()');
         if (this.scene) {
-            console.log('need to stop scene');
-            this.stopScene();
+            // stops render + input loops
+            this._stopScene();
+
+            // stops the scene from running
             this.scene.stop();
         }
 
+        // TODO: handle case where user attempt to set the scene that's currently running
         if (scene) {
-            this.scene = scene;
+            // this.scene = scene;
 
-            // debug
-            window.currentScene = scene;
+            // // debug
+            // window.currentScene = scene;
 
-            this.scene.setDisplay(this.display);
-
-            this.display.clearDisplay();
-
-            console.log('**resetMap', resetMap);
-            this.startScene(resetMap);
+            // console.log('**resetMap', resetMap);
+            //*** this.startScene(resetMap);
+            this._setupScene(scene);
         } else {
             console.warn('attempt to set non-existing scene:', scene);
         }
     }
 
+    _startScene() {
+        debugger;
+        console.log('[Game] _startScene()');
+        const hudScene = this.scene.hudScene;
+        this.display.clearAllScreens();
+        this.scene._start();
+        this.scene.start();
+
+        if (hudScene) {
+            hudScene.start();
+        }
+
+        this._runSceneLoop();
+        this._renderSceneLoop();
+    }
+
+    _setupScene(scene) {
+        console.log('[Game] _setupScene()');
+        this.scene = scene;
+
+        const hudScene = scene.hudScene;
+
+        // Debug
+        window.currentScene = scene;
+
+        // first do internal stuff
+        this.scene.setDisplay(this.display);
+        this.display.clearDisplay();
+
+        // call the scene's internal setup method: we don't want to 
+        // rely on the user calling the parent scene's method so we call
+        // it ourselves
+        this.scene._setup();
+        // then the public one
+        this.scene.setup();
+        if (hudScene) {
+            hudScene.setup();
+        }
+
+        // finally load the scene, and call startScene once the scene has been loaded
+        this.scene._load().then(() => this._startScene());
+    }
 
     /**
      * This is the render scene loop that's get called at up to 60 times per second
@@ -335,7 +367,7 @@ class Game {
             this.running = true;
         }
 
-        scene.run(new Date().getTime());
+        scene.update(new Date().getTime());
 
         if (this.running) {
             this.timeout = setTimeout(this._runSceneLoop.bind(this), 16);
@@ -347,24 +379,27 @@ class Game {
      * 
      */
     togglePauseGame() {
-        if (this.running) {
-            console.log('pausing game');
-            this.running = false;
-            this.scene.pause();
-
-            // be sure to render any changes from the scene before stopping refresh
-            this.display.renderScene(this.scene);
-
-            // then stop render/event loop
-            this.stopScene();
-        } else {
-            console.log('un-pausing game');
-            this.running = true;
-            this.scene.unpause();
-            this._runSceneLoop();
-            this._renderSceneLoop();
-        }
+        debugger;
     }
+    // togglePauseGame() {
+    //     if (this.running) {
+    //         console.log('pausing game');
+    //         this.running = false;
+    //         this.scene.pause();
+
+    //         // be sure to render any changes from the scene before stopping refresh
+    //         this.display.renderScene(this.scene);
+
+    //         // then stop render/event loop
+    //         this.stopScene();
+    //     } else {
+    //         console.log('un-pausing game');
+    //         this.running = true;
+    //         this.scene.unpause();
+    //         this._runSceneLoop();
+    //         this._renderSceneLoop();
+    //     }
+    // }
 
 
     /**
@@ -376,29 +411,31 @@ class Game {
      * - once it's loaded calls scene.start() and start both event & render loops
      * 
      */
-    startScene(resetMap = false) {
-        console.log('[Game] startScene');
+    // startScene(resetMap = false) {
+    //     console.log('[Game] startScene');
 
-        if (this.scene) {
-            console.log('[Game] loading scene');
-            this.scene.load().then(() => {
-                console.log('[Game] Scene', this.scene.name, 'loaded: starting run & render loops');
-                this.scene.start(resetMap);
-                this._runSceneLoop();
-                this._renderSceneLoop();
-            });
-        } else {
-            console.log('[Game] nothing to start: no scene selected!!');
-        }
-    }
+    //     if (this.scene) {
+    //         console.log('[Game] loading scene');
+    //         this.scene.load().then(() => {
+    //             console.log('[Game] Scene', this.scene.name, 'loaded: starting run & render loops');
+    //             this.scene.start(resetMap);
+    //             this._runSceneLoop();
+    //             this._renderSceneLoop();
+    //         });
+    //     } else {
+    //         console.log('[Game] nothing to start: no scene selected!!');
+    //     }
+    // }
 
     /**
      * Stops current scene from running: this will both halt render & event loops
      * 
      * Use Game.togglePauseGame() to temporarly pause a game
      * 
+     * @private
+     * 
      */
-    stopScene() {
+    _stopScene() {
         this.running = false;
 
         console.log('[Game] Scene stopped, stopping run & render loops');

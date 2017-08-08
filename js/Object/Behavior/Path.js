@@ -43,7 +43,7 @@ class Path extends Behavior {
      * Move handler: gets the next vx/vy from `this.nodes`
      * and makes sure to call onVXChange/onVYChange at each sign change
      */
-    onMove(t) {
+    onUpdate(t) {
         let sprite = this.sprite,
             pos = this.currentNode,
             offsetX = this.nodes[pos],

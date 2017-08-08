@@ -1,10 +1,7 @@
 import ResourceManager from 'Resource/ResourceManager';
-import Sprite from 'Object/Sprite';
-import BitmapText from 'Object/BitmapText';
-import Text from 'Object/Text';
 import Map from 'Map/Map';
-import Tile from 'Map/Tile';
 import NM from 'Notification/NotificationManager';
+import Input from 'Input/InputManager';
 import Dom from 'Core/Dom';
 
 import Deferred from 'Core/Deferred';
@@ -72,9 +69,10 @@ class Scene {
         // debug
         window.scenes[this.name] = this;
 
-        this._startCallbacks = [];
+        // methods that are called too early are added here
+        this._objectsToAdd = [];
 
-        this._fillArrays();
+        //*** this._fillArrays();
 
     }
     /**
@@ -91,10 +89,10 @@ class Scene {
     }
 
     /**
-     * Fill layers arrays
+     * Empty all layers
      * @private
      */
-    _fillArrays() {
+    _emptyLayers() {
         for (let i = 0; i < this.layers.length; ++i) {
             this.layers[i] = [];
         }
@@ -121,6 +119,39 @@ class Scene {
         }
     }
 
+    fadeIn(duration = 1000) {
+        return this.animate('Fade', {
+            startValue: 0,
+            endValue: 1,
+            duration: duration
+        });
+    }
+
+    fadeOut(duration) {
+        return this.animate('Fade', {
+            startValue: 1,
+            endValue: 0,
+            duration: duration
+        })
+    }
+
+    fadeInAndOut(inDuration, delay, outDuration) {
+        console.log('starting fadeInOut');
+        let def = new Deferred();
+        this.fadeIn(inDuration).then(() => {
+            console.log('fadeIn done');
+            setTimeout(() => {
+                console.log('calling fade out');
+                this.fadeOut(outDuration).then(() => {
+                    console.log('fadeOut done!');
+                    def.resolve();
+                })
+            }, delay);
+        });
+
+        return def.promise;
+    }
+
     /**
      * Loads resources
      * 
@@ -130,7 +161,7 @@ class Scene {
      * @private
      * 
      */
-    loadResources(res, progressCb/*, doneCb, failCb*/) {
+    _loadResources(res, progressCb) {
         console.log('[scene ' + this.name + '] ' + 'loading Resources...');
         if (!this.loaded) {
             console.log('[scene ' + this.name + '] ' + ' seems like the scene needs to be loaded: goooo!');
@@ -148,35 +179,39 @@ class Scene {
                 this.loaded = true;
             });
 
-            this.readyDef.then(this.cacheImages.bind(this));
-            this.readyDef.then(this.onLoad.bind(this));
+            // this.readyDef.then(this.cacheImages.bind(this));
+            this.readyDef.then(this._onLoad.bind(this));
 
             ResourceManager.loadResources('any', progressCb);
         } else {
             console.log('[scene ' + this.name + '] ' + ' seems like the scene has already been loaded: good!');
-            // this.onLoad();
+            // call onLoad to add elements that were added too early
+            this._onLoad();
         }
 
         return this.readyDef;
     }
 
     /**
-     * Loads the scene (if needed)
+     * Loads resources added on the scene's constructor
+     * 
+     * @returns {Promise} a promise that will be resolved once the scene resources have been loaded
+     * 
      * @private
      */
-    load() {
+    _load() {
         console.log('[Scene ' + this.name + '] load()');
         if (this.hudScene && !this.hudScene.loaded) {
             let def = new Deferred();
-            this.hudScene.load().then(() => {
-                this.loadResources(this.resources).then(() => {
+            this.hudScene._load().then(() => {
+                this._loadResources(this.resources).then(() => {
                     def.resolve();
-                })
+                });
             });
 
             return def.promise;
         } else {
-            return this.loadResources(this.resources);
+            return this._loadResources(this.resources);
         }
     }
 
@@ -193,28 +228,34 @@ class Scene {
      * 1. creates layer arrays
      * 2. get reference resources from the resourceManager
      * 3. prepare canvas elements
+     * 
+     * @private
      */
-    onLoad() {
-        this._fillArrays();
+    _onLoad() {
+        console.log('[Scene] _onLoad()');
+        this._cacheImages();
         this._getResourcesRef();
         this._prepareCanvas();
+        debugger;
+        // add objects that the user wanted to add before initialization
+        this._objectsToAdd.forEach((params) => this.addObject(...params));
     }
 
-    onStart(cb) {
-        console.log('onStart');
-        if (!this.running) {
-            this._startCallbacks.push(cb.bind(this));
-        } else {
-            cb();
-        }
-    }
+    // onStart(cb) {
+    //     console.log('onStart');
+    //     if (!this.running) {
+    //         this._startCallbacks.push(cb.bind(this));
+    //     } else {
+    //         cb();
+    //     }
+    // }
 
     /**
      * Get a reference of each `image` resource that has been loaded.
      * 
      * @private
      */
-    cacheImages() {
+    _cacheImages() {
         console.log('[scene ' + this.name + '] ' + ' caching Images');
         // var max = this.resources.length,
         //     i,
@@ -271,10 +312,9 @@ class Scene {
         console.log('addObject');
         // attempt to add an object on a scene not ready, we load it and postpone the add once it's ready
         if (!this.loaded) {
+            debugger;
             console.log('addObject: later');
-            this.onStart(() => {
-                this.addObject(objects, layerType, layerNum);
-            });
+            this._objectsToAdd.push(Array.from(arguments));
 
             return;
         }
@@ -359,11 +399,13 @@ class Scene {
         //     max, max2,
         //     obj = null,
         //     layer = null;
-
         // i = j = max = max2 = 0;
         // got through the list of all objects and render them if they are visible ?
         for (let i = 0, max = this.layers.length; i < max; i++) {
             let layer = this.layers[i];
+            if (!layer) {
+                debugger;
+            }
             for (let j = 0, max2 = layer.length; j < max2; j++) {
                 let obj = layer[j];
                 obj.draw(destCtx);
@@ -372,7 +414,7 @@ class Scene {
     }
 
     /**
-     * This method calls the move() callback of each object that has been placed onto the map.
+     * This method calls the update() callback of each object that has been placed onto the map.
      * 
      * It is automatically called by the run method after each frame.
      * 
@@ -394,7 +436,7 @@ class Scene {
             for (let j = 0, max2 = layer.length; j < max2; j++) {
                 let obj = layer[j];
                 if (obj.movable) {
-                    obj.move(timestamp);
+                    obj.update(timestamp);
                 }
             }
         }
@@ -438,10 +480,57 @@ class Scene {
      * Resume the scene playback
      */
     resume() {
+        debugger;
         this.start();
         if (this.map) {
             this.map.resume();
         }
+    }
+
+    /**
+     * Public setup method: can be overriden.
+     * 
+     * This method is called right after internal Scene._setup()
+     */
+    setup() {
+        if (this.hudScene) {
+            this.hudScene.setup();
+        }
+    }
+
+    /**
+     * Setup scene
+     * 
+     * @private
+     */
+    _setup() {
+        debugger;
+        this._emptyLayers();
+
+        if (this.map) {
+            this.map.reset();
+        }
+
+        Input.clearEvents();
+
+        if (this.hudScene) {
+            this.hudScene._setup();
+        }
+    }
+
+    _start() {
+        this.running = true;
+        this.time = new Date().getTime();
+        this.playTime = null;
+
+        if (this.hudScene) {
+            this.hudScene._start();
+        }
+    }
+
+    stop() {
+        debugger;
+        this._stop();
     }
 
     /**
@@ -450,52 +539,44 @@ class Scene {
      * @param {Boolean=false} resetMap set true to reset the map objects when starting the scene
      * 
      */
-    start(resetMap = false) {
-        if (!this.loaded) {
-            return;
-            console.warn('[Scene] start() attempt to start a scene that has not been loaded yet. Start failed.');
-        }
-
-        this.running = true;
-
-        // if (this.map) {
-        //     if (!doNotResetMap)
-        //         this.map.reset();
-        //     else
-        //         this.map.resume();
-
-        //     // always force the render of the map
-        //     this.map.isDirty = true;
+    start(/*resetMap = false*/) {
+        debugger;
+        // if (!this.loaded) {
+        //     return;
+        //     console.warn('[Scene] start() attempt to start a scene that has not been loaded yet. Start failed.');
         // }
 
-        // reset layers too
-        this.backgrounds.length = 0;
 
-        this.layers.forEach((layer) => {
-            layer.length = 0;
-        });
+
+        // reset layers too
+        // this.backgrounds.length = 0;
+
+        // this.layers.forEach((layer) => {
+        //     layer.length = 0;
+        // });
 
         // be sure to clear all canvas, inc. secondary, especially
         // if we go from a scene with an hud, to a scene without one
-        this.display.clearAllScreens();
+        // this.display.clearAllScreens();
 
-        this.foregrounds.length = 0;
+        //*** setup
+        // this.foregrounds.length = 0;
 
-        this.time = new Date().getTime();
+        // this.time = new Date().getTime();
 
-        this.playTime = null;
+        // this.playTime = null;
 
-        if (this.hudScene) {
-            this.hudScene.start(resetMap);
-        }
+        // if (this.hudScene) {
+        //     this.hudScene.start(resetMap);
+        // }
 
-        if (this.map && resetMap) {
-            this.map.reset();
-        }
+        // if (this.map && resetMap) {
+        //     this.map.reset();
+        // }
 
-        this._startCallbacks.forEach((cb) => {
-            cb();
-        });
+        // this._startCallbacks.forEach((cb) => {
+        //     cb();
+        // });
     }
 
     /***
@@ -513,29 +594,29 @@ class Scene {
     /**
      * pause the scene: TODO MERGE
      */
-    pause() {
-        this.running = false;
-        this.playTime = new Date().getTime() - this.time;
-        console.log('pausing, playTime = ', this.playTime / 1000);
+    // pause() {
+    //     this.running = false;
+    //     this.playTime = new Date().getTime() - this.time;
+    //     console.log('pausing, playTime = ', this.playTime / 1000);
 
-        if (this.hudScene) {
-            this.hudScene.pause();
-        }
-    }
+    //     if (this.hudScene) {
+    //         this.hudScene.pause();
+    //     }
+    // }
 
     /**
      * unpause the scene: TODO MERGE
      */
-    unpause() {
-        this.running = true;
-        this.time = new Date().getTime() - this.playTime;
-        console.log('resuming, playTime = ', (this.playTime / 1000));
-        this.playTime = null;
+    // unpause() {
+    //     this.running = true;
+    //     this.time = new Date().getTime() - this.playTime;
+    //     console.log('resuming, playTime = ', (this.playTime / 1000));
+    //     this.playTime = null;
 
-        if (this.hudScene) {
-            this.hudScene.unpause();
-        }
-    }
+    //     if (this.hudScene) {
+    //         this.hudScene.unpause();
+    //     }
+    // }
 
     /**
      * Get the total playtime
@@ -561,13 +642,13 @@ class Scene {
      * 
      * @param {Number} timestamp current times
      */
-    run(timestamp) {
+    update(timestamp) {
         this.moveSceneObjects(timestamp);
 
         // user-loop: put user interaction here
         // move map, and sprites found onto the map
         if (this.map) {
-            this.map.move(timestamp);
+            this.map.update(timestamp);
             this.map.checkCollisions(timestamp);
         }
     }

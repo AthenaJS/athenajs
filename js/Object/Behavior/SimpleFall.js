@@ -44,7 +44,7 @@ class SimpleFall extends Behavior {
      * until it reaches the ground and stops bouncing.
      * 
      */
-    onMove(t) {
+    onUpdate(t) {
         let sprite = this.sprite,
             map = sprite.currentMap,
             nextX = sprite.x + sprite.vx,
