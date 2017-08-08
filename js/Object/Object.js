@@ -111,6 +111,7 @@ class GfxObject {
     if (!options.pool) {
       // only set option if not from pool since pool elements are intantiated with
       // fake data: we don't want to reset them yet
+      this._reset();
       this.reset();
 
       if (options.animate) {
@@ -128,13 +129,20 @@ class GfxObject {
   }
 
   /**
+   * User customized reset method
+   */
+  reset() {
+
+  }
+
+  /**
    * Resets the map, used when player lost for example.
    * 
    * `speed`,  `visible`, `canCollide`, `plane`, `x`, `y`, `scale`, `angle`, `movable`,
    * `vx` , `vy`, `gravity`, `wave`
    * 
    */
-  reset() {
+  _reset() {
     this.speed = this._settings.speed;
     this.visible = this._settings.visible;
     this.canCollide = this._settings.canCollide;

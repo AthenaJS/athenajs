@@ -174,7 +174,6 @@ class Scene {
 
             this.readyDef.then(() => {
                 this.loaded = true;
-                debugger;
                 this._onLoad();
             });
 
@@ -232,7 +231,6 @@ class Scene {
         this._cacheImages();
         this._getResourcesRef();
         this._prepareCanvas();
-        debugger;
         // add objects that the user wanted to add before initialization
         this._objectsToAdd.forEach((params) => this.addObject(...params));
     }
@@ -308,7 +306,6 @@ class Scene {
         console.log('addObject');
         // attempt to add an object on a scene not ready, we load it and postpone the add once it's ready
         if (!this.loaded) {
-            debugger;
             console.log('addObject: later');
             this._objectsToAdd.push(Array.from(arguments));
 
@@ -399,9 +396,7 @@ class Scene {
         // got through the list of all objects and render them if they are visible ?
         for (let i = 0, max = this.layers.length; i < max; i++) {
             let layer = this.layers[i];
-            if (!layer) {
-                debugger;
-            }
+
             for (let j = 0, max2 = layer.length; j < max2; j++) {
                 let obj = layer[j];
                 obj.draw(destCtx);
@@ -475,13 +470,13 @@ class Scene {
     /**
      * Resume the scene playback
      */
-    resume() {
-        debugger;
-        this.start();
-        if (this.map) {
-            this.map.resume();
-        }
-    }
+    // resume() {
+    //     debugger;
+    //     this.start();
+    //     if (this.map) {
+    //         this.map.resume();
+    //     }
+    // }
 
     /**
      * Public setup method: can be overriden.
@@ -500,7 +495,6 @@ class Scene {
      * @private
      */
     _setup() {
-        debugger;
         this._emptyLayers();
 
         if (this.map) {
@@ -536,7 +530,6 @@ class Scene {
      * 
      */
     start(/*resetMap = false*/) {
-        debugger;
         // if (!this.loaded) {
         //     return;
         //     console.warn('[Scene] start() attempt to start a scene that has not been loaded yet. Start failed.');
