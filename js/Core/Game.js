@@ -102,6 +102,8 @@ class Game {
                     }
                 } else if (event.keyCode === 70) {
                     this.toggleFullscreen();
+                } else if (event.keyCode === 80) {
+                    this.togglePause();
                 }
             });
         }
@@ -378,8 +380,23 @@ class Game {
      * Pauses the game: both loops are stopped so almost no cpu/gpu is used when calling it
      * 
      */
-    togglePauseGame() {
-        debugger;
+    togglePause() {
+        if (this.running) {
+            this.running = false;
+            // let the scene have a chance to update display, like showing
+            // a pause logo, etc...
+            this.scene.pause(this.running);
+            // and display changes
+            this.display.renderScene(this.scene);
+            // then immediately stop the scene
+            this._stopScene();
+        } else {
+            this.running = true;
+            this.scene.pause(this.running);
+
+            this._runSceneLoop();
+            this._renderSceneLoop();
+        }
     }
     // togglePauseGame() {
     //     if (this.running) {
