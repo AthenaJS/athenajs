@@ -287,9 +287,13 @@ class GfxObject {
    * Applies a new mask to the object, clipping its drawing onto the scene/map
    * 
    * @param {Object} mask the new mask to use, set to null to remove the mask
+   * @param {Boolean} exclude set to true to have the mask exclude portions of the drawing, in this case mask.color will be used
    */
-  setMask(mask = null) {
+  setMask(mask = null, exclude = false) {
     this.mask = mask;
+    if (exclude && mask) {
+      mask.exclude = true;
+    }
   }
 
   /**
@@ -353,10 +357,18 @@ class GfxObject {
    */
   _applyMask(destCtx, x, y) {
     if (this.mask) {
-      destCtx.save();
-      destCtx.beginPath();
-      destCtx.rect(x + this.mask.x, y + this.mask.y, this.mask.w, this.mask.h);
-      destCtx.clip();
+      const mask = this.mask;
+
+      if (mask.exclude) {
+        destCtx.save();
+        destCtx.fillStyle = mask.color || 'black';
+        destCtx.fillRect(x + mask.x, y + mask.y, mask.w, mask.h);
+      } else {
+        destCtx.save();
+        destCtx.beginPath();
+        destCtx.rect(x + mask.x, y + mask.y, mask.w, mask.h);
+        destCtx.clip();
+      }
     }
   }
 
