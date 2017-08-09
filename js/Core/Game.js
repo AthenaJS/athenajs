@@ -73,7 +73,7 @@ class Game {
 
         this.toggleSound(typeof options.sound !== 'undefined' ? options.sound : true);
 
-        if (!!options.sound === false) {
+        if (!this.sound) {
             console.warn('sound disabled: skipping audio resources');
             ResourceManager.skipResources.push('audio');
         }
