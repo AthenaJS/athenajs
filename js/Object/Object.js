@@ -42,6 +42,9 @@ class GfxObject {
     // is player on a platform ?
     this.platform = null;
 
+    // very basic masc support
+    this.mask = null;
+
     // 0 == master (player)
     // 1 == enemies (inc. enemy bullets, gems, bonuses,...)
     // 2 == friend bullets
@@ -281,6 +284,15 @@ class GfxObject {
   }
 
   /**
+   * Applies a new mask to the object, clipping its drawing onto the scene/map
+   * 
+   * @param {Object} mask the new mask to use, set to null to remove the mask
+   */
+  setMask(mask = null) {
+    this.mask = mask;
+  }
+
+  /**
    * Stops the object from moving, optionnaly immediately going to target position
    * 
    * @param {Boolean=false} gotoTarget set to true to go to the target position
@@ -332,6 +344,26 @@ class GfxObject {
   clearBehavior() {
     this.vx = this.vy = 0;
     this.behavior = null;
+  }
+
+  /**
+   * Applies current mask, if any to the drawing context
+   * 
+   * @param {CanvasContext} destCtx context to apply the mask to
+   */
+  _applyMask(destCtx, x, y) {
+    if (this.mask) {
+      destCtx.save();
+      destCtx.beginPath();
+      destCtx.rect(x + this.mask.x, y + this.mask.y, this.mask.w, this.mask.h);
+      destCtx.clip();
+    }
+  }
+
+  _undoMask(destCtx) {
+    if (this.mask) {
+      destCtx.restore();
+    }
   }
 
   /**
