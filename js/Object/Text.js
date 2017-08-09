@@ -164,6 +164,8 @@ export default class Text extends GfxObject {
             return;
         }
 
+        this._applyMask(destCtx, this.x, this.y);
+
         const fakeHeight = parseInt(destCtx.font),
             lines = this.text.split('\n');
 
@@ -183,6 +185,8 @@ export default class Text extends GfxObject {
         if (this.angle !== 0) {
             destCtx.restore();
         }
+
+        this._undoMask();
     }
 
     /**

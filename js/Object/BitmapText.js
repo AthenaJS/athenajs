@@ -423,6 +423,8 @@ class BitmapText extends GfxObject {
 		}
 		// if this.scrolling, need to first offset text into this.buffer
 
+		this._applyMask(destCtx, copyHeight, this.x + this.scrollOffsetX, this.y + destY, this.w, copyHeight);
+
 		if (this.isFxQueueEmpty()) {
 			// draw
 			// throw 'TODO: drawing of bitmapText';

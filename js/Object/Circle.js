@@ -1,6 +1,6 @@
 import GfxObject from 'Object/Object';
 
-export default class Circle extends GfxObject{
+export default class Circle extends GfxObject {
     constructor(options) {
         super('circle', options);
 
@@ -13,9 +13,13 @@ export default class Circle extends GfxObject{
     }
 
     draw(ctx, debug) {
+        this._applyMask(ctx, this.x, this.y);
+
         ctx.beginPath();
-        ctx.arc(this.x + this.w/2, this.y + this.h/2, this.radius, 0, 2 * Math.PI);
+        ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.radius, 0, 2 * Math.PI);
         ctx.fillStyle = this.color;
         ctx.fill();
+
+        this._undoMask();
     }
 };

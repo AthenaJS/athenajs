@@ -2,43 +2,43 @@ import GfxObject from 'Object/Object';
 import Text from 'Object/Text';
 
 
-	/*jshint devel: true, bitwise: false*/
-    /**
-     * The menu class allows to quickly add text menu to an Athena Scene
-     * 
-     * Each menu entry is called menuItem and is a simple object with the following properties:
-     * { text: 'menu text', selectable: true|false, active: true|false, visible: true|false }
-     * 
-     * @param {String} type The type of object.
-     * @param {Object} options
-     * @param {String} [options.title="Menu Title"] The title of the menu.
-     * @param {String} [options.color="black"] The color of the menu.
-     * @param {Array} [options.menuItems=[]] The menu items to add.
-     * @param {String} [options.selectedColor="red"] The default color to use for the selected menu item.
-     * 
-     * @example
-     * 
-     * let myMenu = new Menu('mainMenu', {
-     *   title: 'Gods JS',
-     *      color: 'white',
-     *      menuItems: [
-     *      {
-     *          text: '> Start Game',
-     *          selectable: true,
-     *          visible: true,
-     *          active: true
-     *      },
-     *      {
-     *          text: '> Cannot Select ;)',
-     *          selectable: true,
-     *          visible: true
-     *      }]
-     *    })
-     */
-    class Menu extends GfxObject{
-		constructor(type, options) {
-      
-      super(type, options);
+/*jshint devel: true, bitwise: false*/
+/**
+ * The menu class allows to quickly add text menu to an Athena Scene
+ * 
+ * Each menu entry is called menuItem and is a simple object with the following properties:
+ * { text: 'menu text', selectable: true|false, active: true|false, visible: true|false }
+ * 
+ * @param {String} type The type of object.
+ * @param {Object} options
+ * @param {String} [options.title="Menu Title"] The title of the menu.
+ * @param {String} [options.color="black"] The color of the menu.
+ * @param {Array} [options.menuItems=[]] The menu items to add.
+ * @param {String} [options.selectedColor="red"] The default color to use for the selected menu item.
+ * 
+ * @example
+ * 
+ * let myMenu = new Menu('mainMenu', {
+ *   title: 'Gods JS',
+ *      color: 'white',
+ *      menuItems: [
+ *      {
+ *          text: '> Start Game',
+ *          selectable: true,
+ *          visible: true,
+ *          active: true
+ *      },
+ *      {
+ *          text: '> Cannot Select ;)',
+ *          selectable: true,
+ *          visible: true
+ *      }]
+ *    })
+ */
+class Menu extends GfxObject {
+    constructor(type, options) {
+
+        super(type, options);
         // this.type = type;
         // this.id = this.type + new Date().getTime();
 
@@ -63,7 +63,7 @@ import Text from 'Object/Text';
 
         this.title.moveTo(this.x, this.y);
 
-        this.addMenuItems(options.menuItems || []);
+        this.addMenuItems(options.menuItems ||  []);
     }
 
     /**
@@ -74,14 +74,14 @@ import Text from 'Object/Text';
      * { text: 'menu text', selectable: true|false, active: true|false, visible: true|false }
      */
     addMenuItem(menu) {
-      let y = this.y + ((this.menuItems.length + 1) * this.itemHeight),
-          menuItem = new Text('menuItem' + this.menuItems.length, menu);
+        let y = this.y + ((this.menuItems.length + 1) * this.itemHeight),
+            menuItem = new Text('menuItem' + this.menuItems.length, menu);
 
-      menuItem.moveTo(this.x, y);
-      menuItem.visible = menu.visible === true || false;
-      menuItem.selectable = menu.selectable === true || false;
-    
-      this.menuItems.push(menuItem);
+        menuItem.moveTo(this.x, y);
+        menuItem.visible = menu.visible === true || false;
+        menuItem.selectable = menu.selectable === true || false;
+
+        this.menuItems.push(menuItem);
     }
 
     /**
