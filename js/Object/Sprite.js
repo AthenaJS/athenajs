@@ -687,7 +687,9 @@ class Sprite extends GfxObject {
         // TODO: fix map position when rotate is used
         if (this.isFxQueueEmpty()) {
             // apply clipping
-            this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
+            if (this.mask && !this.mask.exclude) {
+                this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
+            }
 
             if (this.currentAnim.flipFrom) {
                 destCtx.save();
@@ -698,6 +700,11 @@ class Sprite extends GfxObject {
                 destCtx.drawImage(this.image, Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h), Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY), Math.floor(scaledW), Math.floor(scaledH));
             } catch (e) {
                 debugger;
+            }
+
+            // in exclude mode, we need to write the mask after having rendered the object
+            if (this.mask && this.mask.exclude) {
+                this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
             }
 
             // undo clipping as it's specitic to the object
