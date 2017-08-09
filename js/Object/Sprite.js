@@ -686,10 +686,12 @@ class Sprite extends GfxObject {
 
         // TODO: fix map position when rotate is used
         if (this.isFxQueueEmpty()) {
+            // apply clipping
+            this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
+
             if (this.currentAnim.flipFrom) {
                 destCtx.save();
                 destCtx.scale((this.currentAnim.flipType & 1) ? -1 : 1, (this.currentAnim.flipType & 2) ? -1 : 1);
-                // console.log('drawing to', drawX + mapOffsetX, drawY + mapOffsetY);
             }
 
             try {
@@ -697,6 +699,9 @@ class Sprite extends GfxObject {
             } catch (e) {
                 debugger;
             }
+
+            // undo clipping as it's specitic to the object
+            this._undoMask(destCtx);
 
             if (this.currentAnim.flipFrom) {
                 destCtx.restore();
@@ -708,6 +713,10 @@ class Sprite extends GfxObject {
         } else {
             this.executeFx(destCtx);
 
+            if (this.mask) {
+                console.warn('mask not supported when using effects');
+            }
+
             // translate to keep the object as its position
             destCtx.save();
             // flip
@@ -718,6 +727,7 @@ class Sprite extends GfxObject {
             destCtx.rotate(this.angle);
             destCtx.drawImage(this.image, x, y, w, h, -subScaledW, -subScaledH, scaledW, scaledH);
             destCtx.restore();
+
             if (this.isDebug === true || debug === true) {
                 this.showHitBox(destCtx);
             }
