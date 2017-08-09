@@ -164,6 +164,9 @@ export default class Text extends GfxObject {
             return;
         }
 
+        const fakeHeight = parseInt(destCtx.font),
+            lines = this.text.split('\n');
+
         destCtx.fillStyle = this.color;
         destCtx.font = this.font;
         destCtx.textBaseline = 'top';
@@ -173,20 +176,13 @@ export default class Text extends GfxObject {
             destCtx.rotate(this.angle);
         }
 
-        destCtx.fillText(this.text, this.x, this.y);
+        for (let i = 0; i < lines.length; ++i) {
+            destCtx.fillText(lines[i], this.x, this.y + fakeHeight * i);
+        }
 
         if (this.angle !== 0) {
             destCtx.restore();
         }
-
-        //                var w = this.getCurrentWidth(),
-        //					scaledW = w * this.scale,
-        //					h = this.getCurrentHeight(),
-        //					scaledH = h * this.scale,
-        //					x = this.getCurrentOffsetX(),
-        //					y = this.getCurrentOffsetY();
-        //
-        //				destCtx.drawImage(image, x, y, w, h, this.x, this.y, scaledW, scaledH);
     }
 
     /**
