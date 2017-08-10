@@ -152,6 +152,7 @@ class GfxObject {
     this.plane = this._settings.plane;
     this.x = this._settings.x;
     this.y = this._settings.y;
+    this.opacity = this._settings.opacity || 1;
     this.scale = this._settings.scale;
     this.angle = this._settings.angle;
     this.movable = this._settings.movable;
@@ -294,6 +295,24 @@ class GfxObject {
     if (exclude && mask) {
       mask.exclude = true;
     }
+  }
+
+  /**
+   * Changes the opacity of the object
+   * 
+   * @param {number} opacity The new opacity.
+   */
+  setOpacity(opacity) {
+    this.opacity = opacity;
+  }
+
+  /**
+   * Returns the current opacity of the object
+   * 
+   * @returns {number} The current opacity value.
+   */
+  getOpacity() {
+    return this.opacity;
   }
 
   /**
