@@ -15,7 +15,8 @@ class Effect {
 
         this.startValue = typeof options.startValue !== 'undefined' ? options.startValue : 0;
         this.endValue = typeof options.endValue !== 'undefined' ? options.endValue : 1;
-        this.loop = !!options.loop || false;
+        this.loop = typeof options.loop === 'undefined' ? false : options.loop;
+        this.loops = 0;
 
         this.duration = options.duration || 400;
     }
@@ -25,7 +26,10 @@ class Effect {
     }
 
     start() {
-        this.def = new Deferred();
+        // if we are looping the object already got our promise
+        if (!this.loops) {
+            this.def = new Deferred();
+        }
 
         this.startTime = new Date().getTime();
 
@@ -45,7 +49,8 @@ class Effect {
             t = ellapsedTime / this.duration;
 
         if (this.stopped || ellapsedTime >= this.duration) {
-            if (this.stopped || this.loop === false) {
+            this.loops++;
+            if (this.stopped || this.loop === false || this.loops >= this.loop) {
                 // set progress to 1 to avoid weird side effects (eg. opacity set to a negative number since anim progress may be > 1)
                 this.animProgress = 1;
 
@@ -56,7 +61,6 @@ class Effect {
                 // setTimeout(() => { this.def.resolve(true); }, 0);
                 this.def.resolve(true);
             } else {
-                // console.log('looping effect');
                 this.start();
             }
         } else {

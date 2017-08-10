@@ -14,6 +14,7 @@ export { default as Menu } from 'Object/Menu';
 export { default as Hud } from 'Object/Hud';
 export { default as BitmapText } from 'Object/BitmapText';
 export { default as Circle } from 'Object/Circle';
+export { default as Canvas } from 'Object/Canvas';
 
 export { default as Behavior } from 'Object/Behavior/Behavior';
 
@@ -35,3 +36,4 @@ export { default as AudioManager } from 'Audio/AudioManager';
 export { default as Binary } from 'Binary/Binary';
 
 export { default as Dom } from 'Core/Dom';
+export { default as Deferred } from 'Core/Deferred';
