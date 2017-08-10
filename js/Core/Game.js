@@ -239,8 +239,40 @@ class Game {
         Input._init(this, {
             joystick: true
         });
+
+        this._addVisibilityEvents();
     }
 
+
+    _addVisibilityEvents() {
+        let eventName = '',
+            property = '';
+
+        console.log('adding events');
+        if (typeof document.hidden !== "undefined") {
+            property = "hidden";
+            eventName = "visibilitychange";
+        } else if (typeof document.msHidden !== "undefined") {
+            property = "msHidden";
+            eventName = "msvisibilitychange";
+        } else if (typeof document.webkitHidden !== "undefined") {
+            property = "webkitHidden";
+            eventName = "webkitvisibilitychange";
+        }
+
+        if (!eventName.length) {
+            console.warn('[Game] Visibility API not available.');
+        } else {
+            document.addEventListener(eventName, () => {
+                console.log('got visibility event', document[property]);
+                if (document[property]) {
+                    if (this.running) {
+                        this.togglePause();
+                    }
+                }
+            }, false);
+        }
+    }
 
     /**
      * Sets a new scene as the current scene
