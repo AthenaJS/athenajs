@@ -15,7 +15,7 @@ class Effect {
 
         this.startValue = typeof options.startValue !== 'undefined' ? options.startValue : 0;
         this.endValue = typeof options.endValue !== 'undefined' ? options.endValue : 1;
-        this.loop = typeof options.loop === 'undefined' ? false : options.loop;
+        this.loop = typeof options.loop === 'undefined' ? 0 : options.loop;
         this.loops = 0;
 
         this.duration = options.duration || 400;
@@ -50,7 +50,7 @@ class Effect {
 
         if (this.stopped || ellapsedTime >= this.duration) {
             this.loops++;
-            if (this.stopped || this.loop === false || this.loops >= this.loop) {
+            if (this.loop !== true && (this.stopped || this.loops >= this.loop)) {
                 // set progress to 1 to avoid weird side effects (eg. opacity set to a negative number since anim progress may be > 1)
                 this.animProgress = 1;
 
