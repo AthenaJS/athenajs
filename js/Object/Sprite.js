@@ -669,8 +669,8 @@ class Sprite extends GfxObject {
             scaledW = w * this.scale,
             h = this.getCurrentHeight(),
             scaledH = h * this.scale,
-            subScaledW = (scaledW / 2) | 0,
-            subScaledH = (scaledH / 2) | 0,
+            subScaledW = Math.floor(scaledW / 2),
+            subScaledH = Math.floor(scaledH / 2),
             x = this.getCurrentOffsetX(),
             y = this.getCurrentOffsetY(),
             drawX = this.currentAnim.flipFrom ? (this.x + this.getCurrentShiftX() - scaledW) : (this.x + this.getCurrentShiftX()),
@@ -685,7 +685,7 @@ class Sprite extends GfxObject {
         }
 
         // TODO: fix map position when rotate is used
-        if (this.isFxQueueEmpty()) {
+        if (0 /*this.isFxQueueEmpty()*/) {
             // apply clipping
             if (this.mask && !this.mask.exclude) {
                 this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
@@ -720,20 +720,32 @@ class Sprite extends GfxObject {
         } else {
             this.executeFx(destCtx);
 
-            if (this.mask) {
-                console.warn('mask not supported when using effects');
+            if (this.mask && !this.mask.exclude) {
+                this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
             }
+
+            // if (this.mask) {
+            //     console.warn('mask not supported when using effects');
+            // }
 
             // translate to keep the object as its position
             destCtx.save();
             // flip
-            if (this.currentAnim.flipFrom) {
-                destCtx.scale((this.currentAnim.flipType & 1) ? -1 : 1, (this.currentAnim.flipType & 2) ? -1 : 1);
-            }
-            destCtx.translate(drawX + mapOffsetX + subScaledW, drawY + mapOffsetY + subScaledH);
+            // if (this.currentAnim.flipFrom) {
+            //     destCtx.scale((this.currentAnim.flipType & 1) ? -1 : 1, (this.currentAnim.flipType & 2) ? -1 : 1);
+            // }
+            destCtx.translate(Math.floor(drawX + mapOffsetX + subScaledW), Math.floor(drawY + mapOffsetY + subScaledH));
             destCtx.rotate(this.angle);
-            destCtx.drawImage(this.image, x, y, w, h, -subScaledW, -subScaledH, scaledW, scaledH);
+            destCtx.drawImage(this.image, Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
             destCtx.restore();
+
+            // in exclude mode, we need to write the mask after having rendered the object
+            if (this.mask && this.mask.exclude) {
+                this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
+            }
+
+            // undo clipping as it's specitic to the object
+            this._undoMask(destCtx);
 
             if (this.isDebug === true || debug === true) {
                 this.showHitBox(destCtx);
