@@ -729,15 +729,18 @@ class Sprite extends GfxObject {
             // }
 
             // translate to keep the object as its position
-            destCtx.save();
+            // destCtx.save();
             // flip
             // if (this.currentAnim.flipFrom) {
             //     destCtx.scale((this.currentAnim.flipType & 1) ? -1 : 1, (this.currentAnim.flipType & 2) ? -1 : 1);
             // }
-            destCtx.translate(Math.floor(drawX + mapOffsetX + subScaledW), Math.floor(drawY + mapOffsetY + subScaledH));
+            // destCtx.translate(Math.floor(drawX + mapOffsetX + subScaledW), Math.floor(drawY + mapOffsetY + subScaledH));
+            destCtx.setTransform(this.scale, 0, 0, this.scale, drawX + mapOffsetX + subScaledW, drawY + mapOffsetY + subScaledH);
             destCtx.rotate(this.angle);
+
             destCtx.drawImage(this.image, Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
-            destCtx.restore();
+
+            // destCtx.restore();
 
             // in exclude mode, we need to write the mask after having rendered the object
             if (this.mask && this.mask.exclude) {
