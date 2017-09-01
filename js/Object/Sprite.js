@@ -739,11 +739,11 @@ class Sprite extends GfxObject {
             destCtx.rotate(this.angle);
 
             destCtx.drawImage(this.image, Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
-
             // destCtx.restore();
 
             // in exclude mode, we need to write the mask after having rendered the object
             if (this.mask && this.mask.exclude) {
+                destCtx.setTransform(1, 0, 0, 1, 0, 0);
                 this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
             }
 

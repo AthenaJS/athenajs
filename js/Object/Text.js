@@ -164,6 +164,8 @@ export default class Text extends GfxObject {
             return;
         }
 
+        destCtx.setTransform(1, 0, 0, 1, 0, 0);
+
         this._applyMask(destCtx, this.x, this.y);
 
         const fakeHeight = parseInt(destCtx.font),
