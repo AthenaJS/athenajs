@@ -167,7 +167,8 @@ class Display {
 
             ctx['imageSmoothingEnabled'] = false;
         } else {
-            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0, 0, this.width, this.height);
         }
     }
 
