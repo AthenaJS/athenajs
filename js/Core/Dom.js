@@ -1,16 +1,24 @@
-/* Very small and simple jQuery-like object */
+/* Very small and simple jQuery-like object, because whatever you do, you'll end up needed jQuery */
 
 /**
  * Dom is a very simple jQuery-like object that allows to manipulate
  * a collection of DOM elements.
  * 
- * As in jQuery, you may manipulate Dom collections using []
+ * As in jQuery, you may manipulate individual Dom elements using [] operator
  * 
  * @class
  * @constructor 
  */
 function Dom(selector) {
-    if (selector instanceof HTMLElement) {
+    /* little hack to allow calling Dom without the new keyword */
+    if (!(this instanceof arguments.callee)) {
+        return new arguments.callee(...arguments);
+    }
+
+    /* simply create an empty object */
+    if (arguments.length < 1) {
+        return;
+    } else if (selector instanceof HTMLElement) {
         this.push(selector);
     } else if (selector.match(/^#|\./)) {
         this.push(...document.querySelectorAll(selector));
@@ -32,27 +40,46 @@ Object.assign(Dom.prototype, {
      * @memberof Dom#
      */
     css: function (prop, val) {
-            if (typeof prop === 'object') {
-                this.forEach((node) => {
-                    const style = node.style;
+        if (typeof prop === 'object') {
+            this.forEach((node) => {
+                const style = node.style;
 
-                    for (const name in prop) {
-                        style[name] = prop[name];
-                    }
-                });
-            } else if (typeof val === 'undefined') {
-                if (this.length) {
-                    return this[0].style[prop];
-                } else {
-                    return null;
+                for (const name in prop) {
+                    style[name] = prop[name];
                 }
+            });
+        } else if (typeof val === 'undefined') {
+            if (this.length) {
+                return this[0].style[prop];
             } else {
-                this.forEach((node) => {
-                    node.style[prop] = val;
-                });
+                return null;
             }
+        } else {
+            this.forEach((node) => {
+                node.style[prop] = val;
+            });
+        }
 
         return this;
+    },
+
+    /**
+     * Returns a new collection with elements matching the selector found inside current collection
+     * 
+     * @param {String} selector the selector to match
+     * @returns {Dom} a new Dom collection with found elements
+     */
+    find: function (selector) {
+        let newDom = new Dom();
+
+        this.forEach((el) => {
+            const elements = el.querySelectorAll(selector);
+            for (let element of elements) {
+                newDom.push(element);
+            }
+        });
+
+        return newDom;
     },
 
     /**

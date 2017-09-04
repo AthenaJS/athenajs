@@ -66,7 +66,8 @@ class Display {
         const target = this.target;
 
         target.addEventListener('webkitfullscreenchange', this._onFullscreenChange.bind(this), false);
-        target.addEventListener('mozfullscreenchange', this._onFullscreenChange.bind(this), false);
+        // Firefox doesn't seem to send this event on current fullscreen element
+        document.addEventListener('mozfullscreenchange', this._onFullscreenChange.bind(this), false);
         target.addEventListener('fullscreenchange', this._onFullscreenChange.bind(this), false);
         target.addEventListener('MSFullscreenChange', this._onFullscreenChange.bind(this), false);
     }
@@ -77,15 +78,34 @@ class Display {
         this.isFullscreen = fullscreenElement === this.target;
 
         if (!this.isFullscreen) {
-            new Dom(this.target).css({
-                'transform': 'scale(1.0, 1.0)'
+            // new Dom(this.target).css({
+            //     'transform': 'scale(1.0, 1.0)'
+            // });
+            Dom(this.target).css({
+                width: `${this.width}px`,
+                height: `${this.height}px`
+            }).find('span').css({
+                width: `${this.width}px`,
+                height: `${this.height}px`,
+                top: 0,
+                left: 0
             });
         } else {
             const size = this._getFullScreenSize(this.width, this.height);
             console.log('size', size.scaleX, size.scaleY);
-            new Dom(this.target).css({
-                'transform': `scale(${size.scaleX}, ${size.scaleY})`
+            Dom(this.target).css({
+                width: `${size.w}px`,
+                height: `${size.h}px`
+            }).find('span').css({
+                width: size.w + 'px',
+                height: size.h + 'px',
+                top: size.top + 'px',
+                left: size.left + 'px'
             });
+            // new Dom(this.target).css({
+            //     'transform': `scale(${size.scaleX}, ${size.scaleY})`
+            // });
+
         }
     }
 
@@ -99,7 +119,12 @@ class Display {
     _getFullScreenSize(width, height) {
         var ratio = width / height,
             screenWidth = screen.width,
-            screenHeight = screen.height;
+            screenHeight = screen.height,
+            // both Firefox & Edge force fullscreen element to full screen size
+            // since our canvas element do not necessarilty take the whole screen
+            // we have to center them
+            needMargin = navigator.userAgent.match(/Edge|Firefox/);
+
         // screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
         // screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
         console.log('screen', screen.width, screen.height);
@@ -117,7 +142,9 @@ class Display {
             w: newWidth,
             h: newHeight,
             scaleX: newWidth / width,
-            scaleY: newHeight / height
+            scaleY: newHeight / height,
+            top: needMargin ? (screenHeight - newHeight) / 2 : 0,
+            left: needMargin ? (screenWidth - newWidth) / 2 : 0
         }
     }
 
