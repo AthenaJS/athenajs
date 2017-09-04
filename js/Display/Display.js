@@ -5,7 +5,7 @@ import Dom from 'Core/Dom';
 
 /*jshint devel: true*/
 /**
- * 
+ *
  */
 class Display {
     constructor(options, target) {
@@ -82,6 +82,7 @@ class Display {
             });
         } else {
             const size = this._getFullScreenSize(this.width, this.height);
+            console.log('size', size.scaleX, size.scaleY);
             new Dom(this.target).css({
                 'transform': `scale(${size.scaleX}, ${size.scaleY})`
             });
@@ -89,18 +90,21 @@ class Display {
     }
 
     /**
-     * 
+     *
      * @param {Number} width initial width of the screen
      * @param {Number} height initial height of the screen
-     * 
+     *
      * @returns {Object} with new width, height, and x/y scale ratios
      */
     _getFullScreenSize(width, height) {
         var ratio = width / height,
-            screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
-            screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            screenWidth = screen.width,
+            screenHeight = screen.height;
+        // screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+        // screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        console.log('screen', screen.width, screen.height);
 
-        // use height as base since it's 
+        // use height as base since it's
         if (ratio > 0) {
             var newHeight = screenHeight,
                 newWidth = newHeight * ratio;
@@ -121,11 +125,20 @@ class Display {
         this.isFullscreen = !this.isFullscreen;
 
         if (this.isFullscreen) {
+            console.log('request fullscreen');
             this.target.requestFullScreen = this.target.requestFullscreen || this.target.webkitRequestFullscreen || this.target.mozRequestFullScreen || this.target.msRequestFullscreen;
             if (this.target.requestFullScreen) {
                 this.target.requestFullScreen();
             } else {
-                console.warn('Fullscreen support not detected.');
+                console.warn('Request fullscreen support not detected.');
+            }
+        } else {
+            console.log('exit fullscreen');
+            document.exitFullScreen = document.exitFullscreen || document.webkitExitFullscreen || document.mozExitFullScreen || document.msExitFullscreen;
+            if (document.exitFullScreen) {
+                document.exitFullScreen();
+            } else {
+                console.log('Exit fullscreen support not detected.');
             }
         }
     }

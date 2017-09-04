@@ -7,16 +7,16 @@ import Tile from 'Map/Tile';
 
 /**
  * PlayerMove is a behavior that is controlled by the player using keyboard/touch events.
- * 
+ *
  * To have a sprite controlled by the user you can simply attach this behavior.
- * 
+ *
  * @param {Sprite} sprite The sprite to attach the behavior to.
  * @param {InputManager} Input A reference to the InputManager
  * @param {Object} options Parameters specifics to the behavior
  * @param {String} [options.startMovement="idle""] The initial behavior state.
  * @param {String} [options.direction="right"] The initial direction.
  * @param {String} [options.lookDirection="left"] The initial look direction, can be different than direction.
- * 
+ *
  * @see {Behavior}
  */
 class PlayerMove extends Behavior {
@@ -42,7 +42,7 @@ class PlayerMove extends Behavior {
 
     /**
      * onUpdate handler: uses InputManager to get keyboard status and update the sprite's position/state
-     * 
+     *
      * @param {Number} t The current timestamp
      */
     onUpdate(t) {
@@ -80,7 +80,7 @@ class PlayerMove extends Behavior {
             }
 
             // fire (we may fire while jumping/moving)
-            if (Input.getKeyStatus(Input.keys.CTRL, true) === true) {
+            if (Input.getKeyStatus(Input.keys.CTRL, true) === true || Input.isKeyDown('SPACE')) {
                 switch (this.currentMovement) {
                     case 'faceWall':
                         if (this.switchAbove) {
@@ -114,7 +114,7 @@ class PlayerMove extends Behavior {
         } else {
             if (this.currentMovement.match(/jump/)) {
                 // console.log('***', this.currentMovement, Input.getKeyStatus(Input.keys.SPACE, true));
-                if (Input.getKeyStatus(Input.keys.CTRL, true)) {
+                if (Input.getKeyStatus(Input.keys.CTRL, true) || Input.isKeyDown('SPACE')) {
                     this.handleFire();
                 }
                 // TODO: handle up key to catch the ladder
@@ -133,7 +133,7 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when the player attemps to fire
-     * 
+     *
      * @private
      */
     handleFire() {
@@ -170,9 +170,9 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when the player is walking
-     * 
+     *
      * @param {String} direction The direction the player is heading at.
-     * 
+     *
      * @private
      */
     walk(direction) {
@@ -219,7 +219,7 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when player needs to walk on the left
-     * 
+     *
      * @private
      */
     walkLeft() {
@@ -232,9 +232,9 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when player needs to walk on the right
-     * 
+     *
      * Lots of hardcoded constants that would be better off as behavior options
-     * 
+     *
      * @private
      */
     walkRight() {
@@ -247,9 +247,9 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when the play starts jumping
-     * 
+     *
      * @param {String} direction The direction of the jump (right or left).
-     * 
+     *
      * @private
      */
     startJump(direction) {
@@ -298,9 +298,9 @@ class PlayerMove extends Behavior {
     /**
      * Called when the playing is already jumping: this method is checks for colisions and
      * calculates next x/y sprite position
-     * 
+     *
      * @param {String} direction The direction of the jump.
-     * 
+     *
      * @private
      */
     jump(direction) {
@@ -387,7 +387,7 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when the player stops moving
-     * 
+     *
      * @private
      */
     idle() {
@@ -401,7 +401,7 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when the player needs to goDown
-     * 
+     *
      * @private
      */
     goDown() {
@@ -416,7 +416,7 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when the player faces the wall
-     * 
+     *
      * @private
      */
     faceWall() {
@@ -436,9 +436,9 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when the player starts climbing a ladder
-     * 
+     *
      * @param {Number} direction The direction, can be 0 (down) or 1 (up)
-     * 
+     *
      * @private
      */
     climb(direction) {
@@ -462,7 +462,7 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when the player stops climbing (ie: released up/down keys)
-     * 
+     *
      * @private
      */
     stopClimbing(/*direction*/) {
@@ -476,9 +476,9 @@ class PlayerMove extends Behavior {
     /**
      * Called when the player moves the up arrow key: depending on its position he will face a wall
      * or climb a ladder
-     * 
+     *
      * @param {Boolean} onlyClimb Set to true to only climb
-     * 
+     *
      * @private
      */
     goUpOrClimb(onlyClimb) {
@@ -524,7 +524,7 @@ class PlayerMove extends Behavior {
     /**
      * This method is called when the player presses the down arrow key: depending on its position,
      * player will climb a ladder or get down
-     * 
+     *
      * @private
      */
     goDownOrClimb() {
@@ -554,7 +554,7 @@ class PlayerMove extends Behavior {
 
     /**
      * Called when the player is falling
-     * 
+     *
      * @private
      */
     fall() {
@@ -588,11 +588,11 @@ class PlayerMove extends Behavior {
 
     /**
      * Checkes that player can fall
-     * 
+     *
      * @param {Number=1} size The gap size to check for.
-     * 
+     *
      * @returns {Boolean} true if the player falls
-     * 
+     *
      * @private
      */
     fallTest(size) {

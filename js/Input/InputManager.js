@@ -3,18 +3,19 @@
 /*jshint devel: true*/
 /**
  * Handles keyboard input (joystick input doesn't work correctly yet).
- * 
+ *
  * Key presses are stored in a simple hash this.keyPressed with keyCode as key, and attached handlers are stored in
  * another hash this.keyCb.
- * 
+ *
  * The InputManager can also be used to record keystrokes which can then be played back to produce game demos for example.
- * 
+ *
  * @example
- * 
+ *
  * // example state of InputManager.keyPressed where `up` key is down and `down` key has just been released:
  * { 32: true, 40: false}
- * 
+ *
  */
+
 const InputManager = {
     /**
      * A list of common keyCodes
@@ -53,6 +54,7 @@ const InputManager = {
     axes: {
 
     },
+    newGamepadPollDelay: 3000,
     // gamepadSupport: (!!navigator.webkitGetGamepads !!navigator.webkitGetGamepads || !!navigator.webkitGamepads) && navigator.webkitGetGamepads().length && navigator.webkitGetGamepads()[0],
     gamepadSupport: false,
     recording: false,
@@ -63,29 +65,28 @@ const InputManager = {
     keyPressed: {},
     padPressed: {},
     keyCb: {},
-    gameRef: null,
+    enabled: true,
     inputMode: 'keyboard',
     // virtual joystick instance
     dPadJoystick: null,
     jPollInterval: 0,
     /**
      * Initializes the InputManager with a reference to the game.
-     * 
+     *
      * This method prepares the InputManager by reseting keyboard states/handlers and
      * set current inputMode
-     * 
-     * @param {Game} gameRef A reference to the game being used.
-     * 
-     * @private
+     *
+     * @param {Object} options List of input options, unused for now
+     *
      */
-    _init: function (gameRef) {
-        this.gameRef = gameRef;
-
+    init: function (options) {
         this._generateKeyCodes();
 
         this._installInputModeSwitchHandler();
 
         this._installKBEventHandlers();
+
+        this._pollNewGamepad();
 
         // this._initVirtualJoystick();
 
@@ -93,7 +94,7 @@ const InputManager = {
     },
     /**
      * generates key char from key codes
-     * 
+     *
      * @private
      */
     _generateKeyCodes: function () {
@@ -104,7 +105,7 @@ const InputManager = {
     /**
      * Private handler that is supposed to detect touchEvent and automatically switch between keyboard & touch
      * inputs. Unfortunately it tourned out to not be so easy.
-     * 
+     *
      * @private
      */
     _installInputModeSwitchHandler: function () {
@@ -152,7 +153,7 @@ const InputManager = {
     },
     /**
      * Sets next key states using recorded events
-     * 
+     *
      * TODO: add an optional callback to be called at the end of the playback
      * so that demo can be looped.
      */
@@ -184,7 +185,7 @@ const InputManager = {
     },
     /**
      * Saves current event state onto the recordedEvents stack
-     * 
+     *
      * @private
      */
     recordEvents: function () {
@@ -200,7 +201,7 @@ const InputManager = {
     },
     /**
      * Changes input mode
-     * 
+     *
      * @param {String} mode Changes current input mode, can be `virtual_joystick`, `keyboard`, `gamepad`
      */
     setInputMode: function (mode) {
@@ -221,7 +222,9 @@ const InputManager = {
 
             case 'gamepad':
                 this._clearJoystickPoll();
-                this.jPollInterval = setInterval(this._pollGamepad.bind(this), 1 / 30 * 1000);
+                // this.jPollInterval = requestAnimationFrame(this._pollGamepad.bind(this));
+                requestAnimationFrame(this._pollGamepad.bind(this));
+                // this.jPollInterval = setInterval(this._pollGamepad.bind(this), 2000);
                 break;
         }
 
@@ -230,7 +233,7 @@ const InputManager = {
     },
     /**
      * Resets keys that have been pressed.
-     * 
+     *
      * @private
      */
     _resetKeys: function () {
@@ -243,21 +246,34 @@ const InputManager = {
      * when a new joypad is detected.
      */
     _pollNewGamepad: function () {
-        let gamepads = (navigator.getGamepads && navigator.getGamepads()) || (navigator.webkitGetGamepads && navigator.webkitGetGamepads()) || navigator.webkitGamepads;
-        if (!this.pad && gamepads && gamepads.item() !== null) {
-            this.pad = gamepads.item();
+        let gamepads = (navigator.getGamepads && navigator.getGamepads()) || (navigator.webkitGetGamepads && navigator.webkitGetGamepads()),
+            pad = null;
 
-            if (!this.gamepadSupport) {
-                console.log('[Event] Oh oh! Looks like we have a new challenger: ', this.pad.id);
-                this.gamepadSupport = true;
-                this.setInputMode('gamepad');
+        // TODO: we just use the first one for now, we need to be able to use any pad
+        if (gamepads && gamepads.length) {
+            for (let i = 0; i < gamepads.length; ++i) {
+                pad = gamepads[i];
+                if (pad) {
+                    this.pad = pad;
+                    if (!this.gamepadSupport) {
+                        console.log('[Event] Oh oh! Looks like we have a new challenger: ', pad.id);
+                        this.gamepadSupport = true;
+                        this.setInputMode('gamepad');
+                    }
+                }
             }
+        }
+
+        if (!this.gamepadSupport) {
+            setTimeout(() => {
+                this._pollNewGamepad();
+            }, this.newGamepadPollDelay);
         }
     },
     /**
-     * 
+     *
      */
-    _pollGamepad: function (key) {
+    _pollGamepad: function () {
         // normal buttons
         // if (key === this.keys.space) {
         //     if (this.pad.buttons[this.PAD_BUTTONS[key]].pressed === true) {
@@ -266,13 +282,21 @@ const InputManager = {
         //         this.padPressed[key] = false;
         //     }
         // }
+        this._pollNewGamepad();
 
         // special case for dpad on Linux, cannot test on Windows since my pad does not support XInput...
         // d-pad
+        // console.log('pressed', typeof this.pad.buttons[12].pressed, "**");
+        // console.log('poll gamepad', typeof this.pad.buttons[12].pressed, this.pad.buttons[12].pressed.toString());
+        // for (var i = 0; i < this.pad.buttons.length; ++i) {
+        //     console.log(i, this.pad.buttons[i].pressed.toString());
+        // }
         if (this.pad.buttons[12].pressed) {
+            console.log('key 12 pressed (up)');
             this.keyPressed[this.keys['UP']] = true;
             this.keyPressed[this.keys['DOWN']] = false;
         } else if (this.pad.buttons[13].pressed) {
+            console.log('key 13 pressed (down)');
             this.keyPressed[this.keys['DOWN']] = true;
             this.keyPressed[this.keys['UP']] = false;
         } else {
@@ -281,14 +305,22 @@ const InputManager = {
         }
 
         if (this.pad.buttons[15].pressed) {
+            console.log('key 15 pressed (right)');
             this.keyPressed[this.keys['RIGHT']] = true;
             this.keyPressed[this.keys['LEFT']] = false;
         } else if (this.pad.buttons[14].pressed) {
+            console.log('key 14 pressed (left)');
             this.keyPressed[this.keys['LEFT']] = true;
             this.keyPressed[this.keys['RIGHT']] = false;
         } else {
             this.keyPressed[this.keys['LEFT']] = false;
             this.keyPressed[this.keys['RIGHT']] = false;
+        }
+
+        if (this.pad.buttons[0].pressed) {
+            this.keyPressed[this.keys['SPACE']] = true;
+        } else {
+            this.keyPressed[this.keys['SPACE']] = false;
         }
         // stick 1
         /*
@@ -314,6 +346,7 @@ const InputManager = {
             this.keyPressed[this.keys['RIGHT']] = false;
         }
         */
+        this.jPollInterval = requestAnimationFrame(this._pollGamepad.bind(this));
     },
     _getModifiers: function (event) {
         return {
@@ -378,7 +411,8 @@ const InputManager = {
     },
     _clearJoystickPoll: function () {
         if (this.jPollInterval) {
-            clearInterval(this.jPollInterval);
+            // clearInterval(this.jPollInterval);
+            cancelAnimationFrame(this.jPollInterval);
             this.jPollInterval = 0;
         }
     },
@@ -430,8 +464,6 @@ const InputManager = {
         // TODO: what happens for up event ? should be set to up only when going from down to up and called here
     },
     _installKBEventHandlers: function () {
-        let gameRef = this.gameRef;
-
         // TODO: move me somewhere else!
         document.addEventListener('keydown', (event) => {
 
@@ -450,6 +482,7 @@ const InputManager = {
             }
 
             if (event.keyCode) {
+                console.log('key', event.keyCode, 'pressed');
                 this.keyPressed[event.keyCode] = true;
             }
 
@@ -457,7 +490,7 @@ const InputManager = {
 
             this.metas = this._getModifiers();
 
-            if (this.keyCb[event.keyCode] && gameRef && gameRef.running) {
+            if (this.enabled && this.keyCb[event.keyCode]) {
                 this.keyCb[event.keyCode].down.forEach((callback) => { callback(); });
             }
         });
@@ -475,7 +508,7 @@ const InputManager = {
 
             this.metas = this._getModifiers();
 
-            if (this.keyCb[event.keyCode] && gameRef && gameRef.running) {
+            if (this.enabled && this.keyCb[event.keyCode]) {
                 this.keyCb[event.keyCode].up.forEach((callback) => { callback(); });
             }
         });
@@ -501,11 +534,9 @@ const InputManager = {
             // until spec if fully defined and not experimental
             // this._pollNewGamepad();
 
-            /*
-            if (this.pad) {
-                this._pollGamepad(key);
-            }
-            */
+            // if (this.pad) {
+            //     // this._pollGamepad();
+            // }
 
             keyPressed = this.keyPressed[key] || this.padPressed[key];
 
