@@ -3,20 +3,20 @@
 /**
  * Dom is a very simple jQuery-like object that allows to manipulate
  * a collection of DOM elements.
- * 
+ *
  * As in jQuery, you may manipulate individual Dom elements using [] operator
- * 
+ *
  * @class
- * @constructor 
+ * @constructor
  */
-function Dom(selector) {
+function Dom(selector = null) {
     /* little hack to allow calling Dom without the new keyword */
-    if (!(this instanceof arguments.callee)) {
-        return new arguments.callee(...arguments);
+    if (!(this instanceof Dom)) {
+        return new Dom(...arguments);
     }
 
     /* simply create an empty object */
-    if (arguments.length < 1) {
+    if (selector === null) {
         return;
     } else if (selector instanceof HTMLElement) {
         this.push(selector);
@@ -32,11 +32,11 @@ Dom.prototype = new Array();
 Object.assign(Dom.prototype, {
     /**
      * jQuery-like CSS method to easily set multiple styles on a dom collection
-     * 
+     *
      * @param {String|Object} prop or list of properties with their new value
      * @param {String} val value of the property
      * @returns {Dom} `this`
-     * 
+     *
      * @memberof Dom#
      */
     css: function (prop, val) {
@@ -65,7 +65,7 @@ Object.assign(Dom.prototype, {
 
     /**
      * Returns a new collection with elements matching the selector found inside current collection
-     * 
+     *
      * @param {String} selector the selector to match
      * @returns {Dom} a new Dom collection with found elements
      */
@@ -74,8 +74,8 @@ Object.assign(Dom.prototype, {
 
         this.forEach((el) => {
             const elements = el.querySelectorAll(selector);
-            for (let element of elements) {
-                newDom.push(element);
+            for (let i = 0; i < elements.length; ++i) {
+                newDom.push(elements[i]);
             }
         });
 
@@ -83,12 +83,12 @@ Object.assign(Dom.prototype, {
     },
 
     /**
-     * Append current collection to the element with a specific selector 
-     * 
+     * Append current collection to the element with a specific selector
+     *
      * @param {String|HTMLElement} selector Target element where to append selected elements.
      * It can either be a CSS selector or a DOM HTMLElement.
      * @returns {Dom} `this`
-     * 
+     *
      * @memberof Dom#
      */
     appendTo: function (selector) {
@@ -105,11 +105,11 @@ Object.assign(Dom.prototype, {
 
     /**
      * Change multiple attributes at once
-     * 
+     *
      * @param {String|Object} att attribute name to modify or list of attributes+values to change
      * @param {String} val value of the attribute to set
      * @returns {Dom} `this`
-     * 
+     *
      * @memberof Dom#
      */
     attr: function (att, val) {
@@ -130,10 +130,10 @@ Object.assign(Dom.prototype, {
 
     /**
      * Add a new Class to a DOM collection
-     * 
+     *
      * @param {String} name new class to add
      * @returns {Dom} `this`
-     * 
+     *
      * @memberof Dom#
      */
     addClass: function (name) {
@@ -146,10 +146,10 @@ Object.assign(Dom.prototype, {
 
     /**
      * Changes innerHTML of a collection
-     * 
+     *
      * @param {String} html to set as innerHTML
      * @returns {Dom} `this`
-     * 
+     *
      * @memberof Dom#
      */
     html: function (html) {
@@ -161,7 +161,7 @@ Object.assign(Dom.prototype, {
     /**
      * Shows specified set of elements
      * @returns {Dom} `this`
-     * 
+     *
      * @memberof Dom#
      */
     show: function () {
@@ -173,7 +173,7 @@ Object.assign(Dom.prototype, {
     /**
      * Hides specified set of elements
      * @returns {Dom} `this`
-     * 
+     *
      * @memberof Dom#
      */
     hide: function () {
