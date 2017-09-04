@@ -10,7 +10,7 @@ import Dom from 'Core/Dom';
 
 /**
  * The `Game` class is the central part to AthenaJS
- * 
+ *
  * @param {Object} options
  * @param {boolean} [options.debug=false] Debug will be enabled if this is true.
  * @param {string} [options.name] The name of the game.
@@ -20,7 +20,7 @@ import Dom from 'Core/Dom';
  * @param {number} [options.width=1024] The width of the game display.
  * @param {number} [options.height=768] The height of the game display.
  * @param {Object} [options.resources] An optionnal array of resources of the form:``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
- * 
+ *
  */
 class Game {
     constructor(options = {}) {
@@ -107,6 +107,13 @@ class Game {
                     this.setScene(this.scene);
                 }
             });
+
+            if (navigator.userAgent.match(/Xbox/)) {
+                this.target.addEventListener('click', (event) => {
+                    console.log('toggeling fullscreen');
+                    this.toggleFullscreen();
+                });
+            }
         }
     }
 
@@ -179,9 +186,9 @@ class Game {
 
     /**
      * Get ready for events from NotificationManager
-     * 
+     *
      * @param {String} eventList space-separated list of events to listen to
-     * 
+     *
      */
     bindEvents(eventList) {
         NM.listen(eventList, this.onEvent.bind(this));
@@ -191,9 +198,9 @@ class Game {
     /**
      * Method that gets called when receiving an event: by default it does nothing
      * It's up to the developer to overwrite this method on its Game
-     * 
+     *
      * @param {string} event the event name that got fired.
-     * 
+     *
      */
     onEvent(event) {
 
@@ -202,9 +209,9 @@ class Game {
 
     /**
      * Toggles global sound
-     * 
+     *
      * @param {boolean} bool Weather to enable or disable sound.
-     * 
+     *
      */
     toggleSound(bool) {
         this.sound = bool;
@@ -219,12 +226,12 @@ class Game {
 
     /**
      * Creates a new display
-     * 
+     *
      * TODO: DESCRIBE
      * @param {Object}
      * @param {String|HTMLElement} The target of the display: this is were canvas elements will be added
      * @private
-     * 
+     *
      */
     createDisplay(options, target) {
         this.display = DisplayManager.addDisplay(options, target);
@@ -236,7 +243,7 @@ class Game {
      * @private
      */
     _initEvents() {
-        Input._init(this, {
+        Input.init({
             joystick: true
         });
 
@@ -276,10 +283,10 @@ class Game {
 
     /**
      * Sets a new scene as the current scene
-     * 
+     *
      * @param {Scene} scene instance to set as current Scene
      * @param {Boolean=false} resetMap set to true to reset the map
-     * 
+     *
      */
     setScene(scene) {
         console.log('[Game] setScene()');
@@ -334,7 +341,7 @@ class Game {
         this.scene.setDisplay(this.display);
         this.display.clearDisplay();
 
-        // call the scene's internal setup method: we don't want to 
+        // call the scene's internal setup method: we don't want to
         // rely on the user calling the parent scene's method so we call
         // it ourselves
         this.scene._setup();
@@ -350,9 +357,9 @@ class Game {
 
     /**
      * This is the render scene loop that's get called at up to 60 times per second
-     * 
+     *
      * @param {any} time since last frame was rendered
-     * 
+     *
      * @private
      */
     _renderSceneLoop(time) {
@@ -391,7 +398,7 @@ class Game {
 
     /**
      * Main event loop: handles scene based-events
-     * 
+     *
      * @private
      */
     _runSceneLoop() {
@@ -410,7 +417,7 @@ class Game {
 
     /**
      * Pauses the game: both loops are stopped so almost no cpu/gpu is used when calling it
-     * 
+     *
      */
     togglePause() {
         if (this.running) {
@@ -453,12 +460,12 @@ class Game {
 
     /**
      * Starts the current scene
-     * 
+     *
      * @param {Boolean=false} resetMap resets the map associated to the map
-     * 
+     *
      * - loads the scene if not already loaded
      * - once it's loaded calls scene.start() and start both event & render loops
-     * 
+     *
      */
     // startScene(resetMap = false) {
     //     console.log('[Game] startScene');
@@ -478,11 +485,11 @@ class Game {
 
     /**
      * Stops current scene from running: this will both halt render & event loops
-     * 
+     *
      * Use Game.togglePauseGame() to temporarly pause a game
-     * 
+     *
      * @private
-     * 
+     *
      */
     _stopScene() {
         this.running = false;

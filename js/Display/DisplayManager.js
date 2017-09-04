@@ -7,7 +7,13 @@ import Display from 'Display/Display';
 
                   this.displays = {};
 			   }
-         
+
+            /**
+             *
+             * @param {*} options
+             * @param {*} target
+             * @returns {Display}
+             */
             addDisplay(options, target) {
                 console.log('[Display Manager] adding display', options.name/*, 'with options', options*/);
 
@@ -15,7 +21,7 @@ import Display from 'Display/Display';
 
                 return this.displays[options.name];
             }
-        
+
             getDisplay(id) {
                 return this.displays[id];
             }
