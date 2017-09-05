@@ -251,7 +251,6 @@ const InputManager = {
         let gamepads = (navigator.getGamepads && navigator.getGamepads()) || (navigator.webkitGetGamepads && navigator.webkitGetGamepads()),
             pad = null;
 
-        console.log('poll gamepad');
         // TODO: we just use the first one for now, we need to be able to use any pad
         if (gamepads && gamepads.length) {
             for (let i = 0; i < gamepads.length; ++i) {
