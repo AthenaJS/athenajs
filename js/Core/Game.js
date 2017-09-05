@@ -243,9 +243,9 @@ class Game {
      * @private
      */
     _initEvents() {
-        Input.init({
-            joystick: true
-        });
+        // Input.init({
+        //     joystick: true
+        // });
 
         this._addVisibilityEvents();
     }
