@@ -54,7 +54,7 @@ const InputManager = {
     axes: {
 
     },
-    newGamepadPollDelay: 3000,
+    newGamepadPollDelay: 1000,
     // gamepadSupport: (!!navigator.webkitGetGamepads !!navigator.webkitGetGamepads || !!navigator.webkitGamepads) && navigator.webkitGetGamepads().length && navigator.webkitGetGamepads()[0],
     gamepadSupport: false,
     recording: false,
@@ -62,6 +62,7 @@ const InputManager = {
     playingPos: 0,
     recordedEvents: [],
     pad: null,
+    latches: {},
     keyPressed: {},
     padPressed: {},
     keyCb: {},
@@ -239,6 +240,7 @@ const InputManager = {
     _resetKeys: function () {
         for (let key in this.keyPressed) {
             this.keyPressed[key] = false;
+            this.latches[key] = false;
         }
     },
     /**
@@ -249,6 +251,7 @@ const InputManager = {
         let gamepads = (navigator.getGamepads && navigator.getGamepads()) || (navigator.webkitGetGamepads && navigator.webkitGetGamepads()),
             pad = null;
 
+        console.log('poll gamepad');
         // TODO: we just use the first one for now, we need to be able to use any pad
         if (gamepads && gamepads.length) {
             for (let i = 0; i < gamepads.length; ++i) {
@@ -292,34 +295,45 @@ const InputManager = {
         //     console.log(i, this.pad.buttons[i].pressed.toString());
         // }
         if (this.pad.buttons[12].pressed) {
+            console.log('pad 12');
+        }
+
+        if (this.pad.buttons[12].pressed && !this.latches[this.keys['UP']]) {
             console.log('key 12 pressed (up)');
             this.keyPressed[this.keys['UP']] = true;
             this.keyPressed[this.keys['DOWN']] = false;
-        } else if (this.pad.buttons[13].pressed) {
+        } else if (this.pad.buttons[13].pressed && !this.latches[this.keys['DOWN']]) {
+            this.latches[this.keys['UP']] = false;
             console.log('key 13 pressed (down)');
             this.keyPressed[this.keys['DOWN']] = true;
             this.keyPressed[this.keys['UP']] = false;
         } else {
+            this.latches[this.keys['UP']] = false;
+            this.latches[this.keys['DOWN']] = false;
             this.keyPressed[this.keys['DOWN']] = false;
             this.keyPressed[this.keys['UP']] = false;
         }
 
-        if (this.pad.buttons[15].pressed) {
+        if (this.pad.buttons[15].pressed && !this.latches[this.keys['RIGHT']]) {
             console.log('key 15 pressed (right)');
             this.keyPressed[this.keys['RIGHT']] = true;
             this.keyPressed[this.keys['LEFT']] = false;
         } else if (this.pad.buttons[14].pressed) {
+            this.latches[this.keys['RIGHT']] = false;
             console.log('key 14 pressed (left)');
             this.keyPressed[this.keys['LEFT']] = true;
             this.keyPressed[this.keys['RIGHT']] = false;
         } else {
+            this.latches[this.keys['RIGHT']] = false;
+            this.latches[this.keys['LEFT']] = false;
             this.keyPressed[this.keys['LEFT']] = false;
             this.keyPressed[this.keys['RIGHT']] = false;
         }
 
-        if (this.pad.buttons[0].pressed) {
+        if (this.pad.buttons[0].pressed && !this.latches[this.keys['SPACE']]) {
             this.keyPressed[this.keys['SPACE']] = true;
         } else {
+            this.latches[this.keys['SPACE']] = false;
             this.keyPressed[this.keys['SPACE']] = false;
         }
         // stick 1
@@ -481,7 +495,7 @@ const InputManager = {
                     break;
             }
 
-            if (event.keyCode) {
+            if (event.keyCode && !this.latches[event.keyCode]) {
                 console.log('key', event.keyCode, 'pressed');
                 this.keyPressed[event.keyCode] = true;
             }
@@ -502,6 +516,7 @@ const InputManager = {
 
             if (event.keyCode) {
                 this.keyPressed[event.keyCode] = false;
+                this.latches[event.keyCode] = false;
             }
 
             // console.log('keyup', event.keyCode, '<-', this.keyPressed[37], '->', this.keyPressed[39]);
@@ -523,25 +538,15 @@ const InputManager = {
 
         return result;
     },
-    getKeyStatus: function (key, reset) {
+    getKeyStatus: function (key, latch) {
         let keyPressed;
 
         try {
-            // GamePad insertion polling disabled
-            // seems like Chrome & FF have different methods
-            // current one only works with Chrome and I don't
-            // want to waste time adding configuration for both
-            // until spec if fully defined and not experimental
-            // this._pollNewGamepad();
-
-            // if (this.pad) {
-            //     // this._pollGamepad();
-            // }
-
             keyPressed = this.keyPressed[key] || this.padPressed[key];
 
-            if (keyPressed && reset === true) {
-                this.keyPressed[key] = '';
+            if (keyPressed && latch === true) {
+                this.keyPressed[key] = false;
+                this.latches[key] = true;
             }
 
             return keyPressed;
@@ -552,10 +557,10 @@ const InputManager = {
         }
     },
 
-    isKeyDown: function (key) {
+    isKeyDown: function (key, latch) {
         var keyCode = typeof key === 'string' && this.keys[key] || key;
 
-        return this.getKeyStatus(keyCode);
+        return this.getKeyStatus(keyCode, latch);
     },
 
     installKeyCallback: function (key, event, callback) {
