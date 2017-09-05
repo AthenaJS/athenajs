@@ -293,17 +293,12 @@ const InputManager = {
         // for (var i = 0; i < this.pad.buttons.length; ++i) {
         //     console.log(i, this.pad.buttons[i].pressed.toString());
         // }
-        if (this.pad.buttons[12].pressed) {
-            console.log('pad 12');
-        }
 
         if (this.pad.buttons[12].pressed && !this.latches[this.keys['UP']]) {
-            console.log('key 12 pressed (up)');
             this.keyPressed[this.keys['UP']] = true;
             this.keyPressed[this.keys['DOWN']] = false;
         } else if (this.pad.buttons[13].pressed && !this.latches[this.keys['DOWN']]) {
             this.latches[this.keys['UP']] = false;
-            console.log('key 13 pressed (down)');
             this.keyPressed[this.keys['DOWN']] = true;
             this.keyPressed[this.keys['UP']] = false;
         } else {
@@ -314,12 +309,10 @@ const InputManager = {
         }
 
         if (this.pad.buttons[15].pressed && !this.latches[this.keys['RIGHT']]) {
-            console.log('key 15 pressed (right)');
             this.keyPressed[this.keys['RIGHT']] = true;
             this.keyPressed[this.keys['LEFT']] = false;
         } else if (this.pad.buttons[14].pressed) {
             this.latches[this.keys['RIGHT']] = false;
-            console.log('key 14 pressed (left)');
             this.keyPressed[this.keys['LEFT']] = true;
             this.keyPressed[this.keys['RIGHT']] = false;
         } else {
@@ -331,9 +324,16 @@ const InputManager = {
 
         if (this.pad.buttons[0].pressed && !this.latches[this.keys['SPACE']]) {
             this.keyPressed[this.keys['SPACE']] = true;
-        } else {
+        } else if (!this.pad.buttons[0].pressed) {
             this.latches[this.keys['SPACE']] = false;
             this.keyPressed[this.keys['SPACE']] = false;
+        }
+
+        if (this.pad.buttons[1].pressed && !this.latches[this.keys['CTRL']]) {
+            this.keyPressed[this.keys['CTRL']] = true;
+        } else if (!this.pad.buttons[1].pressed) {
+            this.latches[this.keys['CTRL']] = false;
+            this.keyPressed[this.keys['CTRL']] = false;
         }
         // stick 1
         /*

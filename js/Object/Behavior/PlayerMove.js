@@ -51,7 +51,10 @@ class PlayerMove extends Behavior {
         if (this.currentMovement !== 'falling' && !this.currentMovement.match(/jump/) && !this.firing) {
             // console.log('left', Input.getKeyStatus(Input.keys.LEFT));
             // direction
-            if (Input.getKeyStatus(Input.keys.LEFT) === true) {
+            if (Input.isKeyDown('CTRL')) {
+                console.log('jump:', this.lookDirection);
+                this.startJump(this.lookDirection);
+            } else if (Input.getKeyStatus(Input.keys.LEFT) === true) {
                 if (Input.getKeyStatus(Input.keys.UP) === true) {
                     this.startJump('left');
                 } else {
@@ -80,8 +83,7 @@ class PlayerMove extends Behavior {
             }
 
             // fire (we may fire while jumping/moving)
-            if (Input.isKeyDown('CTRL', true) === true || Input.isKeyDown('SPACE', true)) {
-                console.log('ctrl');
+            if (Input.isKeyDown('SPACE', true)) {
                 switch (this.currentMovement) {
                     case 'faceWall':
                         if (this.switchAbove) {
@@ -115,7 +117,7 @@ class PlayerMove extends Behavior {
         } else {
             if (this.currentMovement.match(/jump/)) {
                 // console.log('***', this.currentMovement, Input.getKeyStatus(Input.keys.SPACE, true));
-                if (Input.isKeyDown('CTRL', true) || Input.isKeyDown('SPACE', true)) {
+                if (Input.isKeyDown('SPACE', true)) {
                     this.handleFire();
                 }
                 // TODO: handle up key to catch the ladder
@@ -126,7 +128,7 @@ class PlayerMove extends Behavior {
                     this.jump(this.lookDirection);
                 }
             } else if (!this.currentMovement.match('fire') && !this.currentMovement.match('climb')) {
-                console.log('cas 2.2', this.currentMovement);
+                // console.log('cas 2.2', this.currentMovement);
                 this.fall();
             }
         }
@@ -431,7 +433,7 @@ class PlayerMove extends Behavior {
             this.currentMovement = 'faceWall';
             sprite.advanceFrame('faceWall');
             this.switchAbove = this.sprite.currentMap.getSwitchAboveMaster();
-            console.log('**** faceWall', this.switchAbove);
+            // console.log('**** faceWall', this.switchAbove);
         }
     }
 
@@ -443,7 +445,7 @@ class PlayerMove extends Behavior {
      * @private
      */
     climb(direction) {
-        console.log('climbing');
+        // console.log('climbing');
         let sprite = this.sprite;
 
         this.fromLadder = true;
@@ -510,7 +512,7 @@ class PlayerMove extends Behavior {
                 sprite.centerXOverTile(pos);
                 this.lookDirection = '';
             }
-            console.log('climbing, fromLadder', this.fromLadder, this.currentMovement);
+            // console.log('climbing, fromLadder', this.fromLadder, this.currentMovement);
             this.climb(1);
 
             return true;
@@ -580,7 +582,7 @@ class PlayerMove extends Behavior {
             sprite.advanceFrame('fall' + this.lookDirection);
         } else {
             this.fromLadder = false;
-            console.log('**land =>', this.fromLadder);
+            // console.log('**land =>', this.fromLadder);
             // if (this.currentMovement === 'falling') {
             //     AM.play('land');
             // }
