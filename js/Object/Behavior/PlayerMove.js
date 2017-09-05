@@ -80,7 +80,8 @@ class PlayerMove extends Behavior {
             }
 
             // fire (we may fire while jumping/moving)
-            if (Input.getKeyStatus(Input.keys.CTRL, true) === true || Input.isKeyDown('SPACE')) {
+            if (Input.isKeyDown('CTRL', true) === true || Input.isKeyDown('SPACE', true)) {
+                console.log('ctrl');
                 switch (this.currentMovement) {
                     case 'faceWall':
                         if (this.switchAbove) {
@@ -114,7 +115,7 @@ class PlayerMove extends Behavior {
         } else {
             if (this.currentMovement.match(/jump/)) {
                 // console.log('***', this.currentMovement, Input.getKeyStatus(Input.keys.SPACE, true));
-                if (Input.getKeyStatus(Input.keys.CTRL, true) || Input.isKeyDown('SPACE')) {
+                if (Input.isKeyDown('CTRL', true) || Input.isKeyDown('SPACE', true)) {
                     this.handleFire();
                 }
                 // TODO: handle up key to catch the ladder
