@@ -1,5 +1,6 @@
 import GfxObject from 'Object/Object';
 import FX from 'FX/FX';
+import RM from 'Resource/ResourceManager';
 
 /*jshint devel: true, bitwise: false*/
 /*globals Class*/
@@ -8,28 +9,28 @@ import FX from 'FX/FX';
  * 
  * @param {String} type The type of the sprite.
  * @param {Object} options The options describing the BitmapText.
- * @param {String} options.imageSrc The path to the spritesheet file.
- * @param {Number} [options.offsetX=0] The optional horizontal offset at which to start getting bitmap characters inside the spritesheet.
- * @param {Number} [options.bmStartY=0] The optinal vertical offset at which to start getting bitmap characters.
- * @param {Number} charWidth the width of a character in pixels.
- * @param {Number} charHeight The height of a character in pixels.
+ * @param {String} options.imageId The path to the spritesheet file.
+ * @param {Number} [options.charWidth] The width of a character in pixels.
+ * @param {Number} [options.charHeight] The height of a character in pixels.
+ * @param {Number} [options.offsetX=charWidth] The full width of the character (including spaces) inside the spritesheet
+ * @param {Number} [options.letterSpacing=2] The space between each drawn character (in pixels).
+ * @param {Number} [options.startY=0] The optinal vertical offset at which to start getting bitmap characters.
+ * @param {Number} [options.startX=0] The optinal hoeizontal offset at which to start getting bitmap characters.
  * 
  * @note the charset is limited to a subset of ascii right now: a-z 0-9
  * @example
  * 
  *	let myFont = new BitmapText('myFont', {
- *		offsetX: 34,
- *		bmStartY: 36,
- *		charWidth: 16,
+ *		charWidth: 18,
  *		charHeight: 18,
- *		imageSrc: 'font'
+ *		imageId: 'font'
+ *		offsetX: 34,
+ *		startY: 36
  *	});
  */
 class BitmapText extends GfxObject {
-	constructor(type, options) {
+	constructor(type = 'BitmapText', options) {
 		super(type, options);
-
-		this.imageSrc = options.imageSrc;
 
 		// TODO: maybe we want to have fullsize ?
 		this.w = options.w || 320;
@@ -37,12 +38,22 @@ class BitmapText extends GfxObject {
 
 		this.pixelHeight = 0;
 
-		this.maxLines = Math.floor(this.h / (this.charHeight + this.lineSpacing))
-
 		this.easing = FX.getEasing(options.easing || 'linear');
 
-		this.imageSrc = options.imageSrc || 'image not set';
+		this.imageId = options.imageId || 'image not set';
 
+		if (options.imageSrc) {
+			this.imageId = options.imageSrc;
+
+			RM.loadImage({
+				src: options.imageSrc,
+				id: options.imageSrc,
+				type: 'image'
+			}).then((img) => {
+				console.log('bitmapText image ready!');
+				this.setImage(img);
+			});
+		}
 		// TODO: buffer should be created here and not when object is added to the scene
 		this.buffer = null;
 
@@ -96,10 +107,9 @@ class BitmapText extends GfxObject {
 		this.maxCharPerLine = Math.floor(this.w / (this.charWidth + this.letterSpacing));
 		this.maxPixels = this.maxCharPerLine * ((this.charWidth + this.letterSpacing));
 
-		this.offsetX = options.offsetX || 0;     // 34
-		this.offsetY = options.offsetY || 0;     // 0
-		this.bmStartX = options.bmStartX || 0;  // 0
-		this.bmStartY = options.bmStartY || 0;  // 36
+		this.offsetX = options.offsetX || this.charWidth;     // 34
+		this.startX = options.startX || 0;  // 0
+		this.startY = options.startY || 0;  // 36
 	}
 
 	/**
@@ -327,7 +337,7 @@ class BitmapText extends GfxObject {
 		for (i = 0; i < max; ++i) {
 			if (options.text[i].charCodeAt(0) !== 32) {
 				offset = this.getCharOffset(options.text[i]);
-				this.buffer.drawImage(this.image, offset, this.bmStartY, this.charWidth, this.charHeight, x, y, this.charWidth, this.charHeight);
+				this.buffer.drawImage(this.image, offset, this.startY, this.charWidth, this.charHeight, x, y, this.charWidth, this.charHeight);
 			}
 			x += this.letterSpacing + this.charWidth;
 		}
@@ -377,6 +387,11 @@ class BitmapText extends GfxObject {
 	 * @param {Image} image The new {image} to use as source.
 	 */
 	setImage(image) {
+		if (!image) {
+			console.warn('[BitmapText] setImage(): image not loaded', this.imageId || this.imageSrc);
+			return;
+		}
+
 		this.image = image;
 	}
 
@@ -408,7 +423,8 @@ class BitmapText extends GfxObject {
 			copyHeight,
 			copyStartY;
 
-		if (!this.visible) {
+		/* if image isn't loaded yet, simply do not render the object */
+		if (!this.visible || !this.image) {
 			return;
 		}
 
@@ -423,7 +439,7 @@ class BitmapText extends GfxObject {
 		}
 		// if this.scrolling, need to first offset text into this.buffer
 
-        destCtx.setTransform(1, 0, 0, 1, 0, 0);
+		destCtx.setTransform(1, 0, 0, 1, 0, 0);
 
 		this._applyMask(destCtx, copyHeight, this.x + this.scrollOffsetX, this.y + destY, this.w, copyHeight);
 
