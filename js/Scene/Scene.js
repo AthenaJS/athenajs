@@ -339,15 +339,15 @@ class Scene {
             for (let obj of objects) {
                 console.log('[scene ' + this.name + '] ' + 'pushing', obj);
                 layer.push(obj);
-                if (typeof obj.setImage === 'function') {
-                    obj.setImage(this.pics[obj.imageSrc]);
+                if (typeof obj.setImage === 'function' && !this.image) {
+                    obj.setImage(this.pics[obj.imageId]);
                 }
                 obj.setScene(this);
             }
         } else {
             layer.push(objects);
-            if (typeof objects.setImage === 'function') {
-                objects.setImage(this.pics[objects.imageSrc]);
+            if (typeof objects.setImage === 'function' && !this.image) {
+                objects.setImage(this.pics[objects.imageId]);
             }
             objects.setScene(this);
         }
@@ -519,7 +519,6 @@ class Scene {
     }
 
     stop() {
-        debugger;
         this._stop();
     }
 

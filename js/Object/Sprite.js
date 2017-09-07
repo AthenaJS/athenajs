@@ -13,7 +13,7 @@ import RM from 'Resource/ResourceManager';
  * 
  * @param {String} type An identifier for this sprite, can be for example `enemy1`,...
  * @param {Object} options An options hash for the object
- * @param {String} options.imageSrc The path to the spritesheet image
+ * @param {String} options.imageId The path to the spritesheet image
  * @param {Object} options.animations An hash with a key for each animation of the sprite.
  * 
  * @note Since games usually have multiple sprites of the same type, it's common to extend the Sprite class
@@ -23,7 +23,7 @@ import RM from 'Resource/ResourceManager';
  * @example
  * 
  * let mySprite = new Sprite('gem', {
- *  imageSrc: 'objects',
+ *  imageId: 'objects',
  *  x: options.x,
  *  y: options.y,
  *  pool: options.pool,
@@ -69,7 +69,7 @@ class Sprite extends GfxObject {
     constructor(type, options) {
         super(type || 'Sprite', options || {});
 
-        this.imageSrc = options && options.imageSrc || '';
+        this.imageId = options && options.imageId || '';
 
         // NOTE: sometimes it is done by gfxobject.reset(), sometimes not
         // animations can now be added later
@@ -295,6 +295,11 @@ class Sprite extends GfxObject {
      * @param {Image} image the new Image to use as spritesheet
      */
     setImage(image, force = false) {
+        if (!image) {
+            console.warn('[Sprite] setImage(): image not loaded', this.imageId || this.imageSrc);
+            return;
+        }
+
         if (this.image && !force) {
             return;
         }
