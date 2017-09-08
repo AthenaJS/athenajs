@@ -12,6 +12,7 @@ import RM from 'Resource/ResourceManager';
  * @param {String} options.imageId The path to the spritesheet file.
  * @param {Number} [options.charWidth] The width of a character in pixels.
  * @param {Number} [options.charHeight] The height of a character in pixels.
+ * @param {String} [options.characters] The list of supported characters in the spritesheet
  * @param {Number} [options.offsetX=charWidth] The full width of the character (including spaces) inside the spritesheet
  * @param {Number} [options.letterSpacing=2] The space between each drawn character (in pixels).
  * @param {Number} [options.startY=0] The optinal vertical offset at which to start getting bitmap characters.
@@ -41,6 +42,8 @@ class BitmapText extends GfxObject {
 		this.easing = FX.getEasing(options.easing || 'linear');
 
 		this.imageId = options.imageId || 'image not set';
+
+		this.characters = options.characters || "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 		if (options.imageSrc) {
 			this.imageId = options.imageSrc;
@@ -305,9 +308,15 @@ class BitmapText extends GfxObject {
 	 */
 	getCharOffset(char) {
 		// The magic happens here!
-		let code = char.toUpperCase().charCodeAt(0) - 65;
+		// let code = char.toUpperCase().charCodeAt(0) - 65;
+		let index = this.characters.indexOf(char);
 
-		return code * this.offsetX;
+		if (index < 0) {
+			index = this.characters.indexOf(char.toUpperCase());
+		}
+
+		// return code * this.offsetX;
+		return index * this.offsetX;
 	}
 
 	/**
@@ -337,7 +346,11 @@ class BitmapText extends GfxObject {
 		for (i = 0; i < max; ++i) {
 			if (options.text[i].charCodeAt(0) !== 32) {
 				offset = this.getCharOffset(options.text[i]);
-				this.buffer.drawImage(this.image, offset, this.startY, this.charWidth, this.charHeight, x, y, this.charWidth, this.charHeight);
+				if (offset >= 0) {
+					this.buffer.drawImage(this.image, offset, this.startY, this.charWidth, this.charHeight, x, y, this.charWidth, this.charHeight);
+				} else {
+					console.log(`[BitmapText] chracter ${options.text[i]} not supported`);
+				}
 			}
 			x += this.letterSpacing + this.charWidth;
 		}
