@@ -349,7 +349,7 @@ class BitmapText extends GfxObject {
 				if (offset >= 0) {
 					this.buffer.drawImage(this.image, offset, this.startY, this.charWidth, this.charHeight, x, y, this.charWidth, this.charHeight);
 				} else {
-					console.log(`[BitmapText] chracter ${options.text[i]} not supported`);
+					console.log(`[BitmapText] character ${options.text[i]} not supported`);
 				}
 			}
 			x += this.letterSpacing + this.charWidth;
