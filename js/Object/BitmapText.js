@@ -6,7 +6,7 @@ import RM from 'Resource/ResourceManager';
 /*globals Class*/
 /**
  * The BitmapText class allows to use a spritesheet as a font to draw text onto the screen
- * 
+ *
  * @param {String} type The type of the sprite.
  * @param {Object} options The options describing the BitmapText.
  * @param {String} options.imageId The path to the spritesheet file.
@@ -17,10 +17,10 @@ import RM from 'Resource/ResourceManager';
  * @param {Number} [options.letterSpacing=2] The space between each drawn character (in pixels).
  * @param {Number} [options.startY=0] The optinal vertical offset at which to start getting bitmap characters.
  * @param {Number} [options.startX=0] The optinal hoeizontal offset at which to start getting bitmap characters.
- * 
+ *
  * @note the charset is limited to a subset of ascii right now: a-z 0-9
  * @example
- * 
+ *
  *	let myFont = new BitmapText('myFont', {
  *		charWidth: 18,
  *		charHeight: 18,
@@ -78,7 +78,7 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Generates a new buffer that can hold current text
-	 * 
+	 *
 	 * @param {Display} display the display to get the buffer from
 	 */
 	createBuffer(display) {
@@ -98,7 +98,7 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Sets bitmapText properties using options
-	 * 
+	 *
 	 * @param {Object} options
 	 */
 	setFontParams(options) {
@@ -124,17 +124,17 @@ class BitmapText extends GfxObject {
 	}
 	/*		getCharCodes: function(str) {
 				var charCodes = [];
-	
+
 				for (var i = 0; i < str.length; ++i) {
 					charCodes.push(str.charCodeAt(i));
 				}
 			},*/
 	/**
 	 * Returns the lenght of a text line, in characters
-	 * 
+	 *
 	 * @param {String} str The string to mesure.
 	 * @param {String} eof The character to use as end of line.
-	 * 
+	 *
 	 * @returns {Number} The length of the string
 	 */
 	getNextLineLength(str, eof) {
@@ -196,7 +196,7 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Scrolls text from the bottom to the top, firing an optional callback at the end
-	 * 
+	 *
 	 * @param {Number} The duration of the scrolling in milliseconds.
 	 * @param {Function=undefined} An optional callback to fire when the scrolling is over.
 	 */
@@ -214,7 +214,7 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Scrolls text from the top, firing an optional callback at the end
-	 * 
+	 *
 	 * @param {Number} The duration of the scrolling in milliseconds.
 	 * @param {Function=undefined} An optional callback to fire when the scrolling is over.
 	 */
@@ -232,15 +232,15 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Scrolls the current text block
-	 * 
+	 *
 	 * @param {Object} options
 	 * @param {Number} options.targetOffsetX The horizontal destination of the scrolling.
 	 * @param {Number} options.targetOffsetY The vertical destination of the scrolling.
 	 * @param {Number} options.duration The duration of the scrolling, in milliseconds.
 	 * @param {Function} [options.callback=undefined] An optional callback function to call when the scrolling is done.
-	 * 
+	 *
 	 * @note if a scrolling is already in progress, nothing happens
-	 * 
+	 *
 	 * @private
 	 */
 	scrollText(options) {
@@ -266,7 +266,7 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Does nothing
-	 * 
+	 *
 	 * @private
 	 */
 	setTextPosition() {
@@ -301,9 +301,9 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Returns the character horizontal offset in pixels inside the spritesheet
-	 * 
+	 *
 	 * @param {String} char The character to get the position inside the spritesheet
-	 * 
+	 *
 	 * @returns {Number} The horizontal offset in pixels of the character
 	 */
 	getCharOffset(char) {
@@ -321,14 +321,14 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Draws the specified line onto the screen
-	 * 
+	 *
 	 * @param {Object} options
 	 * @param {Number} options.x The horizontal position of the line to draw
 	 * @param {Number} options.x The vertical position of the line to draw
 	 * @param {String} options.text The text to draw
-	 * 
+	 *
 	 * @example
-	 * 
+	 *
 	 * bitmapText.drawLine({
 	 * 	x: 0,
 	 *  y: 0,
@@ -358,7 +358,7 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Pre-renders text from this.textArray into the internal buffer
-	 * 
+	 *
 	 */
 	renderText() {
 		let i = 0,
@@ -376,7 +376,7 @@ class BitmapText extends GfxObject {
 	/**
 	 * Changes the text of the sprite, calculates every line size, and renders it into
 	 * the internal buffer
-	 * 
+	 *
 	 * @param {String} text The new text to use
 	 */
 	setText(text) {
@@ -396,7 +396,7 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Changes the image to use as spritesheet
-	 * 
+	 *
 	 * @param {Image} image The new {image} to use as source.
 	 */
 	setImage(image) {
@@ -410,7 +410,7 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Sets the scene of the bitmap font
-	 * 
+	 *
 	 * @param {Scene} scene The scene to use.
 	 */
 	setScene(scene) {
@@ -421,17 +421,17 @@ class BitmapText extends GfxObject {
 
 	/**
 	 * Draws pre-rendered into destination buffer
-	 * 
+	 *
 	 * @param {CanvasContext} destCtx The new cancas context where to draw the bitmap font.
 	 * @param {Boolean} debug Wether to draw debug stuff.
-	 * 
+	 *
 	 * @note: once added onto the scene, this method is automatically called at each render loop.
-	 * 
+	 *
 	 * @related {Scene}
-	 * 
+	 *
 	 * @private
 	 */
-	draw(destCtx, debug) {
+	draw(destCtx) {
 		var destY,
 			copyHeight,
 			copyStartY;
@@ -465,10 +465,6 @@ class BitmapText extends GfxObject {
 		} else {
 			this.executeFx(destCtx);
 			throw 'TODO: drawing of bitmapText';
-		}
-
-		if (debug) {
-			this.showObjectBox(destCtx);
 		}
 	}
 };

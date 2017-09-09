@@ -14,14 +14,20 @@ import Effect from 'FX/Effect/Effect';
 
             this.diff = this.endValue - this.startValue;
         }
-        
+
         start() {
             this.currentAngle = this.startAngle;
 
             // start timer and get deferred
             return super.start();
         }
-        
+
+        stop(object, endValue) {
+            super.stop();
+
+            object.setAngle(endValue);
+        }
+
         process(ctx, fxCtx, obj) {
             super.process();
 

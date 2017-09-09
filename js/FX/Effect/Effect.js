@@ -39,7 +39,7 @@ class Effect {
         return this.def.promise;
     }
 
-    stop(setEndValue) {
+    stop(object, setEndValue) {
         this.stopped = true;
     }
 
@@ -50,7 +50,7 @@ class Effect {
 
         if (this.stopped || ellapsedTime >= this.duration) {
             this.loops++;
-            if (this.loop !== true && (this.stopped || this.loops >= this.loop)) {
+            if (this.stopped || this.loops >= this.loop) {
                 // set progress to 1 to avoid weird side effects (eg. opacity set to a negative number since anim progress may be > 1)
                 this.animProgress = 1;
 

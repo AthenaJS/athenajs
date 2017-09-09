@@ -3,7 +3,7 @@ import GfxObject from 'Object/Object';
 /*jshint devel: true, bitwise: false*/
 /**
  * Basic class for displaying text using Canvas
- * 
+ *
  * @param {String} type The type of the graphic object
  * @param {Object} options
  * @param {String} [options.text=undefined] The initial text. Can be changed later using Text.setText().
@@ -15,9 +15,9 @@ import GfxObject from 'Object/Object';
  * @param {String} [options.fontWeight="normal"] The weight of the font.
  * @param {String} [options.align="center"] How to align the text when rendered.
  * @param {String} [options.color="white"] The color to use when rendering the text.
- * 
+ *
  * @example
- * 
+ *
  * let myText = new Text({
  *  text: 'hello',
  *  fontFace: 'Verdana',
@@ -49,7 +49,7 @@ export default class Text extends GfxObject {
 
     /**
      * TODO
-     * 
+     *
      * @private
      */
     moveWithSpline() {
@@ -58,7 +58,7 @@ export default class Text extends GfxObject {
 
     /**
      * Change the size of the object
-     * 
+     *
      * @param {Number} w The width of the object.
      * @param {Number} h The height of the object.
      */
@@ -74,7 +74,7 @@ export default class Text extends GfxObject {
 
     /**
      * Change the text of the object
-     * 
+     *
      * @param {String} text The new text.
      * @param {String} [text='center'] Optional new alignment for the text.
      */
@@ -85,7 +85,7 @@ export default class Text extends GfxObject {
 
     /**
      * Change the color of the object
-     * 
+     *
      * @param {String} color Thew new color to use, can be anything that is valid for the `color` *CSS* property.
      */
     setColor(color) {
@@ -94,7 +94,7 @@ export default class Text extends GfxObject {
 
     /**
      * Returns the hitbox of the text object
-     * 
+     *
      * @returns {Object} The new hitbox
      */
     getHitBox() {
@@ -108,7 +108,7 @@ export default class Text extends GfxObject {
 
     /**
      * Returns the width of the text object
-     * 
+     *
      * @returns [Number] The object's width
      */
     getCurrentWidth() {
@@ -117,7 +117,7 @@ export default class Text extends GfxObject {
 
     /**
      * Returns the height of the text object
-     * 
+     *
      * @returns [Number] The object's height
      */
     getCurrentHeight() {
@@ -126,7 +126,7 @@ export default class Text extends GfxObject {
 
     /**
      * Returns the horizontal offset of the text object
-     * 
+     *
      * @returns [Number] The object's horizontal offset
      */
     getCurrentOffsetX() {
@@ -135,7 +135,7 @@ export default class Text extends GfxObject {
 
     /**
      * Returns the vertical offset of the text object
-     * 
+     *
      * @returns [Number] The object's vertical offset
      */
     getCurrentOffsetY() {
@@ -144,7 +144,7 @@ export default class Text extends GfxObject {
 
     /**
      * Called when an object collides with the text Object
-     * 
+     *
      * @param {GfxObject} obj The graphical object that collided.
      */
     onHit(obj) {
@@ -154,9 +154,9 @@ export default class Text extends GfxObject {
 
     /**
      * Called on each render loop: renders the object on the destination canvas context
-     * 
+     *
      * @param {CanvasContext} destCtx Where to render the object.
-     * 
+     *
      * @private
      */
     draw(destCtx) {

@@ -94,10 +94,9 @@ class Game {
         if (this.debug) {
             document.addEventListener('keyup', (event) => {
                 if (event.keyCode === 68) {
-
                     if (this.scene) {
                         this.scene.debug();
-                        this.scene.map && this.toggleTileInspector(this.scene.map);
+                        this.scene.map && this.toggleTileInspector(this.scene.isDebug);
                     }
                 } else if (event.keyCode === 70) {
                     this.toggleFullscreen();
@@ -117,67 +116,71 @@ class Game {
         }
     }
 
-    toggleTileInspector(map) {
-        if (map.isDebug) {
+    addInspector() {
+        this.moveHandler = (event) => {
+            const map = this.scene.map;
+            const offsetX = event.offsetX > 0 ? event.offsetX : 0;
+            const offsetY = event.offsetY > 0 ? event.offsetY : 0;
+            const mapOffsetX = this.scene.mapOffsetX,
+                mapOffsetY = this.scene.mapOffsetY,
+                mapWidth = map.viewportW,
+                mapHeight = map.viewportH;
+
+            if (event.offsetX < mapOffsetX || event.offsetX > (mapOffsetX + mapWidth) || event.offsetY < mapOffsetY || event.offsetY > (mapOffsetY + mapHeight)) {
+                this.tileInspector.hide();
+                this.tileHover.hide();
+            } else {
+                const pos = map.getTileIndexFromPixel(offsetX - mapOffsetX - map.viewportX, offsetY - mapOffsetY - map.viewportY);
+                if (pos) {
+                    this.tileInspector.html(`${pos.x}, ${pos.y}<br />[${map.map[pos.x + pos.y * map.numCols]}, ${map.tileBehaviors[pos.x + pos.y * map.numCols]}]`).css({
+                        left: 0,
+                        top: 0
+                    });
+                    this.tileInspector.show();
+                    this.tileHover.css({
+                        left: ((pos.x * map.tileWidth) + mapOffsetX + map.viewportX) + 'px',
+                        top: ((pos.y * map.tileHeight) + mapOffsetY + map.viewportY) + 'px'
+                    }).show();
+                } else {
+                    this.tileInspector.hide();
+                    this.tileHover.hide();
+                }
+            }
+        };
+
+        this.tileInspector = new Dom('div').css({
+            border: '1px dotted white',
+            'background-color': 'rgba(0,0,0,.7)',
+            color: 'white',
+            'z-index': 10,
+            position: 'absolute',
+            'pointer-events': 'none'
+        }).appendTo(this.target);
+
+        this.tileHover = new Dom('div').css({
+            border: '1px dotted white',
+            width: `${this.scene.map.tileWidth}px`,
+            height: `${this.scene.map.tileHeight}px`,
+            'background-color': 'rgba(255,0,0,.4)',
+            position: 'absolute',
+            'z-index': 10,
+            top: 0,
+            left: 0,
+            'pointer-events': 'none'
+        }).appendTo(this.target);
+
+        // TODO: do not change position if != static
+        Dom(this.target).css('position', 'relative');
+    }
+
+    toggleTileInspector(enable) {
+        if (enable) {
             if (!this.tileInspector) {
-                this.moveHandler = (event) => {
-                    const map = this.scene.map;
-                    const offsetX = event.offsetX > 0 ? event.offsetX : 0;
-                    const offsetY = event.offsetY > 0 ? event.offsetY : 0;
-                    const mapOffsetX = this.scene.mapOffsetX,
-                        mapOffsetY = this.scene.mapOffsetY,
-                        mapWidth = map.viewportW,
-                        mapHeight = map.viewportH;
-
-                    if (event.offsetX < mapOffsetX || event.offsetX > (mapOffsetX + mapWidth) || event.offsetY < mapOffsetY || event.offsetY > (mapOffsetY + mapHeight)) {
-                        this.tileInspector.hide();
-                        this.tileHover.hide();
-                    } else {
-                        const pos = map.getTileIndexFromPixel(offsetX - mapOffsetX - map.viewportX, offsetY - mapOffsetY - map.viewportY);
-                        if (pos) {
-                            this.tileInspector.html(`${pos.x}, ${pos.y}<br />[${map.map[pos.x + pos.y * map.numCols]}, ${map.tileBehaviors[pos.x + pos.y * map.numCols]}]`).css({
-                                left: 0,
-                                top: 0
-                            });
-                            this.tileInspector.show();
-                            this.tileHover.css({
-                                left: ((pos.x * map.tileWidth) + mapOffsetX + map.viewportX) + 'px',
-                                top: ((pos.y * map.tileHeight) + mapOffsetY + map.viewportY) + 'px'
-                            }).show();
-                        } else {
-                            this.tileInspector.hide();
-                            this.tileHover.hide();
-                        }
-                    }
-                };
-
-                this.tileInspector = new Dom('div').css({
-                    border: '1px dotted white',
-                    'background-color': 'rgba(0,0,0,.7)',
-                    color: 'white',
-                    'z-index': 10,
-                    position: 'absolute',
-                    'pointer-events': 'none'
-                }).appendTo(this.target);
-
-                this.tileHover = new Dom('div').css({
-                    border: '1px dotted white',
-                    width: `${this.scene.map.tileWidth}px`,
-                    height: `${this.scene.map.tileHeight}px`,
-                    'background-color': 'rgba(255,0,0,.4)',
-                    position: 'absolute',
-                    'z-index': 10,
-                    top: 0,
-                    left: 0,
-                    'pointer-events': 'none'
-                }).appendTo(this.target);
-
-                // TODO: do not change position if != static
-                new Dom(this.target).css('position', 'relative');
+                this.addInspector();
             }
             this.tileInspector.show();
             this.target.addEventListener('mousemove', this.moveHandler, false);
-        } else {
+        } else if (this.tileInspector) {
             this.target.removeEventListener('mousemove', this.moveHandler);
             this.tileInspector.hide();
             this.tileHover.hide();
@@ -292,10 +295,12 @@ class Game {
         console.log('[Game] setScene()');
         if (this.scene) {
             // stops render + input loops
-            this._stopScene();
+            this._stopSceneLoops();
 
             // stops the scene from running
-            this.scene.stop();
+            this.scene._stop();
+
+            this.toggleTileInspector(false);
         }
 
         // TODO: handle case where user attempt to set the scene that's currently running
@@ -428,7 +433,7 @@ class Game {
             // and display changes
             this.display.renderScene(this.scene);
             // then immediately stop the scene
-            this._stopScene();
+            this._stopSceneLoops();
         } else {
             this.running = true;
             this.scene.pause(this.running);
@@ -491,7 +496,7 @@ class Game {
      * @private
      *
      */
-    _stopScene() {
+    _stopSceneLoops() {
         this.running = false;
 
         console.log('[Game] Scene stopped, stopping run & render loops');
