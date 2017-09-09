@@ -13,7 +13,7 @@ import Mosaic from 'FX/Effect/Mosaic';
             // by default, add linear easing, other easing are defined in Easing.js and may be added at runtime
             this.addEasing('linear', (t) => t);
         }
-        
+
         addFX(fxName, fxClass) {
             effects[fxName] = fxClass;
         }
@@ -27,7 +27,8 @@ import Mosaic from 'FX/Effect/Mosaic';
         }
 
         getEasing(easingName) {
-            return easing[easingName];
+            // defaults to linear easing if not specified or doesn't exist
+            return easing[easingName] || easing['linear'];
         }
     };
 
@@ -40,4 +41,3 @@ import Mosaic from 'FX/Effect/Mosaic';
 
     export default instance;
 
-    

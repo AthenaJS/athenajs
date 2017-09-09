@@ -553,6 +553,20 @@ class GfxObject {
   }
 
   /**
+   *
+   * @param {CanvasContext} ctx context to use
+   * @private
+   */
+  applyCtxAlpha(ctx) {
+    this._oldAlpha = ctx.globalAlpha;
+    ctx.globalAlpha = this.opacity;
+  }
+
+  restoreCtxAlpha(ctx) {
+    ctx.globalAlpha = this._oldAlpha;
+  }
+
+  /**
    * Returns the current width of the object: with some types of GfxObjects ({Sprite}),
    * width can vary
    *
@@ -884,17 +898,16 @@ class GfxObject {
   }
 
   /**
-   * This method is called when drawing an object
+   * Performs common draw effects on canvas here so that each Object doesn't need to reimplement it
    *
-   * GfxObject is a virtual object so its drawing method does nothing
-   *
-   * Every Object inheriting from GfxObject should implement its own draw method.
-   *
-   * @param {CanvasContext} destCtx the target canvas rendering context.
-   * @param {Boolean} debug Debug is set to true if the game is being debugged.
+   * @param {CanvasContext} ctx the context to use for graphic operations
+   * @private
    */
-  draw(destCtx, debug) {
-    console.error('[GfxObject] you need to define a draw method for your object, GfxObjects do not have a draw method');
+  _draw(ctx) {
+    this.applyCtxAlpha(ctx);
+    // call object-specific draw-method
+    this.draw(ctx);
+    this.restoreCtxAlpha(ctx)
   }
 
   /**
