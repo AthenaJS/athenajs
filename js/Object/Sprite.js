@@ -6,22 +6,22 @@ import RM from 'Resource/ResourceManager';
 /*jshint devel: true, bitwise: false*/
 /**
  * This class extends {GfxObject} to implement 2D sprites using an image sprite sheet.
- * 
+ *
  * A sprite can have an infinite number of animations.
  * Each animation can have a different frameDuration and any number of frames.
  * Each frame may have a different size and a different hitbox
- * 
+ *
  * @param {String} type An identifier for this sprite, can be for example `enemy1`,...
  * @param {Object} options An options hash for the object
  * @param {String} options.imageId The path to the spritesheet image
  * @param {Object} options.animations An hash with a key for each animation of the sprite.
- * 
+ *
  * @note Since games usually have multiple sprites of the same type, it's common to extend the Sprite class
  * to generate each sprite type with its own properties and then use these sprites instead of instanciating
  * the Sprite class but it's possible to do so.
- * 
+ *
  * @example
- * 
+ *
  * let mySprite = new Sprite('gem', {
  *  imageId: 'objects',
  *  x: options.x,
@@ -62,7 +62,7 @@ import RM from 'Resource/ResourceManager';
  *       }
  *    }
  * });
- * 
+ *
  * @related {GfxObject}
  */
 class Sprite extends GfxObject {
@@ -114,11 +114,11 @@ class Sprite extends GfxObject {
 
     /**
      * Toggles debugging
-     * 
+     *
      * @param {Boolean} isDebug wether to enable or disable debug
-     * 
+     *
      * TODO: should use a global setting instead
-     * 
+     *
      * @private
      */
     debug(isDebug) {
@@ -134,7 +134,7 @@ class Sprite extends GfxObject {
 
     /**
      * Adds a new animation to the sprite
-     * 
+     *
      * @param {String} name The name of the new animation
      * @param {String} source The source of the image
      * @param {Object} options The animation to add, see:
@@ -224,8 +224,8 @@ class Sprite extends GfxObject {
     /**
      * Loads animations from settings, flipping sprites if needed
      * and sets the last animation of the array as current animation
-     * 
-     * 
+     *
+     *
      */
     load(anims) {
         if (!this._settings)
@@ -257,14 +257,14 @@ class Sprite extends GfxObject {
 
     /**
      * WIP: updateFlipAnimation
-     * 
+     *
      * It's possible to define a new animation that is simply the flip of another one
      * This method copies the frames of the source animation and flips them
-     * 
+     *
      * @param {Object} animation The animation to create frames for
      * @param {String} flipFrom The name of the animation to use as reference
      * @param {Number} flipType The direction of the flip: set to 1 for left/right flip, 2 for top/bottom flip
-     * 
+     *
      */
     updateFlipAnimation(anim, flipFrom, flipType) {
         let animFromFrames = this.animations[flipFrom].frames;
@@ -291,7 +291,7 @@ class Sprite extends GfxObject {
 
     /**
      * Changes the source image for this sprite
-     * 
+     *
      * @param {Image} image the new Image to use as spritesheet
      */
     setImage(image, force = false) {
@@ -327,9 +327,9 @@ class Sprite extends GfxObject {
 
     /**
      * Goes to the next animation frame
-     * 
+     *
      * When reaching the last frame, the next frame will depend on animation.loop property:
-     * 
+     *
      * - if loop == 2 then animation will play back in reverse mode, up to the first frame
      * - if loop == 1 then animation will play back from the begining so nextFrame = 0
      * - if loop == 0/undefined then animation will stop and sprite._onAnimateEnd is called
@@ -387,7 +387,7 @@ class Sprite extends GfxObject {
 
     /**
      * Restore animation to a previous saved state
-     * 
+     *
      * @related {restorePreviousAnim}
      */
     restorePreviousAnim() {
@@ -397,7 +397,7 @@ class Sprite extends GfxObject {
     /**
      * advanceFrame is called at each render loop and waits for currentAnim.frameDuration
      * before advancing to the next animation frame.
-     * 
+     *
      * If animName != than currentAnimName then switches to the new animation
      */
     advanceFrame(animName) {
@@ -432,7 +432,7 @@ class Sprite extends GfxObject {
 
     /**
      * Returns the x offset in the spritesheet of current animation frame
-     * 
+     *
      * @returns {number} current frame horizontal offset in the spritesheet
      */
     getCurrentOffsetX() {
@@ -441,7 +441,7 @@ class Sprite extends GfxObject {
 
     /**
      * Returns the y offset in the spritesheet of current animation frame
-     * 
+     *
      * @returns {number} current frame vertical offset in the spritesheet
      */
     getCurrentOffsetY() {
@@ -451,9 +451,9 @@ class Sprite extends GfxObject {
     /**
      * Returns the optional horizontal shift of the sprite: can be used
      * if sprite image's width is less than actual frame width and sprite is flipped
-     * 
+     *
      * @returns {number} current frame horizontal shift value or 0 if not defined
-     * 
+     *
      * @private
      */
     getCurrentShiftX() {
@@ -463,9 +463,9 @@ class Sprite extends GfxObject {
     /**
      * Returns the optional horizontal shift of the sprite: can be used
      * if sprite image's height is less than actual frame height and sprite is flipped
-     * 
+     *
      * @returns {number} current frame vertical shift value or 0 if not defined
-     * 
+     *
      * @private
      */
     getCurrentShiftY() {
@@ -474,20 +474,25 @@ class Sprite extends GfxObject {
 
     /**
      * Returns the hitBox of current animation frame
-     * 
+     *
      * @returns {Object} the hitbox
-     * 
+     *
      * @example
-     * 
+     *
      * { x: 0, y: 0, x2: 10, y2: 10 }
      */
     getHitBox() {
-        return this.currentFrame.hitBox;
+        return this.currentFrame.hitBox || {
+            x: 0,
+            y: 0,
+            x2: this.getCurrentWidth() - 1,
+            y2: this.getCurrentHeight() -1
+        };
     }
 
     /**
      * Returns hitbox position
-     * 
+     *
      * returns {Object} the hitbox position using current sprite position
      */
     getHitBox2() {
@@ -503,7 +508,7 @@ class Sprite extends GfxObject {
 
     /**
      * Centers the sprite horizontaly around a tile
-     * 
+     *
      * @param {Object} tilePos The tile to center the sprite on
      */
     centerXOverTile(tilePos) {
@@ -519,7 +524,7 @@ class Sprite extends GfxObject {
 
     /**
      * Stops current animation from running
-     * 
+     *
      * TODO: rename this method
      */
     clearMove() {
@@ -529,7 +534,7 @@ class Sprite extends GfxObject {
 
     /**
      * Changes the sprite's current animation
-     * 
+     *
      * @param {String} anim The new animation to play.
      * @param {Function=undefined} fn An optionnal callback to run when the animation will have ended.
      * @param {number=0} frameNum The first frame to play, defaults to zero.
@@ -582,7 +587,7 @@ class Sprite extends GfxObject {
 
     /**
      * Stops playing current animation
-     * 
+     *
      * @param {Boolean} runPreviousEndMethod Set to false if you don't want to run the end callback functions
      */
     stopAnimation(runPreviousEndMethod) {
@@ -597,7 +602,7 @@ class Sprite extends GfxObject {
 
     /**
      * Starts/resumes animation playback
-     * 
+     *
      * This method only sets `this.running` to true.
      */
     startAnimation() {
@@ -606,7 +611,7 @@ class Sprite extends GfxObject {
 
     /**
      * Adds a new function that will be called when current animation ends
-     * 
+     *
      * @param {Function} fn The callback to run
      */
     onAnimationEnd(func) {
@@ -616,7 +621,7 @@ class Sprite extends GfxObject {
 
     /**
      * Adds a new function that will be called when a new animation is ran
-     * 
+     *
      * @param {Function} func The callback function to add.
      */
     onAnimationChange(func) {
@@ -625,7 +630,7 @@ class Sprite extends GfxObject {
 
     /**
      * Runs every registered end callback function
-     * 
+     *
      * @private
      */
     _animationEnded() {
@@ -635,7 +640,7 @@ class Sprite extends GfxObject {
 
     /**
      * Runs every registered change callback function
-     * 
+     *
      * @private
      */
     _animationChanged(oldAnim) {
@@ -644,7 +649,7 @@ class Sprite extends GfxObject {
 
     /**
      * onHit is called when a collision has been detect between the sprite and another graphical object
-     * 
+     *
      * @param {GfxObject} obj The graphical object that collided
      */
     onHit(obj) {
@@ -654,10 +659,10 @@ class Sprite extends GfxObject {
 
     /**
      * Draws the sprite onto the canvas context passed
-     * 
+     *
      * @param {CanvasContext} destCtx The context where to render the sprite.
      * @param {Boolean=false} debug wether to show the sprite hit box
-     * 
+     *
      * @private
      */
     draw(destCtx, debug) {
@@ -742,7 +747,6 @@ class Sprite extends GfxObject {
             // destCtx.translate(Math.floor(drawX + mapOffsetX + subScaledW), Math.floor(drawY + mapOffsetY + subScaledH));
             destCtx.setTransform(this.scale, 0, 0, this.scale, drawX + mapOffsetX + subScaledW, drawY + mapOffsetY + subScaledH);
             destCtx.rotate(this.angle);
-
             destCtx.drawImage(this.image, Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
             // destCtx.restore();
 
@@ -754,48 +758,18 @@ class Sprite extends GfxObject {
 
             // undo clipping as it's specitic to the object
             this._undoMask(destCtx);
-
-            if (this.isDebug === true || debug === true) {
-                this.showHitBox(destCtx);
-            }
         }
 
-        if (this.children.length) {
-            this.children.forEach((sprite) => {
-                sprite.draw(destCtx, debug);
-            });
-        }
-    }
-
-    /**
-     * Draws the sprite hit box
-     * 
-     * @param {CanvasContext} The canvas context where to render the hitbox
-     */
-    showHitBox(ctx) {
-        // TODO: add scale (rotation ?)
-        let hitBox = this.getHitBox(),
-            mapOffsetX = this.currentMap && this.currentMap.viewportX || 0,
-            mapOffsetY = this.currentMap && this.currentMap.viewportY || 0;
-
-        if (!hitBox) {
-            return;
-        }
-
-        ctx.strokeStyle = 'rgb(0,230,0)';
-        ctx.beginPath();
-        ctx.moveTo(hitBox.x + this.x + mapOffsetX, hitBox.y + this.y + mapOffsetY);
-        ctx.lineTo(hitBox.x2 + this.x + mapOffsetX, hitBox.y + this.y + mapOffsetY);
-        ctx.lineTo(hitBox.x2 + this.x + mapOffsetX, hitBox.y2 + this.y + mapOffsetY);
-        ctx.lineTo(hitBox.x + this.x + mapOffsetX, hitBox.y2 + this.y + mapOffsetY);
-        ctx.lineTo(hitBox.x + this.x + mapOffsetX, hitBox.y + this.y + mapOffsetY);
-        ctx.closePath();
-        ctx.stroke();
+        // if (this.children.length) {
+        //     this.children.forEach((sprite) => {
+        //         sprite.draw(destCtx);
+        //     });
+        // }
     }
 
     /**
      * Draws all sprite animation frames onto a temporary canvas that is added to the body tag
-     * 
+     *
      * This is used for debugging sprites
      *
      * @private
@@ -893,9 +867,9 @@ class Sprite extends GfxObject {
 
     /**
      * Returns the sprite's animation hash
-     * 
+     *
      * Used for debugging
-     * 
+     *
      * @private
      */
     listAnimations() {
