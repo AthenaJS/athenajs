@@ -15,7 +15,7 @@ window.maps = {};
  * The `Map` is used to display tile-based backgrounds. It is usually initialized using a buffer containing
  * tiles and tilebehaviors. It has a viewport so that only a part of the map can be displayed.
  * A map also contains objects that are added onto the map once the viewport reaches a `block`.
- * 
+ *
  * @param {Object} options
  * @param {string} options.src The url to an image that will be used for the tiles
  * @param {number} options.tileWidth The width of a tile
@@ -34,7 +34,7 @@ window.maps = {};
  *    height: 600,
  *    buffer: new ArrayBuffer(800*600*2)
  * });
- * 
+ *
  */
 class Map {
     constructor(options) {
@@ -156,14 +156,14 @@ class Map {
         // TODESCRIBE
         this.mapEvent = new MapEvent(this);
 
-        // flag that 
+        // flag that
         this.isDirty = true;
     }
 
 	/**
-	 * 
+	 *
 	 * Changes the start position using the master's current position: usually called when reaching a checkpoint
-	 * 
+	 *
 	 */
     setStartXYFromMaster() {
         this.startX = this.masterObject.x;
@@ -173,7 +173,7 @@ class Map {
 	/**
 	 * Resets the master's position to the map.startX/startY position & resets its animation state:
 	 * usually called when player loses a life and needs to be positionned at a checkpoint
-	 * 
+	 *
 	 */
     respawn() {
         debugger;
@@ -190,7 +190,7 @@ class Map {
 
 
 	/**
-	 * 
+	 *
 	 * Resets the map:
 	 * 	- removes objects from the map
 	 *  - reset windows
@@ -198,9 +198,9 @@ class Map {
 	 *  - reset mapEvents
 	 *  - reset viewport + scrollOffset
 	 *  - sets isDirty to true so that map is redrawn
-	 * 
+	 *
 	 * TODO: scrollOffset shouldn't be 0 but depends on the master's position
-	 * 
+	 *
 	 */
     reset() {
         this.masterObject = null;
@@ -255,9 +255,9 @@ class Map {
 	 * Sets the map tiles and tiletypes from binary buffer:
 	 *  - first (numCols * numRows) bytes are visual tile numbers
 	 *  - last (numCols * numRows) bytes are the tile types (wall, ladder,...)
-	 * 
+	 *
 	 * @param {any} buffer
-	 * 
+	 *
 	 */
     setBuffer(buffer) {
         let size = this.numCols * this.numRows;
@@ -272,9 +272,9 @@ class Map {
 	 * Sets the master object, it will be used for:
 	 *  - scrolling the viewport when needed, centering it around the master sprite
 	 *  - collision detection
-	 * 
+	 *
 	 * @param {GfxObject} obj The object to set as master.
-	 * 
+	 *
 	 */
     setMasterObject(obj) {
         this.masterObject = obj;
@@ -290,12 +290,12 @@ class Map {
 	 * Add a new graphical object on to the map, it will be:
 	 *  - displayed if it is visible (in the viewport)
 	 *  - added to collision group
-	 * 
+	 *
 	 * @param {GfxObject} obj A reference to the new object to add
-	 * 
+	 *
 	 * @note the object will be added to the correct collision group
 	 * if obj.collideGroup is set
-	 * 
+	 *
 	 */
     addObject(obj) {
         if (!obj.image) {
@@ -332,10 +332,10 @@ class Map {
 
 	/**
 	 * Sets the map tile size (in pixels)
-	 * 
+	 *
 	 * @param {number} width of a map tile.
 	 * @param {number} height of a map tile.
-	 * 
+	 *
 	 */
     setTilesSize(width, height) {
         this.tileWidth = width;
@@ -345,14 +345,14 @@ class Map {
 
 	/**
 	 * changes current viewport size and position
-	 * 
+	 *
 	 * @param {number} x Horizontal position of the viewport.
 	 * @param {number} y Vertical position of the viewport.
 	 * @param {number} w Width of the viewport.
 	 * @param {number} h Height of the viewport.
-	 * 
+	 *
 	 * @note there is currently no boundaries checks
-	 * 
+	 *
 	 */
     setViewPort(x, y, w, h) {
         this.viewportX = x;
@@ -365,9 +365,9 @@ class Map {
 	/**
 	 * Sets current debug status: when set to true outputs more console logs and may also debug visual stuff
 	 * like map tiles and objects onto the map
-	 * 
+	 *
 	 * @param {boolean} isDebug Set to true to enable debug.
-	 * 
+	 *
 	 */
     debug(isDebug) {
         this.isDebug = isDebug;
@@ -377,7 +377,7 @@ class Map {
 
 	/**
 	 * Move movable objects into the map
-	 * 
+	 *
      * @param {Number} timestamp current time
 	 */
     moveObjects(timestamp) {
@@ -393,9 +393,9 @@ class Map {
     }
 
 	/**
-	 * Move platform objects onto the map: they must be moved before normal objects are moved 
+	 * Move platform objects onto the map: they must be moved before normal objects are moved
 	 * so that movable objects move related to the platforms
-	 * 
+	 *
      * @param {Number} current time
 	 */
     movePlatforms(timestamp) {
@@ -412,7 +412,7 @@ class Map {
 	 *  - updates the viewport window if map.moving is set
 	 *  - checks for triggers (that could spawn new objects onto the map)
 	 *  - move platforms and objects
-	 * 
+	 *
      * @param {Number} timestamp current time
 	 */
     update(timestamp) {
@@ -454,9 +454,9 @@ class Map {
 
 
 	/**
-	 * 
+	 *
 	 * Triggers map scrolling depending on the master's position (if needed)
-	 * 
+	 *
 	 */
     checkMasterPosition() {
         let destX = null,
@@ -502,9 +502,9 @@ class Map {
 
 
 	/**
-	 * 
+	 *
 	 * Checks for collisions
-	 * 
+	 *
 	 */
     checkCollisions() {
         if (this.masterObject && this.masterObject.canCollide) {
@@ -516,10 +516,10 @@ class Map {
 
 
 	/**
-	 * 
+	 *
 	 * Check for map triggers and handle any found triggers, like enemies or bonus that can appear
 	 * when the player reaches certain positions
-	 * 
+	 *
 	 */
     checkForTriggers() {
         let box = this.masterObject.getHitBox(),
@@ -535,10 +535,10 @@ class Map {
 	 * Sets a new destination for the viewport: this method doesn't not set it immediately
 	 * but sets a new target instead: if not already moving, new move will happen at each
 	 * render inside the map.update) method
-	 * 
+	 *
 	 * @param {number} x The horizontal position to move the viewport at.
 	 * @param {number} y The vertical position to move the viewport at.
-	 * 
+	 *
 	 * @note moveTo will do nothing in case the map already has a destination set
 	 */
     moveTo(x, y) {
@@ -564,12 +564,12 @@ class Map {
 
 	/**
 	 * Sets new tiles image source
-	 * 
+	 *
 	 * @param {Object} options
 	 * @param {String} options.src The new source.
-	 * 
+	 *
 	 * @private
-	 * 
+	 *
 	 */
     setNewSrc(options) {
         this.src = options.src;
@@ -578,9 +578,9 @@ class Map {
 
 	/**
 	 * Returns current source image url used to render map tiles
-	 * 
+	 *
 	 * @returns {String} The current source image used to render the tiles.
-	 * 
+	 *
 	 * @private
 	 */
     getSrc() {
@@ -590,11 +590,11 @@ class Map {
 
 	/**
 	 * Checks if tile at position x,y is `TYPE.WALL` and returns true if it is a wall, false otherwise
-	 * 
+	 *
 	 * @param {number} x The x position of the tile to check.
 	 * @param {number} y The y position of the tile to check.
 	 * @returns {boolean} Returns true if the tile is a wall, false otherwise.
-	 * 
+	 *
 	 * @related {Tile}
 	 */
     fallTest(x, y) {
@@ -606,10 +606,10 @@ class Map {
 
 
 	/**
-	 * 
+	 *
 	 * Checks collisions between master bullets and enemies: call hitTest method on
 	 * any frend bullet object with the enemies object as parameter
-	 * 
+	 *
 	 */
     checkMasterBulletsToEnemiesCollisions() {
         let i = 0,
@@ -632,9 +632,9 @@ class Map {
 	/**
 	 * Checks collisions between master object and enemies, calling hitTest on any enemie
 	 * that collides with the master
-	 * 
+	 *
 	 * @returns {boolean} Returns true if the masterSprite was hit, false otherwise.
-	 * 
+	 *
 	 */
     checkMasterToEnemiesCollisions() {
         let i = 0,
@@ -654,14 +654,14 @@ class Map {
 
 	/**
 	 * WIP: Check if user will reach a platform
-	 * 
+	 *
 	 * @param {any} sprite
 	 * @param {any} vx
 	 * @param {any} vy
 	 * @returns {boolean} false (not fully implemented yet)
-	 * 
+	 *
 	 * @private
-	 * 
+	 *
 	 */
     checkForPlatform(object, vx, vy) {
         let box = object.getHitBox(),
@@ -680,14 +680,14 @@ class Map {
 
 	/**
 	 * getTriggers for map window: `(x, y, x2, y2)`
-	 * 
+	 *
 	 * @param {number} x The x coordonate of left top corner of the box to check for.
 	 * @param {numer} y The y coordonate of left top corner of the box to check for.
 	 * @param {numer} x2 The x coordonate of right bottom corner of the box to check for.
 	 * @param {number} y2 The y coordonate of right bottom corner of the box to check for.
-	 * 
+	 *
 	 * @returns {Array} a list of trigger objects that have not already been triggered
-	 * 
+	 *
 	 * @private
 	 */
     getTriggersForBox(x, y, x2, y2) {
@@ -715,13 +715,13 @@ class Map {
 
     /**
      * Compares a source matrix with map behaviors, looking for hits
-     * 
+     *
      * @param {Array} buffer the source buffer: 0 === empty, 1 === full
      * @param {Number} matrixWidth the width of the matrix, in pixels
      * @param {Number} x the x index to start checking inside the map
      * @param {Number} y the y index to start checking inside the map
      * @param {Number} behavior the behavior to check for
-     * 
+     *
      * @returns {Bolean} true if one or more hits were found, false otherwise
      */
     checkMatrixForCollision(buffer, matrixWidth, x, y, behavior) {
@@ -742,11 +742,11 @@ class Map {
 
     /**
      * This method returns min(next `Behavior` tile, distance)
-     * 
+     *
      * @param {Sprite} sprite the sprite to check distance with
      * @param {Number} distance the maximum (x) distance in pixels
      * @param {Number} behavior the behavior we want to check for
-     * 
+     *
      * Returns the minimum distance
      */
     getMaxDistanceToTile(sprite, distance, behavior) {
@@ -780,11 +780,11 @@ class Map {
 	/**
 	 * Calculates and sets the object's next x position using its current x, vx and
 	 * avoids tileTypes tiles (ie: walls, moving platforms)
-	 * 
+	 *
 	 * @param {GfxObject} sprite The sprite to get next position of.
 	 * @param {number} tileTypes The tileType.
 	 * @returns {boolean} Returns true if the object hit the spcified tile, false otherwise
-	 * 
+	 *
 	 */
     setNextX(sprite, tileTypes) {
         // TODO: if player moves too fast, or tiles are too small,
@@ -805,7 +805,7 @@ class Map {
             minX = left ? startX : 0;
         //
         // console.log('begin test');
-        // left: minX >= sprite.vx => minX 
+        // left: minX >= sprite.vx => minX
         while (!found && ((left && (minX >= sprite.vx)) || (!left && (minX <= sprite.vx)))) {
             for (let i = tilePos.y * this.tileHeight; i < spriteYMax; i += this.tileHeight, tilePos.y++) {
                 // DISABLE WALL COLLISIONS
@@ -838,11 +838,11 @@ class Map {
 	/**
 	 * WIP: Calculates and sets the object's next y position using its current y, vy and
 	 * avoids tileTypes tiles (ie: walls, moving platforms)
-	 * 
+	 *
 	 * @param {any} sprite
 	 * @param {any} tileTypes
 	 * @returns true if the object hit a tile, false otherwise
-	 * 
+	 *
 	 */
     setNextYTop(sprite, tileTypes) {
         let hitBox = sprite.getHitBox,
@@ -859,7 +859,7 @@ class Map {
         // 			found = true;
         // 			break;
         // 		}
-        // 	}				
+        // 	}
         // }
 
         sprite.y += sprite.vy;
@@ -908,19 +908,19 @@ class Map {
 	/**
 	 * Checks if an object is in front of a certain type of tileType,
 	 * optionnaly centering the object under the tile
-	 * 
+	 *
 	 * Used when checking if the player can climb a ladder for example
-	 * 
+	 *
 	 * spaceX/spaceY specify how to reduce the players hitbox
-	 * 
+	 *
 	 * @param {GfxObject} sprite The sprite to check.
 	 * @param {number} tileType The tileType to check for.
 	 * @param {number} [spaceX=0] The x padding that is accepted: if horizontal position is +/- that spaceX, check will succeed.
 	 * @param {number} [spaceY=0] The y padding that is accepted: if vertical position is +/- that spaceX, check will succeed.
 	 * @param {boolean} [center=false] Set to true if you want to sprite to be centered on the tile.
-	 * 
+	 *
 	 * @returns {boolean} True if the tile was found, false otherwise
-	 * 
+	 *
 	 */
     checkForTileType(sprite, tileType, spaceX = 0, spaceY = 0, center = false) {
         const currentHitBox = sprite.getHitBox(),
@@ -941,14 +941,14 @@ class Map {
 	/**
 	 * Tests if a rectangle collapses with certain types of tiles
 	 * Used when checking colligions between a sprite and walls for example
-	 * 
+	 *
 	 * @param {number} x
 	 * @param {number} y
 	 * @param {number} x2
 	 * @param {number} y2
 	 * @param {number} types
 	 * @returns {boolean} True if colision detected
-	 * 
+	 *
 	 */
     hitObjectTest(x, y, x2, y2, types) {
         let pos1 = this.getTileIndexFromPixel(x, y),
@@ -981,19 +981,19 @@ class Map {
 
 	/**
 	 * Draws tile at pixel position (x, y) onto the specified {Canvas} context
-	 * 
+	 *
 	 * @note If offset is true it means scroll is in progress and
 	 * we are drawing the first col: in this case we have to draw
 	 * a partial tile and we do not use tileWidth/tileHeight
 	 * but this.scrollTileOffsetX instead
-	 * 
+	 *
 	 * @param {number} tileNum The tile number to draw.
 	 * @param {CanvasContext} ctx The canvas rendering context to draw the tile into.
 	 * @param {number} x The horizontal position where to draw the tile.
 	 * @param {number} y The vertical position where to draw the tile.
 	 * @param {Boolean} useScrollOffset If set to true, the tile will be partially rendered
 	 * starting at scrollOffsetX. This happens if the tile is at the firstRow/firstCol of the viewport.
-	 * 
+	 *
 	 * @note Unless noted otherwise, positions are related to the whole map, and not to the viewport.
 	 */
     drawTile(tileNum, ctx, x, y, useScrollOffset) {
@@ -1025,7 +1025,7 @@ class Map {
 
 	/**
 	 * Internal: calculates scrolling offsets for first cols in case a scrolling is in progress
-	 * 
+	 *
 	 * @private
 	 */
     _getScrollOffset() {
@@ -1041,12 +1041,12 @@ class Map {
 
 	/**
 	 * Draws the map, showing the whole map and not only the visible window if showHidden true
-	 * 
+	 *
 	 * @param {CanvasContext} ctx The context of the canvas where to draw the map.
 	 * @param {boolean} showHidden The map only draws the viewport, set this to true to draw the whole map.
 	 * @param {number=0} mapOffsetX The x offset where to start drawing the map
 	 * @param {number=0} mapOffsetY The y offset where to start drawing the map
-	 * 
+	 *
 	 * @private
 	 */
     draw(ctx, showHidden, mapOffsetX = 0, mapOffsetY = 0) {
@@ -1119,11 +1119,11 @@ class Map {
 
 	/**
 	 * Adds new Objects onto the map if this is the first time we display this window.
-	 * 
+	 *
 	 * Each map is divided into windows: each viewport window is the size of the current viewport
 	 * When drawing a window for the first time, objects found into this window are added to the map
 	 * It can be enemies, etc...
-	 * 
+	 *
 	 * @private
 	 */
     addNewObjectsFromWindow() {
@@ -1148,11 +1148,11 @@ class Map {
 
 	/**
 	 * Draw all objects that are onto the map
-	 * 
+	 *
 	 * @param {CanvasContext} ctx The context where to draw the objects.
 	 * @param {number=0} mapOffsetX The x offset where to start rendering the object
 	 * @param {number=0} mapOffsetY The y offset where to start rendering the object
-	 * 
+	 *
 	 * @private
 	 */
     drawObjects(ctx, mapOffsetX = 0, mapOffsetY = 0) {
@@ -1178,7 +1178,16 @@ class Map {
                     }
                 }
             }
-            obj.draw(ctx, this.isDebug);
+            obj.draw(ctx);
+            this.isDebug && obj.showHitBox(ctx);
+
+            if (obj.children.length) {
+                obj.children.forEach((sprite) => {
+                    sprite.draw(ctx);
+                    this.isDebug && sprite.showHitBox(ctx);
+                });
+            }
+
             // restores its position
             if (mapOffsetX || mapOffsetY) {
                 obj.x -= mapOffsetX;
@@ -1197,14 +1206,14 @@ class Map {
 
 	/**
 	 * Returns the tile at (x, y) pixels
-	 * 
+	 *
 	 * @param {number} x The horizontal position in pixels.
 	 * @param {number} y The vertical position in pixels.
-	 * 
+	 *
 	 * @note Position is related to the whole map, not the viewport.
-	 * 
+	 *
 	 * @returns {Tile=undefined} The tile that is found at position x, y, undefined if tile `(x, y)` is out of bounds
-	 * 
+	 *
 	 */
     getTileAt(x, y) {
         let i,
@@ -1220,10 +1229,10 @@ class Map {
 
     /**
      * Get the behavior at specified index
-     * 
+     *
      * @param {Number} col The col number
      * @param {Number} row The row number
-     * 
+     *
      * @returns {Number} The behavior found at position (col, row)
      */
     getTileBehaviorAtIndex(col, row) {
@@ -1232,11 +1241,11 @@ class Map {
 
 	/**
 	 * Returns index of the tile at pos (x,y) in map array
-	 * 
+	 *
 	 * @param {number} x
 	 * @param {number} y
 	 * @returns {Object} Object with i, j tile index
-	 * 
+	 *
 	 */
     getTileIndexFromPixel(x, y) {
         let i,
@@ -1266,10 +1275,10 @@ class Map {
     }
 
 	/**
-	 * 
+	 *
 	 * INTERNAL: Calculates the number of tile rows & cols, and number of rows/cols
 	 * per viewport window
-	 * 
+	 *
 	 * @private
 	 */
     _calcNumTiles() {
@@ -1286,9 +1295,9 @@ class Map {
 	 * If showHidden is set to true we display the whole map so:
 	 * firstCol = firstRow = 0
 	 * lastCol/lastRow = lastCol/lastRow of the map
-	 * 
+	 *
 	 * @param {Boolean=false} showHidden Set to true to get boundaries for the whole map.
-	 * 
+	 *
 	 * @private
 	 */
     _getBoundariesTiles(showHidden) {
@@ -1320,10 +1329,10 @@ class Map {
 
 	/**
 	 * Send specified event to the NotificationManager
-	 * 
+	 *
 	 * @param {String} eventType The type of event to send.
 	 * @param {Object} data The data to send with the notification.
-	 * 
+	 *
 	 */
     notify(eventType, data) {
         NM.notify(eventType, data);
@@ -1332,11 +1341,11 @@ class Map {
 
 	/**
 	 * removeObject from the map
-	 * 
+	 *
 	 * @param {GfxObject} gfxObject The object to remove from the map.
-	 * 
+	 *
 	 * @note the object if automatically removed from collision lists
-	 * 
+	 *
 	 */
     removeObject(gfxObject) {
         let foundIndex = this.objects.indexOf(gfxObject);
@@ -1357,12 +1366,12 @@ class Map {
 
     /**
      * Schedule adding a new object to the map
-     * 
+     *
      * @param {String} spriteId The id of the new sprite to add.
      * @param {Object} spriteOptions The options that will be passed to the object constructor.
      * @param {number=0} delay The delay in milliseconds to wait before adding the object.
      * @returns {GfxObject} the new object
-     * 
+     *
      */
     scheduleSprite(spriteId, spriteOptions, delay) {
         let sprite = RM.newResourceFromPool(spriteId, spriteOptions);
@@ -1385,10 +1394,10 @@ class Map {
     /**
      * Add a new wave of objects to the map
 	 * Used for example when the player triggers apparition of several enemies or bonuses
-     * 
+     *
      * @param {Object} options The options to pass to the wav object
      * @returns
-     * 
+     *
 	 * @related {Wave}
      */
     handleWave(options) {
@@ -1416,9 +1425,9 @@ class Map {
 	/**
 	 * DEBUG: draw outline of each tile with a different color, depending
 	 * on the type of tile
-	 * 
+	 *
 	 * @param {CanvasContext} ctx The canvas context to render outline on.
-	 * 
+	 *
 	 */
     showTileBehaviors(ctx, showHidden, mapOffsetX = 0, mapOffsetY = 0) {
         let i, j, max, max2,
@@ -1469,9 +1478,9 @@ class Map {
 
 
 	/**
-	 * 
+	 *
 	 * DEBUG: displays the list of each object and its type/id onto the console
-	 * 
+	 *
 	 * @private
 	 */
     getObjectsList() {
@@ -1482,9 +1491,9 @@ class Map {
 
 	/**
 	 * WIP/DEBUG: converts current map into a string
-	 * 
+	 *
 	 * @returns {String} The json export of the map
-	 * 
+	 *
 	 * @private
 	 */
     toString() {
@@ -1528,10 +1537,10 @@ class Map {
 
 	/**
 	 * Creates tiles from an array of tiles description
-	 * 
+	 *
 	 * @param {any} tilesArray
 	 * @returns array of tile objects
-	 * 
+	 *
 	 * @private
 	 */
     _createTiles(tilesArray) {
@@ -1547,9 +1556,9 @@ class Map {
 
     /**
      * adds a new tileset for the map
-     * 
+     *
      * @param {Array=undefined} tiles The tile descriptions
-     * 
+     *
      */
     addTileSet(tiles) {
         if (tiles && tiles.length) {
@@ -1564,7 +1573,7 @@ class Map {
 
     /**
      * Clears the whole map with specified tile number & behavior
-     * 
+     *
      * @param {Number = 0} tileNum Tile number to use for the whole map
      * @param {Number = 1} behavior Behavior number to use for the whole map
      */
@@ -1579,12 +1588,12 @@ class Map {
 
     /**
      * updates individual tile & tile behavior
-     * 
+     *
      * @param {Number} col the column of the tile to update
      * @param {Number} row the row of the tile to update
      * @param {Number=-1} tileNum the new tile number to use, the previous one will be kept if tileNum === -1
      * @param {Number=-1} behavior the new tile behavior, the previous value will be kept if behavior === -1
-     * 
+     *
      */
     updateTile(col, row, tileNum = -1, behavior = -1) {
         var pos = row * this.numCols + col;
@@ -1602,7 +1611,7 @@ class Map {
 
     /**
      * shifts map from top to bottom
-     * 
+     *
      * @param {Number} startLine Where to start the copy
      * @param {Number} height How many lines to shift
      * @param {Number} tile tile to use for new lines
@@ -1621,10 +1630,10 @@ class Map {
 
     /**
      * WIP & NOT TESTED: some code to allow resizing a map, was to be used in map editor
-     * 
+     *
      * @param {string} direction Where to extend the map, can be 'bottomLeft', 'bottomRight', 'topLeft', 'topRight'
      * @param {Object} options
-     * 
+     *
      * @private
      */
     resize(direction, options) {

@@ -14,14 +14,14 @@ import Dom from 'Core/Dom';
     "use strict";
     /**
      * Handles resource loading at runtime
-     * 
+     *
      * Resources are loaded and retrieved using this manager.
-     * 
+     *
      * The ResourceManager can load at runtime the folowing types of resources:
      *  - Images
      *  - Sounds
      *  - Maps (JSON-based)
-     * 
+     *
      */
     export default {
         isLocal: !!document.location.href.match(/^file:\/\//),
@@ -50,7 +50,7 @@ import Dom from 'Core/Dom';
         loading: false,
         /**
          * Retrieve a resource using its id with optionnal group
-         * 
+         *
          * @param {String} id The id of the resource to get
          * @param {String="any"} group the group to get the resource from
          * @param {Boolean=false} fullObject returns the resource object if true. Otherwise return the resource only.
@@ -76,18 +76,18 @@ import Dom from 'Core/Dom';
                     return resource.default;
                 } else {
                     debugger;
-                    console.warn('[RM] WARN: could not find resource', id);                    
+                    console.warn('[RM] WARN: could not find resource', id);
                 }
             }
         },
         /**
          * Allocates a new resource from the pool
-         * 
+         *
          * This method creates a new instance of the JavaScript object, retrieving it from
          * the pool if the object supports it. If it does not it simply uses new to generate a new instance
-         * 
+         *
          * @param {String} id The id of the resource for which to create a new instance.
-         * 
+         *
          * @returns {Object} a new instance of the specified object.
          */
         newResourceFromPool: function(id) {
@@ -103,13 +103,13 @@ import Dom from 'Core/Dom';
         },
         /**
          * Creates a new group of resources.
-         * 
+         *
          * This allows to load a group of resources of any type
          * with a single load call.
-         * 
+         *
          * This is usefull for loading every resource of a single
          * game's level for example
-         * 
+         *
          * @private
          */
         _createGroup: function(groupName) {
@@ -130,11 +130,11 @@ import Dom from 'Core/Dom';
         },
         /**
          * Checks if a group already exists
-         * 
+         *
          * @param {String} groupName The name of the group to check.
-         * 
+         *
          * @returns {Boolean} true if the group already exists.
-         * 
+         *
          * @private
          */
         _groupExists: function(groupName) {
@@ -142,24 +142,24 @@ import Dom from 'Core/Dom';
         },
         /**
          * Add new resource(s) into the specified group
-         * 
+         *
          * @param {Object|Array} resource a single or a group of resources to load
          * @param {String} group the name of the group to add the resources into
-         * 
+         *
          * @returns {Deferred} a new Deferred that will be resolved once the
          * resources have been loaded.
-         * 
+         *
          * *Note* This method only adds the resources to the group
          * but do not load them.
-         * 
+         *
          * @example
-         * 
+         *
          * ResourceManager.addResources({
          *  id: 'sprites',
          *  type: 'image',
          *  src: './sprites/gem.png'
          * }, "sprites");
-         * 
+         *
          * // resource type can be image|map|audio
          */
         addResources: function(resource, group) {
@@ -195,7 +195,7 @@ import Dom from 'Core/Dom';
         },
         /**
          * Attempts to load the next resource in the specified group
-         * 
+         *
          * @param {String} groupName the name of the group to use.
          */
         loadNextResource: function(groupName) {
@@ -213,11 +213,11 @@ import Dom from 'Core/Dom';
         /**
          * Loads all resources found in the specified group, optionnaly
          * calling a callback after each file has been loaded.
-         * 
+         *
          * @param {String} group The name of the group to load
          * @param {Function=undefined} progressCb an optionnal progress callback
          * @param {Function=undefined} errorCb an optionnal error callback
-         * 
+         *
          */
         loadResources: function(group, progressCb, errorCb) {
             group = group || 'any';
@@ -287,11 +287,11 @@ import Dom from 'Core/Dom';
         },
         /**
          * Converts an image into a canvas element
-         * 
+         *
          * @param {Image} image The image to convert
-         * 
+         *
          * @returns {Canvas} a new canvas element containing the image
-         * 
+         *
          * @private
          */
         getCanvasFromImage: function(image) {
@@ -306,10 +306,10 @@ import Dom from 'Core/Dom';
         },
         /**
          * starts loading an image
-         * 
+         *
          * @param {Object} res an Object describing the resource to load
          * @param {String=undefined} gpName the name of the group that the resource came from, set to undefined to load a single resource
-         * 
+         *
          * @returns {Deferred} a new promise that will be resolved when the file has been loaded.
          */
         loadImage: function(res, gpName = undefined) {
@@ -318,12 +318,14 @@ import Dom from 'Core/Dom';
                 def = new Deferred(),
                 gp = gpName && that.resources[gpName];
 
+            // attempt to retrive image first, load it if not already loaded
+
             // console.log('[RM] loading image', res.src);
 
             img.onload = function() {
                 // on Chrome/Win calling drawImage to draw from canvas to canvas is abnormally slow (20-30ms to draw a 20x20px sprite on a core2quad + ati card)
                 // so it's disabled for now
-                // res.elt = that.getCanvasFromImage(this);                
+                // res.elt = that.getCanvasFromImage(this);
                 res.elt = img;
                 res.img = this;
                 res.loaded = true;
@@ -339,12 +341,12 @@ import Dom from 'Core/Dom';
         },
         /**
          * Creates a pool for a specified object
-         * 
+         *
          * This method pre-allocates objects for later use.
-         * 
+         *
          * @param {Function} Obj a new object to create
          * @param {Number} size the size of the pool
-         * 
+         *
          */
         createObjectPool: function(Obj, size) {
             Pool.create(Obj, size);
@@ -352,23 +354,23 @@ import Dom from 'Core/Dom';
         /**
          * Register a script as resource: this allows to retrieve it using the resourceManager
          * at runtime.
-         * 
+         *
          * `notes`
          * During athenajs development, systemjs loader was used instead of Webpack
          * systemjs allows to load any script during *runtime*
-         * 
+         *
          * This allowed to load script (sprite) resources at runtime, on-demand.
-         * 
+         *
          * Unfortunately, this is not possible at all with ES6/Webpack which needs to
          * know during build-process which scripts will be needed at runtime to build
          * dependency graphs.
-         * 
+         *
          */
         registerScript: function(id, elt, poolSize) {
             let existing = this.dynamicScripts[id];
 
             if (poolSize) {
-                this.createObjectPool(elt, poolSize);                
+                this.createObjectPool(elt, poolSize);
             }
 
             if (existing) {
@@ -380,7 +382,7 @@ import Dom from 'Core/Dom';
         /**
          * loads a new external script: this is not supported anymore
          * since webpack cannot load random script file
-         * 
+         *
          * @obsolete
          * @private
          */
@@ -432,10 +434,10 @@ import Dom from 'Core/Dom';
 
         /**
          * Loads a new Audio file using standard HTML5 Audio
-         * 
+         *
          * @param {Object} res a descriptor for the sound to load
          * @param {String} gpName the name of the group to load the audio file from
-         * 
+         *
          * @returns {Deferred} a new promise that will be resolved once the file has been loaded
          */
         loadAudio: function(res, gpName) {
@@ -445,7 +447,7 @@ import Dom from 'Core/Dom';
                 audio = new Audio(),
                 def = new Deferred(),
                 gp = that.resources[gpName];
-                
+
             function onLoad() {
                 // canplaythrough event is sent not only on first load, but after the song has been played (and has been rewinded)
                 // so we remove it to prevent from triggering again
@@ -472,13 +474,13 @@ import Dom from 'Core/Dom';
 
         /**
          * Loads a new Audio file using the WAD library
-         * 
+         *
          * @param {Object} res a descriptor for the sound to load
          * @param {String} gpName the name of the group to load the audio file from
-         * 
+         *
          * @returns {Deferred} a new promise that will be resolved once the file has been loaded
          */
-        loadWadAudio: function(res, gpName) {           
+        loadWadAudio: function(res, gpName) {
             let that = this,
                 gp = that.resources[gpName],
                 def = new Deferred(),
@@ -498,10 +500,10 @@ import Dom from 'Core/Dom';
 
         /**
          * Loads a new Audio file using the Howler library
-         * 
+         *
          * @param {Object} res a descriptor for the sound to load
          * @param {String} gpName the name of the group to load the audio file from
-         * 
+         *
          * @returns {Deferred} a new promise that will be resolved once the file has been loaded
          */
         loadHowlerAudio: function(res, gpName) {
@@ -524,11 +526,11 @@ import Dom from 'Core/Dom';
 
         /**
          * Loads a JSON file
-         * 
+         *
          * @param {Object} res The JSON file descriptor
          * @param {String} gpName The name of the group to load the file from
          * @param {Function} callback An optionnal callback to execute once the file has been loaded
-         * 
+         *
          * @returns {Deferred} a promise that will be resolved once the file has been loaded.
          */
         loadJSON: function(res, gpName, callback) {
@@ -560,9 +562,9 @@ import Dom from 'Core/Dom';
          *
          * @param {Object} res The JSON file descriptor
          * @param {String} gpName The name of the group to load the file from
-         * 
+         *
          * @returns {Deferred} a promise that will be resolved once the file has been loaded.
-         * 
+         *
          * @private
          */
         loadMapData: function(res, gpName) {
@@ -583,10 +585,10 @@ import Dom from 'Core/Dom';
         },
         /**
          * Internal method that gets called once a resource has been loaded
-         * 
+         *
          * If there is resource remaining to be loaded, this method will load the next resource.
          * Otherwise it will resolve the group's loading promise.
-         * 
+         *
          * @private
          */
         _resLoaded: function(groupName) {
@@ -619,10 +621,10 @@ import Dom from 'Core/Dom';
         },
         /**
          * Loads the specificied resource from specified group
-         * 
+         *
          * @param {Object} res The JSON file descriptor
          * @param {String} gpName The name of the group to load the file from
-         * 
+         *
          * @private
          */
         _loadResource: function(res, groupName) {

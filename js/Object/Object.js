@@ -9,12 +9,12 @@ import Deferred from 'Core/Deferred';
 /*globals Class*/
 /**
  * `GfxObject` is the base class for objects that can be rendered on the screen.
- * 
+ *
  * A `GfxObject` has properties like x, y, vx, vy, speed.
  * In order to be rendered, an object must be added onto the active scene/map.
  * It can also have an optional behavior which tells Athena how
  * to move an object at each frame.
- * 
+ *
  * @param {string} type The type of object: this describes the type of object
  * @param {Object} options
  * @param {string} [options.objectId] The id of the object. The defaults is type + random timestamp.
@@ -140,10 +140,10 @@ class GfxObject {
 
   /**
    * Resets the map, used when player lost for example.
-   * 
+   *
    * `speed`,  `visible`, `canCollide`, `plane`, `x`, `y`, `scale`, `angle`, `movable`,
    * `vx` , `vy`, `gravity`, `wave`
-   * 
+   *
    */
   _reset() {
     this.speed = this._settings.speed;
@@ -183,12 +183,12 @@ class GfxObject {
 
   /**
    * Sets the map of the object.
-   * 
+   *
    * @param {Map} map The map of the object.
-   * 
+   *
    * @note you don't usually need to call this method as it's called automatically when adding an object
    * onto a map.
-   * 
+   *
    */
   setMap(map) {
     this.currentMap = map;
@@ -200,9 +200,9 @@ class GfxObject {
 
   /**
    * Sets the scene of the object.
-   * 
+   *
    * @param {Scene} scene The scene of the object.
-   * 
+   *
    * @note you don't usually need to call this method as it's called when adding an object onto a scene.
    */
   setScene(scene) {
@@ -215,7 +215,7 @@ class GfxObject {
 
   /**
    * WIP Sets the platform of the object. This will be used when platforms will be fully implemented.
-   * 
+   *
    * @param {GfxObject} platform The platform the object is attached to.
    */
   setPlatform(platform) {
@@ -224,11 +224,11 @@ class GfxObject {
 
   /**
    * Moves the object to a new destination.
-   * 
+   *
    * @param {number} x The new horizontal position.
    * @param {number} y The new vertical position.
    * @param {number=0} duration The duration of the move, 0 to have the object move immediately to new position
-   * 
+   *
    * @returns {GfxObject} this
    */
   moveTo(x, y, duration = 0) {
@@ -259,7 +259,7 @@ class GfxObject {
   /**
    * Moves the object by snapping it to the map tiles
    *
-   * @param {Boolean} isLeft should we snap to the left? 
+   * @param {Boolean} isLeft should we snap to the left?
    * @param {Boolean} isUp should we snap to the right?
    * @param {Number=0} duration the duration of the snap move in ms
    */
@@ -286,7 +286,7 @@ class GfxObject {
 
   /**
    * Applies a new mask to the object, clipping its drawing onto the scene/map
-   * 
+   *
    * @param {Object} mask the new mask to use, set to null to remove the mask
    * @param {Boolean} exclude set to true to have the mask exclude portions of the drawing, in this case mask.color will be used
    */
@@ -299,7 +299,7 @@ class GfxObject {
 
   /**
    * Changes the opacity of the object
-   * 
+   *
    * @param {number} opacity The new opacity.
    */
   setOpacity(opacity) {
@@ -308,7 +308,7 @@ class GfxObject {
 
   /**
    * Returns the current opacity of the object
-   * 
+   *
    * @returns {number} The current opacity value.
    */
   getOpacity() {
@@ -317,7 +317,7 @@ class GfxObject {
 
   /**
    * Stops the object from moving, optionnaly immediately going to target position
-   * 
+   *
    * @param {Boolean=false} gotoTarget set to true to go to the target position
    */
   cancelMoveTo(gotoTarget = false) {
@@ -332,7 +332,7 @@ class GfxObject {
 
   /**
    * Centers the object into the scene.
-   * 
+   *
    * @returns {GfxObject} this
    */
   center() {
@@ -345,10 +345,10 @@ class GfxObject {
 
   /**
    * Sets a new behavior to the object: this will be called in the move loop
-   * 
+   *
    * @param {String|Behavior} behavior Either the name of a standard behavior or a Behavior class to use.
    * @param {Object={}} options The options of the behavior (may depend on the behavior type)
-   * 
+   *
    * @related {Behavior}
    */
   setBehavior(behavior, options = {}) {
@@ -361,7 +361,7 @@ class GfxObject {
 
   /**
    * You can call clearBehavior if you want to stop using a particular behavior.
-   * 
+   *
    * The vx and vy properties of the object will be set to zero.
    */
   clearBehavior() {
@@ -371,7 +371,7 @@ class GfxObject {
 
   /**
    * Applies current mask, if any to the drawing context
-   * 
+   *
    * @param {CanvasContext} destCtx context to apply the mask to
    */
   _applyMask(destCtx, x, y) {
@@ -400,7 +400,7 @@ class GfxObject {
   /**
    * Called on each move loop and used to move the object using its (optional) behavior or its
    * vx and vy properties.
-   * 
+   *
    * @param {Number} timestamp the current time
    * @private
    */
@@ -456,7 +456,7 @@ class GfxObject {
 
   /**
    * Returns previously seved position
-   * 
+   *
    * @returns {Object} The saved position
    */
   getSavedPosition() {
@@ -468,7 +468,7 @@ class GfxObject {
 
   /**
    * NOT IMPLEMENTED
-   * 
+   *
    * @private
    */
   moveWithSpline(/*speed*/) {
@@ -477,9 +477,9 @@ class GfxObject {
 
   /**
    * Sets a new path for the object
-   * 
+   *
    * @param {Path} path The new path that the object will use when moving.
-   * 
+   *
    * @related {Path}
    */
   setPath(path) {
@@ -488,9 +488,9 @@ class GfxObject {
 
   /**
    * Change the scale of the object
-   * 
+   *
    * @param {number} scale The new scale of the object.
-   * 
+   *
    * @note: it's only used when rendering, collision detection is not using the scale yet.
    */
   setScale(scale) {
@@ -499,9 +499,9 @@ class GfxObject {
 
   /**
    * Change the angle of an object
-   * 
+   *
    * @param {number} angle The new angle of the object. 0 < angle < 360
-   * 
+   *
    * @note This property is only used for the rendering and it's ignored for collisions.
    */
   setAngle(angle) {
@@ -519,7 +519,7 @@ class GfxObject {
 
   /**
    * WIP Performs a transformation on the object
-   * 
+   *
    * @private
    */
   transform(type, value) {
@@ -532,7 +532,7 @@ class GfxObject {
 
   /**
    * Hides the object
-   * 
+   *
    * @returns {GfxObject} this
    */
   hide() {
@@ -543,7 +543,7 @@ class GfxObject {
 
   /**
    * Show the object
-   * 
+   *
    * @returns {GfxObject} this
    */
   show() {
@@ -555,25 +555,90 @@ class GfxObject {
   /**
    * Returns the current width of the object: with some types of GfxObjects ({Sprite}),
    * width can vary
-   * 
+   *
    * @returns {number} The current width of the object
-   * 
+   *
    * @related {Sprite}
    */
   getCurrentWidth() {
-    return this.width;
+    return this.w;
   }
 
   /**
    * Returns the current height of the object: with some types of GfxObjects ({Sprite}),
    * height can vary
-   * 
+   *
    * @returns {number} The current height of the object
-   * 
+   *
    * @related {Sprite}
    */
   getCurrentHeight() {
-    return this.height;
+    return this.h;
+  }
+
+  getHitBox() {
+    return {
+      x: 0,
+      y: 0,
+      x2: this.getCurrentWidth()-1,
+      y2: this.getCurrentHeight()-1
+    };
+}
+
+  /**
+   * Draws the sprite hit box
+   *
+   * @param {CanvasContext} The canvas context where to render the hitbox
+   */
+  showHitBox(ctx) {
+    if (!this.visible) {
+      return;
+    }
+
+    // TODO: add scale (rotation ?)
+    let hitBox = this.getHitBox(),
+      mapOffsetX = this.currentMap && this.currentMap.viewportX || 0,
+      mapOffsetY = this.currentMap && this.currentMap.viewportY || 0;
+
+    if (!hitBox) {
+      return;
+    }
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+    ctx.strokeStyle = 'rgb(0,230,0)';
+    ctx.beginPath();
+    // console.log('***');
+    // console.log('draw to', hitBox.x + this.x + mapOffsetX, hitBox.y + this.y + mapOffsetY);
+    // console.log('draw to', hitBox.x2 + this.x + mapOffsetX, hitBox.y + this.y + mapOffsetY);
+    // console.log('draw to', hitBox.x2 + this.x + mapOffsetX, hitBox.y2 + this.y + mapOffsetY);
+    // console.log('draw to', hitBox.x + this.x + mapOffsetX, hitBox.y2 + this.y + mapOffsetY);
+    // console.log('draw to', hitBox.x + this.x + mapOffsetX, hitBox.y + this.y + mapOffsetY);
+    ctx.moveTo(hitBox.x + this.x + mapOffsetX, hitBox.y + this.y + mapOffsetY);
+    ctx.lineTo(hitBox.x2 + this.x + mapOffsetX, hitBox.y + this.y + mapOffsetY);
+    ctx.lineTo(hitBox.x2 + this.x + mapOffsetX, hitBox.y2 + this.y + mapOffsetY);
+    ctx.lineTo(hitBox.x + this.x + mapOffsetX, hitBox.y2 + this.y + mapOffsetY);
+    ctx.lineTo(hitBox.x + this.x + mapOffsetX, hitBox.y + this.y + mapOffsetY);
+    ctx.closePath();
+    ctx.stroke();
+    // console.log('***');
+  }
+
+  /**
+     * Draws a box around objects. This method is called when debugging is enabled.
+     *
+     * @param {CanvasContext} ctx The context where to draw the box
+     */
+  showObjectBox(ctx) {
+    ctx.strokeStyle = 'rgb(0,230,0)';
+    ctx.beginPath();
+    ctx.moveTo(this.x, this.y);
+    ctx.lineTo(this.w + this.x, this.y);
+    ctx.lineTo(this.w + this.x, this.y + this.h);
+    ctx.lineTo(this.x, this.y + this.h);
+    ctx.lineTo(this.x, this.y);
+    ctx.closePath();
+    ctx.stroke();
   }
 
   // TODO: should return the type of sprite ?
@@ -581,9 +646,9 @@ class GfxObject {
   // TODO: handle scale/rotation here !!
   /**
    * Performs collision tests on the specifed object.
-   * 
+   *
    * @param {GfxObject} obj The object to perform test on
-   * 
+   *
    * @returns {Boolean} Returns true if this and obj collide
    */
   hitTest(obj) {
@@ -624,10 +689,10 @@ class GfxObject {
 
   /**
    * WIP: Set a new target for the object
-   * 
+   *
    * It's planned to have the ability for objects to follow other objects, for example:
    * homing missiles, etc...
-   * 
+   *
    * @private
    */
   setTarget(obj) {
@@ -636,7 +701,7 @@ class GfxObject {
 
   /**
    * Add a new handler to be called after each move of the object
-   * 
+   *
    * @param {Function} cb The callback to add
    */
   addMoveHandler(cb) {
@@ -645,9 +710,9 @@ class GfxObject {
 
   /**
    * onHit is called when the object collides with another object
-   * 
+   *
    * @param {GfxObject} obj The object that collided.
-   * 
+   *
    * This function does nothing interesting: this should be extended if needed.
    */
   onHit(obj) {
@@ -656,7 +721,7 @@ class GfxObject {
 
   /**
    * INTERNAL: calls move handles
-   * 
+   *
    * @private
    */
   _onUpdate() {
@@ -666,9 +731,9 @@ class GfxObject {
 
   /**
    * INTERNAL: checks if object fx queue is empty
-   * 
+   *
    * @returns {Boolean} True if the queue is empty, false otherwise.
-   * 
+   *
    * @private
    */
   isFxQueueEmpty() {
@@ -681,9 +746,9 @@ class GfxObject {
 
   /**
    * Performs an animation on the object using one of the defined {FX} effects
-   * 
+   *
    * Effects change the object size/position using an interpolation function.
-   * 
+   *
    * Athena has the following effects:
    * - {Fade} performs a fade
    * - {Mosaic} performs a SNES-like mosaic effect
@@ -692,7 +757,7 @@ class GfxObject {
    * @param {String} fxName the name of the effect to use.
    * @param {Object} options the options of the effect.
    * @param {String} [options.easing="linear"] The easing functions to use, can be: 'linear', 'swing', 'easeInQuad', 'easeOutBounce'.
-   * 
+   *
    * @returns {Promise} a promise that will be fullfilled when the effect has been completed
    */
   animate(fxName, options) {
@@ -723,10 +788,10 @@ class GfxObject {
 
   /**
    * Stop current running animation
-   * 
+   *
    * In some cases, the game may need to stop effects from running before
    * they are completed. This method proves a way to do so and set an end value.
-   * 
+   *
    * @param {any} The end value of the animation
    */
   stopAnimate(setEndValue) {
@@ -736,7 +801,7 @@ class GfxObject {
     Object.keys(this.fxQueue).forEach((fxName) => {
       fxObject = this.fxQueue[fxName];
 
-      fxObject.stop(setEndValue);
+      fxObject.stop(this, setEndValue);
     });
     // for (let fxName in this.fxQueue) {
 
@@ -745,10 +810,10 @@ class GfxObject {
 
   /**
    * Perform each fx remaining in the fxQueue
-   * 
+   *
    * @param {CanvasContext} ctx Where to perform the rendering.
    * @param {number} time The current time ellapsed since fx queue was started.
-   * 
+   *
    * @private
    */
   executeFx(ctx, time) {
@@ -768,9 +833,9 @@ class GfxObject {
 
   /**
    * onCollision is called on each collision with the object.
-   * 
+   *
    * This method does nothing and should be extended if needed.
-   * 
+   *
    */
   onCollision() {
     //console.log('onCollision does nothing by default');
@@ -778,11 +843,11 @@ class GfxObject {
 
   /**
    * Add a new Child to the object.
-   * 
+   *
    * Childs are automatically rendered and moved when the parent object is.
-   * 
+   *
    * @param {GfxObject} child The child to add.
-   * 
+   *
    * @note children are automatically added to the scene/map of the parent object.
    */
   addChild(child) {
@@ -794,9 +859,9 @@ class GfxObject {
 
   /**
    * Remove a child from the object
-   * 
+   *
    * @param {GfxObject} child The child to remove from the object.
-   * 
+   *
    * @note: removing a child object will call its `destroy` method
    */
   removeChild(child) {
@@ -820,11 +885,11 @@ class GfxObject {
 
   /**
    * This method is called when drawing an object
-   * 
+   *
    * GfxObject is a virtual object so its drawing method does nothing
-   * 
+   *
    * Every Object inheriting from GfxObject should implement its own draw method.
-   * 
+   *
    * @param {CanvasContext} destCtx the target canvas rendering context.
    * @param {Boolean} debug Debug is set to true if the game is being debugged.
    */
@@ -834,7 +899,7 @@ class GfxObject {
 
   /**
    * Plays the spcified sound
-   * 
+   *
    * @param {String} id The id of the sound to play
    * @param {Object} options
    * @param {Boolean} [options.pan=true] Set pan to true if you want to use panning.
@@ -864,7 +929,7 @@ class GfxObject {
 
   /**
    * WIP
-   * 
+   *
    * @private
    */
   // does nothing by default, must be redefined if needed
@@ -873,7 +938,7 @@ class GfxObject {
   }
 
   /**
-   * 
+   *
    * @param {String} id name of the event to send
    * @param {Object} data data to send with the event, default = empty object
    */
@@ -881,28 +946,11 @@ class GfxObject {
     NM.notify(`${this.type}:${id}`, data);
   }
 
-  /**
-   * Draws a box around objects. This method is called when debugging is enabled.
-   * 
-   * @param {CanvasContext} ctx The context where to draw the box
-   */
-  showObjectBox(ctx) {
-    ctx.strokeStyle = 'rgb(0,230,0)';
-    ctx.beginPath();
-    ctx.moveTo(this.x, this.y);
-    ctx.lineTo(this.w + this.x, this.y);
-    ctx.lineTo(this.w + this.x, this.y + this.h);
-    ctx.lineTo(this.x, this.y + this.h);
-    ctx.lineTo(this.x, this.y);
-    ctx.closePath();
-    ctx.stroke();
-  }
-
   // 1. remove from pool, if pooled object
   // 2. remove from map or scene
   /**
    * Destroy is called when an object is removed from a scene or object
-   * 
+   *
    * @note calling destroy on a parent will automatically call the destroy method of each child.
    */
   destroy() {
