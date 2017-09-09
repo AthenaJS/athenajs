@@ -405,14 +405,14 @@ class Scene {
 
             for (let j = 0, max2 = layer.length; j < max2; j++) {
                 let obj = layer[j];
-                obj.draw(destCtx);
+                obj._draw(destCtx);
                 if (this.isDebug) {
                     this.isDebug && obj.showHitBox(destCtx);
                 }
 
                 if (obj.children.length) {
                     obj.children.forEach((sprite) => {
-                        sprite.draw(destCtx);
+                        sprite._draw(destCtx);
                         this.isDebug && sprite.showHitBox(destCtx);
                     });
                 }

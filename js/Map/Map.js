@@ -1178,12 +1178,12 @@ class Map {
                     }
                 }
             }
-            obj.draw(ctx);
+            obj._draw(ctx);
             this.isDebug && obj.showHitBox(ctx);
 
             if (obj.children.length) {
                 obj.children.forEach((sprite) => {
-                    sprite.draw(ctx);
+                    sprite._draw(ctx);
                     this.isDebug && sprite.showHitBox(ctx);
                 });
             }

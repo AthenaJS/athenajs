@@ -18,17 +18,15 @@ export default class Canvas extends GfxObject {
     }
 
     draw(ctx, debug) {
+        this.ctx = ctx;
+
         this._applyMask(ctx, this.x, this.y);
 
         if (!this.isFxQueueEmpty()) {
             this.executeFx(ctx);
         }
 
-        this.ctx = ctx;
-        const oldAlpha = ctx.globalAlpha;
-        ctx.globalAlpha = this.opacity;
         this.render();
-        ctx.globalAlpha = oldAlpha;
 
         this._undoMask();
     }
