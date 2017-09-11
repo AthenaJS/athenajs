@@ -214,14 +214,17 @@ class Scene {
 
     /**
      * Simple debug method: only toggles map boxes for now
+     * 
+     * @param {Boolean=undefined} isDebug if specified, this will be the new debug status, otherwise toggle current debug status
      */
-    debug() {
+    debug(isDebug) {
+        const newStatus = typeof isDebug !== 'undefined' ? isDebug : !this.isDebug;
         // console.log('[scene ' + this.name + '] ' + 'debug() default scene debug does nothing!');
-        this.isDebug = !this.isDebug;
+        this.isDebug = newStatus;
         if (this.hudScene) {
-            this.hudScene.debug();
+            this.hudScene.debug(newStatus);
         }
-        this.map && this.map.debug(!this.map.isDebug);
+        this.map && this.map.debug(newStatus);
     }
 
     /**
@@ -539,8 +542,18 @@ class Scene {
     }
 
     _stop() {
-        this.debug(false);
+        this._reset();
         this.stop();
+    }
+
+    /**
+     * 
+     * 
+     * @memberof Scene
+     */
+    _reset() {
+        this.debug(false);
+        this._objectsToAdd = [];
     }
 
     /**
