@@ -39,15 +39,22 @@ export default class Canvas extends GfxObject {
     }
 
     fill(color) {
-        this.ctx.fillStyle = color;
+        this.ctx.fillStyle = color || this.color;
         this.ctx.fillRect(this.x, this.y, this.w, this.h);
     }
 
     rect(x, y, w, h, color) {
         const ctx = this.ctx;
 
-        ctx.fillStyle = color;
+        ctx.fillStyle = color || this.color;
         ctx.fillRect(this.x + x, this.y + y, w, h);
+    }
+
+    circle(x, y, w, h, radius, color) {
+        ctx.beginPath();
+        ctx.arc(this.x + x + w / 2, this.y + y + h / 2, radius, 0, 2 * Math.PI);
+        ctx.fillStyle = color || this.color;
+        ctx.fill();
     }
 
     ellipse() {
