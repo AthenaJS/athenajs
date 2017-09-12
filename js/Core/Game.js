@@ -357,7 +357,9 @@ class Game {
         }
 
         // finally load the scene, and call startScene once the scene has been loaded
-        this.scene._load().then(() => this._startScene());
+        this.scene._load().then(() => this._startScene()).catch(err => {
+            console.error(err);
+        });
     }
 
     /**
