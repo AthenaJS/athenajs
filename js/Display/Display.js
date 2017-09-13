@@ -122,9 +122,9 @@ class Display {
             isXbox = navigator.userAgent.match(/Edge/),
             screenWidth = screen.width,
             screenHeight = screen.height;
-            // both Firefox & Edge force fullscreen element to full screen size
-            // since our canvas element do not necessarilty take the whole screen
-            // we have to center them
+        // both Firefox & Edge force fullscreen element to full screen size
+        // since our canvas element do not necessarilty take the whole screen
+        // we have to center them
 
 
         if (isXbox) {
@@ -293,8 +293,7 @@ class Display {
             promise,
             easing = options.easing || 'linear',
             when = options.when || 'pre',
-            fx,
-            that = this;
+            fx;
 
         options.context = context || this;
         // console.log('animate', this.fxQueue);
@@ -311,10 +310,13 @@ class Display {
             fx = new fxClass(options, this);
             fx.setEasing(new FX.getEasing(easing));
 
-            promise = fx.start().then(function () {
+            promise = fx.start().then(() => {
                 console.log('effect ended, need to stop it', fxName);
-                delete that.fxQueue[when][fxName];
+                delete this.fxQueue[when][fxName];
+            }).catch(err => {
+                console.error(err);
             });
+
             this.fxQueue[when][fxName] = fx;
         }
 
