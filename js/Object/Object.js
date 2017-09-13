@@ -594,10 +594,10 @@ class GfxObject {
     return {
       x: 0,
       y: 0,
-      x2: this.getCurrentWidth()-1,
-      y2: this.getCurrentHeight()-1
+      x2: this.getCurrentWidth() - 1,
+      y2: this.getCurrentHeight() - 1
     };
-}
+  }
 
   /**
    * Draws the sprite hit box
@@ -938,16 +938,6 @@ class GfxObject {
     }
 
     this.sound = AM.play(id, opt.loop || false, volume, panning);
-  }
-
-  /**
-   * WIP
-   *
-   * @private
-   */
-  // does nothing by default, must be redefined if needed
-  setImage(image) {
-
   }
 
   /**
