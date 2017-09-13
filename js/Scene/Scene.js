@@ -177,6 +177,8 @@ class Scene {
             this.readyDef.then(() => {
                 this.loaded = true;
                 this._onLoad();
+            }).catch(err => {
+                console.error(err);
             });
 
             ResourceManager.loadResources('any', progressCb);
@@ -196,7 +198,7 @@ class Scene {
      *
      * @private
      */
-    _load() {
+    _load() { 
         console.log('[Scene ' + this.name + '] load()');
         if (this.hudScene && !this.hudScene.loaded) {
             let def = new Deferred();
@@ -204,6 +206,8 @@ class Scene {
                 this._loadResources(this.resources).then(() => {
                     def.resolve();
                 });
+            }).catch(err => {
+                console.error(err);
             });
 
             return def.promise;
