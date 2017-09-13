@@ -69,7 +69,7 @@ class Sprite extends GfxObject {
     constructor(type, options) {
         super(type || 'Sprite', options || {});
 
-        this.imageId = options && options.imageId || '';
+        this.imageId = options && options.imageId || null;
 
         // NOTE: sometimes it is done by gfxobject.reset(), sometimes not
         // animations can now be added later
@@ -166,13 +166,16 @@ class Sprite extends GfxObject {
             return;
         }
 
-        RM.loadImage({
-            src: source,
-            id: source,
-            type: 'image'
-        }).then((img) => {
-            this.setImage(img);
-        });
+        this.imageSrc = source;
+        this.imageId = this.imageId || source;
+
+        // RM.loadImage({
+        //     src: source,
+        //     id: source,
+        //     type: 'image'
+        // }).then((img) => {
+        //     this.setImage(img);
+        // });
 
         let x = options.offsetX || 0,
             y = options.offsetY || 0,
@@ -486,7 +489,7 @@ class Sprite extends GfxObject {
             x: 0,
             y: 0,
             x2: this.getCurrentWidth() - 1,
-            y2: this.getCurrentHeight() -1
+            y2: this.getCurrentHeight() - 1
         };
     }
 

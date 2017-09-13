@@ -41,7 +41,7 @@ class Scene {
 
         this.readyDef = null;
 
-        this.resources = options.resources || null;
+        this.resources = options.resources || [];
 
         this.pics = {};
 
@@ -192,13 +192,62 @@ class Scene {
     }
 
     /**
+     * 
+     * loads a resource
+     * 
+     * @memberof Scene
+     */
+    load(type, src, id = null) {
+        if (this.loaded) {
+            console.log('Scene already loaded');
+            return;
+        }
+
+        this.resources.push({
+            type: type,
+            src: src,
+            id: id || src
+        });
+    }
+
+    /**
+     * loadImage
+     * 
+     * @returns 
+     * @memberof Scene
+     */
+    loadImage(src, id = null) {
+        this.load('image', src, id || src);
+    }
+
+    /**
+     * loadAudio
+     * 
+     * @returns 
+     * @memberof Scene
+     */
+    loadAudio(src, id = null) {
+        this.load('audio', src, id || src);
+    }
+
+    /**
+     * loadMap
+     * 
+     * @returns 
+     * @memberof Scene
+     */
+    loadMap(src, id = null) {
+        this.load('map', src, id || src);
+    }
+
+    /**
      * Loads resources added on the scene's constructor
      *
      * @returns {Promise} a promise that will be resolved once the scene resources have been loaded
      *
      * @private
      */
-    _load() { 
+    _load() {
         console.log('[Scene ' + this.name + '] load()');
         if (this.hudScene && !this.hudScene.loaded) {
             let def = new Deferred();
@@ -273,9 +322,11 @@ class Scene {
 
         try {
             for (let i = 0, max = this.resources.length; i < max; i++) {
-                let id = this.resources[i].id;
+                const id = this.resources[i].id,
+                    src = this.resources[i].src;
                 if (this.resources[i].type === 'image') {
                     this.pics[id] = ResourceManager.getResourceById(id);
+                    this.pics[src] = ResourceManager.getResourceById(id);
                 }
             }
         } catch (err) {
@@ -306,6 +357,21 @@ class Scene {
 
         // debug stuff
         window.currentMap = this.map;
+    }
+
+
+    _setObjectImage(object) {
+        if (typeof object.setImage === 'function' && !object.image) {
+            object.setImage(this.pics[object.imageId || object.imageSrc]);
+        }
+    }
+
+
+    _addObjectToLayer(layer, object) {
+
+        layer.push(object);
+        this._setObjectImage(object);
+        object.setScene(this);
     }
 
     /**
@@ -351,18 +417,16 @@ class Scene {
         if (Array.isArray(objects)) {
             for (let obj of objects) {
                 console.log('[scene ' + this.name + '] ' + 'pushing', obj);
-                layer.push(obj);
-                if (typeof obj.setImage === 'function' && !obj.image) {
-                    obj.setImage(this.pics[obj.imageId]);
-                }
-                obj.setScene(this);
+                this._addObjectToLayer(layer, obj);
+                // layer.push(obj);
+                // this.setObjectImage(obj);
+                // obj.setScene(this);
             }
         } else {
-            layer.push(objects);
-            if (typeof objects.setImage === 'function' && !objects.image) {
-                objects.setImage(this.pics[objects.imageId]);
-            }
-            objects.setScene(this);
+            // layer.push(objects);
+            // this.set
+            // objects.setScene(this);
+            this._addObjectToLayer(layer, objects);
         }
     }
 
