@@ -293,28 +293,32 @@ class Game {
      */
     setScene(scene) {
         console.log('[Game] setScene()');
-        if (this.scene) {
-            // stops render + input loops
-            this._stopSceneLoops();
+        if (this.scene !== scene) {
+            if (this.scene) {
+                // stops render + input loops
+                this._stopSceneLoops();
 
-            // stops the scene from running
-            this.scene._stop();
+                // stops the scene from running
+                this.scene._stop();
 
-            this.toggleTileInspector(false);
-        }
+                this.toggleTileInspector(false);
+            }
 
-        // TODO: handle case where user attempt to set the scene that's currently running
-        if (scene) {
-            // this.scene = scene;
+            // TODO: handle case where user attempt to set the scene that's currently running
+            if (scene) {
+                // this.scene = scene;
 
-            // // debug
-            // window.currentScene = scene;
+                // // debug
+                // window.currentScene = scene;
 
-            // console.log('**resetMap', resetMap);
-            //*** this.startScene(resetMap);
-            this._setupScene(scene);
+                // console.log('**resetMap', resetMap);
+                //*** this.startScene(resetMap);
+                this._setupScene(scene);
+            } else {
+                console.warn('attempt to set non-existing scene:', scene);
+            }
         } else {
-            console.warn('attempt to set non-existing scene:', scene);
+            console.log('same scene');
         }
     }
 

@@ -45,17 +45,19 @@ class BitmapText extends GfxObject {
 
 		this.characters = options.characters || "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+		debugger;
+
 		if (options.imageSrc) {
 			this.imageId = options.imageSrc;
 
-			RM.loadImage({
-				src: options.imageSrc,
-				id: options.imageSrc,
-				type: 'image'
-			}).then((img) => {
-				console.log('bitmapText image ready!');
-				this.setImage(img);
-			});
+			// RM.loadImage({
+			// 	src: options.imageSrc,
+			// 	id: options.imageSrc,
+			// 	type: 'image'
+			// }).then((img) => {
+			// 	console.log('bitmapText image ready!');
+			// 	this.setImage(img);
+			// });
 		}
 		// TODO: buffer should be created here and not when object is added to the scene
 		this.buffer = null;
@@ -464,7 +466,7 @@ class BitmapText extends GfxObject {
 			// destCtx.drawImage(this.image, Math.floor(this.x), Math.floor(this.y), Math.floorthis.(w), Math.floor(this.h), Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY), Math.floor(scaledW), Math.floor(scaledH));
 		} else {
 			this.executeFx(destCtx);
-			throw 'TODO: drawing of bitmapText';
+			throw 'TODO: Effect drawing of bitmapText not supported';
 		}
 	}
 };
