@@ -39,12 +39,12 @@ export default class Text extends GfxObject {
         this.align = options.align || 'center';
         this.color = options.color || 'white';
 
-        this._setFont();
-
-        this.setText(options.text || '');
-
         this.w = options.w || 0;
         this.h = options.h || 0;
+
+        this.context = document.createElement('canvas').getContext('2d');
+
+        this.setText(options.text || '');
     }
 
     /**
@@ -79,8 +79,19 @@ export default class Text extends GfxObject {
      * @param {String} [text='center'] Optional new alignment for the text.
      */
     setText(text, align) {
+        this._setFont();
         this.text = text;
         this.align = align || 'center';
+        this.lines = this.text.split('\n');
+        this.getMetrics();
+    }
+
+    getMetrics() {
+        const ctx = this.context;
+        ctx.font = this.font;
+        this.fakeLineHeight = parseInt(ctx.font);
+        this.fakeWidth = ctx.measureText(this.text).width;
+        console.log(this.text, this.fakeWidth, this.fakeHeight);
     }
 
     /**
@@ -166,26 +177,32 @@ export default class Text extends GfxObject {
 
         destCtx.setTransform(1, 0, 0, 1, 0, 0);
 
-        this._applyMask(destCtx, this.x, this.y);
-
-        const fakeHeight = parseInt(destCtx.font),
-            lines = this.text.split('\n');
-
         destCtx.fillStyle = this.color;
         destCtx.font = this.font;
         destCtx.textBaseline = 'top';
+
+        this.executeFx(destCtx);
+
+        if (this.mask && !this.mask.exclude) {
+            this._applyMask(destCtx, this.x, this.y);
+        }
 
         if (this.angle !== 0) {
             destCtx.save();
             destCtx.rotate(this.angle);
         }
 
-        for (let i = 0; i < lines.length; ++i) {
-            destCtx.fillText(lines[i], this.x, this.y + fakeHeight * i);
+        for (let i = 0; i < this.lines.length; ++i) {
+            destCtx.fillText(this.lines[i], this.x, this.y + this.fakeLineHeight * i);
         }
 
         if (this.angle !== 0) {
             destCtx.restore();
+        }
+
+        if (this.mask && this.mask.exclude) {
+            destCtx.setTransform(1, 0, 0, 1, 0, 0);
+            this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
         }
 
         this._undoMask();
