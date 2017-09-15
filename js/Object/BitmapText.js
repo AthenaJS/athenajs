@@ -86,7 +86,8 @@ class BitmapText extends GfxObject {
 	createBuffer(display) {
 		// generate a buffer with enough height to hold every lines of text
 		let width = this.w,
-			height = this.textArray.length * (this.charHeight + this.lineSpacing);
+			height = this.h;
+		// this.textArray.length * (this.charHeight + this.lineSpacing);
 
 		this.buffer = display.getBuffer(width, height);
 	}
