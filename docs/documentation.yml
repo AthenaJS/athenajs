@@ -9,7 +9,7 @@ toc:
   - Game
   - name: Scenes
     description: |
-      Scene is an important part of AthenaJS: much like in a 3D engine, the displayed is based on the notion of scene.
+      Scene is an important part of AthenaJS: much like in a 3D engine, the display is based on the notion of scene.
       In order to have graphical elements into the screen, you first create a Scene, then add objects onto it.
   - Scene
   - name: Maps
