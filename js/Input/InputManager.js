@@ -121,9 +121,9 @@ const InputManager = {
             this.setInputMode('joystick');
         });
 
-        document.addEventListener('keydown', () => {
-            this.setInputMode('keyboard');
-        });
+        // document.addEventListener('keydown', () => {
+        //     this.setInputMode('keyboard');
+        // });
     },
     /**
      * Starts recording input events. They are stored into `InputManager.recordedEvents`
