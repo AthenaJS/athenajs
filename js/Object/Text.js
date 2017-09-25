@@ -90,6 +90,7 @@ export default class Text extends GfxObject {
         const ctx = this.context;
         ctx.font = this.font;
         this.fakeLineHeight = parseInt(ctx.font);
+        this.fakeHeight = this.lines.length * this.fakeLineHeight;
         this.fakeWidth = ctx.measureText(this.text).width;
         console.log(this.text, this.fakeWidth, this.fakeHeight);
     }
@@ -171,6 +172,14 @@ export default class Text extends GfxObject {
      * @private
      */
     draw(destCtx) {
+        var destY,
+            scaledW = this.w * this.scale,
+            scaledH = this.h * this.scale,
+            subScaledW = Math.floor(scaledW / 2),
+            subScaledH = Math.floor(scaledH / 2),
+            w = this.w,
+            h = this.h;
+
         if (!this.visible) {
             return;
         }

@@ -437,12 +437,20 @@ class BitmapText extends GfxObject {
 	draw(destCtx) {
 		var destY,
 			copyHeight,
-			copyStartY;
+			copyStartY,
+			scaledW = this.w * this.scale,
+			scaledH = this.h * this.scale,
+			subScaledW = Math.floor(scaledW / 2),
+			subScaledH = Math.floor(scaledH / 2),
+			w = this.w,
+			h = this.h;
 
 		/* if image isn't loaded yet, simply do not render the object */
 		if (!this.visible || !this.image) {
 			return;
 		}
+
+		this.executeFx(destCtx);
 
 		if (this.scrollOffsetY >= 0) {
 			destY = this.scrollOffsetY;
@@ -450,25 +458,15 @@ class BitmapText extends GfxObject {
 			copyStartY = 0;
 		} else {
 			destY = 0;
-			copyHeight = this.h;    // auto clipped ?
+			copyHeight = h;    // auto clipped ?
 			copyStartY = Math.abs(this.scrollOffsetY);
 		}
 		// if this.scrolling, need to first offset text into this.buffer
 
-		destCtx.setTransform(1, 0, 0, 1, 0, 0);
+		destCtx.setTransform(this.scale, 0, 0, this.scale, this.x + subScaledW, this.y + subScaledH);
+		destCtx.rotate(this.angle);
 
-		this._applyMask(destCtx, copyHeight, this.x + this.scrollOffsetX, this.y + destY, this.w, copyHeight);
-
-		if (this.isFxQueueEmpty()) {
-			// draw
-			// throw 'TODO: drawing of bitmapText';
-			// TODO: should use scrollPos to update destination and simulate horizontal/vertical text scrolling
-			destCtx.drawImage(this.buffer.canvas, 0, copyStartY, this.w, copyHeight, this.x + this.scrollOffsetX, this.y + destY, this.w, copyHeight);
-			// destCtx.drawImage(this.image, Math.floor(this.x), Math.floor(this.y), Math.floorthis.(w), Math.floor(this.h), Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY), Math.floor(scaledW), Math.floor(scaledH));
-		} else {
-			this.executeFx(destCtx);
-			throw 'TODO: Effect drawing of bitmapText not supported';
-		}
+		destCtx.drawImage(this.buffer.canvas, 0, copyStartY, Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
 	}
 };
 
