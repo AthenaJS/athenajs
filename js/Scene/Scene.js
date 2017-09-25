@@ -192,9 +192,9 @@ class Scene {
     }
 
     /**
-     * 
+     *
      * loads a resource
-     * 
+     *
      * @memberof Scene
      */
     load(type, src, id = null) {
@@ -212,8 +212,8 @@ class Scene {
 
     /**
      * loadImage
-     * 
-     * @returns 
+     *
+     * @returns
      * @memberof Scene
      */
     loadImage(src, id = null) {
@@ -222,8 +222,8 @@ class Scene {
 
     /**
      * loadAudio
-     * 
-     * @returns 
+     *
+     * @returns
      * @memberof Scene
      */
     loadAudio(src, id = null) {
@@ -232,8 +232,8 @@ class Scene {
 
     /**
      * loadMap
-     * 
-     * @returns 
+     *
+     * @returns
      * @memberof Scene
      */
     loadMap(src, id = null) {
@@ -267,7 +267,7 @@ class Scene {
 
     /**
      * Simple debug method: only toggles map boxes for now
-     * 
+     *
      * @param {Boolean=undefined} isDebug if specified, this will be the new debug status, otherwise toggle current debug status
      */
     debug(isDebug) {
@@ -615,8 +615,8 @@ class Scene {
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * @memberof Scene
      */
     _reset() {

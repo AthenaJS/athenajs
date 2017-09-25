@@ -152,7 +152,7 @@ class Sprite extends GfxObject {
      *    frameWidth: 32
      * })
      */
-    addAnimation(name, source, options = {}) {
+    addAnimation(name, id, options = {}) {
         let animations = {};
 
         animations[name] = Object.assign({
@@ -166,8 +166,8 @@ class Sprite extends GfxObject {
             return;
         }
 
-        this.imageSrc = source;
-        this.imageId = this.imageId || source;
+        // this.imageSrc = source;
+        this.imageId = id;
 
         // RM.loadImage({
         //     src: source,
@@ -205,23 +205,6 @@ class Sprite extends GfxObject {
         if (numFrames) {
             this.load(animations);
         }
-        // } else {
-        //     while (x < this.naturalWidth) {
-        //         frames.push({
-        //             offsetX: x,
-        //             offsetY: y,
-        //             w: options.frameWidth,
-        //             h: frameHeight,
-        //             hitBox: {
-        //                 x: 0,
-        //                 y: 0,
-        //                 x2: options.frameWidth - 1,
-        //                 y2: frameHeight - 1
-        //             }
-        //         });
-        //         x += frameSpace;
-        //     }
-        // }
     }
 
     /**
@@ -684,8 +667,8 @@ class Sprite extends GfxObject {
             scaledH = h * this.scale,
             subScaledW = Math.floor(scaledW / 2),
             subScaledH = Math.floor(scaledH / 2),
-            x = this.getCurrentOffsetX(),
-            y = this.getCurrentOffsetY(),
+            sheetX = this.getCurrentOffsetX(),
+            sheetY = this.getCurrentOffsetY(),
             drawX = this.currentAnim.flipFrom ? (this.x + this.getCurrentShiftX() - scaledW) : (this.x + this.getCurrentShiftX()),
             drawY = this.currentAnim.flipFrom ? (this.y + this.getCurrentShiftY() - scaledH) : (this.y + this.getCurrentShiftY()),
             mapOffsetX = this.currentMap && this.currentMap.viewportX || 0,
@@ -697,77 +680,25 @@ class Sprite extends GfxObject {
             return;
         }
 
-        // TODO: fix map position when rotate is used
-        if (0 /*this.isFxQueueEmpty()*/) {
-            // apply clipping
-            if (this.mask && !this.mask.exclude) {
-                this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
-            }
+        this.executeFx(destCtx);
 
-            if (this.currentAnim.flipFrom) {
-                destCtx.save();
-                destCtx.scale((this.currentAnim.flipType & 1) ? -1 : 1, (this.currentAnim.flipType & 2) ? -1 : 1);
-            }
-
-            try {
-                destCtx.drawImage(this.image, Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h), Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY), Math.floor(scaledW), Math.floor(scaledH));
-            } catch (e) {
-                debugger;
-            }
-
-            // in exclude mode, we need to write the mask after having rendered the object
-            if (this.mask && this.mask.exclude) {
-                this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
-            }
-
-            // undo clipping as it's specitic to the object
-            this._undoMask(destCtx);
-
-            if (this.currentAnim.flipFrom) {
-                destCtx.restore();
-            }
-
-            if (this.isDebug === true || debug === true) {
-                this.showHitBox(destCtx);
-            }
-        } else {
-            this.executeFx(destCtx);
-
-            if (this.mask && !this.mask.exclude) {
-                this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
-            }
-
-            // if (this.mask) {
-            //     console.warn('mask not supported when using effects');
-            // }
-
-            // translate to keep the object as its position
-            // destCtx.save();
-            // flip
-            // if (this.currentAnim.flipFrom) {
-            //     destCtx.scale((this.currentAnim.flipType & 1) ? -1 : 1, (this.currentAnim.flipType & 2) ? -1 : 1);
-            // }
-            // destCtx.translate(Math.floor(drawX + mapOffsetX + subScaledW), Math.floor(drawY + mapOffsetY + subScaledH));
-            destCtx.setTransform(this.scale, 0, 0, this.scale, drawX + mapOffsetX + subScaledW, drawY + mapOffsetY + subScaledH);
-            destCtx.rotate(this.angle);
-            destCtx.drawImage(this.image, Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
-            // destCtx.restore();
-
-            // in exclude mode, we need to write the mask after having rendered the object
-            if (this.mask && this.mask.exclude) {
-                destCtx.setTransform(1, 0, 0, 1, 0, 0);
-                this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
-            }
-
-            // undo clipping as it's specitic to the object
-            this._undoMask(destCtx);
+        if (this.mask && !this.mask.exclude) {
+            this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
         }
 
-        // if (this.children.length) {
-        //     this.children.forEach((sprite) => {
-        //         sprite.draw(destCtx);
-        //     });
-        // }
+        destCtx.setTransform(this.scale, 0, 0, this.scale, drawX + mapOffsetX + subScaledW, drawY + mapOffsetY + subScaledH);
+        destCtx.rotate(this.angle);
+        destCtx.drawImage(this.image, Math.floor(sheetX), Math.floor(sheetY), Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
+        // destCtx.restore();
+
+        // in exclude mode, we need to write the mask after having rendered the object
+        if (this.mask && this.mask.exclude) {
+            destCtx.setTransform(1, 0, 0, 1, 0, 0);
+            this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
+        }
+
+        // undo clipping as it's specitic to the object
+        this._undoMask(destCtx);
     }
 
     /**

@@ -13,6 +13,7 @@ export default class Circle extends GfxObject {
     }
 
     draw(ctx, debug) {
+		ctx.setTransform(1, 0, 0, 1, 0, 0);
         this._applyMask(ctx, this.x, this.y);
 
         ctx.beginPath();
