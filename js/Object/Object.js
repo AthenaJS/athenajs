@@ -792,7 +792,9 @@ class GfxObject {
       promise = fx.start().then(() => {
         // console.log('effect ended, need to stop it', fxName);
         delete this.fxQueue[fxName];
-      });
+      }).catch(err => {
+        console.error(err);
+      })
 
       this.fxQueue[fxName] = fx;
     }
