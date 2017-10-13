@@ -8,7 +8,7 @@
     "description": "AthenaJS is a framework for building 2D games using HTML5",
     "author": "Nicolas Ramz",
     "license": "MIT",
-    "main": "dist/athena.js",
+    "main": "./dist/athena.js",
     "keywords": [
         "html5",
         "canvas",

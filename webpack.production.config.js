@@ -23,11 +23,7 @@ module.exports = {
         ]
     },
     resolve: {
-        modules: [path.resolve('./js/'), path.resolve('./js/lib'), 'node_modules'],
-        alias: {
-            Joystick: 'virtualJoystick/virtualJoystick',
-            fpscounter: 'fpscounter/fpscounter.min'
-        }
+        modules: ['node_modules']
     },
     plugins: [
         new CircularDependencyPlugin({

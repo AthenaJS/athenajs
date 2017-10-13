@@ -1,10 +1,10 @@
-import Tile from 'Map/Tile';
-import Wave from 'Object/Wave';
-import RM from 'Resource/ResourceManager';
-import NM from 'Notification/NotificationManager';
-import FX from 'FX/FX';
-import MapEvent from 'Map/MapEvent';
-import Deferred from 'Core/Deferred';
+import Tile from './Tile';
+import Wave from '../Object/Wave';
+import RM from '../Resource/ResourceManager';
+import NM from '../Notification/NotificationManager';
+import FX from '../FX/FX';
+import MapEvent from './MapEvent';
+import Deferred from '../Core/Deferred';
 
 /*jshint devel: true, bitwise: false*/
 

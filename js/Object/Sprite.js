@@ -1,7 +1,7 @@
-import GfxObject from 'Object/Object';
-import Input from 'Input/InputManager';
-import Deferred from 'Core/Deferred';
-import RM from 'Resource/ResourceManager';
+import GfxObject from './Object';
+import Input from '../Input/InputManager';
+import Deferred from '../Core/Deferred';
+import RM from '../Resource/ResourceManager';
 
 /*jshint devel: true, bitwise: false*/
 /**

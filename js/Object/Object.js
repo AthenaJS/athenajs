@@ -1,9 +1,9 @@
-import FX from 'FX/FX';
-import Behaviors from 'Object/Behavior/Behaviors';
-import Input from 'Input/InputManager';
-import NM from 'Notification/NotificationManager';
-import AM from 'Audio/AudioManager';
-import Deferred from 'Core/Deferred';
+import FX from '../FX/FX';
+import Behaviors from './Behavior/Behaviors';
+import Input from '../Input/InputManager';
+import NM from '../Notification/NotificationManager';
+import AM from '../Audio/AudioManager';
+import Deferred from '../Core/Deferred';
 
 /*jshint devel: true, bitwise: false*/
 /*globals Class*/

@@ -1,5 +1,5 @@
-import Behavior from 'Object/Behavior/Behavior';
-import Tile from 'Map/Tile';
+import Behavior from './Behavior';
+import Tile from '../../Map/Tile';
 
 /*jshint devel: true, bitwise: false*/
 // by default

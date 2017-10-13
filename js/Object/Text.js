@@ -1,4 +1,4 @@
-import GfxObject from 'Object/Object';
+import GfxObject from './Object';
 
 /*jshint devel: true, bitwise: false*/
 /**

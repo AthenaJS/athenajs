@@ -1,7 +1,7 @@
-import FX from 'FX/FX';
-import Easing from 'FX/Easing/Easing';
-import Deferred from 'Core/Deferred';
-import Dom from 'Core/Dom';
+import FX from '../FX/FX';
+import Easing from '../FX/Easing/Easing';
+import Deferred from '../Core/Deferred';
+import Dom from '../Core/Dom';
 
 /*jshint devel: true*/
 /**

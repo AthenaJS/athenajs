@@ -1,4 +1,4 @@
-import Behavior from 'Object/Behavior/Behavior';
+import Behavior from './Behavior';
 
 /*jshint devel: true, bitwise: false*/
 // by default

@@ -1,5 +1,5 @@
-import GfxObject from 'Object/Object';
-import Text from 'Object/Text';
+import GfxObject from './Object';
+import Text from './Text';
 
 
 /*jshint devel: true, bitwise: false*/
@@ -63,7 +63,7 @@ class Menu extends GfxObject {
 
         this.title.moveTo(this.x, this.y);
 
-        this.addMenuItems(options.menuItems ||  []);
+        this.addMenuItems(options.menuItems || []);
     }
 
     /**

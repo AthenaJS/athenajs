@@ -1,4 +1,4 @@
-import Deferred from 'Core/Deferred';
+import Deferred from '../../Core/Deferred';
 
 /*jshint devel: true, bitwise: false*/
 class Effect {
