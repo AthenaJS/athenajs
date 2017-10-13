@@ -1,10 +1,9 @@
-import ResourceManager from 'Resource/ResourceManager';
-import Map from 'Map/Map';
-import NM from 'Notification/NotificationManager';
-import Input from 'Input/InputManager';
-import Dom from 'Core/Dom';
-
-import Deferred from 'Core/Deferred';
+import ResourceManager from '../Resource/ResourceManager';
+import Map from '../Map/Map';
+import NM from '../Notification/NotificationManager';
+import Input from '../Input/InputManager';
+import Dom from '../Core/Dom';
+import Deferred from '../Core/Deferred';
 /*jshint devel: true, bitwise: false*/
 // debug
 window.scenes = {};

@@ -1,6 +1,6 @@
-import GfxObject from 'Object/Object';
-import FX from 'FX/FX';
-import RM from 'Resource/ResourceManager';
+import GfxObject from './Object';
+import FX from '../FX/FX';
+import RM from '../Resource/ResourceManager';
 
 /*jshint devel: true, bitwise: false*/
 /*globals Class*/

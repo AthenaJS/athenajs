@@ -1,4 +1,4 @@
-// import VirtualJoystick from 'Joystick';
+// import VirtualJoystick from '../lib/virtualJoystick/virtualJoystick';
 
 /*jshint devel: true*/
 /**

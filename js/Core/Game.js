@@ -1,12 +1,12 @@
 /*jshint devel: true, bitwise: false*/
-import ResourceManager from 'Resource/ResourceManager';
-import Binary from 'Binary/Binary';
-import DisplayManager from 'Display/DisplayManager';
-import AudioManager from 'Audio/AudioManager';
-import NM from 'Notification/NotificationManager';
-import Input from 'Input/InputManager';
-import fpscounter from 'fpscounter';
-import Dom from 'Core/Dom';
+import ResourceManager from '../Resource/ResourceManager';
+import Binary from '../Binary/Binary';
+import DisplayManager from '../Display/DisplayManager';
+import AudioManager from '../Audio/AudioManager';
+import NM from '../Notification/NotificationManager';
+import Input from '../Input/InputManager';
+import fpscounter from '../lib/fpscounter/fpscounter.min';
+import Dom from './Dom';
 
 /**
  * The `Game` class is the central part to AthenaJS

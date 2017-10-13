@@ -1,6 +1,5 @@
 import Promise from "es6-promise";
 
-console.log("deferred");
 /**
  * Simple wrapper for ES6 native Promise
  */
@@ -16,5 +15,3 @@ export default class Deferred {
     return Promise.resolve(val);
   }
 }
-
-console.log("end deferred");

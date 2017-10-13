@@ -1,4 +1,4 @@
-import GfxObject from 'Object/Object';
+import GfxObject from './Object';
 
 export default class Circle extends GfxObject {
     constructor(options) {
@@ -13,7 +13,7 @@ export default class Circle extends GfxObject {
     }
 
     draw(ctx, debug) {
-		ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
         this._applyMask(ctx, this.x, this.y);
 
         ctx.beginPath();

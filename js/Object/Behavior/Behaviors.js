@@ -1,9 +1,9 @@
-import GroundMove from 'Object/Behavior/GroundMove';
-import SimpleFall from 'Object/Behavior/SimpleFall';
-import PlayerMove from 'Object/Behavior/PlayerMove';
-import InOut from 'Object/Behavior/InOut';
-import Path from 'Object/Behavior/Path';
-import WeaponMove from 'Object/Behavior/WeaponMove';
+import GroundMove from './GroundMove';
+import SimpleFall from './SimpleFall';
+import PlayerMove from './PlayerMove';
+import InOut from './InOut';
+import Path from './Path';
+import WeaponMove from './WeaponMove';
 
 /*jshint devel: true, bitwise: false*/
 let behaviors = {};

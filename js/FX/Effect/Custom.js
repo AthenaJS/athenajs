@@ -1,4 +1,4 @@
-import Effect from 'FX/Effect/Effect';
+import Effect from './Effect';
 
 /*jshint devel: true, bitwise: false*/
 class Custom extends Effect {

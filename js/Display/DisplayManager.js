@@ -1,31 +1,31 @@
-import Display from 'Display/Display';
+import Display from './Display';
 
-    /*jshint devel: true*/
-		class DisplayManager{
-			constructor(options) {
-				  console.log('[DisplayManager] Init()'/*, options*/);
+/*jshint devel: true*/
+class DisplayManager {
+    constructor(options) {
+        console.log('[DisplayManager] Init()'/*, options*/);
 
-                  this.displays = {};
-			   }
+        this.displays = {};
+    }
 
-            /**
-             *
-             * @param {*} options
-             * @param {*} target
-             * @returns {Display}
-             */
-            addDisplay(options, target) {
-                console.log('[Display Manager] adding display', options.name/*, 'with options', options*/);
+    /**
+     *
+     * @param {*} options
+     * @param {*} target
+     * @returns {Display}
+     */
+    addDisplay(options, target) {
+        console.log('[Display Manager] adding display', options.name/*, 'with options', options*/);
 
-                this.displays[options.name] = new Display(options, target);
+        this.displays[options.name] = new Display(options, target);
 
-                return this.displays[options.name];
-            }
+        return this.displays[options.name];
+    }
 
-            getDisplay(id) {
-                return this.displays[id];
-            }
-		};
+    getDisplay(id) {
+        return this.displays[id];
+    }
+};
 
-    console.log('end DisplayManager');
-    export default new DisplayManager();
+console.log('end DisplayManager');
+export default new DisplayManager();
