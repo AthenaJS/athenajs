@@ -25,10 +25,9 @@ module.exports = {
         ]
     },
     resolve: {
-        modules: [path.resolve('./js/'), path.resolve('./js/lib'), 'node_modules'],
+        modules: ['node_modules'],
         alias: {
-            Joystick: 'virtualJoystick/virtualJoystick',
-            fpscounter: 'fpscounter/fpscounter.min'
+            'toto': path.resolve(__dirname, './node_modules/athena/js/athena-module.js')
         }
     },
     plugins: [

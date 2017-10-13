@@ -1,7 +1,7 @@
-import Behavior from 'Object/Behavior/Behavior';
-import Input from 'Input/InputManager';
-import Tile from 'Map/Tile';
-import AM from 'Audio/AudioManager';
+import Behavior from './Behavior';
+import Input from '../../Input/InputManager';
+import Tile from '../../Map/Tile';
+import AM from '../../Audio/AudioManager';
 
 // debug
 window.AM = AM;

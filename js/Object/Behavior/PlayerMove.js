@@ -1,6 +1,6 @@
-import Behavior from 'Object/Behavior/Behavior';
-import AM from 'Audio/AudioManager';
-import Tile from 'Map/Tile';
+import Behavior from './Behavior';
+import AM from '../../Audio/AudioManager';
+import Tile from '../../Map/Tile';
 
 /*jshint devel: true, bitwise: false*/
 /*globals Game*/
