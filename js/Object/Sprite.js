@@ -14,11 +14,11 @@ import RM from '../Resource/ResourceManager';
  * @param {String} type An identifier for this sprite, can be for example `enemy1`,...
  * @param {Object} options An options hash for the object
  * @param {String} options.imageId The path to the spritesheet image
- * @param {Object} options.animations An hash with a key for each animation of the sprite.
+ * @param {Object} options.animations A map with a key for each animation of the sprite.
  *
  * @note Since games usually have multiple sprites of the same type, it's common to extend the Sprite class
  * to generate each sprite type with its own properties and then use these sprites instead of instanciating
- * the Sprite class but it's possible to do so.
+ * the Sprite class.
  *
  * @example
  *
@@ -136,7 +136,7 @@ class Sprite extends GfxObject {
      * Adds a new animation to the sprite
      *
      * @param {String} name The name of the new animation
-     * @param {String} source The source of the image
+     * @param {String} id The id of the resource (image) to use for the animation
      * @param {Object} options The animation to add, see:
      * @param {number=0} options.offsetX The x offset of the sprite frames inside the image
      * @param {number=0} options.offsetY The y offset of the sprite frames inside the image*
@@ -211,7 +211,7 @@ class Sprite extends GfxObject {
      * Loads animations from settings, flipping sprites if needed
      * and sets the last animation of the array as current animation
      *
-     *
+     * @param {Object} anims The animations map to load
      */
     load(anims) {
         if (!this._settings)
@@ -279,6 +279,7 @@ class Sprite extends GfxObject {
      * Changes the source image for this sprite
      *
      * @param {Image} image the new Image to use as spritesheet
+     * @param {Boolean=false} force will replace current image with a new one if force == false
      */
     setImage(image, force = false) {
         if (!image) {
@@ -374,7 +375,7 @@ class Sprite extends GfxObject {
     /**
      * Restore animation to a previous saved state
      *
-     * @related {restorePreviousAnim}
+     * @related {storeCurrentAnim}
      */
     restorePreviousAnim() {
         this.setAnimation(this.storedAnimName, null, this.storedFrameNum);
@@ -384,7 +385,9 @@ class Sprite extends GfxObject {
      * advanceFrame is called at each render loop and waits for currentAnim.frameDuration
      * before advancing to the next animation frame.
      *
-     * If animName != than currentAnimName then switches to the new animation
+     * @param {String} animName the name to advance
+     *
+     * If animName != currentAnimName then switches to the new animation
      */
     advanceFrame(animName) {
         this.previousFrameNum = this.currentFrameNum;
@@ -401,7 +404,8 @@ class Sprite extends GfxObject {
     }
 
     /**
-     * Returns the width of the current animation frame
+     * @returns {Number} the width of current animation frame
+     *
      */
     getCurrentWidth() {
         // TODO: handle scale/rotate ?
@@ -409,7 +413,7 @@ class Sprite extends GfxObject {
     }
 
     /**
-     * Returns the height of the current animation frame
+     * @returns {Number} the height of current animation frame
      */
     getCurrentHeight() {
         // TODO: handle scale/rotate ?
@@ -479,7 +483,7 @@ class Sprite extends GfxObject {
     /**
      * Returns hitbox position
      *
-     * returns {Object} the hitbox position using current sprite position
+     * @returns {Object} the hitbox position using current sprite position
      */
     getHitBox2() {
         const box = this.currentFrame.hitBox;
@@ -524,7 +528,7 @@ class Sprite extends GfxObject {
      * @param {String} anim The new animation to play.
      * @param {Function=undefined} fn An optionnal callback to run when the animation will have ended.
      * @param {number=0} frameNum The first frame to play, defaults to zero.
-     * @param {Boolean=false} rever Wether to start playing the animation from the last frame
+     * @param {Boolean=false} revert Whether to start playing the animation from the last frame
      */
     setAnimation(anim, fn, frameNum, revert) {
         // console.log('[Sprite] setting animation of', this.type, 'to', anim);
@@ -598,7 +602,7 @@ class Sprite extends GfxObject {
     /**
      * Adds a new function that will be called when current animation ends
      *
-     * @param {Function} fn The callback to run
+     * @param {Function} func The callback to run
      */
     onAnimationEnd(func) {
         // console.log(this.currentAnimName, 'animationEnd');
@@ -646,7 +650,7 @@ class Sprite extends GfxObject {
     /**
      * Draws the sprite onto the canvas context passed
      *
-     * @param {CanvasContext} destCtx The context where to render the sprite.
+     * @param {CanvasRenderingContext2D} destCtx The context where to render the sprite.
      * @param {Boolean=false} debug wether to show the sprite hit box
      *
      * @private
@@ -740,9 +744,8 @@ class Sprite extends GfxObject {
             canvas.id = 'describe';
             canvas.setAttribute('width', totalWidth);
             canvas.setAttribute('height', totalHeight);
-            canvas
         }
-        debugger;
+
         ctx = new Dom('#describe')[0] && new Dom('#describe')[0].getContext('2d') || new Dom('canvas').attr('id', 'describe').attr('width', totalWidth).attr('height', totalHeight).css('zIndex', '100').appendTo('body')[0].getContext('2d');
 
         ctx.webkitImageSmoothingEnabled = false;
@@ -800,7 +803,9 @@ class Sprite extends GfxObject {
     }
 
     /**
-     * Returns the sprite's animation hash
+     * Returns the sprite's animation map
+     *
+     * @returns {Object} return the sprite's animations map
      *
      * Used for debugging
      *
