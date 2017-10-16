@@ -231,7 +231,7 @@ class Game {
      * Creates a new display
      *
      * TODO: DESCRIBE
-     * @param {Object}
+     * @param {Object} options
      * @param {String|HTMLElement} The target of the display: this is were canvas elements will be added
      * @private
      *
