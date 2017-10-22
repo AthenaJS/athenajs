@@ -442,6 +442,8 @@ class BitmapText extends GfxObject {
 			scaledH = this.h * this.scale,
 			subScaledW = Math.floor(scaledW / 2),
 			subScaledH = Math.floor(scaledH / 2),
+			mapOffsetX = this.currentMap && this.currentMap.viewportX || 0,
+			mapOffsetY = this.currentMap && this.currentMap.viewportY || 0,
 			w = this.w,
 			h = this.h;
 
@@ -463,7 +465,7 @@ class BitmapText extends GfxObject {
 		}
 		// if this.scrolling, need to first offset text into this.buffer
 
-		destCtx.setTransform(this.scale, 0, 0, this.scale, this.x + subScaledW, this.y + subScaledH);
+		destCtx.setTransform(this.scale, 0, 0, this.scale, this.x + mapOffsetX + subScaledW, this.y + mapOffsetY + subScaledH);
 		destCtx.rotate(this.angle);
 
 		destCtx.drawImage(this.buffer.canvas, 0, copyStartY, Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
