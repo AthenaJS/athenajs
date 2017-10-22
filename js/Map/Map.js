@@ -156,6 +156,9 @@ class Map {
         // TODESCRIBE
         this.mapEvent = new MapEvent(this);
 
+        // we need to keep a reference to the scene
+        this.scene = null;
+
         // flag that
         this.isDirty = true;
     }
@@ -250,6 +253,14 @@ class Map {
         this.isDirty = true;
     }
 
+    /**
+     * saves a refrence to the scene the map is attached to
+     *
+     * @param {Scene} scene reference to the scene the map is being attached to
+     */
+    setScene(scene) {
+        this.scene = scene;
+    }
 
 	/**
 	 * Sets the map tiles and tiletypes from binary buffer:
@@ -302,6 +313,8 @@ class Map {
             obj.setImage(RM.getResourceById(obj.imageId));
         }
         obj.setMap(this);
+
+        obj.setScene(this.scene);
 
         this.objects.push(obj);
 

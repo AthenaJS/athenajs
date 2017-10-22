@@ -351,6 +351,8 @@ class Scene {
             this.map = new Map(map);
         }
 
+        this.map.setScene(this);
+
         this.mapOffsetX = x;
         this.mapOffsetY = y;
 
