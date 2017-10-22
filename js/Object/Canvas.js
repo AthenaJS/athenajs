@@ -20,6 +20,8 @@ export default class Canvas extends GfxObject {
     draw(ctx, debug) {
         this.ctx = ctx;
 
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+
         this._applyMask(ctx, this.x, this.y);
 
         if (!this.isFxQueueEmpty()) {
@@ -61,3 +63,5 @@ export default class Canvas extends GfxObject {
 
     }
 };
+
+window.Canvas = Canvas;

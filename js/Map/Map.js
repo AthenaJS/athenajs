@@ -309,7 +309,7 @@ class Map {
 	 *
 	 */
     addObject(obj) {
-        if (!obj.image) {
+        if (!obj.image && obj.imageId) {
             obj.setImage(RM.getResourceById(obj.imageId));
         }
         obj.setMap(this);
