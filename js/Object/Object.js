@@ -900,6 +900,13 @@ class GfxObject {
   }
 
   /**
+   * @param {Image} image the image that this object needs to draw: redefine if needed
+   */
+  setImage(image) {
+
+  }
+
+  /**
    * Performs common draw effects on canvas here so that each Object doesn't need to reimplement it
    *
    * @param {CanvasContext} ctx the context to use for graphic operations

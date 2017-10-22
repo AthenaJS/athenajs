@@ -42,9 +42,30 @@ export default class Text extends GfxObject {
         this.w = options.w || 0;
         this.h = options.h || 0;
 
-        this.context = document.createElement('canvas').getContext('2d');
+        this.buffer = null;
 
-        this.setText(options.text || '');
+        this.text = options.text || '';
+    }
+
+	/**
+	 * Generates a new buffer that can hold current text
+	 *
+	 * @param {Display} display the display to get the buffer from
+	 */
+    createBuffer(display) {
+        // generate a buffer with enough height to hold every lines of text
+        let width = this.fakeWidth || 0,
+            height = this.fakeHeight || 0;
+        // this.textArray.length * (this.charHeight + this.lineSpacing);
+
+        this.buffer = display.getBuffer(width, height);
+    }
+
+	/**
+	 * Clears the buffer
+	 */
+    clearBuffer() {
+        this.currentScene.display.clearScreen(this.buffer);
     }
 
     /**
@@ -73,26 +94,62 @@ export default class Text extends GfxObject {
     }
 
     /**
-     * Change the text of the object
-     *
-     * @param {String} text The new text.
-     * @param {String} [text='center'] Optional new alignment for the text.
+     * Prepare render by getting text metrics and creating temp text buffer
      */
-    setText(text, align) {
+    prepareRender() {
         this._setFont();
-        this.text = text;
-        this.align = align || 'center';
         this.lines = this.text.split('\n');
+
+        if (!this.buffer) {
+            this.createBuffer(this.currentScene.display);
+        } else {
+            this.clearBuffer();
+        }
+
         this.getMetrics();
     }
 
     getMetrics() {
-        const ctx = this.context;
+        const ctx = this.buffer;
         ctx.font = this.font;
         this.fakeLineHeight = parseInt(ctx.font);
         this.fakeHeight = this.lines.length * this.fakeLineHeight;
         this.fakeWidth = ctx.measureText(this.text).width;
-        console.log(this.text, this.fakeWidth, this.fakeHeight);
+
+        // set correct with/height since we now have the width
+        ctx.canvas.width = this.fakeWidth;
+        ctx.canvas.height = this.fakeHeight;
+
+        ctx.fillStyle = this.color;
+        ctx.font = this.font;
+        ctx.textBaseline = 'top';
+        console.log('metrics', this.fakeWidth, this.fakeHeight);
+    }
+
+    /**
+     * pre-renders text in a temp canvas
+     */
+    renderText() {
+        this.prepareRender();
+        for (let i = 0; i < this.lines.length; ++i) {
+            this.buffer.fillText(this.lines[i], 0, this.fakeLineHeight * i);
+        }
+    }
+
+    /**
+     * Updates the text's object
+     *
+     * @param {String} text the new text of the Text object
+     */
+    setText(text) {
+        this.text = text;
+        this.renderText();
+    }
+
+    setScene(scene) {
+        super.setScene(scene);
+
+        this.setText(this.text);
     }
 
     /**
@@ -102,6 +159,7 @@ export default class Text extends GfxObject {
      */
     setColor(color) {
         this.color = color;
+        this.renderText();
     }
 
     /**
@@ -124,7 +182,7 @@ export default class Text extends GfxObject {
      * @returns [Number] The object's width
      */
     getCurrentWidth() {
-        return this.w;
+        return this.fakeWidth;
     }
 
     /**
@@ -133,7 +191,7 @@ export default class Text extends GfxObject {
      * @returns [Number] The object's height
      */
     getCurrentHeight() {
-        return this.h;
+        return this.fakeHeight;
     }
 
     /**
@@ -173,54 +231,31 @@ export default class Text extends GfxObject {
      */
     draw(destCtx) {
         var destY,
-            scaledW = this.w * this.scale,
-            scaledH = this.h * this.scale,
+            scaledW = this.fakeWidth * this.scale,
+            scaledH = this.fakeHeight * this.scale,
             subScaledW = Math.floor(scaledW / 2),
             subScaledH = Math.floor(scaledH / 2),
-            w = this.w,
-            h = this.h;
+            mapOffsetX = this.currentMap && this.currentMap.viewportX || 0,
+            mapOffsetY = this.currentMap && this.currentMap.viewportY || 0,
+            w = this.fakeWidth,
+            h = this.fakeHeight;
 
-        if (!this.visible) {
+        if (!this.visible || !this.buffer) {
             return;
         }
 
-        destCtx.setTransform(1, 0, 0, 1, 0, 0);
-
-        destCtx.fillStyle = this.color;
-        destCtx.font = this.font;
-        destCtx.textBaseline = 'top';
-
         this.executeFx(destCtx);
 
-        if (this.mask && !this.mask.exclude) {
-            this._applyMask(destCtx, this.x, this.y);
-        }
+        destCtx.setTransform(this.scale, 0, 0, this.scale, this.x + mapOffsetX + subScaledW, this.y + mapOffsetY + subScaledH);
+        destCtx.rotate(this.angle);
 
-        if (this.angle !== 0) {
-            destCtx.save();
-            destCtx.rotate(this.angle);
-        }
-
-        for (let i = 0; i < this.lines.length; ++i) {
-            destCtx.fillText(this.lines[i], this.x, this.y + this.fakeLineHeight * i);
-        }
-
-        if (this.angle !== 0) {
-            destCtx.restore();
-        }
-
-        if (this.mask && this.mask.exclude) {
-            destCtx.setTransform(1, 0, 0, 1, 0, 0);
-            this._applyMask(destCtx, Math.floor(drawX + mapOffsetX), Math.floor(drawY + mapOffsetY));
-        }
-
-        this._undoMask();
+        destCtx.drawImage(this.buffer.canvas, 0, 0, Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
     }
 
     /**
      * Generates the font css property using current this.fontSize and this.fontFace
      */
     _setFont() {
-        this.font = this.fontSize + ' ' + this.fontFace;
+        this.font = `${this.fontSize} ${this.fontFace}`;
     }
 };
