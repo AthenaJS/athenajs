@@ -51,10 +51,10 @@ class Display {
         };
     }
 
-    getBuffer(w, h) {
+    getBuffer(width, height) {
         let ctx = new Dom('canvas').attr({
-            width: w + 'px',
-            height: h + 'px'
+            width: width + 'px',
+            height: height + 'px'
         })[0].getContext('2d');
 
         ctx['imageSmoothingEnabled'] = false;
@@ -94,11 +94,11 @@ class Display {
             const size = this._getFullScreenSize(this.width, this.height);
             console.log('size', size.scaleX, size.scaleY);
             Dom(this.target).css({
-                width: `${size.w}px`,
-                height: `${size.h}px`
+                width: `${size.width}px`,
+                height: `${size.height}px`
             }).find('canvas').css({
-                width: size.w + 'px',
-                height: size.h + 'px',
+                width: size.width + 'px',
+                height: size.height + 'px',
                 top: size.top + 'px',
                 left: size.left + 'px'
             });
@@ -144,8 +144,8 @@ class Display {
         }
 
         return {
-            w: newWidth,
-            h: newHeight,
+            width: newWidth,
+            height: newHeight,
             scaleX: newWidth / width,
             scaleY: newHeight / height,
             top: needMargin ? (screenHeight - newHeight) / 2 : 0,

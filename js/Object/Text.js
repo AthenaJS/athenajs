@@ -7,8 +7,8 @@ import GfxObject from './Object';
  * @param {String} type The type of the graphic object
  * @param {Object} options
  * @param {String} [options.text=undefined] The initial text. Can be changed later using Text.setText().
- * @param {Number} [options.w=0] The width of the text.
- * @param {Number} [options.h=0] The height of the text.
+ * @param {Number} [options.width=0] The width of the text.
+ * @param {Number} [options.height=0] The height of the text.
  * @param {String} [options.fontFace="Arial"] The font to use to draw the text.
  * @param {String} [options.fontStyle="normal"] The style of the font.
  * @param {String} [options.fontSize="18px"] The size of the font.
@@ -39,8 +39,8 @@ export default class Text extends GfxObject {
         this.align = options.align || 'center';
         this.color = options.color || 'white';
 
-        this.w = options.w || 0;
-        this.h = options.h || 0;
+        this.width = options.width || 0;
+        this.height = options.height || 0;
 
         this.buffer = null;
 
@@ -80,16 +80,16 @@ export default class Text extends GfxObject {
     /**
      * Change the size of the object
      *
-     * @param {Number} w The width of the object.
-     * @param {Number} h The height of the object.
+     * @param {Number} width The width of the object.
+     * @param {Number} height The height of the object.
      */
-    setSize(w, h) {
-        if (w !== null) {
-            this.w = w;
+    setSize(width, height) {
+        if (width !== null) {
+            this.width = width;
         }
 
-        if (h !== null) {
-            this.h = h;
+        if (height !== null) {
+            this.height = height;
         }
     }
 

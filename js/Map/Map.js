@@ -361,17 +361,17 @@ class Map {
 	 *
 	 * @param {number} x Horizontal position of the viewport.
 	 * @param {number} y Vertical position of the viewport.
-	 * @param {number} w Width of the viewport.
-	 * @param {number} h Height of the viewport.
+	 * @param {number} width Width of the viewport.
+	 * @param {number} height Height of the viewport.
 	 *
 	 * @note there is currently no boundaries checks
 	 *
 	 */
-    setViewPort(x, y, w, h) {
+    setViewPort(x, y, width, height) {
         this.viewportX = x;
         this.viewportY = y;
-        this.viewportW = w;
-        this.viewportH = h;
+        this.viewportW = width;
+        this.viewportH = height;
     }
 
 

@@ -9,11 +9,11 @@ export default class Canvas extends GfxObject {
     constructor(name, options) {
         super(name, options);
 
-        this.w = options.w || 0;
-        this.h = options.h || 0;
+        this.width = options.width || 0;
+        this.height = options.height || 0;
         this.x = options.x || 0;
         this.y = options.y || 0;
-        this.radius = options.radius || this.w / 2;
+        this.radius = options.radius || this.width / 2;
         this.color = options.color || "red";
 
     }
@@ -43,7 +43,7 @@ export default class Canvas extends GfxObject {
 
     fill(color) {
         this.ctx.fillStyle = color || this.color;
-        this.ctx.fillRect(this.x, this.y, this.w, this.h);
+        this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     rect(x, y, w, h, color) {
