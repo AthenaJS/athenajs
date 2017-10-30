@@ -53,14 +53,16 @@ export default class Canvas extends GfxObject {
     }
 
     circle(x, y, w, h, radius, color) {
+        const ctx = this.ctx;
+
         ctx.beginPath();
         ctx.arc(this.x + x + w / 2, this.y + y + h / 2, radius, 0, 2 * Math.PI);
         ctx.fillStyle = color || this.color;
         ctx.fill();
     }
 
-    ellipse() {
-
+    animate() {
+        console.warn('animte() not supported on Canvas objects yet. Effect not applied.');
     }
 };
 
