@@ -35,8 +35,8 @@ import RM from '../Resource/ResourceManager';
  *          frames:[{
  *              offsetX: 136,
  *              offsetY: 189,
- *              w: 31,
- *              h: 31,
+ *              width: 31,
+ *              height: 31,
  *              hitBox: {
  *                  x: 0,
  *                  y: 0,
@@ -48,8 +48,8 @@ import RM from '../Resource/ResourceManager';
  *               {
  *              offsetX: 170,
  *              offsetY: 189,
- *              w: 31,
- *              h: 31,
+ *              width: 31,
+ *              height: 31,
  *              hitBox: {
  *                  x: 0,
  *                  y: 0,
@@ -189,8 +189,8 @@ class Sprite extends GfxObject {
             frames.push({
                 offsetX: x,
                 offsetY: y,
-                w: options.frameWidth,
-                h: frameHeight,
+                width: options.frameWidth,
+                height: frameHeight,
                 hitBox: {
                     x: 0,
                     y: 0,
@@ -265,12 +265,12 @@ class Sprite extends GfxObject {
             // $.extend(true, anim.frames[i], animFromFrames[i]);
             Object.assign(anim.frames[i], animFromFrames[i]);
             if (flipType & 1) {
-                anim.frames[i].hitBox.x = animFromFrames[i].w - animFromFrames[i].hitBox.x2;
-                anim.frames[i].hitBox.x2 = animFromFrames[i].w - animFromFrames[i].hitBox.x;
+                anim.frames[i].hitBox.x = animFromFrames[i].width - animFromFrames[i].hitBox.x2;
+                anim.frames[i].hitBox.x2 = animFromFrames[i].width - animFromFrames[i].hitBox.x;
             }
             if (flipType & 2) {
-                anim.frames[i].hitBox.y = animFromFrames[i].h - animFromFrames[i].hitBox.y2;
-                anim.frames[i].hitBox.y2 = animFromFrames[i].h - animFromFrames[i].hitBox.y;
+                anim.frames[i].hitBox.y = animFromFrames[i].height - animFromFrames[i].hitBox.y2;
+                anim.frames[i].hitBox.y2 = animFromFrames[i].height - animFromFrames[i].hitBox.y;
             }
         }
     }
@@ -409,7 +409,7 @@ class Sprite extends GfxObject {
      */
     getCurrentWidth() {
         // TODO: handle scale/rotate ?
-        return this.currentFrame.w;
+        return this.currentFrame.width;
     }
 
     /**
@@ -417,7 +417,7 @@ class Sprite extends GfxObject {
      */
     getCurrentHeight() {
         // TODO: handle scale/rotate ?
-        return this.currentFrame.h;
+        return this.currentFrame.height;
     }
 
     /**
@@ -727,8 +727,8 @@ class Sprite extends GfxObject {
 
         Object.keys(this.animations).forEach((animationName) => {
             animation = this.animations[animationName];
-            width = animation.frames[0].w;
-            height = animation.frames[0].h;
+            width = animation.frames[0].width;
+            height = animation.frames[0].height;
 
             if ((width + 5) * animation.frames.length > totalWidth) {
                 totalWidth = (width + 5) * animation.frames.length;
@@ -761,8 +761,8 @@ class Sprite extends GfxObject {
             console.log('rewindOnEnd', animation.rewindOnEnd);
 
             animation.frames.forEach((frame, i) => {
-                var w = frame.w,
-                    h = frame.h,
+                var w = frame.width,
+                    h = frame.height,
                     x = frame.offsetX,
                     y = frame.offsetY,
                     hitBox = frame.hitBox;
