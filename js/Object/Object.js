@@ -338,8 +338,8 @@ class GfxObject {
   center() {
     let display = this.currentScene.display;
 
-    this.x = (display.width - this.w) / 2;
-    this.y = (display.height - this.h) / 2;
+    this.x = (display.width - this.width) / 2;
+    this.y = (display.height - this.height) / 2;
     return this;
   }
 
@@ -381,11 +381,11 @@ class GfxObject {
       if (mask.exclude) {
         destCtx.save();
         destCtx.fillStyle = mask.color || 'black';
-        destCtx.fillRect(x + mask.x, y + mask.y, mask.w, mask.h);
+        destCtx.fillRect(x + mask.x, y + mask.y, mask.width, mask.height);
       } else {
         destCtx.save();
         destCtx.beginPath();
-        destCtx.rect(x + mask.x, y + mask.y, mask.w, mask.h);
+        destCtx.rect(x + mask.x, y + mask.y, mask.width, mask.height);
         destCtx.clip();
       }
     }
@@ -575,7 +575,7 @@ class GfxObject {
    * @related {Sprite}
    */
   getCurrentWidth() {
-    return this.w;
+    return this.width;
   }
 
   /**
@@ -587,7 +587,7 @@ class GfxObject {
    * @related {Sprite}
    */
   getCurrentHeight() {
-    return this.h;
+    return this.height;
   }
 
   getHitBox() {
@@ -647,9 +647,9 @@ class GfxObject {
     ctx.strokeStyle = 'rgb(0,230,0)';
     ctx.beginPath();
     ctx.moveTo(this.x, this.y);
-    ctx.lineTo(this.w + this.x, this.y);
-    ctx.lineTo(this.w + this.x, this.y + this.h);
-    ctx.lineTo(this.x, this.y + this.h);
+    ctx.lineTo(this.width + this.x, this.y);
+    ctx.lineTo(this.width + this.x, this.y + this.height);
+    ctx.lineTo(this.x, this.y + this.height);
     ctx.lineTo(this.x, this.y);
     ctx.closePath();
     ctx.stroke();

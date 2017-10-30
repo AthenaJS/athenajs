@@ -34,8 +34,8 @@ class BitmapText extends GfxObject {
 		super(type, options);
 
 		// TODO: maybe we want to have fullsize ?
-		this.w = options.w || 320;
-		this.h = options.h || 18;
+		this.width = options.width || 320;
+		this.height = options.height || 18;
 
 		this.pixelHeight = 0;
 
@@ -85,8 +85,8 @@ class BitmapText extends GfxObject {
 	 */
 	createBuffer(display) {
 		// generate a buffer with enough height to hold every lines of text
-		let width = this.w,
-			height = this.h;
+		let width = this.width,
+			height = this.height;
 		// this.textArray.length * (this.charHeight + this.lineSpacing);
 
 		this.buffer = display.getBuffer(width, height);
@@ -110,7 +110,7 @@ class BitmapText extends GfxObject {
 
 		this.charWidth = options.charWidth || 16;               // 16
 		this.charHeight = options.charHeight || 18;     // 18
-		this.maxCharPerLine = Math.floor(this.w / (this.charWidth + this.letterSpacing));
+		this.maxCharPerLine = Math.floor(this.width / (this.charWidth + this.letterSpacing));
 		this.maxPixels = this.maxCharPerLine * ((this.charWidth + this.letterSpacing));
 
 		this.offsetX = options.offsetX || this.charWidth;     // 34
@@ -205,13 +205,13 @@ class BitmapText extends GfxObject {
 	 */
 	scrollFromBottom(duration, callback) {
 		// set scrollPos to offscreen
-		this.scrollOffsetY = this.h;
+		this.scrollOffsetY = this.height;
 
 		this.scrollText({
 			callback: callback,
 			duration: duration,
 			targetOffsetX: 0,
-			targetOffsetY: this.h - this.pixelHeight
+			targetOffsetY: this.height - this.pixelHeight
 		});
 	}
 
@@ -438,14 +438,14 @@ class BitmapText extends GfxObject {
 		var destY,
 			copyHeight,
 			copyStartY,
-			scaledW = this.w * this.scale,
-			scaledH = this.h * this.scale,
+			scaledW = this.width * this.scale,
+			scaledH = this.height * this.scale,
 			subScaledW = Math.floor(scaledW / 2),
 			subScaledH = Math.floor(scaledH / 2),
 			mapOffsetX = this.currentMap && this.currentMap.viewportX || 0,
 			mapOffsetY = this.currentMap && this.currentMap.viewportY || 0,
-			w = this.w,
-			h = this.h;
+			width = this.width,
+			height = this.height;
 
 		/* if image isn't loaded yet, simply do not render the object */
 		if (!this.visible || !this.image) {
@@ -456,11 +456,11 @@ class BitmapText extends GfxObject {
 
 		if (this.scrollOffsetY >= 0) {
 			destY = this.scrollOffsetY;
-			copyHeight = this.h - destY;
+			copyHeight = this.height - destY;
 			copyStartY = 0;
 		} else {
 			destY = 0;
-			copyHeight = h;    // auto clipped ?
+			copyHeight = height;    // auto clipped ?
 			copyStartY = Math.abs(this.scrollOffsetY);
 		}
 		// if this.scrolling, need to first offset text into this.buffer
@@ -468,7 +468,7 @@ class BitmapText extends GfxObject {
 		destCtx.setTransform(this.scale, 0, 0, this.scale, this.x + mapOffsetX + subScaledW, this.y + mapOffsetY + subScaledH);
 		destCtx.rotate(this.angle);
 
-		destCtx.drawImage(this.buffer.canvas, 0, copyStartY, Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
+		destCtx.drawImage(this.buffer.canvas, 0, copyStartY, Math.floor(width), Math.floor(height), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
 	}
 };
 
