@@ -1,4 +1,5 @@
 import GfxObject from './Object';
+import Deferred from '../Core/Deferred';
 
 /**
  * Very basic wrapper for canvas drawing methods
@@ -61,8 +62,13 @@ export default class Canvas extends GfxObject {
         ctx.fill();
     }
 
-    animate() {
-        console.warn('animte() not supported on Canvas objects yet. Effect not applied.');
+    animate(name, options) {
+        if (name !== 'Fade') {
+            console.warn('animte() not supported on Canvas objects yet. Effect not applied.');
+            return Deferred.resolve();
+        } else {
+            return super.animate(name, options);
+        }
     }
 };
 
