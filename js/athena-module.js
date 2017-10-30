@@ -16,7 +16,6 @@ export { default as Wave } from './Object/Wave';
 export { default as Menu } from './Object/Menu';
 export { default as Hud } from './Object/Hud';
 export { default as BitmapText } from './Object/BitmapText';
-export { default as Circle } from './Object/Circle';
 export { default as Canvas } from './Object/Canvas';
 
 export { default as Behavior } from './Object/Behavior/Behavior';
