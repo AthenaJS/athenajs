@@ -55,7 +55,7 @@ class Scene {
 
         this.backgroundImage = null;
 
-        this.name = options.name || `Scene${new Date().getTime()}`;
+        this.name = options.name || `Scene${Scene.count++}`;
 
         this.opacity = (typeof options.opacity !== 'undefined') ? options.opacity : 1;
 
@@ -76,6 +76,7 @@ class Scene {
         //*** this._fillArrays();
 
     }
+
     /**
      * Browsers seem to do some conversion the first time drawImage is used from/to canvas
      *
@@ -834,5 +835,7 @@ class Scene {
         }
     }
 };
+
+Scene.count = 1;
 
 export default Scene;
