@@ -133,7 +133,7 @@ class BitmapText extends GfxObject {
 				}
 			},*/
 	/**
-	 * Returns the lenght of a text line, in characters
+	 * Returns the length of a text line, in characters
 	 *
 	 * @param {String} str The string to mesure.
 	 * @param {String} eof The character to use as end of line.
