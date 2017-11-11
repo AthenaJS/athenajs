@@ -46,20 +46,36 @@ export default class Canvas extends GfxObject {
         this.ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
-    rect(x, y, w, h, color) {
+    rect(x, y, width, height, color) {
         const ctx = this.ctx;
 
         ctx.fillStyle = color || this.color;
-        ctx.fillRect(this.x + x, this.y + y, w, h);
+        ctx.fillRect(this.x + x, this.y + y, width, height);
     }
 
-    circle(x, y, w, h, radius, color) {
+    circle(x, y, radius, color, strokeWidth, strokeStyle) {
         const ctx = this.ctx;
 
         ctx.beginPath();
-        ctx.arc(this.x + x + w / 2, this.y + y + h / 2, radius, 0, 2 * Math.PI);
+        ctx.arc(this.x + x + radius, this.y + y + radius, radius, 0, 2 * Math.PI, false);
         ctx.fillStyle = color || this.color;
         ctx.fill();
+
+        if (arguments.length > 4) {
+            ctx.strokeStyle = strokeStyle || this.color;
+            ctx.lineWidth = strokeWidth;
+            ctx.stroke();
+        }
+    }
+
+    arc(x, y, radius, startAngle, endAngle, strokeStyle, strokeWidth) {
+        const ctx = this.ctx;
+
+        ctx.beginPath();
+        ctx.arc(this.x + x, this.y + y, radius, startAngle, endAngle, false);
+        ctx.lineWidth = strokeWidth;
+        ctx.strokeStyle = strokeStyle || this.color;
+        ctx.stroke();
     }
 
     animate(name, options) {
