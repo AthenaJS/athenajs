@@ -1,7 +1,4 @@
-// export { default as Game } from 'Core/Game';
-import Game from './Core/Game';
-
-export { Game };
+export { default as Game } from './Core/Game';
 
 export { default as Pool } from './Core/Pool';
 
