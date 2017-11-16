@@ -196,6 +196,8 @@ class Scene {
      * loads a resource
      *
      * @memberof Scene
+     *
+     * // TODO: remove me ?
      */
     load(type, src, id = null) {
         if (this.loaded) {
@@ -249,20 +251,20 @@ class Scene {
      */
     _load() {
         console.log('[Scene ' + this.name + '] load()');
+        let def = new Deferred();
         if (this.hudScene && !this.hudScene.loaded) {
-            let def = new Deferred();
             this.hudScene._load().then(() => {
                 this._loadResources(this.resources).then(() => {
-                    def.resolve();
+                    def.resolve(this);
                 });
             }).catch(err => {
                 console.error(err);
             });
-
-            return def.promise;
         } else {
-            return this._loadResources(this.resources);
+            this._loadResources(this.resources).then(() => def.resolve(this));
         }
+
+        return def.promise;
     }
 
     /**

@@ -224,7 +224,6 @@ export default {
      *
      */
     loadResources: function (group, progressCb, errorCb) {
-        debugger;
         group = group || 'any';
 
         if (this.loading === true) {

@@ -45,8 +45,6 @@ class BitmapText extends GfxObject {
 
 		this.characters = options.characters || "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-		debugger;
-
 		if (options.imageSrc) {
 			this.imageId = options.imageSrc;
 
