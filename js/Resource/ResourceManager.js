@@ -11,7 +11,7 @@ function newObject(Obj) {
 }
 
 // little shim for browsers not supporting createImageBitmap yet
-// in case browser doesn't support createImageBitmap we simply return resolve with the original image
+// in case browser doesn't support createImageBitmap we simply resolve with the original image
 const createImageBitmap = window.createImageBitmap || function createImageBitmap(img) { return Deferred.resolve(img); };
 
 /*jshint devel: true, bitwise: false*/
@@ -21,7 +21,7 @@ const createImageBitmap = window.createImageBitmap || function createImageBitmap
  *
  * Resources are loaded and retrieved using this manager.
  *
- * The ResourceManager can load at runtime the folowing types of resources:
+ * The ResourceManager can load at runtime the following types of resources:
  *  - Images
  *  - Sounds
  *  - Maps (JSON-based)
@@ -224,6 +224,7 @@ export default {
      *
      */
     loadResources: function (group, progressCb, errorCb) {
+        debugger;
         group = group || 'any';
 
         if (this.loading === true) {
