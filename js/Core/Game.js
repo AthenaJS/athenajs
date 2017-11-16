@@ -361,7 +361,13 @@ class Game {
         }
 
         // finally load the scene, and call startScene once the scene has been loaded
-        this.scene._load().then(() => this._startScene()).catch(err => {
+        this.scene._load().then((scene) => {
+            if (this.scene === scene) {
+                this._startScene();
+            } else {
+                console.warn("[Game] scene", scene, "has finished loading but is not the current scene anymore so it won't be started.");
+            }
+        }).catch(err => {
             console.error(err);
         });
     }
