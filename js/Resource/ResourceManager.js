@@ -10,6 +10,10 @@ function newObject(Obj) {
     return new (Obj.bind.apply(Obj, arguments))();
 }
 
+// little shim for browsers not supporting createImageBitmap yet
+// in case browser doesn't support createImageBitmap we simply return resolve with the original image
+const createImageBitmap = window.createImageBitmap || function createImageBitmap(img) { return Deferred.resolve(img); };
+
 /*jshint devel: true, bitwise: false*/
 "use strict";
 /**
@@ -267,7 +271,9 @@ export default {
             var notLoaded = [],
                 resId;
 
-            if (resGroup.gpTimeout && resGroup.def.state() === 'rejected') {
+            // ES6 promise spec doesn't have such function: this was there in older code
+            // to be sure network wasn't just slow but an error really occured
+            if (resGroup.gpTimeout /*&& resGroup.def.state() === 'rejected'*/) {
                 resGroup.gpTimeout = null;
 
                 console.error('[RM] Unable to load the following resources after', this.groupMaxTime / 1000, 'sec');
@@ -326,11 +332,13 @@ export default {
             // on Chrome/Win calling drawImage to draw from canvas to canvas is abnormally slow (20-30ms to draw a 20x20px sprite on a core2quad + ati card)
             // so it's disabled for now
             // res.elt = that.getCanvasFromImage(this);
-            res.elt = img;
-            res.img = this;
-            res.loaded = true;
-            gpName && that._resLoaded(gpName);
-            def.resolve(gpName && true || img);
+            createImageBitmap(this).then((bitmap) => {
+                res.elt = bitmap; // img
+                res.img = img;// this;
+                res.loaded = true;
+                gpName && that._resLoaded(gpName);
+                def.resolve(gpName && true || bitmap);
+            });
 
             // console.log('[RM] loaded image', res.src);
         };
@@ -404,16 +412,16 @@ export default {
         // remove ending .js since it shouldn't be there for require js
         /*
                     res.src = res.src.replace(/\.js$/, '');
-        
+
                     System.import(res.src).then((scriptEval) => {
                         console.log('[RM] loaded AJAX script', res.src, scriptEval);
                         res.elt = scriptEval.default ? scriptEval.default : scriptEval;
                         res.loaded = true;
-        
+
                         if (res.poolSize) {
                             this.createObjectPool(res.elt, res.poolSize);
                         }
-        
+
                         if (!callback) {
                             this._resLoaded(gpName);
                             loaded.resolve(true);
@@ -423,7 +431,7 @@ export default {
                                 loaded.resolve(true);
                             });
                         }
-        
+
                     }).catch(function(err) {
                         console.log('resource not loaded', err);
                         gp.def.reject('Unable to load resource "' + res.src + '" [' + res.id + ']');
@@ -441,7 +449,7 @@ export default {
      * @returns {Deferred} a new promise that will be resolved once the file has been loaded
      */
     loadAudio: function (res, gpName) {
-        console.log('[RM] loading sound', res.src);
+        // console.log('[RM] loading sound', res.src);
 
         let that = this,
             audio = new Audio(),
@@ -452,7 +460,7 @@ export default {
             // canplaythrough event is sent not only on first load, but after the song has been played (and has been rewinded)
             // so we remove it to prevent from triggering again
             this.removeEventListener('canplaythrough', onLoad);
-            console.log('[RM] audioLoaded', res.src);
+            // console.log('[RM] audioLoaded', res.src);
             res.elt = this;
             res.loaded = true;
             AM.addSound(res.id, this);
@@ -613,7 +621,7 @@ export default {
             }
             group.def.resolve(true);
         } else if (!this.async) {
-            //  console.log('[RM] more stuff to load !', group.loadedRes + '/' + group.numRes);
+            // console.log('[RM] more stuff to load !', group.loadedRes + '/' + group.numRes);
             this.loadNextResource(groupName);
         } else {
             // console.log('[RM] more stuff to load !', group.loadedRes + '/' + group.numRes);
