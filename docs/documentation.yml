@@ -18,17 +18,17 @@ toc:
       A map isn't required to create a new game.
   - Map
   - MapEvent
-  - name: Objects
+  - name: Drawables
     description: |
-      In AthenaJS, any graphical objects that can be displayed and moved onto the screen inherits from GfxObject.
-      AthenaJS comes with these Objects:
+      In AthenaJS, any graphical objects that can be displayed and moved onto the screen inherits from Drawable.
+      AthenaJS comes with these Drawables:
       * BitmapText: a bitmap-based text
-      * Menu: a special object that can handle several options      
+      * Menu: a special object that can handle several options
       * Sprite: an object that can have any number of bitmap based animations
       * Text: a simple text object
       Although they can be instanciated, you should extend one of these objects and instanciate it instead, because most
       objects (for example sprites) and different behaviors, spritesheets, and properties.
-  - GfxObject
+  - Drawable
   - Sprite
   - BitmapText
   - Text

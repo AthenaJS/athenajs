@@ -8,9 +8,9 @@ import Deferred from '../Core/Deferred';
 /*jshint devel: true, bitwise: false*/
 /*globals Class*/
 /**
- * `GfxObject` is the base class for objects that can be rendered on the screen.
+ * `Drawable` is the base class for objects that can be rendered on the screen.
  *
- * A `GfxObject` has properties like x, y, vx, vy, speed.
+ * A `Drawable` has properties like x, y, vx, vy, speed.
  * In order to be rendered, an object must be added onto the active scene/map.
  * It can also have an optional behavior which tells Athena how
  * to move an object at each frame.
@@ -22,7 +22,7 @@ import Deferred from '../Core/Deferred';
  * @param {boolean} [options.master=false] Set to true if the object should be the master.
  * @param {boolean} [options.visible=true] An invisible object isn't rendered onto the screen.
  */
-class GfxObject {
+class Drawable {
   constructor(type, options) {
     this.type = type;
     this.id = options.objectId || (this.type + new Date().getTime());
@@ -216,7 +216,7 @@ class GfxObject {
   /**
    * WIP Sets the platform of the object. This will be used when platforms will be fully implemented.
    *
-   * @param {GfxObject} platform The platform the object is attached to.
+   * @param {Drawable} platform The platform the object is attached to.
    */
   setPlatform(platform) {
     this.platform = platform;
@@ -229,7 +229,7 @@ class GfxObject {
    * @param {number} y The new vertical position.
    * @param {number=0} duration The duration of the move, 0 to have the object move immediately to new position
    *
-   * @returns {GfxObject} this
+   * @returns {Drawable} this
    */
   moveTo(x, y, duration = 0) {
     if (!this.moving) {
@@ -333,7 +333,7 @@ class GfxObject {
   /**
    * Centers the object into the scene.
    *
-   * @returns {GfxObject} this
+   * @returns {Drawable} this
    */
   center() {
     let display = this.currentScene.display;
@@ -533,7 +533,7 @@ class GfxObject {
   /**
    * Hides the object
    *
-   * @returns {GfxObject} this
+   * @returns {Drawable} this
    */
   hide() {
     this.visible = false;
@@ -544,7 +544,7 @@ class GfxObject {
   /**
    * Show the object
    *
-   * @returns {GfxObject} this
+   * @returns {Drawable} this
    */
   show() {
     this.visible = true;
@@ -567,7 +567,7 @@ class GfxObject {
   }
 
   /**
-   * Returns the current width of the object: with some types of GfxObjects ({Sprite}),
+   * Returns the current width of the drawable: with some types of drawables ({Sprite}),
    * width can vary
    *
    * @returns {number} The current width of the object
@@ -579,7 +579,7 @@ class GfxObject {
   }
 
   /**
-   * Returns the current height of the object: with some types of GfxObjects ({Sprite}),
+   * Returns the current height of the object: with some types of Drawables ({Sprite}),
    * height can vary
    *
    * @returns {number} The current height of the object
@@ -661,7 +661,7 @@ class GfxObject {
   /**
    * Performs collision tests on the specifed object.
    *
-   * @param {GfxObject} obj The object to perform test on
+   * @param {Drawable} obj The object to perform test on
    *
    * @returns {Boolean} Returns true if this and obj collide
    */
@@ -725,12 +725,12 @@ class GfxObject {
   /**
    * onHit is called when the object collides with another object
    *
-   * @param {GfxObject} obj The object that collided.
+   * @param {Drawable} obj The object that collided.
    *
    * This function does nothing interesting: this should be extended if needed.
    */
   onHit(obj) {
-    console.log('[GfxObject] oops, ', this.type, ' [', this.id, '] ', 'was hit by', obj.name, ' [', obj.id, ']');
+    console.log('[Drawable] oops, ', this.type, ' [', this.id, '] ', 'was hit by', obj.name, ' [', obj.id, ']');
   }
 
   /**
@@ -862,7 +862,7 @@ class GfxObject {
    *
    * Childs are automatically rendered and moved when the parent object is.
    *
-   * @param {GfxObject} child The child to add.
+   * @param {Drawable} child The child to add.
    *
    * @note children are automatically added to the scene/map of the parent object.
    */
@@ -876,7 +876,7 @@ class GfxObject {
   /**
    * Remove a child from the object
    *
-   * @param {GfxObject} child The child to remove from the object.
+   * @param {Drawable} child The child to remove from the object.
    *
    * @note: removing a child object will call its `destroy` method
    */
@@ -984,4 +984,4 @@ class GfxObject {
   }
 };
 
-export default GfxObject;
+export default Drawable;

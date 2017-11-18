@@ -1,23 +1,23 @@
-import GfxObject from './Object';
+import Drawable from './Drawable';
 import Text from './Text';
 
 
 /*jshint devel: true, bitwise: false*/
 /**
  * The menu class allows to quickly add text menu to an Athena Scene
- * 
+ *
  * Each menu entry is called menuItem and is a simple object with the following properties:
  * { text: 'menu text', selectable: true|false, active: true|false, visible: true|false }
- * 
+ *
  * @param {String} type The type of object.
  * @param {Object} options
  * @param {String} [options.title="Menu Title"] The title of the menu.
  * @param {String} [options.color="black"] The color of the menu.
  * @param {Array} [options.menuItems=[]] The menu items to add.
  * @param {String} [options.selectedColor="red"] The default color to use for the selected menu item.
- * 
+ *
  * @example
- * 
+ *
  * let myMenu = new Menu('mainMenu', {
  *   title: 'Gods JS',
  *      color: 'white',
@@ -35,7 +35,7 @@ import Text from './Text';
  *      }]
  *    })
  */
-class Menu extends GfxObject {
+class Menu extends Drawable {
     constructor(type, options) {
 
         super(type, options);
@@ -68,9 +68,9 @@ class Menu extends GfxObject {
 
     /**
      * Adds a new menu item
-     * 
+     *
      * @param {Object} menu An hash describing the menu.
-     * The hash can have the following properties: 
+     * The hash can have the following properties:
      * { text: 'menu text', selectable: true|false, active: true|false, visible: true|false }
      */
     addMenuItem(menu) {
@@ -86,9 +86,9 @@ class Menu extends GfxObject {
 
     /**
      * Adds several menuItems in a row
-     * 
+     *
      * @param {Array} items The list of items to add
-     * 
+     *
      * @see addMenuItem()
      */
     addMenuItems(items) {
@@ -104,7 +104,7 @@ class Menu extends GfxObject {
 
     /**
      * Selects the next item in the item list
-     * 
+     *
      * @private
      */
     nextItem() {
@@ -119,9 +119,9 @@ class Menu extends GfxObject {
 
     /**
      * Returns the index of the selected item
-     * 
+     *
      * @returns {Number} The index of the selected item.
-     * 
+     *
      * @private
      */
     getSelectedItemIndex() {
@@ -130,9 +130,9 @@ class Menu extends GfxObject {
 
     /**
      * Returns the current selected Item object
-     * 
+     *
      * @returns {Object} Current selected item.
-     * 
+     *
      * @private
      */
     getSelectedItem() {
@@ -141,10 +141,10 @@ class Menu extends GfxObject {
 
     /**
      * Updates the text of a menu item
-     * 
+     *
      * @param {Number} itemId The index of the item to modify.
      * @param {String} text The new text.
-     * 
+     *
      */
     setText(itemId, text) {
         this.menuItems[itemId] = text;
@@ -152,9 +152,9 @@ class Menu extends GfxObject {
 
     /**
      * Draw method for the Text object
-     * 
+     *
      * @param {CanvasContext} destCtx The canvas context where to draw the menu
-     * 
+     *
      * @private
      */
     draw(destCtx) {
