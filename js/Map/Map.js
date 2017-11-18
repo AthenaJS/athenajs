@@ -1,5 +1,5 @@
 import Tile from './Tile';
-import Wave from '../Object/Wave';
+import Wave from '../Drawable/Wave';
 import RM from '../Resource/ResourceManager';
 import NM from '../Notification/NotificationManager';
 import FX from '../FX/FX';
@@ -284,7 +284,7 @@ class Map {
 	 *  - scrolling the viewport when needed, centering it around the master sprite
 	 *  - collision detection
 	 *
-	 * @param {GfxObject} obj The object to set as master.
+	 * @param {Drawable} obj The object to set as master.
 	 *
 	 */
     setMasterObject(obj) {
@@ -302,7 +302,7 @@ class Map {
 	 *  - displayed if it is visible (in the viewport)
 	 *  - added to collision group
 	 *
-	 * @param {GfxObject} obj A reference to the new object to add
+	 * @param {Drawable} obj A reference to the new object to add
 	 *
 	 * @note the object will be added to the correct collision group
 	 * if obj.collideGroup is set
@@ -794,7 +794,7 @@ class Map {
 	 * Calculates and sets the object's next x position using its current x, vx and
 	 * avoids tileTypes tiles (ie: walls, moving platforms)
 	 *
-	 * @param {GfxObject} sprite The sprite to get next position of.
+	 * @param {Drawable} sprite The sprite to get next position of.
 	 * @param {number} tileTypes The tileType.
 	 * @returns {boolean} Returns true if the object hit the spcified tile, false otherwise
 	 *
@@ -926,7 +926,7 @@ class Map {
 	 *
 	 * spaceX/spaceY specify how to reduce the players hitbox
 	 *
-	 * @param {GfxObject} sprite The sprite to check.
+	 * @param {Drawable} sprite The sprite to check.
 	 * @param {number} tileType The tileType to check for.
 	 * @param {number} [spaceX=0] The x padding that is accepted: if horizontal position is +/- that spaceX, check will succeed.
 	 * @param {number} [spaceY=0] The y padding that is accepted: if vertical position is +/- that spaceX, check will succeed.
@@ -1355,23 +1355,23 @@ class Map {
 	/**
 	 * removeObject from the map
 	 *
-	 * @param {GfxObject} gfxObject The object to remove from the map.
+	 * @param {Drawable} drawable The object to remove from the map.
 	 *
 	 * @note the object if automatically removed from collision lists
 	 *
 	 */
-    removeObject(gfxObject) {
-        let foundIndex = this.objects.indexOf(gfxObject);
+    removeObject(drawable) {
+        let foundIndex = this.objects.indexOf(drawable);
 
         if (foundIndex > -1) {
             this.objects.splice(foundIndex, 1);
         }
 
-        foundIndex = this.enemies.indexOf(gfxObject);
+        foundIndex = this.enemies.indexOf(drawable);
 
         if (foundIndex > -1) {
             this.enemies.splice(foundIndex, 1);
-        } else if ((foundIndex = this.friendBullets.indexOf(gfxObject)) > -1) {
+        } else if ((foundIndex = this.friendBullets.indexOf(drawable)) > -1) {
             this.friendBullets.splice(foundIndex, 1);
         }
     }
@@ -1383,24 +1383,24 @@ class Map {
      * @param {String} spriteId The id of the new sprite to add.
      * @param {Object} spriteOptions The options that will be passed to the object constructor.
      * @param {number=0} delay The delay in milliseconds to wait before adding the object.
-     * @returns {GfxObject} the new object
+     * @returns {Drawable} the new drawable
      *
      */
     scheduleSprite(spriteId, spriteOptions, delay) {
-        let sprite = RM.newResourceFromPool(spriteId, spriteOptions);
+        let drawable = RM.newResourceFromPool(spriteId, spriteOptions);
 
         // No need to call setTimeout if delay is zero
         if (delay) {
             // FIXME: if the game is paused before the setTimeout is called
             // sprite will be added right after in unpaused, potentially before the delay
             setTimeout(() => {
-                this.addObject(sprite);
+                this.addObject(drawable);
             }, delay);
         } else {
-            this.addObject(sprite);
+            this.addObject(drawable);
         }
 
-        return sprite;
+        return drawable;
     }
 
 

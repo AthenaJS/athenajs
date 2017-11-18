@@ -1,4 +1,4 @@
-import GfxObject from './Object';
+import Drawable from './Drawable';
 
 /*jshint devel: true, bitwise: false*/
 /**
@@ -25,7 +25,7 @@ import GfxObject from './Object';
  *  fontSize: '24px'
  * })
  */
-export default class Text extends GfxObject {
+export default class Text extends Drawable {
     constructor(type = 'Text' + new Date().getTime(), options = {}) {
         // type = type || 'Text' + new Date().getTime();
         // options = options || {};
@@ -215,7 +215,7 @@ export default class Text extends GfxObject {
     /**
      * Called when an object collides with the text Object
      *
-     * @param {GfxObject} obj The graphical object that collided.
+     * @param {Drawable} obj The graphical object that collided.
      */
     onHit(obj) {
         super.onHit(obj);

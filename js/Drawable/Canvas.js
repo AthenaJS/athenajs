@@ -1,11 +1,11 @@
-import GfxObject from './Object';
+import Drawable from './Drawable';
 import Deferred from '../Core/Deferred';
 
 /**
  * Very basic wrapper for canvas drawing methods
  * Incomplete: missing translate, rotates, scale support
  */
-export default class Canvas extends GfxObject {
+export default class Canvas extends Drawable {
     constructor(name, options) {
         super(name, options);
 
