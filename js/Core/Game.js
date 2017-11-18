@@ -45,10 +45,12 @@ class Game {
         this.height = options.height || 768;
 
         // DOM element to use for the game (it will be cleared)
-        this.target = target && target.length && target[0] || new Dom('div').css({
+        this.target = target && target.length && target[0] || Dom('div').css({
             width: `${this.width}px`,
             height: `${this.height}px`
         }).appendTo('body')[0];
+
+        Dom(this.target).addClass('athena-game');
 
         this.resources = options.resources;
 

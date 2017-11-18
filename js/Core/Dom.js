@@ -129,19 +129,37 @@ Object.assign(Dom.prototype, {
     },
 
     /**
-     * Add a new Class to a DOM collection
+     * Add one or more CSS classes to a DOM collection
      *
-     * @param {String} name new class to add
+     * @param {String} name space-separated list of classes to add
      * @returns {Dom} `this`
      *
      * @memberof Dom#
      */
     addClass: function (name) {
+        const classes = name.split(' ');
+
         this.forEach((node) => {
-            node.classList.add(name);
+            node.classList.add(...classes);
         });
 
         return this;
+    },
+
+    /**
+     * Remove one or more CSS classes to a DOM collection
+     *
+     * @param {String} name space-separated list of classes to remove
+     * @param {Dom} `this`
+     *
+     * @memberof Dom#
+     */
+    removeClass: function (name) {
+        const classes = name.split(" ");
+
+        this.forEach((node) => {
+            node.classList.remove(...classes);
+        });
     },
 
     /**
