@@ -1,4 +1,4 @@
-import GfxObject from './Object';
+import Drawable from './Drawable';
 import FX from '../FX/FX';
 import RM from '../Resource/ResourceManager';
 
@@ -29,7 +29,7 @@ import RM from '../Resource/ResourceManager';
  *		startY: 36
  *	});
  */
-class BitmapText extends GfxObject {
+class BitmapText extends Drawable {
 	constructor(type = 'BitmapText', options) {
 		super(type, options);
 

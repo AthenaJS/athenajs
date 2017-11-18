@@ -76,14 +76,14 @@ But the `Game` class does nothing by itself other than creating necessary Canvas
 
 That's where the `Scene` class comes into play. In AthenaJS, a game renders a `Scene`.
 
-And a `Scene` renders whatever objects it contains. Objects can be anything that inherits from the `GfxObject` class. AthenaJS comes with this type of objects:
+And a `Scene` renders whatever objects it contains. Objects can be anything that inherits from the `Drawable` class. AthenaJS comes with this type of objects:
 
  - Sprite: image-based sprite that can have any number of animations with different framerate
  - BitmapFont: image-based font
  - Menu: simple text-based menu
  - Circle: simple circle shape
 
-Of course, you can write your own objects by simply extending the base `GfxObject` class or any other object.
+Of course, you can write your own objects by simply extending the base `Drawable` class or any other object.
 
 In the end, here is a very simple game that just renders a circle onto the screen:
 

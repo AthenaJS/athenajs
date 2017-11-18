@@ -5,17 +5,17 @@ export { default as Pool } from './Core/Pool';
 export { default as Scene } from './Scene/Scene';
 
 export { default as ResourceManager } from './Resource/ResourceManager';
-export { default as Object } from './Object/Object';
+export { default as Drawable } from './Drawable/Drawable';
 
-export { default as Sprite } from './Object/Sprite';
-export { default as Text } from './Object/Text';
-export { default as Wave } from './Object/Wave';
-export { default as Menu } from './Object/Menu';
-export { default as Hud } from './Object/Hud';
-export { default as BitmapText } from './Object/BitmapText';
-export { default as Canvas } from './Object/Canvas';
+export { default as Sprite } from './Drawable/Sprite';
+export { default as Text } from './Drawable/Text';
+export { default as Wave } from './Drawable/Wave';
+export { default as Menu } from './Drawable/Menu';
+export { default as Hud } from './Drawable/Hud';
+export { default as BitmapText } from './Drawable/BitmapText';
+export { default as Canvas } from './Drawable/Canvas';
 
-export { default as Behavior } from './Object/Behavior/Behavior';
+export { default as Behavior } from './Drawable/Behavior/Behavior';
 
 export { default as NotificationManager } from './Notification/NotificationManager';
 

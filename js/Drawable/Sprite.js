@@ -1,11 +1,11 @@
-import GfxObject from './Object';
+import Drawable from './Drawable';
 import Input from '../Input/InputManager';
 import Deferred from '../Core/Deferred';
 import RM from '../Resource/ResourceManager';
 
 /*jshint devel: true, bitwise: false*/
 /**
- * This class extends {GfxObject} to implement 2D sprites using an image sprite sheet.
+ * This class extends {Drawable} to implement 2D sprites using an image sprite sheet.
  *
  * A sprite can have an infinite number of animations.
  * Each animation can have a different frameDuration and any number of frames.
@@ -63,15 +63,15 @@ import RM from '../Resource/ResourceManager';
  *    }
  * });
  *
- * @related {GfxObject}
+ * @related {Drawable}
  */
-class Sprite extends GfxObject {
+class Sprite extends Drawable {
     constructor(type, options) {
         super(type || 'Sprite', options || {});
 
         this.imageId = options && options.imageId || null;
 
-        // NOTE: sometimes it is done by gfxobject.reset(), sometimes not
+        // NOTE: sometimes it is done by drawable.reset(), sometimes not
         // animations can now be added later
         if (options && options.animations) {
             this.load(options.animations);
@@ -640,7 +640,7 @@ class Sprite extends GfxObject {
     /**
      * onHit is called when a collision has been detect between the sprite and another graphical object
      *
-     * @param {GfxObject} obj The graphical object that collided
+     * @param {Drawable} obj The graphical object that collided
      */
     onHit(obj) {
         super.onHit(obj);

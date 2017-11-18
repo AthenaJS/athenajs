@@ -381,7 +381,7 @@ class Scene {
     /**
      * Add one ore more display objects onto the scene
      *
-     * @param {Array|GfxObject} objects The object(s) to add onto the scene.
+     * @param {Array|Drawable} objects The object(s) to add onto the scene.
      * @param {string} [layerType="front"] Defines in which type of layer the object should be added.
      * @param {number} [layerNum=0] Defines the layer number where to add the objects.
      */
@@ -826,11 +826,11 @@ class Scene {
     /**
      * Remove the specified object from the scene
      *
-     * @param {GfxObject} gfxObject the object to remove from the scene
+     * @param {Drawable} drawable the object to remove from the scene
      */
-    removeObject(gfxObject) {
+    removeObject(drawable) {
         let layer = this.layers[0],
-            foundIndex = layer.indexOf(gfxObject);
+            foundIndex = layer.indexOf(drawable);
 
         if (foundIndex > -1) {
             layer.splice(foundIndex, 1);

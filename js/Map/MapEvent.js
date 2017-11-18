@@ -3,13 +3,13 @@
  * MapEvent handles events that are triggered on the map.
  * Such events can be: checkpoint was reached, new wave needs to
  * be generated, etc...
- * 
+ *
  * For that, the MapEvent class stores a list of items, events, switches
  * that are on the map.
- * 
+ *
  * This is a default MapEvent class: games should extend MapEvent
  * to handle whatever events they need.
- * 
+ *
  * @param {Map} map The [`Map`](#Map) to use
  */
 export default class MapEvent{
@@ -29,10 +29,10 @@ export default class MapEvent{
     }
 
     /**
-     * Adds a new [`GfxObject`]{#item} onto the map
-     * 
+     * Adds a new [`Drawable`]{#item} onto the map
+     *
      * @param {string} id of the item to add
-     * @param {GfxObject} item to add
+     * @param {Drawable} item to add
      */
     addItem(id, item) {
         this.items[id] = item;
@@ -40,10 +40,10 @@ export default class MapEvent{
 
     /**
      * Returns an item
-     * 
+     *
      * @param {string} id of the item to retrieve
-     * 
-     * @returns {Object|undefined} The item or undefined if it wasn't handled by the map
+     *
+     * @returns {Drawable|undefined} The item or undefined if it wasn't handled by the map
      */
     getItem(id) {
         return this.items[id];
