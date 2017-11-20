@@ -24,6 +24,7 @@ export { default as Tile } from './Map/Tile';
 export { default as MapEvent } from './Map/MapEvent';
 
 export { default as FX } from './FX/FX';
+export { default as Effect } from './FX/Effect/Effect';
 export { default as Easing } from './FX/Easing/Easing';
 
 export { default as InputManager } from './Input/InputManager';

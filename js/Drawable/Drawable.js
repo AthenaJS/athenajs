@@ -353,9 +353,9 @@ class Drawable {
    */
   setBehavior(behavior, options = {}) {
     if (typeof behavior === 'string') {
-      this.behavior = new (Behaviors.getBehavior(behavior))(this, Input, options);
+      this.behavior = new (Behaviors.getBehavior(behavior))(this, options);
     } else {
-      this.behavior = new behavior(this, Input, options);
+      this.behavior = new behavior(this, options);
     }
   }
 

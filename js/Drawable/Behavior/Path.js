@@ -9,18 +9,17 @@ function sign(x) {
 /**
  * A Path is a special behavior that uses a pre-defined (recorded) path to move
  * an object.
- * 
+ *
  * @param {Sprite} sprite The sprite to attach the behavior to.
- * @param {InputManager} Input A reference to the InputManager.
  * @param {Object} options The options of the behavior.
  * @param {Array} options.nodes The nodes of the path: a simple array with nodes[0] = vx, nodes[1] = vy, nodes[2] = vx, nodes[3] = vy,...
  * @param {Boolean} options.reverse Set to true so that when the end of the path is reached, movement goes backwards.
- * 
+ *
  * @see {Behavior}
  */
 class Path extends Behavior {
-    constructor(sprite, Input, options) {
-        super(sprite, Input, options);
+    constructor(sprite, options) {
+        super(sprite, options);
 
         this.startY = sprite.y;
         this.startX = sprite.x;
