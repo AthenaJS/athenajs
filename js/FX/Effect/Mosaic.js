@@ -35,6 +35,8 @@ class Mosaic extends Effect {
 
         // first draw image onto canvas
         this.buffer.drawImage(ctx.canvas, 0, 0, newWidth | 0, newHeight | 0);
+        // test-fix
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.drawImage(this.buffer.canvas, 0, 0, newWidth | 0, newHeight | 0, 0, 0, this.width, this.height);
 
         return this.ended;

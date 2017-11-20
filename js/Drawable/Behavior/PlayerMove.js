@@ -1,6 +1,7 @@
 import Behavior from './Behavior';
 import AM from '../../Audio/AudioManager';
 import Tile from '../../Map/Tile';
+import Input from '../../Input/InputManager';
 
 /*jshint devel: true, bitwise: false*/
 /*globals Game*/
@@ -20,8 +21,8 @@ import Tile from '../../Map/Tile';
  * @see {Behavior}
  */
 class PlayerMove extends Behavior {
-    constructor(sprite, Input, options) {
-        super(sprite, Input, options);
+    constructor(sprite, options) {
+        super(sprite, options);
 
         this.direction = options.direction || 'right';
 
@@ -46,8 +47,6 @@ class PlayerMove extends Behavior {
      * @param {Number} t The current timestamp
      */
     onUpdate(t) {
-        let Input = this.Input;
-
         if (this.currentMovement !== 'falling' && !this.currentMovement.match(/jump/) && !this.firing) {
             // console.log('left', Input.getKeyStatus(Input.keys.LEFT));
             // direction
@@ -489,8 +488,7 @@ class PlayerMove extends Behavior {
             currentHitBox = sprite.getHitBox(),
             diff = onlyClimb ? 0 : 24,
             pos = false,
-            pos2 = false,
-            Input = this.Input;
+            pos2 = false;
 
         if (Input.getKeyStatus(Input.keys.LEFT) === true || Input.getKeyStatus(Input.keys.RIGHT) === true) {
             return false;

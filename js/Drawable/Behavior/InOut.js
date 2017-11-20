@@ -3,8 +3,8 @@ import Behavior from './Behavior';
 /*jshint devel: true, bitwise: false*/
 // by default
 class InOut extends Behavior {
-    constructor(sprite, Input, options) {
-        super(sprite, Input, options);
+    constructor(sprite, options) {
+        super(sprite, options);
 
         this.startY = sprite.y;
         this.startX = sprite.x;

@@ -4,16 +4,15 @@ import Tile from '../../Map/Tile';
 /*jshint devel: true, bitwise: false*/
 /**
  * Simple behavior that moves horizontally until a wall is reached.
- * 
+ *
  * @param {Sprite} sprite The sprite to attach the behavior to.
- * @param {InputManager} Input A reference to the InputManager.
  * @param {Object} options The options of the behavior
  * @param {String} [options.direction="left"] The initial direction of the move, default is `right`.
- * 
+ *
  */
 class WeaponMove extends Behavior {
-    constructor(sprite, Input, options) {
-        super(sprite, Input, options);
+    constructor(sprite, options) {
+        super(sprite, options);
 
         this.direction = options.direction || 'right';
 
