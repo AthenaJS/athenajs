@@ -11,14 +11,14 @@ class Custom extends Effect {
     }
     /*        start: function() {
                 this.currentAngle = this.startAngle;
-    
+
                 // start timer and get deferred
                 return this._super();
             },*/
     process(ctx, fxCtx, obj) {
         super.process();
 
-        this.callback(this.startValue + this.animProgress * this.diff);
+        this.callback(this.startValue + this.animProgress * this.diff, ctx, fxCtx);
 
         return this.ended;
     }

@@ -6,17 +6,16 @@ import Tile from '../../Map/Tile';
 /**
  * GroundMove is a simple behavior that causes an object to move along the horizontal
  * axis until a wall or an hole is reached.
- * 
+ *
  * @param {Sprite} sprite The sprite to attach the behavior to.
- * @param {InputManager} Input A reference to the InputManager.
  * @param {Object} options General behavior & GroundMove specific options
  * @param {String} [options.direction="right"] The initial direction of the move, default = `right`.
- * 
+ *
  * @see {Behavior}
  */
 class GroundMove extends Behavior {
-    constructor(sprite, Input, options) {
-        super(sprite, Input, options);
+    constructor(sprite, options) {
+        super(sprite, options);
 
         this.direction = options.direction || 'right';
 
@@ -31,7 +30,7 @@ class GroundMove extends Behavior {
 
     /**
      * Simple onMove handler that checks for a wall or hole
-     * 
+     *
      */
     onUpdate(t) {
         let sprite = this.sprite,

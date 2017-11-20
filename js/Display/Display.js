@@ -31,7 +31,7 @@ class Display {
 
         this.prefix = prefix.lowercase;
 
-        this.target = target || new Dom('div').attr('id', 'display_' + options.name).appendTo('body')[0];
+        this.target = target || Dom('div').attr('id', 'display_' + options.name).appendTo('body')[0];
         this.width = options.width;
         this.height = options.height;
 
@@ -52,7 +52,7 @@ class Display {
     }
 
     getBuffer(width, height) {
-        let ctx = new Dom('canvas').attr({
+        let ctx = Dom('canvas').attr({
             width: width + 'px',
             height: height + 'px'
         })[0].getContext('2d');
@@ -78,7 +78,7 @@ class Display {
         this.isFullscreen = fullscreenElement === this.target;
 
         if (!this.isFullscreen) {
-            // new Dom(this.target).css({
+            // Dom(this.target).css({
             //     'transform': 'scale(1.0, 1.0)'
             // });
             Dom(this.target).css({
@@ -102,7 +102,7 @@ class Display {
                 top: size.top + 'px',
                 left: size.left + 'px'
             });
-            // new Dom(this.target).css({
+            // Dom(this.target).css({
             //     'transform': `scale(${size.scaleX}, ${size.scaleY})`
             // });
 
@@ -179,7 +179,7 @@ class Display {
         let i;
 
         for (i = 0; i < this.layers.length; ++i) {
-            this.layers[i] = new Dom('canvas').addClass('layer_' + i).attr({
+            this.layers[i] = Dom('canvas').addClass('layer_' + i).attr({
                 'width': this.width,
                 'height': this.height
             }).css({
@@ -192,7 +192,7 @@ class Display {
             this.layers[i]['imageSmoothingEnabled'] = false;
         }
 
-        this.fxCtx = new Dom('canvas').addClass('fx').attr({
+        this.fxCtx = Dom('canvas').addClass('fx').attr({
             'width': this.width,
             'height': this.height
         }).css({
@@ -225,6 +225,10 @@ class Display {
         this.clearScreen(this.fxCtx);
     }
 
+    setCanvasOpacity(canvas, opacity) {
+        canvas.style.opacity = opacity;
+    }
+
     renderScene(scene) {
         this.clearScreen(this.fxCtx);
 
@@ -235,7 +239,8 @@ class Display {
 
         // TODO: all CTX ?
         for (let i = 0; i < this.layers.length; ++i) {
-            this.layers[i].canvas.style.opacity = scene.getOpacity();
+            this.setCanvasOpacity(this.layers[i].canvas, Object.keys(this.fxQueue['post']).length ? 0 : scene.getOpacity());
+            // this.layers[i].canvas.style.opacity = ;
         }
 
         this.clearScreen(this.layers[1]);
@@ -250,7 +255,8 @@ class Display {
         // then apply fx on this one, then render this one onto foremost layer
         /* HACK */
         if (Object.keys(this.fxQueue['post']).length) {
-            this.clearScreen(this.fxCtx);
+            this.clearScreen(this.fxCtx, true);
+            this.setCanvasOpacity(this.fxCtx.canvas, 0);
             // merge all canvas into fxCtx one
             for (let i = 0; i < this.layers.length; ++i) {
                 this.fxCtx.drawImage(this.layers[i].canvas, 0, 0);
@@ -259,6 +265,9 @@ class Display {
         /* HACK */
         // execute pre fx
         this.executeFx(this.fxCtx, this.fxCtx, scene, null, 'post');
+        if (Object.keys(this.fxQueue['post']).length) {
+            this.setCanvasOpacity(this.fxCtx.canvas, 1);
+        }
     }
 
     prepareCanvas(resources) {
@@ -335,7 +344,6 @@ class Display {
         for (var fxName in this.fxQueue[when]) {
             fxObject = this.fxQueue[when][fxName];
             // console.log('processing fx', fxName, fxObject);
-
             fxObject.process(ctx, fxCtx, obj, time);
         }
     }

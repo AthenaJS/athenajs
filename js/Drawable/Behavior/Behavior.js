@@ -1,16 +1,15 @@
 /*jshint devel: true, bitwise: false*/
 /**
  * Base class for behaviors.
- * 
+ *
  * A behavior is a class that describes how a graphical object moves during the time.
- * 
+ *
  * Every behavior should implement these two methods:
- * 
+ *
  * - onUpdate()
  * - getMapEvent()
- * 
+ *
  * @param {Sprite} sprite The sprite to attach the behavior to.
- * @param {InputManager} Input A reference to the InputManager.
  * @param {Object} options An hash with behavior-specific properties.
  * @param {Number} [options.gravity=0] The object's gravity.
  * @param {Number} [options.vx=0] The object's horizontal velocity.
@@ -20,9 +19,8 @@
  *
  */
 class Behavior {
-    constructor(sprite, Input, options) {
+    constructor(sprite, options) {
         this.sprite = sprite;
-        this.Input = Input;
         sprite.gravity = typeof options.gravity !== 'undefined' ? options.gravity : 0;
         sprite.vx = typeof options.vx !== 'undefined' ? options.vx : 0;
         sprite.vy = typeof options.vy !== 'undefined' ? options.vy : 0;

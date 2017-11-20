@@ -4,16 +4,15 @@ import Tile from '../../Map/Tile';
 /*jshint devel: true, bitwise: false*/
 /**
  * Simple behavior that makes an object bounce on the ground
- * 
+ *
  * @param {Sprite} sprite The sprite to attach the behavior to.
- * @param {InputManager} Input A reference to the InputManager.
  * @param {Object} options The options of the behavior.
  * @param {Number} [options.elasticity=0.80] The elasticity: the closer it is to 1, the higher the bounce.
  * @param {Function} [options.onEnd=undefined] An optional callback to execute when the object stops bouncing.
  * @param {Function} [options.onGround=undefined] An optional callback to execute each time the object touches the ground.
- * 
+ *
  * @example
- * 
+ *
  *  sprite.setBehavior('simplefall', {
  *    gravity: 0.3,
  *    onEnd: () => {
@@ -25,8 +24,8 @@ import Tile from '../../Map/Tile';
  * });
  */
 class SimpleFall extends Behavior {
-    constructor(sprite, Input, options) {
-        super(sprite, Input, options);
+    constructor(sprite, options) {
+        super(sprite, options);
 
         this.elasticity = typeof options.elasticity !== 'undefined' ? options.elasticity : 0.80;
 
@@ -38,11 +37,11 @@ class SimpleFall extends Behavior {
 
     /**
      * The move handler that gets executed at each move loop.
-     * 
+     *
      * Simply calculates the next vertical position using current velocity.
      * Each time the object reaches the ground, it bounces a little less, using the elasticity property,
      * until it reaches the ground and stops bouncing.
-     * 
+     *
      */
     onUpdate(t) {
         let sprite = this.sprite,
@@ -74,7 +73,7 @@ class SimpleFall extends Behavior {
 
     /**
      * Called when the object reaches the ground: simply inverts velocity
-     * 
+     *
      * @private
      */
     resetY() {

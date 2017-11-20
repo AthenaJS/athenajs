@@ -495,7 +495,6 @@ const InputManager = {
             }
 
             if (event.keyCode && !this.latches[event.keyCode]) {
-                console.log('key', event.keyCode, 'pressed');
                 this.keyPressed[event.keyCode] = true;
             }
 

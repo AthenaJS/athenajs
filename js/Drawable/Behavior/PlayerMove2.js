@@ -22,8 +22,8 @@ var STATUS = {},
 
 // possible level
 class PlayerMove2 extends Behavior {
-    constructor(sprite, Input, options) {
-        super(sprite, Input, options);
+    constructor(sprite, options) {
+        super(sprite, options);
 
         // start level 1 status
         this.status = STATUS[options.status] || STATUS.STANDING;
@@ -293,7 +293,7 @@ class PlayerMove2 extends Behavior {
         } else {
             this.sprite.setAnimation(isRight ? this.animations.walkRight : this.animations.walkLeft);
         }
-        // else 
+        // else
         if (this.actionReady) {
             this.sprite.vx = isRight ? this.walkVX : -this.walkVX;
             this.sprite.vy = this.walkVY;
@@ -313,7 +313,7 @@ class PlayerMove2 extends Behavior {
             isCollide,
             nextY;
 
-        // TODO: if platform, then add platform.vx as well 
+        // TODO: if platform, then add platform.vx as well
 
         // TODO: no test if vx/vy == 0!
         if (this.status === STATUS.STANDING && this.sprite.vx) {
@@ -335,10 +335,10 @@ class PlayerMove2 extends Behavior {
         // console.log('nextPositionNotHandledYet');
         // limitx
         /*            if (this.sprite.vx) {
-                        
+
                     }*/
         // after moving, we check if we reached or left a platform
-        // var bool = sprite.currentMap.checkForPlatform(sprite, x, y);            
+        // var bool = sprite.currentMap.checkForPlatform(sprite, x, y);
     }
 };
 
