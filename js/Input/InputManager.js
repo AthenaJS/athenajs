@@ -476,6 +476,10 @@ const InputManager = {
 
         // TODO: what happens for up event ? should be set to up only when going from down to up and called here
     },
+    /**
+     * Intalls golbal keyboard events for `keydown` / `keyup` events
+     * @private
+     */
     _installKBEventHandlers: function () {
         // TODO: move me somewhere else!
         document.addEventListener('keydown', (event) => {
@@ -503,7 +507,7 @@ const InputManager = {
             this.metas = this._getModifiers();
 
             if (this.enabled && this.keyCb[event.keyCode]) {
-                this.keyCb[event.keyCode].down.forEach((callback) => { callback(); });
+                this.keyCb[event.keyCode].down.forEach((callback) => { callback(Sting.fromCharCode(event.keyCode), event); });
             }
         });
 
@@ -522,10 +526,13 @@ const InputManager = {
             this.metas = this._getModifiers();
 
             if (this.enabled && this.keyCb[event.keyCode]) {
-                this.keyCb[event.keyCode].up.forEach((callback) => { callback(); });
+                this.keyCb[event.keyCode].up.forEach((callback) => { callback(String.fromCharCode(event.keyCode), event); });
             }
         });
     },
+    /**
+     * Returns an object with the state of all keys
+     */
     getAllKeysStatus: function () {
         const keys = Object.keys(this.keys),
             result = {};
@@ -536,6 +543,7 @@ const InputManager = {
 
         return result;
     },
+
     getKeyStatus: function (key, latch) {
         let keyPressed;
 
@@ -561,17 +569,26 @@ const InputManager = {
         return this.getKeyStatus(keyCode, latch);
     },
 
+    /**
+     * Install callback that gets called when a key is pressed/released
+     * 
+     * @param {String} space-separated list of keys to listen for
+     * @param {String} event to listen for: can be `up` or `down`
+     * @param {Function} callback the function to call
+     */
     installKeyCallback: function (key, event, callback) {
-        let keyCode = this.keys[key];
+        key.split(' ').forEach(key => {
+            let keyCode = this.keys[key];
 
-        if (!this.keyCb[keyCode]) {
-            this.keyCb[keyCode] = {
-                up: [],
-                down: []
-            };
-        }
+            if (!this.keyCb[keyCode]) {
+                this.keyCb[keyCode] = {
+                    up: [],
+                    down: []
+                };
+            }
 
-        this.keyCb[keyCode][event].push(callback);
+            this.keyCb[keyCode][event].push(callback);
+        })
     },
 
     removeKeyCallback: function (key, event, callback) {
@@ -587,6 +604,12 @@ const InputManager = {
     }
 };
 
-window.InputManager = InputManager;
+// fill in 1-7 keyCodes
+for (let i = 0; i < 10; ++i) {
+    InputManager.keys[i.toString()] = i + 48;
+}
+
+// fill in a-z keycodes
+[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((char, i) => { InputManager.keys[char] = 65 + i });
 
 export default InputManager;
