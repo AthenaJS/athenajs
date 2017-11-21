@@ -25,7 +25,7 @@ Although incomplete, this demo already makes use of and validates the following 
  - enemy waves
  - tile-based collision detection
  - map vertical & horizontal scrolling
- - png-based sprites and bitmap fonts
+ - image-based sprites and bitmap fonts
  - sprites collision detection
  - special effects like [SNES-like mosaic](https://github.com/warpdesign/jquery-mosaic) & sprite rotation
  - game scenes
@@ -80,15 +80,16 @@ And a `Scene` renders whatever objects it contains. Objects can be anything that
 
  - Sprite: image-based sprite that can have any number of animations with different framerate
  - BitmapFont: image-based font
- - Menu: simple text-based menu
- - Circle: simple circle shape
+ - SimpleText: Canvas-based text rendering
+ - Menu: very simple text menu
+ - Canvas: simple wrapper for drawing shapes using the HTML 5 canvas API
 
-Of course, you can write your own objects by simply extending the base `Drawable` class or any other object.
+Of course, you can write your own objects by simply extending the base `Drawable` class or any other drawable.
 
 In the end, here is a very simple game that just renders a circle onto the screen:
 
 ````javascript
-import { Game, Scene, Circle } from 'athenajs';
+import { Game, Scene, SimpleText } from 'athenajs';
 
 // create a new game
 const myGame = new Game({
@@ -97,12 +98,17 @@ const myGame = new Game({
     height: 200
 }),
 // create a new empty scene
-myScene = new Scene(),
-// create a new circle object
-circle = new Circle({w: 20, h: 20});
+myScene = new class MyScene extends Scene{
+    start() {
+        const myText = new SimpleText('my text', {
+            text: 'This is a test',
+            color: 'black'
+        });
+        // add the object onto the scene
+        this.addObject(myText);
+    }
+};
 
-// add the object onto the scene
-myScene.addObject(circle);
 // play this scene
 myGame.setScene(myScene);
 ````
