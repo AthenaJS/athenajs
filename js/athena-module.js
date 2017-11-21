@@ -8,7 +8,7 @@ export { default as ResourceManager } from './Resource/ResourceManager';
 export { default as Drawable } from './Drawable/Drawable';
 
 export { default as Sprite } from './Drawable/Sprite';
-export { default as Text } from './Drawable/Text';
+export { default as SimpleText } from './Drawable/SimpleText';
 export { default as Wave } from './Drawable/Wave';
 export { default as Menu } from './Drawable/Menu';
 export { default as Hud } from './Drawable/Hud';

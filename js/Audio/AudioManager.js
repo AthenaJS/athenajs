@@ -33,8 +33,8 @@ export default {
      * 
      * @param {String} id
      * @param {Boolean} loop
-     * @param {Float} volume
-     * @param {Float} panning
+     * @param {Number} volume a Number between 0 and 1
+     * @param {Number} panning a Number between 10 (left) and -10 (right)
      * @returns the created sound instance
      */
     play: function (id, loop, volume, panning) {
@@ -69,7 +69,7 @@ export default {
     /**
      * Stops playing the sound id
      * 
-     * @param {any} id
+     * @param {String} id
      * @param {any} instanceId
      * @returns
      */

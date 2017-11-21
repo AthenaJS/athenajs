@@ -6,7 +6,7 @@ import Drawable from './Drawable';
  *
  * @param {String} type The type of the graphic object
  * @param {Object} options
- * @param {String} [options.text=undefined] The initial text. Can be changed later using Text.setText().
+ * @param {String} [options.text=undefined] The initial text. Can be changed later using SimpleText.setText().
  * @param {Number} [options.width=0] The width of the text.
  * @param {Number} [options.height=0] The height of the text.
  * @param {String} [options.fontFace="Arial"] The font to use to draw the text.
@@ -18,15 +18,15 @@ import Drawable from './Drawable';
  *
  * @example
  *
- * let myText = new Text({
+ * let myText = new SimpleText({
  *  text: 'hello',
  *  fontFace: 'Verdana',
  *  fontStyle: 'bold',
  *  fontSize: '24px'
  * })
  */
-export default class Text extends Drawable {
-    constructor(type = 'Text' + new Date().getTime(), options = {}) {
+export default class SimpleText extends Drawable {
+    constructor(type = 'SimpleText' + new Date().getTime(), options = {}) {
         // type = type || 'Text' + new Date().getTime();
         // options = options || {};
 
@@ -139,7 +139,7 @@ export default class Text extends Drawable {
     /**
      * Updates the text's object
      *
-     * @param {String} text the new text of the Text object
+     * @param {String} text the new text of the SimpleText object
      */
     setText(text) {
         this.text = text;

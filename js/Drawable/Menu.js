@@ -1,5 +1,5 @@
 import Drawable from './Drawable';
-import Text from './Text';
+import SimpleText from './SimpleText';
 
 
 /*jshint devel: true, bitwise: false*/
@@ -42,7 +42,7 @@ class Menu extends Drawable {
         // this.type = type;
         // this.id = this.type + new Date().getTime();
 
-        this.title = new Text(type, {
+        this.title = new SimpleText(type, {
             color: options.color || 'black',
             text: options.title || 'Menu Title'
         });
@@ -75,7 +75,7 @@ class Menu extends Drawable {
      */
     addMenuItem(menu) {
         let y = this.y + ((this.menuItems.length + 1) * this.itemHeight),
-            menuItem = new Text('menuItem' + this.menuItems.length, menu);
+            menuItem = new SimpleText('menuItem' + this.menuItems.length, menu);
 
         menuItem.moveTo(this.x, y);
         menuItem.visible = menu.visible === true || false;
