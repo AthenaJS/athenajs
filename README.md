@@ -2,91 +2,34 @@
 
 AthenaJS is a complete framework for building HTML5 2D games.
 
-Although its development is not finished yet, AthenaJS already supports the following features:
+- Visit the [API documentation](https://athenajs.github.io/athenajs-documentation/) for a list of classes and methods available
+- Visit the [samples](https://github.com/AthenaJS/athenajs-samples) repository to get started with AthenaJS
+- For an example of a complete game written using AthenaJS check [athenajs-tetris](https://github.com/AthenaJS/athenajs-tetris)
 
+# Features
+
+ Here is a non-exhaustive liste of features of AthenaJS:
+
+ - Unlimited number of scenes with an unlimited number of sprites
  - Image-based Sprites with any number of animations
  - Tiles-based Maps with horizontal & vertical scrolling
- - Special effects like Fades, Mosaic can be added easily
+ - Special scene transition effects like Fades, Mosaic can be added easily
  - Map VS Sprite and Sprite vs Sprite collision detection
  - Map Triggers support
- - Sound support
- - Keyboard input event (touch & joystick support is being worked on)
+ - Sound support with volume and horizontal panning
+ - Keyboard & Joytisck input event supported (touch support is planned)
 
-# Demo
+# Install
 
-[AthenaJS-Gods](https://athenajs.github.io/athenajs-gods/) was designed as a proof of concept for what can AthenaJS can do.
+```
+npm install athenajs --save
+```
 
-The game was designed while developing the [AthenaJS](https://github.com/AthenaJS/athenajs) framework and only supports the begining of level one.
-
-Although incomplete, this demo already makes use of and validates the following AthenaJS components:
-
- - maps with tiles & tile behaviors
- - map triggers based on player position & other conditions
- - enemy waves
- - tile-based collision detection
- - map vertical & horizontal scrolling
- - image-based sprites and bitmap fonts
- - sprites collision detection
- - special effects like [SNES-like mosaic](https://github.com/warpdesign/jquery-mosaic) & sprite rotation
- - game scenes
-
-## Installation
+# Quick Start
 
 AthenaJS can be used in any ES5 & ES6 projects.
 
-**Old-school**
-
-in your html file:
-````html
-<script type="text/javascript" src="athenajs.js"></script>
-<script type="text/javascript">
-    window.onload = function() {
-        var myGame = new AthenaJS.Game({
-            width: 320,
-            height: 200
-        });
-    }
-</script>
-````
-
-**ES6 using npm**
-
-Install the athenajs module:
-````bash
-npm install --save athenajs
-````
-
-in your index.js:
-````javascript
-import { Game, Scene, Circle } from 'athenajs';
-
-const myGame = new Game({
-    width: 320,
-    height: 200
-});
-````
-
-## Core concepts
-
-At the heart of AthenaJS is the `Game` class.
-
-Creating a new game is as easy as instanciating or sublcassing the Game class.
-
-But the `Game` class does nothing by itself other than creating necessary Canvas elements needed to render a game.
-
-That's where the `Scene` class comes into play. In AthenaJS, a game renders a `Scene`.
-
-And a `Scene` renders whatever objects it contains. Objects can be anything that inherits from the `Drawable` class. AthenaJS comes with this type of objects:
-
- - Sprite: image-based sprite that can have any number of animations with different framerate
- - BitmapFont: image-based font
- - SimpleText: Canvas-based text rendering
- - Menu: very simple text menu
- - Canvas: simple wrapper for drawing shapes using the HTML 5 canvas API
-
-Of course, you can write your own objects by simply extending the base `Drawable` class or any other drawable.
-
-In the end, here is a very simple game that just renders a circle onto the screen:
+**ES6**
 
 ````javascript
 import { Game, Scene, SimpleText } from 'athenajs';
@@ -113,10 +56,44 @@ myScene = new class MyScene extends Scene{
 myGame.setScene(myScene);
 ````
 
-## Documentation
+**ES5**
 
-- [Documentation](https://athenajs.github.io/athenajs-documentation/)
-- [Samples](https://github.com/AthenaJS/athenajs-samples)
+in your html file:
+````html
+<script type="text/javascript" src="athenajs.js"></script>
+<script type="text/javascript">
+    window.onload = function() {
+    var Game = AthenaJS.Game,
+        Scene = AthenaJS.Scene,
+        SimpleText = AthenaJS.SimpleText;
+
+    // create a new game
+    var myGame = new Game({
+        name: 'first-game',
+        width: 320,
+        height: 200
+    });
+    // // create a new empty scene
+    // myScene = new class MyScene extends Scene{
+    //     start() {
+    //         const myText = new SimpleText('my text', {
+    //             text: 'This is a test',
+    //             color: 'black'
+    //         });
+    //         // add the object onto the scene
+    //         this.addObject(myText);
+    //     }
+    // };
+
+    // play this scene
+    myGame.setScene(myScene);
+</script>
+````
+
+## Apps written using AthenaJS
+
+- [Gods](https://athenajs.github.io/athenajs-documentation/)
+- [Tetris](https://github.com/AthenaJS/athenajs-samples)
 
 ## Contributing
 
