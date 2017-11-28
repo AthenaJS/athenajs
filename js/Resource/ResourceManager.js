@@ -659,7 +659,7 @@ export default {
 
             // case 'map'
             default:
-                // return this.loadScript(res, groupName, this.loadMapData);
+                // load Map JSON + Binary data
                 return this.loadJSON(res, groupName, this.loadMapData);
         }
     }

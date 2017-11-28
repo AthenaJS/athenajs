@@ -271,13 +271,24 @@ class Map {
 	 *
 	 */
     setBuffer(buffer) {
-        let size = this.numCols * this.numRows;
+        const size = this.numCols * this.numRows;
 
         this.map = new Uint8Array(buffer, 0, size);
         this.tileBehaviors = new Uint8Array(buffer, size);
         this.buffer = buffer;
     }
 
+    setData(map, behaviors) {
+        const size = this.numCols * this.numRows;
+
+        const array = new Uint8Array(size * 2);
+        array.set(new Uint8Array(map), 0);
+        array.set(new Uint8Array(behaviors), size);
+
+        this.buffer = array.buffer;
+        this.map = new Uint8Array(this.buffer, 0, size);
+        this.tileBehaviors = new Uint8Array(this.buffer, size, size);
+    }
 
 	/**
 	 * Sets the master object, it will be used for:
