@@ -314,18 +314,20 @@ class Map {
 	 *  - added to collision group
 	 *
 	 * @param {Drawable} obj A reference to the new object to add
+     * @param {Number} layerIndex The layer to add the object into
 	 *
 	 * @note the object will be added to the correct collision group
 	 * if obj.collideGroup is set
 	 *
 	 */
-    addObject(obj) {
+    addObject(obj, layerIndex) {
         if (!obj.image && obj.imageId) {
             obj.setImage(RM.getResourceById(obj.imageId));
         }
         obj.setMap(this);
 
         obj.setScene(this.scene);
+        obj.layer = layerIndex;
 
         this.objects.push(obj);
 
@@ -1173,13 +1175,13 @@ class Map {
 	/**
 	 * Draw all objects that are onto the map
 	 *
-	 * @param {CanvasContext} ctx The context where to draw the objects.
+	 * @param {Array}  drawContexts The list of draw context
 	 * @param {number=0} mapOffsetX The x offset where to start rendering the object
 	 * @param {number=0} mapOffsetY The y offset where to start rendering the object
 	 *
 	 * @private
 	 */
-    drawObjects(ctx, mapOffsetX = 0, mapOffsetY = 0) {
+    drawObjects(drawContexts, mapOffsetX = 0, mapOffsetY = 0) {
         let i,
             j,
             max = this.objects.length,
@@ -1190,6 +1192,7 @@ class Map {
         // TODO: only draw visible objects (viewport) + active ones
         for (i = max - 1; i >= 0; i--) {
             obj = objects[i];
+            const drawContext = obj.layer;
             // update position with map offset in case map should doesn't take the whole scene display
             if (mapOffsetX || mapOffsetY) {
                 obj.x += mapOffsetX;
@@ -1202,13 +1205,13 @@ class Map {
                     }
                 }
             }
-            obj._draw(ctx);
-            this.isDebug && obj.showHitBox(ctx);
+            obj._draw(drawContexts[drawContext]);
+            this.isDebug && obj.showHitBox(drawContext);
 
             if (obj.children.length) {
                 obj.children.forEach((sprite) => {
-                    sprite._draw(ctx);
-                    this.isDebug && sprite.showHitBox(ctx);
+                    sprite._draw(drawContext);
+                    this.isDebug && sprite.showHitBox(drawContext);
                 });
             }
 
@@ -1538,7 +1541,7 @@ class Map {
                 tileWidth: this.tileWidth,
                 tileHeight: this.tileHeight,
                 map: this.map,
-                bjects: this.objects,
+                objects: this.objects,
                 tiles: []
             };
 

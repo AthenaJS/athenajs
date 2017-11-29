@@ -17,9 +17,7 @@ window.scenes = {};
  * @param {Object} options
  * @param {string} [options.name="Scene"+timestamp] The name of your scene.
  * @param {Object} [options.resources] An optional array of resources of the form: ``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
- * @param {number} [options.backgrounds=1] The number of backgrounds: a scene can have any number of backgrounds.
  * @param {number} [options.layers=2] The number of layers: layers are stacked above the backgrounds.
- * @param {number} [options.foregrounds=1] The number of foreground layers. This would typically be used for parallax scrollings.
  * @param {number} [options.opacity=1] The default opacity for the scene: can be usefull to have fadeIn effects when starting the scene.
  * @param {number} [options.hudScene] Scenes can have an option `hud` scene that is automatically rendered on top of it. This allows to easily add score/status elements to games.
  *
@@ -30,13 +28,7 @@ class Scene {
 
         console.log('[scene ' + options.name || '' + '] ' + 'Init()', options);
 
-        // we may have several backgrounds
-        this.backgrounds = new Array(options.backgrounds || 1);
-
         this.layers = new Array(options.layers || 2);
-
-        // foregrounds will be added later
-        this.foregrounds = new Array(options.backgrounds || 1);
 
         this.readyDef = null;
 
@@ -97,13 +89,6 @@ class Scene {
     _emptyLayers() {
         for (let i = 0; i < this.layers.length; ++i) {
             this.layers[i] = [];
-        }
-
-        for (let i = 0; i < this.backgrounds.length; ++i) {
-            this.backgrounds[i] = [];
-        }
-        for (let i = 0; i < this.foregrounds.length; ++i) {
-            this.foregrounds[i] = [];
         }
     }
 
@@ -371,23 +356,33 @@ class Scene {
     }
 
 
-    _addObjectToLayer(layer, object) {
+    /**
+     * Add an object into the specified layer
+     * 
+     * @param {Number} layerIndex the layer index
+     * @param {Drawable} object the Drawable to add
+     * 
+     * @private
+     */
+    _addObjectToLayer(layerIndex, object) {
+        const layer = this.layers[layerIindex];
 
         layer.push(object);
         this._setObjectImage(object);
         object.setScene(this);
+        object.layer = layerIndex;
     }
 
     /**
      * Add one ore more display objects onto the scene
      *
      * @param {Array|Drawable} objects The object(s) to add onto the scene.
-     * @param {string} [layerType="front"] Defines in which type of layer the object should be added.
-     * @param {number} [layerNum=0] Defines the layer number where to add the objects.
+     * @param {number} [layerIndex=0] Defines the layer number where to add the objects.
      */
-    addObject(objects, layerType, layerNum) {
+    addObject(objects, layerIndex) {
         console.log('addObject');
-        // attempt to add an object on a scene not ready, we load it and postpone the add once it's ready
+        // attempt to add an object on a scene not ready yet:
+        // we load it and postpone the add once the scene ready
         if (!this.loaded) {
             console.log('addObject: later');
             this._objectsToAdd.push(Array.from(arguments));
@@ -395,42 +390,17 @@ class Scene {
             return;
         }
 
-        console.log('[scene ' + this.name + '] ' + 'addObject', objects, layerType, layerNum);
+        console.log('[scene ' + this.name + '] ' + 'addObject', objects, layerNum);
 
-        let type = layerType || 'front',
-            num = layerNum || 0,
-            layer = null;
-
-        switch (type) {
-            case 'back':
-                layer = this.backgrounds[num];
-                break;
-
-            case 'fore':
-                layer = this.foregrounds[num];
-                break;
-
-            default:
-            case 'front':
-                layer = this.layers[num];
-                break;
-        }
-
-        // console.log('[scene ' + this.name + '] ' + layerNum, layerType, layer, this.layers);
+        const num = layerIndex || 0;
 
         if (Array.isArray(objects)) {
             for (let obj of objects) {
                 console.log('[scene ' + this.name + '] ' + 'pushing', obj);
-                this._addObjectToLayer(layer, obj);
-                // layer.push(obj);
-                // this.setObjectImage(obj);
-                // obj.setScene(this);
+                this._addObjectToLayer(num, obj);
             }
         } else {
-            // layer.push(objects);
-            // this.set
-            // objects.setScene(this);
-            this._addObjectToLayer(layer, objects);
+            this._addObjectToLayer(num, objects);
         }
     }
 
@@ -453,42 +423,38 @@ class Scene {
     /**
      * Draws every object that is part of the associated map
      *
-     * @param {CanvasContext} destCtx The canvas context where the map should be rendered.
+     * @param {Array} drawContexts An array with all layers context
      *
      * @private
      */
-    drawMapObjects(destCtx) {
-        this.map.drawObjects(destCtx, this.mapOffsetX, this.mapOffsetY);
+    drawMapObjects(drawContexts) {
+        this.map.drawObjects(drawContexts, this.mapOffsetX, this.mapOffsetY);
     }
 
     /**
      * Draws every object that has been added onto the scene
      *
-     * @param {CanvasContext} destCtx The canvas context where the map should be rendered.
+     * @param {Array} drawContexts An array with all layers context
      *
      * @private
      */
-    drawSceneObjects(destCtx) {
-        // var i, j,
-        //     max, max2,
-        //     obj = null,
-        //     layer = null;
-        // i = j = max = max2 = 0;
-        // got through the list of all objects and render them if they are visible ?
+    drawSceneObjects(drawContexts) {
+        // go through the list of all objects and render them if they are visible ?
         for (let i = 0, max = this.layers.length; i < max; i++) {
-            let layer = this.layers[i];
+            const layer = this.layers[i],
+                drawContext = drawContexts[i];
 
             for (let j = 0, max2 = layer.length; j < max2; j++) {
                 let obj = layer[j];
-                obj._draw(destCtx);
+                obj._draw(drawContext);
                 if (this.isDebug) {
-                    this.isDebug && obj.showHitBox(destCtx);
+                    this.isDebug && obj.showHitBox(drawContext);
                 }
 
                 if (obj.children.length) {
                     obj.children.forEach((sprite) => {
-                        sprite._draw(destCtx);
-                        this.isDebug && sprite.showHitBox(destCtx);
+                        sprite._draw(drawContext);
+                        this.isDebug && sprite.showHitBox(drawContext);
                     });
                 }
             }
@@ -505,14 +471,7 @@ class Scene {
      * @private
      */
     moveSceneObjects(timestamp) {
-        // var i, j,
-        //     max, max2,
-        //     obj = null,
-        //     layer = null;
-
-        // i = j = max = max2 = 0;
-
-        // got through the list of all objects and call move method ?
+        // go through the list of all objects and call move method ?
         for (let i = 0, max = this.layers.length; i < max; i++) {
             let layer = this.layers[i];
             for (let j = 0, max2 = layer.length; j < max2; j++) {
@@ -557,17 +516,6 @@ class Scene {
             new Dom(this.display.target).css('backgroundImage', 'url(' + image + ')');
         }
     }
-
-    /**
-     * Resume the scene playback
-     */
-    // resume() {
-    //     debugger;
-    //     this.start();
-    //     if (this.map) {
-    //         this.map.resume();
-    //     }
-    // }
 
     /**
      * Public setup method: can be overriden.
@@ -631,46 +579,8 @@ class Scene {
     /**
      * Starts the scene
      *
-     * @param {Boolean=false} resetMap set true to reset the map objects when starting the scene
-     *
      */
-    start(/*resetMap = false*/) {
-        // if (!this.loaded) {
-        //     return;
-        //     console.warn('[Scene] start() attempt to start a scene that has not been loaded yet. Start failed.');
-        // }
-
-
-
-        // reset layers too
-        // this.backgrounds.length = 0;
-
-        // this.layers.forEach((layer) => {
-        //     layer.length = 0;
-        // });
-
-        // be sure to clear all canvas, inc. secondary, especially
-        // if we go from a scene with an hud, to a scene without one
-        // this.display.clearAllScreens();
-
-        //*** setup
-        // this.foregrounds.length = 0;
-
-        // this.time = new Date().getTime();
-
-        // this.playTime = null;
-
-        // if (this.hudScene) {
-        //     this.hudScene.start(resetMap);
-        // }
-
-        // if (this.map && resetMap) {
-        //     this.map.reset();
-        // }
-
-        // this._startCallbacks.forEach((cb) => {
-        //     cb();
-        // });
+    start() {
     }
 
     /***
@@ -695,33 +605,6 @@ class Scene {
     pause(isRunning) {
 
     }
-
-    /**
-     * pause the scene: TODO MERGE
-     */
-    // pause() {
-    //     this.running = false;
-    //     this.playTime = new Date().getTime() - this.time;
-    //     console.log('pausing, playTime = ', this.playTime / 1000);
-
-    //     if (this.hudScene) {
-    //         this.hudScene.pause();
-    //     }
-    // }
-
-    /**
-     * unpause the scene: TODO MERGE
-     */
-    // unpause() {
-    //     this.running = true;
-    //     this.time = new Date().getTime() - this.playTime;
-    //     console.log('resuming, playTime = ', (this.playTime / 1000));
-    //     this.playTime = null;
-
-    //     if (this.hudScene) {
-    //         this.hudScene.unpause();
-    //     }
-    // }
 
     /**
      * Get the total playtime
@@ -761,17 +644,27 @@ class Scene {
     /**
      * This method is responsible for drawing the scene and will be called 60 times a second.
      *
-     * @param {Array} layers The layers array to draw.
+     * @param {Array} drawContexts The layers array to draw over
      * *note* When the scene is not running, this method isn't called at all.
      */
-    render(layers) {
+    render(drawContexts) {
+        const mapIndex = drawContexts.length - 1;
         // render-loop: put render-related stuff here
         if (this.map) {
-            this.drawMap(layers[0]);
-            this.drawMapObjects(layers[1]);
+            this.drawMap(drawContexts[mapIndex]);
+            this.drawMapObjects(drawContexts);
         }
 
-        this.drawSceneObjects(layers[1]);
+        this.drawSceneObjects(drawContexts);
+    }
+
+    /**
+     * 
+     * @param {Number} layer layer number
+     * @param {Boolean} background set to true to put layer in background, false for foreground
+     */
+    setLayerPriority(layer, background) {
+        this.display.setLayerZIndex(layer, background ? 0 : 2);
     }
 
     /**
@@ -829,7 +722,7 @@ class Scene {
      * @param {Drawable} drawable the object to remove from the scene
      */
     removeObject(drawable) {
-        let layer = this.layers[0],
+        let layer = this.layers[drawable].layer,
             foundIndex = layer.indexOf(drawable);
 
         if (foundIndex > -1) {
