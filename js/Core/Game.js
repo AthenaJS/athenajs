@@ -70,7 +70,7 @@ class Game {
             name: 'main',
             width: options.width,
             height: options.height,
-            numLayers: options.numLayers || 2
+            layers: options.layers || [true, true]
         }, this.target);
 
         this.toggleSound(typeof options.sound !== 'undefined' ? options.sound : true);

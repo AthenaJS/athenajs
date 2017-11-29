@@ -27,7 +27,9 @@ class Display {
             };
         })();
 
-        this.layers = new Array(options.numLayers);
+        // we add an extra layer for the map
+        this.layers = new Array(options.layers.length + 1);
+        this.layersIndex = options.layers;
 
         this.prefix = prefix.lowercase;
 
@@ -186,7 +188,7 @@ class Display {
                 'width': this.width + 'px',
                 'height': this.height + 'px',
                 'position': 'absolute',
-                zIndex: i
+                zIndex: _getLayerZIndex(i)
             }).appendTo(this.target)[0].getContext(this.type);
 
             this.layers[i]['imageSmoothingEnabled'] = false;
@@ -199,10 +201,27 @@ class Display {
             'width': this.width + 'px',
             'height': this.height + 'px',
             'position': 'absolute',
-            zIndex: i + 1
+            zIndex: 3
         }).appendTo(this.target)[0].getContext(this.type);
 
         this.fxCtx['imageSmoothingEnabled'] = false;
+    }
+
+    getLayerZIndex(layer) {
+        // normal layer
+        if (layer <= this.layersIndex.length) {
+            const isBackground = this.layersIndex[layer];
+            return isBackGround ? 0 : 2;
+        } else {
+            // map is always set to 1 for now
+            return 1;
+        }
+    }
+
+    setLayerZIndex(layer, zIndex) {
+        if (layer < this.layers.length) {
+            Dom(this.layers[layer]).css('zIndex', zIndex);
+        }
     }
 
     clearScreen(ctx) {
@@ -235,7 +254,7 @@ class Display {
         // execute pre fx
         // TODO: here we have to make some hack to pre-render all buffers into a single one
         // then aply fx on this one, then render this one onto foremost layer
-        this.executeFx(this.layers[0], null, scene, null, 'pre');
+        this.executeFx(null, null, scene, null, 'pre');
 
         // TODO: all CTX ?
         for (let i = 0; i < this.layers.length; ++i) {
@@ -243,7 +262,10 @@ class Display {
             // this.layers[i].canvas.style.opacity = ;
         }
 
-        this.clearScreen(this.layers[1]);
+        for (let i = 0; i <= this.layers.length - 1; i++) {
+            this.clearScreen(this.layers[i]);
+        }
+        // this.clearScreen(this.layers[1]);
 
         scene.render(this.layers);
 
@@ -343,7 +365,6 @@ class Display {
 
         for (var fxName in this.fxQueue[when]) {
             fxObject = this.fxQueue[when][fxName];
-            // console.log('processing fx', fxName, fxObject);
             fxObject.process(ctx, fxCtx, obj, time);
         }
     }
