@@ -365,7 +365,7 @@ class Scene {
      * @private
      */
     _addObjectToLayer(layerIndex, object) {
-        const layer = this.layers[layerIindex];
+        const layer = this.layers[layerIndex];
 
         layer.push(object);
         this._setObjectImage(object);
@@ -390,7 +390,7 @@ class Scene {
             return;
         }
 
-        console.log('[scene ' + this.name + '] ' + 'addObject', objects, layerNum);
+        console.log('[scene ' + this.name + '] ' + 'addObject', objects, layerIndex);
 
         const num = layerIndex || 0;
 

@@ -1206,12 +1206,12 @@ class Map {
                 }
             }
             obj._draw(drawContexts[drawContext]);
-            this.isDebug && obj.showHitBox(drawContext);
+            this.isDebug && obj.showHitBox(drawContexts[drawContext]);
 
             if (obj.children.length) {
                 obj.children.forEach((sprite) => {
-                    sprite._draw(drawContext);
-                    this.isDebug && sprite.showHitBox(drawContext);
+                    sprite._draw(drawContexts[drawContext]);
+                    this.isDebug && sprite.showHitBox(drawContexts[drawContext]);
                 });
             }
 
