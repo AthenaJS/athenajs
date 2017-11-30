@@ -188,7 +188,7 @@ class Display {
                 'width': this.width + 'px',
                 'height': this.height + 'px',
                 'position': 'absolute',
-                zIndex: _getLayerZIndex(i)
+                zIndex: this._getLayerZIndex(i)
             }).appendTo(this.target)[0].getContext(this.type);
 
             this.layers[i]['imageSmoothingEnabled'] = false;
@@ -207,11 +207,11 @@ class Display {
         this.fxCtx['imageSmoothingEnabled'] = false;
     }
 
-    getLayerZIndex(layer) {
+    _getLayerZIndex(layer) {
         // normal layer
-        if (layer <= this.layersIndex.length) {
+        if (layer < this.layersIndex.length) {
             const isBackground = this.layersIndex[layer];
-            return isBackGround ? 0 : 2;
+            return isBackground ? 0 : 2;
         } else {
             // map is always set to 1 for now
             return 1;
@@ -220,7 +220,7 @@ class Display {
 
     setLayerZIndex(layer, zIndex) {
         if (layer < this.layers.length) {
-            Dom(this.layers[layer]).css('zIndex', zIndex);
+            Dom(this.layers[layer].canvas).css('zIndex', zIndex);
         }
     }
 
@@ -248,6 +248,11 @@ class Display {
         canvas.style.opacity = opacity;
     }
 
+    /**
+     * Renders the specified scene
+     *
+     * @param {Scene} scene the scene to render
+     */
     renderScene(scene) {
         this.clearScreen(this.fxCtx);
 
@@ -262,7 +267,7 @@ class Display {
             // this.layers[i].canvas.style.opacity = ;
         }
 
-        for (let i = 0; i <= this.layers.length - 1; i++) {
+        for (let i = 0; i < this.layers.length - 1; i++) {
             this.clearScreen(this.layers[i]);
         }
         // this.clearScreen(this.layers[1]);

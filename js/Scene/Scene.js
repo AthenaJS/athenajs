@@ -358,10 +358,10 @@ class Scene {
 
     /**
      * Add an object into the specified layer
-     * 
+     *
      * @param {Number} layerIndex the layer index
      * @param {Drawable} object the Drawable to add
-     * 
+     *
      * @private
      */
     _addObjectToLayer(layerIndex, object) {
@@ -659,7 +659,7 @@ class Scene {
     }
 
     /**
-     * 
+     *
      * @param {Number} layer layer number
      * @param {Boolean} background set to true to put layer in background, false for foreground
      */

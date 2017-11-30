@@ -139,12 +139,12 @@ class Sprite extends Drawable {
      * @param {String} id The id of the resource (image) to use for the animation
      * @param {Object} options The animation to add, see:
      * @param {number=0} options.offsetX The x offset of the sprite frames inside the image
-     * @param {number=0} options.offsetY The y offset of the sprite frames inside the image*
+     * @param {number=0} options.offsetY The y offset of the sprite frames inside the image
      * @param {number} options.frameWidth The width of a frame
      * @param {number=imageHeight} options.frameHeight The height of a frame. By default frameHeight is taken from image.naturalHeight
      * @param {number=1} options.frameDuration The duration of a frame (1 = 16ms)
      * @param {number=0} options.frameSpacing The space between each frame
-     * @param {number=1} options.loop 0=anim play once and stops at the end, 1=anim loops to frame 1 at the end, 2=anim will play in reverse when reaching the end, then plays again, etc
+     * @param {number=1} options.loop 0 = anim play once and stops at the end, 1 = anim loops to frame 1 at the end, 2 = anim will play in reverse when reaching the end, then plays again, etc
      * @returns {Deferred} a deferred object that's resolved once the animation is ready
      * @example
      * // creates a new animation from the image run.png
