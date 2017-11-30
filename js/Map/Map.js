@@ -314,13 +314,13 @@ class Map {
 	 *  - added to collision group
 	 *
 	 * @param {Drawable} obj A reference to the new object to add
-     * @param {Number} layerIndex The layer to add the object into
+     * @param {Number=0} layerIndex The layer to add the object into
 	 *
 	 * @note the object will be added to the correct collision group
 	 * if obj.collideGroup is set
 	 *
 	 */
-    addObject(obj, layerIndex) {
+    addObject(obj, layerIndex = 0) {
         if (!obj.image && obj.imageId) {
             obj.setImage(RM.getResourceById(obj.imageId));
         }
