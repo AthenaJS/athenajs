@@ -4,8 +4,6 @@ import NM from '../Notification/NotificationManager';
 import Input from '../Input/InputManager';
 import Dom from '../Core/Dom';
 import Deferred from '../Core/Deferred';
-/*jshint devel: true, bitwise: false*/
-// debug
 window.scenes = {};
 
 /**
@@ -14,15 +12,18 @@ window.scenes = {};
  *
  * Instead of creating a new scene, it is common to extend the Scene class to create your own scene.
  *
- * @param {Object} options
- * @param {string} [options.name="Scene"+timestamp] The name of your scene.
- * @param {Object} [options.resources] An optional array of resources of the form: ``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
- * @param {number} [options.layers=2] The number of layers: layers are stacked above the backgrounds.
- * @param {number} [options.opacity=1] The default opacity for the scene: can be usefull to have fadeIn effects when starting the scene.
- * @param {number} [options.hudScene] Scenes can have an option `hud` scene that is automatically rendered on top of it. This allows to easily add score/status elements to games.
- *
  */
 class Scene {
+    /**
+     * Creates a new Scene
+     * 
+     * @param {object} options
+     * @param {string} [options.name="Scene"+timestamp] The name of your scene.
+     * @param {Object} [options.resources] An optional array of resources of the form: ``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
+     * @param {number} [options.layers=2] The number of layers: layers are stacked above the backgrounds.
+     * @param {number} [options.opacity=1] The default opacity for the scene: can be usefull to have fadeIn effects when starting the scene.
+     * @param {number} [options.hudScene] Scenes can have an option `hud` scene that is automatically rendered on top of it. This allows to easily add score/status elements to games.
+     */
     constructor(options) {
         options = options || {};
 
@@ -119,7 +120,7 @@ class Scene {
             startValue: 1,
             endValue: 0,
             duration: duration
-        })
+        });
     }
 
     fadeInAndOut(inDuration, delay, outDuration) {
@@ -132,7 +133,7 @@ class Scene {
                 this.fadeOut(outDuration).then(() => {
                     console.log('fadeOut done!');
                     def.resolve();
-                })
+                });
             }, delay);
         });
 
@@ -255,7 +256,7 @@ class Scene {
     /**
      * Simple debug method: only toggles map boxes for now
      *
-     * @param {Boolean=undefined} isDebug if specified, this will be the new debug status, otherwise toggle current debug status
+     * @param {Boolean} [isDebug=undefined] if specified, this will be the new debug status, otherwise toggle current debug status
      */
     debug(isDebug) {
         const newStatus = typeof isDebug !== 'undefined' ? isDebug : !this.isDebug;
@@ -317,7 +318,7 @@ class Scene {
                 }
             }
         } catch (err) {
-            debugger;
+            throw err;
         }
     }
 
@@ -328,8 +329,8 @@ class Scene {
      * @param {Map|Object} map The `Map` to use: it can be an instance of a Map inheriting class or
      * an options Object that will be used to create a new {Map} instance
      *
-     * @param {number=0} x x offset where to start drawing the map onto the scene
-     * @param {number=0} y y offset where to start drawing the map onto the scene
+     * @param {Number} [x=0] x Offset where to start drawing the map onto the scene.
+     * @param {Number} [y=0] y Offset where to start drawing the map onto the scene.
      *
      */
     setMap(map, x = 0, y = 0) {
@@ -359,8 +360,8 @@ class Scene {
     /**
      * Add an object into the specified layer
      *
-     * @param {Number} layerIndex the layer index
-     * @param {Drawable} object the Drawable to add
+     * @param {Number} layerIndex the layer index.
+     * @param {Drawable} object the Drawable to add.
      *
      * @private
      */
@@ -423,7 +424,7 @@ class Scene {
     /**
      * Draws every object that is part of the associated map
      *
-     * @param {Array} drawContexts An array with all layers context
+     * @param {Array<CanvasRenderingContext>} drawContexts An array with all layers context.
      *
      * @private
      */
@@ -434,7 +435,7 @@ class Scene {
     /**
      * Draws every object that has been added onto the scene
      *
-     * @param {Array} drawContexts An array with all layers context
+     * @param {Array<CanvasRenderingContext>} drawContexts An array with all layers context.
      *
      * @private
      */
@@ -466,7 +467,7 @@ class Scene {
      *
      * It is automatically called by the run method after each frame.
      *
-     * @param {Number} timestamp current time
+     * @param {Number} timestamp Current time.
      *
      * @private
      */
@@ -502,9 +503,9 @@ class Scene {
     }
 
     /**
-     * You can set a static background image independently of the layers
+     * Set a static (CSS) background image independently of the layers
      *
-     * @param {Image|String} The image to set as background
+     * @param {Image|String} The image to set as background.
      * @obsolete
      */
     setBackgroundImage(image) {
@@ -557,10 +558,6 @@ class Scene {
         }
     }
 
-    stop() {
-
-    }
-
     _stop() {
         this._reset();
         this.stop();
@@ -603,7 +600,7 @@ class Scene {
      * @param {Boolean} isRunning
      */
     pause(isRunning) {
-
+        isRunning;
     }
 
     /**
@@ -644,7 +641,7 @@ class Scene {
     /**
      * This method is responsible for drawing the scene and will be called 60 times a second.
      *
-     * @param {Array} drawContexts The layers array to draw over
+     * @param {Array<CanvasRenderingContext>} drawContexts The layers array to draw over.
      * *note* When the scene is not running, this method isn't called at all.
      */
     render(drawContexts) {
@@ -660,8 +657,8 @@ class Scene {
 
     /**
      *
-     * @param {Number} layer layer number
-     * @param {Boolean} background set to true to put layer in background, false for foreground
+     * @param {Number} layer Layer number.
+     * @param {Boolean} background Set to true to put layer in background, false for foreground.
      */
     setLayerPriority(layer, background) {
         this.display.setLayerZIndex(layer, background ? 0 : 2);
@@ -719,7 +716,7 @@ class Scene {
     /**
      * Remove the specified object from the scene
      *
-     * @param {Drawable} drawable the object to remove from the scene
+     * @param {Drawable} drawable The object to remove from the scene.
      */
     removeObject(drawable) {
         let layer = this.layers[drawable].layer,
@@ -729,7 +726,7 @@ class Scene {
             layer.splice(foundIndex, 1);
         }
     }
-};
+}
 
 Scene.count = 1;
 

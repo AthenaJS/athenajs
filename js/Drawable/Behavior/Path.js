@@ -10,14 +10,18 @@ function sign(x) {
  * A Path is a special behavior that uses a pre-defined (recorded) path to move
  * an object.
  *
- * @param {Sprite} sprite The sprite to attach the behavior to.
- * @param {Object} options The options of the behavior.
- * @param {Array} options.nodes The nodes of the path: a simple array with nodes[0] = vx, nodes[1] = vy, nodes[2] = vx, nodes[3] = vy,...
- * @param {Boolean} options.reverse Set to true so that when the end of the path is reached, movement goes backwards.
- *
  * @see {Behavior}
+ * @extends Behavior
  */
 class Path extends Behavior {
+    /**
+     * Creates a new Path behavior
+     * 
+     * @param {Drawable} sprite The sprite to attach the behavior to.
+     * @param {Object} options The options of the behavior.
+     * @param {Array} options.nodes The nodes of the path: a simple array with nodes[0] = vx, nodes[1] = vy, nodes[2] = vx, nodes[3] = vy,...
+     * @param {Boolean} options.reverse Set to true so that when the end of the path is reached, movement goes backwards.
+     */
     constructor(sprite, options) {
         super(sprite, options);
 
@@ -41,8 +45,10 @@ class Path extends Behavior {
     /**
      * Move handler: gets the next vx/vy from `this.nodes`
      * and makes sure to call onVXChange/onVYChange at each sign change
+     * 
+     * @param {Number} t Current timestamp.
      */
-    onUpdate(t) {
+    onUpdate(/*t*/) {
         let sprite = this.sprite,
             pos = this.currentNode,
             offsetX = this.nodes[pos],
@@ -91,6 +97,6 @@ class Path extends Behavior {
             }
         }
     }
-};
+}
 
 export default Path;

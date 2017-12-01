@@ -4,28 +4,32 @@ import Drawable from './Drawable';
 /**
  * Basic class for displaying text using Canvas
  *
- * @param {String} type The type of the graphic object
- * @param {Object} options
- * @param {String} [options.text=undefined] The initial text. Can be changed later using SimpleText.setText().
- * @param {Number} [options.width=0] The width of the text.
- * @param {Number} [options.height=0] The height of the text.
- * @param {String} [options.fontFace="Arial"] The font to use to draw the text.
- * @param {String} [options.fontStyle="normal"] The style of the font.
- * @param {String} [options.fontSize="18px"] The size of the font.
- * @param {String} [options.fontWeight="normal"] The weight of the font.
- * @param {String} [options.align="center"] How to align the text when rendered.
- * @param {String} [options.color="white"] The color to use when rendering the text.
- *
- * @example
- *
- * let myText = new SimpleText({
- *  text: 'hello',
- *  fontFace: 'Verdana',
- *  fontStyle: 'bold',
- *  fontSize: '24px'
- * })
+ * @extends Drawable
  */
 export default class SimpleText extends Drawable {
+    /**
+     * 
+     * @param {String} type The type of the graphic object
+     * @param {Object} [options={}]
+     * @param {String} [options.text=undefined] The initial text. Can be changed later using SimpleText.setText().
+     * @param {Number} [options.width=0] The width of the text.
+     * @param {Number} [options.height=0] The height of the text.
+     * @param {String} [options.fontFace="Arial"] The font to use to draw the text.
+     * @param {String} [options.fontStyle="normal"] The style of the font.
+     * @param {String} [options.fontSize="18px"] The size of the font.
+     * @param {String} [options.fontWeight="normal"] The weight of the font.
+     * @param {String} [options.align="center"] How to align the text when rendered.
+     * @param {String} [options.color="white"] The color to use when rendering the text.
+     *
+     * @example
+     *
+     * let myText = new SimpleText({
+     *  text: 'hello',
+     *  fontFace: 'Verdana',
+     *  fontStyle: 'bold',
+     *  fontSize: '24px'
+     * })
+     */
     constructor(type = 'SimpleText' + new Date().getTime(), options = {}) {
         // type = type || 'Text' + new Date().getTime();
         // options = options || {};
@@ -47,11 +51,11 @@ export default class SimpleText extends Drawable {
         this.text = options.text || '';
     }
 
-	/**
-	 * Generates a new buffer that can hold current text
-	 *
-	 * @param {Display} display the display to get the buffer from
-	 */
+    /**
+     * Generates a new buffer that can hold current text
+     *
+     * @param {Display} display The display to get the buffer from.
+     */
     createBuffer(display) {
         // generate a buffer with enough height to hold every lines of text
         let width = this.fakeWidth || 0,
@@ -61,9 +65,9 @@ export default class SimpleText extends Drawable {
         this.buffer = display.getBuffer(width, height);
     }
 
-	/**
-	 * Clears the buffer
-	 */
+    /**
+     * Clears the buffer
+     */
     clearBuffer() {
         this.currentScene.display.clearScreen(this.buffer);
     }
@@ -109,6 +113,14 @@ export default class SimpleText extends Drawable {
         this.getMetrics();
     }
 
+    /**
+     * Gets the following text metrics:
+     *  - this.fakeLineHeight`
+     * - `this.fakeHeight`
+     * - `this.fakeWidth`
+     * 
+     * This method also sets the canvas'width & height to fit these metrics
+     */
     getMetrics() {
         const ctx = this.buffer;
         ctx.font = this.font;
@@ -139,13 +151,19 @@ export default class SimpleText extends Drawable {
     /**
      * Updates the text's object
      *
-     * @param {String} text the new text of the SimpleText object
+     * @param {String} text The new text of the SimpleText object.
      */
     setText(text) {
         this.text = text;
         this.renderText();
     }
 
+    /**
+     * Overrides Drawable's setScene element: we need to have
+     * have a scene to be able to calculate metrics
+     * 
+     * @param {*} scene 
+     */
     setScene(scene) {
         super.setScene(scene);
 
@@ -155,7 +173,7 @@ export default class SimpleText extends Drawable {
     /**
      * Change the color of the object
      *
-     * @param {String} color Thew new color to use, can be anything that is valid for the `color` *CSS* property.
+     * @param {String} color The new color to use, can be anything that is valid for the `color` *CSS* property.
      */
     setColor(color) {
         this.color = color;
@@ -179,7 +197,7 @@ export default class SimpleText extends Drawable {
     /**
      * Returns the width of the text object
      *
-     * @returns [Number] The object's width
+     * @returns {Number} The object's width
      */
     getCurrentWidth() {
         return this.fakeWidth;
@@ -188,7 +206,7 @@ export default class SimpleText extends Drawable {
     /**
      * Returns the height of the text object
      *
-     * @returns [Number] The object's height
+     * @returns {Number} The object's height
      */
     getCurrentHeight() {
         return this.fakeHeight;
@@ -197,7 +215,7 @@ export default class SimpleText extends Drawable {
     /**
      * Returns the horizontal offset of the text object
      *
-     * @returns [Number] The object's horizontal offset
+     * @returns {Number} The object's horizontal offset
      */
     getCurrentOffsetX() {
         return this.offsetX;
@@ -206,7 +224,7 @@ export default class SimpleText extends Drawable {
     /**
      * Returns the vertical offset of the text object
      *
-     * @returns [Number] The object's vertical offset
+     * @returns {Number} The object's vertical offset
      */
     getCurrentOffsetY() {
         return this.offsetY;
@@ -225,13 +243,12 @@ export default class SimpleText extends Drawable {
     /**
      * Called on each render loop: renders the object on the destination canvas context
      *
-     * @param {CanvasContext} destCtx Where to render the object.
+     * @param {CanvasRenderingContext} destCtx Where to render the object.
      *
      * @private
      */
     draw(destCtx) {
-        var destY,
-            scaledW = this.fakeWidth * this.scale,
+        var scaledW = this.fakeWidth * this.scale,
             scaledH = this.fakeHeight * this.scale,
             subScaledW = Math.floor(scaledW / 2),
             subScaledH = Math.floor(scaledH / 2),
@@ -254,8 +271,10 @@ export default class SimpleText extends Drawable {
 
     /**
      * Generates the font css property using current this.fontSize and this.fontFace
+     * 
+     * @private
      */
     _setFont() {
         this.font = `${this.fontSize} ${this.fontFace}`;
     }
-};
+}

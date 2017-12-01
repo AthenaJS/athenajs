@@ -1,6 +1,7 @@
 // import VirtualJoystick from '../lib/virtualJoystick/virtualJoystick';
 
 /*jshint devel: true*/
+/*globals VirtualJoystick*/
 /**
  * Handles keyboard input (joystick input doesn't work correctly yet).
  *
@@ -80,7 +81,7 @@ const InputManager = {
      * @param {Object} options List of input options, unused for now
      *
      */
-    init: function (options) {
+    init: function (/*options*/) {
         this._generateKeyCodes();
 
         this._installInputModeSwitchHandler();
@@ -361,7 +362,7 @@ const InputManager = {
         */
         this.jPollInterval = requestAnimationFrame(this._pollGamepad.bind(this));
     },
-    _getModifiers: function (event) {
+    _getModifiers: function (/*event*/) {
         return {
             'ALT': true,
             'SHIFT': true,
@@ -432,8 +433,7 @@ const InputManager = {
     _pollJoystick: function () {
         let down = [],
             up = [],
-            joystick = this.dPadJoystick,
-            fire = this.fireJoystick;
+            joystick = this.dPadJoystick;
 
         /* directions */
         if (Math.abs(joystick.deltaX()) >= 10) {
@@ -507,7 +507,7 @@ const InputManager = {
             this.metas = this._getModifiers();
 
             if (this.enabled && this.keyCb[event.keyCode]) {
-                this.keyCb[event.keyCode].down.forEach((callback) => { callback(Sting.fromCharCode(event.keyCode), event); });
+                this.keyCb[event.keyCode].down.forEach((callback) => { callback(String.fromCharCode(event.keyCode), event); });
             }
         });
 
@@ -538,7 +538,7 @@ const InputManager = {
             result = {};
 
         for (let i = 0; i < keys.length; ++i) {
-            result[array[i]] = this.getKeyStatus(array[i]);
+            result[keys[i]] = this.getKeyStatus(keys[i]);
         }
 
         return result;
@@ -558,8 +558,7 @@ const InputManager = {
             return keyPressed;
 
         } catch (err) {
-            debugger;
-            return false;
+            throw err;
         }
     },
 
@@ -588,7 +587,7 @@ const InputManager = {
             }
 
             this.keyCb[keyCode][event].push(callback);
-        })
+        });
     },
 
     removeKeyCallback: function (key, event, callback) {
@@ -610,6 +609,6 @@ for (let i = 0; i < 10; ++i) {
 }
 
 // fill in a-z keycodes
-[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((char, i) => { InputManager.keys[char] = 65 + i });
+[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((char, i) => { InputManager.keys[char] = 65 + i; });
 
 export default InputManager;

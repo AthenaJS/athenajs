@@ -6,6 +6,8 @@
  *
  * As in jQuery, you may manipulate individual Dom elements using [] operator
  *
+ * @param {(HTMLElement|string)} [selector=null] The optional selector to use to create the new Dom collection
+ * 
  * @class
  * @constructor
  */
@@ -68,6 +70,8 @@ Object.assign(Dom.prototype, {
      *
      * @param {String} selector the selector to match
      * @returns {Dom} a new Dom collection with found elements
+     * 
+     * @memberof Dom#
      */
     find: function (selector) {
         let newDom = new Dom();
@@ -149,13 +153,13 @@ Object.assign(Dom.prototype, {
     /**
      * Remove one or more CSS classes to a DOM collection
      *
-     * @param {String} name space-separated list of classes to remove
-     * @param {Dom} `this`
+     * @param {String} name Space-separated list of classes to remove.
+     * @returns {Dom} `this`
      *
      * @memberof Dom#
      */
     removeClass: function (name) {
-        const classes = name.split(" ");
+        const classes = name.split(' ');
 
         this.forEach((node) => {
             node.classList.remove(...classes);

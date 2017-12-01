@@ -1,7 +1,22 @@
 import Deferred from '../../Core/Deferred';
 
-/*jshint devel: true, bitwise: false*/
+/**
+ * The Effect class allows to apply transformations to Scene & Drawable instances.
+ * 
+ * An effect can modifiy a properties and/or alter the rendering of a scene.
+ * 
+ * Effects can use a custom easing function to allow elastic like animations.
+ */
 class Effect {
+    /**
+     * This the class constructor. Default options are:
+     * 
+     * @param {Number} options.startValue The start value of the effect.
+     * @param {Number} options.endValue The end value of the effect.
+     * @param {Number} options.duration The duration of the effect (ms).*
+     * @param {Boolean} options.loop Set to true to make the effect loop.
+     * @param {Display} display Reference to the Display in case a buffer is needed.
+     */
     constructor(options, display) {
         this.easing = null;
         this.context = options.context || this;
@@ -21,10 +36,20 @@ class Effect {
         this.duration = options.duration || 400;
     }
 
+    /**
+     * Changes the easing function used for the ffect
+     * 
+     * @param {Function} easing The new easing function.
+     */
     setEasing(easing) {
         this.easing = easing;
     }
 
+    /**
+     * Called when the ffect is started.
+     * 
+     * This method can be overriden but the super should always be called
+     */
     start() {
         // if we are looping the object already got our promise
         if (!this.loops) {
@@ -39,11 +64,19 @@ class Effect {
         return this.def.promise;
     }
 
-    stop(object, setEndValue) {
+    /**
+     * called when the effect is stopped
+     */
+    stop(/*object, setEndValue*/) {
         this.stopped = true;
     }
 
-    process(ctx, fxCtx, obj) {
+    /**
+     * Calculates current animation process
+     * 
+     * This method can be overridden but the super should always be calle dfirst
+     */
+    process(/*ctx, fxCtx, obj*/) {
         let currentTime = new Date().getTime(),
             ellapsedTime = currentTime - this.startTime,
             t = ellapsedTime / this.duration;
@@ -69,7 +102,6 @@ class Effect {
 
         return this.ended;
     }
-};
+}
 
 export default Effect;
-

@@ -1,7 +1,6 @@
 import Drawable from './Drawable';
-import Input from '../Input/InputManager';
 import Deferred from '../Core/Deferred';
-import RM from '../Resource/ResourceManager';
+import Dom from '../Core/Dom';
 
 /*jshint devel: true, bitwise: false*/
 /**
@@ -11,61 +10,65 @@ import RM from '../Resource/ResourceManager';
  * Each animation can have a different frameDuration and any number of frames.
  * Each frame may have a different size and a different hitbox
  *
- * @param {String} type An identifier for this sprite, can be for example `enemy1`,...
- * @param {Object} options An options hash for the object
- * @param {String} options.imageId The path to the spritesheet image
- * @param {Object} options.animations A map with a key for each animation of the sprite.
- *
  * @note Since games usually have multiple sprites of the same type, it's common to extend the Sprite class
  * to generate each sprite type with its own properties and then use these sprites instead of instanciating
  * the Sprite class.
  *
- * @example
  *
- * let mySprite = new Sprite('gem', {
- *  imageId: 'objects',
- *  x: options.x,
- *  y: options.y,
- *  pool: options.pool,
- *  canCollide: true,
- *  collideGroup: 1,
- *  animations: {
- *      mainLoop: {
- *          frameDuration: 4,
- *          frames:[{
- *              offsetX: 136,
- *              offsetY: 189,
- *              width: 31,
- *              height: 31,
- *              hitBox: {
- *                  x: 0,
- *                  y: 0,
- *                  x2: 31,
- *                  y2: 31
- *              },
- *              plane: 0
- *          },
- *               {
- *              offsetX: 170,
- *              offsetY: 189,
- *              width: 31,
- *              height: 31,
- *              hitBox: {
- *                  x: 0,
- *                  y: 0,
- *                  x2: 31,
- *                  y2: 31
- *              },
- *              plane: 0
- *          }],
- *           loop: 1
- *       }
- *    }
- * });
- *
- * @related {Drawable}
+ * @extends Drawable
  */
 class Sprite extends Drawable {
+    /**
+     * Creates a new Sprite
+     * 
+     * @param {String} type An identifier for this sprite, can be for example `enemy1`,...
+     * @param {Object} options An options hash for the object.
+     * @param {String} options.imageId The path to the spritesheet image.
+     * @param {Object} options.animations A map with a key for each animation of the sprite.
+     *
+     * @example
+     *
+     * let mySprite = new Sprite('gem', {
+     *  imageId: 'objects',
+     *  x: options.x,
+     *  y: options.y,
+     *  pool: options.pool,
+     *  canCollide: true,
+     *  collideGroup: 1,
+     *  animations: {
+     *      mainLoop: {
+     *          frameDuration: 4,
+     *          frames:[{
+     *              offsetX: 136,
+     *              offsetY: 189,
+     *              width: 31,
+     *              height: 31,
+     *              hitBox: {
+     *                  x: 0,
+     *                  y: 0,
+     *                  x2: 31,
+     *                  y2: 31
+     *              },
+     *              plane: 0
+     *          },
+     *               {
+     *              offsetX: 170,
+     *              offsetY: 189,
+     *              width: 31,
+     *              height: 31,
+     *              hitBox: {
+     *                  x: 0,
+     *                  y: 0,
+     *                  x2: 31,
+     *                  y2: 31
+     *              },
+     *              plane: 0
+     *          }],
+     *           loop: 1
+     *       }
+     *    }
+     * });
+     */
     constructor(type, options) {
         super(type || 'Sprite', options || {});
 
@@ -125,27 +128,20 @@ class Sprite extends Drawable {
         this.isDebug = isDebug;
     }
 
-    // /**
-    //  * Resets the sprite to its default settings
-    //  */
-    // reset() {
-    //     super.reset();
-    // }
-
     /**
      * Adds a new animation to the sprite
      *
-     * @param {String} name The name of the new animation
-     * @param {String} id The id of the resource (image) to use for the animation
-     * @param {Object} options The animation to add, see:
-     * @param {number=0} options.offsetX The x offset of the sprite frames inside the image
-     * @param {number=0} options.offsetY The y offset of the sprite frames inside the image
-     * @param {number} options.frameWidth The width of a frame
-     * @param {number=imageHeight} options.frameHeight The height of a frame. By default frameHeight is taken from image.naturalHeight
-     * @param {number=1} options.frameDuration The duration of a frame (1 = 16ms)
-     * @param {number=0} options.frameSpacing The space between each frame
-     * @param {number=1} options.loop 0 = anim play once and stops at the end, 1 = anim loops to frame 1 at the end, 2 = anim will play in reverse when reaching the end, then plays again, etc
-     * @returns {Deferred} a deferred object that's resolved once the animation is ready
+     * @param {String} name The name of the new animation.
+     * @param {String} id The id of the resource (image) to use for the animation.
+     * @param {Object} [options={}] The animation to add, see:
+     * @param {number} [options.offsetX=0] The x offset of the sprite frames inside the image.
+     * @param {number} [options.offsetY=0] The y offset of the sprite frames inside the image.
+     * @param {number} [options.frameWidth] The width of a frame.
+     * @param {number} [options.frameHeight=imageHeight] The height of a frame. By default frameHeight is taken from image.naturalHeight.
+     * @param {number} [options.frameDuration=1] The duration of a frame (1 = 16ms).
+     * @param {number} [options.frameSpacing=0] The space between each frame.
+     * @param {number} [options.loop=1] 0 = anim play once and stops at the end, 1 = anim loops to frame 1 at the end, 2 = anim will play in reverse when reaching the end, then plays again, etc.
+     * @returns {Deferred} a deferred object that's resolved once the animation is ready.
      * @example
      * // creates a new animation from the image run.png
      * mySprite.addAnimation ('running', 'run.png', {
@@ -211,11 +207,11 @@ class Sprite extends Drawable {
      * Loads animations from settings, flipping sprites if needed
      * and sets the last animation of the array as current animation
      *
-     * @param {Object} anims The animations map to load
+     * @param {Object} anims The animations map to load.
      */
     load(anims) {
-        if (!this._settings)
-            debugger;
+        // if (!this._settings)
+        //     debugger;
 
         let animations = anims || this._settings.animations,
             lastName;
@@ -247,9 +243,9 @@ class Sprite extends Drawable {
      * It's possible to define a new animation that is simply the flip of another one
      * This method copies the frames of the source animation and flips them
      *
-     * @param {Object} animation The animation to create frames for
-     * @param {String} flipFrom The name of the animation to use as reference
-     * @param {Number} flipType The direction of the flip: set to 1 for left/right flip, 2 for top/bottom flip
+     * @param {Object} animation The animation to create frames for.
+     * @param {String} flipFrom The name of the animation to use as reference.
+     * @param {Number} flipType The direction of the flip: set to 1 for left/right flip, 2 for top/bottom flip.
      *
      */
     updateFlipAnimation(anim, flipFrom, flipType) {
@@ -278,8 +274,8 @@ class Sprite extends Drawable {
     /**
      * Changes the source image for this sprite
      *
-     * @param {Image} image the new Image to use as spritesheet
-     * @param {Boolean=false} force will replace current image with a new one if force == false
+     * @param {Image} image the new Image to use as spritesheet.
+     * @param {Boolean} [force=false] will replace current image with a new one if force == false.
      */
     setImage(image, force = false) {
         if (!image) {
@@ -385,7 +381,7 @@ class Sprite extends Drawable {
      * advanceFrame is called at each render loop and waits for currentAnim.frameDuration
      * before advancing to the next animation frame.
      *
-     * @param {String} animName the name to advance
+     * @param {String} animName The name to advance.
      *
      * If animName != currentAnimName then switches to the new animation
      */
@@ -404,7 +400,7 @@ class Sprite extends Drawable {
     }
 
     /**
-     * @returns {Number} the width of current animation frame
+     * @returns {Number} The width of current animation frame
      *
      */
     getCurrentWidth() {
@@ -499,7 +495,7 @@ class Sprite extends Drawable {
     /**
      * Centers the sprite horizontaly around a tile
      *
-     * @param {Object} tilePos The tile to center the sprite on
+     * @param {Object} tilePos The tile to center the sprite on.
      */
     centerXOverTile(tilePos) {
         let tileWidth = this.currentMap.tileWidth,
@@ -526,9 +522,9 @@ class Sprite extends Drawable {
      * Changes the sprite's current animation
      *
      * @param {String} anim The new animation to play.
-     * @param {Function=undefined} fn An optionnal callback to run when the animation will have ended.
-     * @param {number=0} frameNum The first frame to play, defaults to zero.
-     * @param {Boolean=false} revert Whether to start playing the animation from the last frame
+     * @param {Function} [fn=undefined] An optionnal callback to run when the animation will have ended.
+     * @param {number} [frameNum=0] The first frame to play, defaults to zero.
+     * @param {Boolean} [revert=false] Whether to start playing the animation from the last frame.
      */
     setAnimation(anim, fn, frameNum, revert) {
         // console.log('[Sprite] setting animation of', this.type, 'to', anim);
@@ -570,7 +566,6 @@ class Sprite extends Drawable {
                 this.onAnimationEnd(fn);
             }
         } catch (err) {
-            debugger;
             console.error('[Sprite] setAnimation() - unable to set animation ', anim, '(' + err.message + ')', 'for sprite', this.id);
         }
     }
@@ -578,7 +573,7 @@ class Sprite extends Drawable {
     /**
      * Stops playing current animation
      *
-     * @param {Boolean} runPreviousEndMethod Set to false if you don't want to run the end callback functions
+     * @param {Boolean} runPreviousEndMethod Set to false if you don't want to run the end callback functions.
      */
     stopAnimation(runPreviousEndMethod) {
         this.running = false;
@@ -602,7 +597,7 @@ class Sprite extends Drawable {
     /**
      * Adds a new function that will be called when current animation ends
      *
-     * @param {Function} func The callback to run
+     * @param {Function} func The callback to execute.
      */
     onAnimationEnd(func) {
         // console.log(this.currentAnimName, 'animationEnd');
@@ -640,7 +635,7 @@ class Sprite extends Drawable {
     /**
      * onHit is called when a collision has been detect between the sprite and another graphical object
      *
-     * @param {Drawable} obj The graphical object that collided
+     * @param {Drawable} obj The graphical object that collided.
      */
     onHit(obj) {
         super.onHit(obj);
@@ -651,11 +646,11 @@ class Sprite extends Drawable {
      * Draws the sprite onto the canvas context passed
      *
      * @param {CanvasRenderingContext2D} destCtx The context where to render the sprite.
-     * @param {Boolean=false} debug wether to show the sprite hit box
+     * @param {Boolean} [debug=false] Whether to show the sprite hit box.
      *
      * @private
      */
-    draw(destCtx, debug) {
+    draw(destCtx/*, debug = false*/) {
         if (!this.visible || !this.image || !this.currentAnimName) {
             return;
         }
@@ -717,7 +712,6 @@ class Sprite extends Drawable {
             that = this,
             destX = 1,
             destY = 1,
-            animationName = '',
             width = 0,
             height = 0,
             totalWidth = 0,
@@ -746,7 +740,7 @@ class Sprite extends Drawable {
             canvas.setAttribute('height', totalHeight);
         }
 
-        ctx = new Dom('#describe')[0] && new Dom('#describe')[0].getContext('2d') || new Dom('canvas').attr('id', 'describe').attr('width', totalWidth).attr('height', totalHeight).css('zIndex', '100').appendTo('body')[0].getContext('2d');
+        ctx = Dom('#describe')[0] && Dom('#describe')[0].getContext('2d') || new Dom('canvas').attr('id', 'describe').attr('width', totalWidth).attr('height', totalHeight).css('zIndex', '100').appendTo('body')[0].getContext('2d');
 
         ctx.webkitImageSmoothingEnabled = false;
 
@@ -760,7 +754,7 @@ class Sprite extends Drawable {
             console.log('loopFrom=', animation.loopFrom);
             console.log('rewindOnEnd', animation.rewindOnEnd);
 
-            animation.frames.forEach((frame, i) => {
+            animation.frames.forEach((frame) => {
                 var w = frame.width,
                     h = frame.height,
                     x = frame.offsetX,
@@ -814,6 +808,6 @@ class Sprite extends Drawable {
     listAnimations() {
         return this.animations;
     }
-};
+}
 
 export default Sprite;

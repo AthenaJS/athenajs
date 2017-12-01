@@ -3,9 +3,6 @@ import AM from '../../Audio/AudioManager';
 import Tile from '../../Map/Tile';
 import Input from '../../Input/InputManager';
 
-/*jshint devel: true, bitwise: false*/
-/*globals Game*/
-
 /**
  * PlayerMove is a behavior that is controlled by the player using keyboard/touch events.
  *
@@ -14,11 +11,12 @@ import Input from '../../Input/InputManager';
  * @param {Sprite} sprite The sprite to attach the behavior to.
  * @param {InputManager} Input A reference to the InputManager
  * @param {Object} options Parameters specifics to the behavior
- * @param {String} [options.startMovement="idle""] The initial behavior state.
+ * @param {String} [options.startMovement="idle"] The initial behavior state.
  * @param {String} [options.direction="right"] The initial direction.
  * @param {String} [options.lookDirection="left"] The initial look direction, can be different than direction.
  *
  * @see {Behavior}
+ * @extends Behavior
  */
 class PlayerMove extends Behavior {
     constructor(sprite, options) {
@@ -46,7 +44,7 @@ class PlayerMove extends Behavior {
      *
      * @param {Number} t The current timestamp
      */
-    onUpdate(t) {
+    onUpdate(/*t*/) {
         if (this.currentMovement !== 'falling' && !this.currentMovement.match(/jump/) && !this.firing) {
             // console.log('left', Input.getKeyStatus(Input.keys.LEFT));
             // direction
@@ -305,7 +303,7 @@ class PlayerMove extends Behavior {
      *
      * @private
      */
-    jump(direction) {
+    jump(/*direction*/) {
         let sprite = this.sprite,
             nextX = sprite.x + Math.ceil(this.vx),
             nextY = sprite.y + Math.ceil(this.vy),
@@ -487,8 +485,7 @@ class PlayerMove extends Behavior {
         let sprite = this.sprite,
             currentHitBox = sprite.getHitBox(),
             diff = onlyClimb ? 0 : 24,
-            pos = false,
-            pos2 = false;
+            pos = false;
 
         if (Input.getKeyStatus(Input.keys.LEFT) === true || Input.getKeyStatus(Input.keys.RIGHT) === true) {
             return false;
@@ -590,7 +587,7 @@ class PlayerMove extends Behavior {
     /**
      * Checkes that player can fall
      *
-     * @param {Number=1} size The gap size to check for.
+     * @param {Number} [size=1] The gap size to check for.
      *
      * @returns {Boolean} true if the player falls
      *
@@ -621,6 +618,6 @@ class PlayerMove extends Behavior {
             return false;
         }
     }
-};
+}
 
 export default PlayerMove;

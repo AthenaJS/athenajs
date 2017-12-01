@@ -1,8 +1,21 @@
 import Effect from './Effect';
 
-
-/*jshint devel: true, bitwise: false*/
+/**
+ * Fading effect
+ * 
+ * Supported on: `Drawable`, `Scene`
+ * 
+ * @extends Effect
+ */
 class Fade extends Effect {
+    /**
+     * Creates a Fade Effect
+     * 
+     * @param {Number} options.startValue the start value of the effect.
+     * @param {Number} options.endValue the end value of the effect.
+     * @param {Boolean} options.loop Set to true to make the effect loop.
+     * @param {Display} display Reference to the Display in case a buffer is needed.
+     */
     constructor(options, display) {
         super(Object.assign({
             startValue: 0,
@@ -15,6 +28,9 @@ class Fade extends Effect {
         this.diff = this.endValue - this.startValue;
     }
 
+    /**
+     * Initializes the effect
+     */
     start() {
         this.currentOpacity = 1;
 
@@ -22,6 +38,12 @@ class Fade extends Effect {
         return super.start();
     }
 
+    /**
+     * 
+     * @param {CanvasRenderingContext} ctx The `source`rendering context.
+     * @param {CanvasRenderingContext} fxCtx The `destination` context.
+     * @param {Drawable} obj The Drawable on which to execute the ffect.
+     */
     process(ctx, fxCtx, obj) {
         super.process();
 
@@ -31,6 +53,6 @@ class Fade extends Effect {
 
         return this.ended;
     }
-};
+}
 
 export default Fade;
