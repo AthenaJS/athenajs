@@ -29,7 +29,7 @@ class WeaponMove extends Behavior {
      * The onMove event handler, simply moves updates the object's x using vx and calls VXChange
      * when it reaches a wall
      */
-    onUpdate(t) {
+    onUpdate(/*t*/) {
         let sprite = this.sprite,
             map = sprite.currentMap,
             nextX = sprite.x + sprite.vx,
@@ -47,6 +47,6 @@ class WeaponMove extends Behavior {
         sprite.x += sprite.vx;
         sprite.y += sprite.vy;
     }
-};
+}
 
 export default WeaponMove;

@@ -1,6 +1,5 @@
 import Behavior from './Behavior';
 import Input from '../../Input/InputManager';
-import Tile from '../../Map/Tile';
 import AM from '../../Audio/AudioManager';
 
 // debug
@@ -143,7 +142,7 @@ class PlayerMove2 extends Behavior {
         this.statusDirection = newDirection || this.statusDirection;
     }
 
-    onUpdate(timestamp) {
+    onUpdate(/*timestamp*/) {
         this.collisionDetected = false;
 
         // console.log('onMove', this.status);

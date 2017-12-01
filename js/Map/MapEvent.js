@@ -12,7 +12,7 @@
  *
  * @param {Map} map The [`Map`](#Map) to use
  */
-export default class MapEvent{
+export default class MapEvent {
     constructor(map) {
         console.log('[MapEvent] init with map');
         this.map = map || null;
@@ -171,4 +171,4 @@ export default class MapEvent{
     // handleAction(options) {
 
     // }
-};
+}

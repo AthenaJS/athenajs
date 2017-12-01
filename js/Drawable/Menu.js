@@ -9,33 +9,37 @@ import SimpleText from './SimpleText';
  * Each menu entry is called menuItem and is a simple object with the following properties:
  * { text: 'menu text', selectable: true|false, active: true|false, visible: true|false }
  *
- * @param {String} type The type of object.
- * @param {Object} options
- * @param {String} [options.title="Menu Title"] The title of the menu.
- * @param {String} [options.color="black"] The color of the menu.
- * @param {Array} [options.menuItems=[]] The menu items to add.
- * @param {String} [options.selectedColor="red"] The default color to use for the selected menu item.
- *
- * @example
- *
- * let myMenu = new Menu('mainMenu', {
- *   title: 'Gods JS',
- *      color: 'white',
- *      menuItems: [
- *      {
- *          text: '> Start Game',
- *          selectable: true,
- *          visible: true,
- *          active: true
- *      },
- *      {
- *          text: '> Cannot Select ;)',
- *          selectable: true,
- *          visible: true
- *      }]
- *    })
  */
 class Menu extends Drawable {
+    /**
+     * Creates a new Menu
+     * 
+     * @param {String} type The type of object.
+     * @param {Object} options
+     * @param {String} [options.title="Menu Title"] The title of the menu.
+     * @param {String} [options.color="black"] The color of the menu.
+     * @param {Array} [options.menuItems=[]] The menu items to add.
+     * @param {String} [options.selectedColor="red"] The default color to use for the selected menu item.
+     *
+     * @example
+     *
+     * let myMenu = new Menu('mainMenu', {
+     *   title: 'Gods JS',
+     *      color: 'white',
+     *      menuItems: [
+     *      {
+     *          text: '> Start Game',
+     *          selectable: true,
+     *          visible: true,
+     *          active: true
+     *      },
+     *      {
+     *          text: '> Cannot Select ;)',
+     *          selectable: true,
+     *          visible: true
+     *      }]
+     *    })
+     */
     constructor(type, options) {
 
         super(type, options);
@@ -70,6 +74,7 @@ class Menu extends Drawable {
      * Adds a new menu item
      *
      * @param {Object} menu An hash describing the menu.
+     *
      * The hash can have the following properties:
      * { text: 'menu text', selectable: true|false, active: true|false, visible: true|false }
      */
@@ -87,7 +92,7 @@ class Menu extends Drawable {
     /**
      * Adds several menuItems in a row
      *
-     * @param {Array} items The list of items to add
+     * @param {Array<Object>} items The list of items to add
      *
      * @see addMenuItem()
      */
@@ -153,7 +158,7 @@ class Menu extends Drawable {
     /**
      * Draw method for the Text object
      *
-     * @param {CanvasContext} destCtx The canvas context where to draw the menu
+     * @param {CanvasRenderingContext} destCtx The canvas context where to draw the menu.
      *
      * @private
      */
@@ -178,6 +183,6 @@ class Menu extends Drawable {
             destCtx.restore();
         }
     }
-};
+}
 
 export default Menu;

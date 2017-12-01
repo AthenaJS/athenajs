@@ -1,8 +1,20 @@
 import Behavior from './Behavior';
 
 /*jshint devel: true, bitwise: false*/
-// by default
+/**
+ * InOut behavior class: a very simple behavior used for the Gods game
+ * 
+ * This behavior makes the object move verticaly from a minY to a maxY
+ */
 class InOut extends Behavior {
+    /**
+     * Creates a new InOut behavior
+     * 
+     * @param {Drawable} sprite The drawable to attach the behavior to.
+     * @param {Object} options The InOut's options.
+     * @param {Number} [options.minY] Object's minimum Y position
+     * @param {Number} [options.maxY] Object's maximum Y position
+     */
     constructor(sprite, options) {
         super(sprite, options);
 
@@ -14,7 +26,12 @@ class InOut extends Behavior {
         this.maxY = options.minY || 0;
     }
 
-    onUpdate(t) {
+    /**
+     * Called when the game wants to update the Drawable's position
+     * 
+     * @param {Number} t Current timestamp.
+     */
+    onUpdate(/*t*/) {
         let sprite = this.sprite,
             diffY = Math.abs(sprite.y - this.startY),
             diffX = Math.abs(sprite.x - this.startX);
@@ -36,6 +53,6 @@ class InOut extends Behavior {
         sprite.x += sprite.vx;
         sprite.y += sprite.vy;
     }
-};
+}
 
 export default InOut;

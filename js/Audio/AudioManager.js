@@ -1,4 +1,3 @@
-/*jshint devel: true*/
 /**
  * `AudioManager` handles playback of audio files loaded using the `ResourceManager`
  * 

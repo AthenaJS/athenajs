@@ -1,8 +1,19 @@
 
-/*jshint devel: true, bitwise: false*/
 var eventCallbacks = {};
 
+/**
+ * The notification manager allows different AthenaJS components to send/receive
+ * events.
+ */
 const NotificationManager = {
+    /**
+     * Notifies all listeners
+     * 
+     * @param {String} eventType The event to send.
+     * @param {any} data The data to send with the event.
+     * 
+     * Every listener that has subscribed to this event will be notified.
+     */
     notify: function (eventType, data) {
         // console.log('[NM] got event', eventType, 'with data', data);
         const params = { type: eventType, data: data };
@@ -13,6 +24,12 @@ const NotificationManager = {
             eventCallbacks['*'].forEach((callback) => callback(params));
         }
     },
+    /**
+     * Listen to a particular event
+     * 
+     * @param {String} eventType The event to listen to.
+     * @param {Function} method The callback function to call when notified.
+     */
     listen: function (eventType, method) {
         console.log('[NM] listening to event', eventType);
         let eventList = eventType.replace(/\s+/g, ' ').split(' ');

@@ -14,8 +14,6 @@ function newObject(Obj) {
 // in case browser doesn't support createImageBitmap we simply resolve with the original image
 const createImageBitmap = window.createImageBitmap || function createImageBitmap(img) { return Deferred.resolve(img); };
 
-/*jshint devel: true, bitwise: false*/
-"use strict";
 /**
  * Handles resource loading at runtime
  *
@@ -56,12 +54,11 @@ export default {
      * Retrieve a resource using its id with optionnal group
      *
      * @param {String} id The id of the resource to get
-     * @param {String="any"} group the group to get the resource from
-     * @param {Boolean=false} fullObject returns the resource object if true. Otherwise return the resource only.
+     * @param {String} [group="any"] the group to get the resource from
+     * @param {Boolean} [fullObject=false] returns the resource object if true. Otherwise return the resource only.
      */
-    getResourceById: function (id, group, fullObject) {
+    getResourceById: function (id, group = 'any', fullObject = false) {
         // console.log('[RM] getting resource', id);
-        group = group || 'any';
 
         let rsGroup = this.resources[group].res,
             rs = rsGroup[id];
@@ -75,13 +72,12 @@ export default {
                 console.error('[RM] unknwon resource id', id);
                 return;
             }
-
-            if (resource) {
-                return resource.default;
-            } else {
-                debugger;
-                console.warn('[RM] WARN: could not find resource', id);
-            }
+            // if (resource) {
+            //     return resource.default;
+            // } else {
+            //     debugger;
+            //     console.warn('[RM] WARN: could not find resource', id);
+            // }
         }
     },
     /**
@@ -218,12 +214,12 @@ export default {
      * Loads all resources found in the specified group, optionnaly
      * calling a callback after each file has been loaded.
      *
-     * @param {String} group The name of the group to load
-     * @param {Function=undefined} progressCb an optionnal progress callback
-     * @param {Function=undefined} errorCb an optionnal error callback
+     * @param {String} group The name of the group to load.
+     * @param {Function} [progressCb=undefined] an optionnal progress callback.
+     * @param {Function} [errorCb=undefined] an optionnal error callback.
      *
      */
-    loadResources: function (group, progressCb, errorCb) {
+    loadResources: function (group, progressCb = undefined, errorCb = undefined) {
         group = group || 'any';
 
         if (this.loading === true) {
@@ -314,15 +310,14 @@ export default {
      * starts loading an image
      *
      * @param {Object} res an Object describing the resource to load
-     * @param {String=undefined} gpName the name of the group that the resource came from, set to undefined to load a single resource
+     * @param {String} [gpName=undefined] the name of the group that the resource came from, set to undefined to load a single resource
      *
      * @returns {Deferred} a new promise that will be resolved when the file has been loaded.
      */
     loadImage: function (res, gpName = undefined) {
         let img = new Image(),
             that = this,
-            def = new Deferred(),
-            gp = gpName && that.resources[gpName];
+            def = new Deferred();
 
         // attempt to retrive image first, load it if not already loaded
 
@@ -395,8 +390,7 @@ export default {
      * @private
      */
     loadScript: function (res, gpName, callback) {
-        let loaded = new Deferred(),
-            gp = this.resources[gpName];
+        let loaded = new Deferred();
         /*
         script = null,
         timeout = 0;
@@ -453,8 +447,7 @@ export default {
 
         let that = this,
             audio = new Audio(),
-            def = new Deferred(),
-            gp = that.resources[gpName];
+            def = new Deferred();
 
         function onLoad() {
             // canplaythrough event is sent not only on first load, but after the song has been played (and has been rewinded)
@@ -489,42 +482,14 @@ export default {
      * @returns {Deferred} a new promise that will be resolved once the file has been loaded
      */
     loadWadAudio: function (res, gpName) {
-        let that = this,
-            gp = that.resources[gpName],
-            def = new Deferred(),
+        let def = new Deferred(),
             sound = new Wad({
                 source: res.src,
-                callback: function () {
+                callback: () => {
                     res.elt = sound;
                     res.loaded = true;
                     AM.addSound(res.id, sound);
-                    that._resLoaded(gpName);
-                    def.resolve(true);
-                }
-            });
-
-        return def.promise;
-    },
-
-    /**
-     * Loads a new Audio file using the Howler library
-     *
-     * @param {Object} res a descriptor for the sound to load
-     * @param {String} gpName the name of the group to load the audio file from
-     *
-     * @returns {Deferred} a new promise that will be resolved once the file has been loaded
-     */
-    loadHowlerAudio: function (res, gpName) {
-        let that = this,
-            gp = that.resources[gpName],
-            def = new Deferred(),
-            sound = new Howl.Howl({
-                urls: [res.src],
-                onload: function () {
-                    res.elt = sound;
-                    res.loaded = true;
-                    AM.addSound(res.id, sound);
-                    that._resLoaded(gpName);
+                    this._resLoaded(gpName);
                     def.resolve(true);
                 }
             });
@@ -556,7 +521,8 @@ export default {
                 res.loaded = true;
                 if (!callback) {
                     this._resLoaded(gpName);
-                    loaded.resolve(true);
+                    def.resolve(true);
+                    // loaded.resolve(true)
                 } else {
                     var newDef = callback.call(this, res, gpName);
                     newDef.then(() => {
@@ -642,17 +608,7 @@ export default {
                 return this.loadImage(res, groupName);
 
             case 'audio':
-                // return this.loadHowlerAudio(res, groupName);
-                // return this.loadAudio(res, groupName);
-                // return this.loadAudio(res, groupName);
                 return this.loadWadAudio(res, groupName);
-            /*
-            if (this.useWad) {
-                return this.loadWadAudio(res, groupName);
-            } else {
-                return this.loadHowlerAudio(res, groupName);
-            }*/
-
 
             case 'script':
                 return this.loadScript(res, groupName);

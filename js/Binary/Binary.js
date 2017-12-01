@@ -11,8 +11,8 @@ export default {
      * 
      * @param {ArrayBufferView} view
      * @param {String} url to post binary data to
-     */    
-    sendArrayBufferView: function(view, url) {
+     */
+    sendArrayBufferView: function (view, url) {
         const req = new XMLHttpRequest();
 
         req.open('POST', url, true);
@@ -25,15 +25,15 @@ export default {
      * 
      * @param {String} url to get binary data from
      * @returns promise that is fullfilled with ArrayBuffer or false if get failed
-     */        
-    getArrayBuffer: function(url) {
+     */
+    getArrayBuffer: function (url) {
         return new Promise((resolve, reject) => {
             const req = new XMLHttpRequest();
 
             req.open('GET', url, true);
             req.responseType = 'arraybuffer';
 
-            req.onload = (event) => {
+            req.onload = () => {
                 const arrayBuffer = req.response;
 
                 if (arrayBuffer) {
@@ -43,7 +43,7 @@ export default {
                 }
             };
 
-            req.send(null);            
+            req.send(null);
         });
     }
 };

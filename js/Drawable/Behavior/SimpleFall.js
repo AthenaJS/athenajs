@@ -43,7 +43,7 @@ class SimpleFall extends Behavior {
      * until it reaches the ground and stops bouncing.
      *
      */
-    onUpdate(t) {
+    onUpdate(/*t*/) {
         let sprite = this.sprite,
             map = sprite.currentMap,
             nextX = sprite.x + sprite.vx,
@@ -79,6 +79,6 @@ class SimpleFall extends Behavior {
     resetY() {
         this.sprite.vy = -this.sprite.vy * this.elasticity;
     }
-};
+}
 
 export default SimpleFall;

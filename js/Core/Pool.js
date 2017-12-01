@@ -1,85 +1,85 @@
+/**
+ * Pool support for AthenaJS
+ *
+ * This objects allows to defined and use pools for any type of object
+ */
+export default {
     /**
-     * Pool support for AthenaJS
+     * Creates a new pool
      *
-     * This objects allows to defined and use pools for any type of object
+     * @param {Function} obj the constructor of the object to add a pool for
+     * @param {Number} suze the size of the pool
      */
-    export default {
-        /**
-         * Creates a new pool
+    create: function (obj, size) {
+        obj._pool = [];
+        obj._poolMarker = 0;
+        obj._poolSize = 0;
+
+        let pool = obj._pool;
+
+        /*
+         * Get a new object from the pool
          *
-         * @param {Function} obj the constructor of the object to add a pool for
-         * @param {Number} suze the size of the pool
+         * -*Note* This method does not call new but gets a reference to an already created object
+         *  and calls its constructor.
+         *
+         *  @returns {Object} an instance of the object from the pool
+         *
          */
-        create: function(obj, size) {
-            obj._pool = [];
-            obj._poolMarker = 0;
-            obj._poolSize = 0;
-
-            let pool = obj._pool;
-
-            /*
-             * Get a new object from the pool
-             *
-             * -*Note* This method does not call new but gets a reference to an already created object
-             *  and calls its constructor.
-             *
-             *  @returns {Object} an instance of the object from the pool
-             *
-             */
-            obj.createFromPool = function() {
-                // expand the pool if we run out of objects
-                if (obj._poolSize <= obj._poolMarker) {
-                    obj.expandPool(10);
-                }
-
-                // get new object
-                let newObj = obj._pool[obj._poolMarker++];
-
-                // save its index
-                newObj._poolIndex = obj._poolMarker - 1;
-
-                // apply the constructor
-                obj.prototype.constructor.apply(newObj, arguments);
-
-                return newObj;
+        obj.createFromPool = function () {
+            // expand the pool if we run out of objects
+            if (obj._poolSize <= obj._poolMarker) {
+                obj.expandPool(10);
             }
 
-            /*
-             * expands an already created pool
-             *
-             * ]@param {number} size the new size of the pool
-             */
-            obj.expandPool = function(size) {
-                var options = {
-                    pool: true
-                };
+            // get new object
+            let newObj = obj._pool[obj._poolMarker++];
 
-                for (var i = pool.length, max = pool.length + size; i < max; i++) {
-                    pool.push(new obj(options));
-                };
+            // save its index
+            newObj._poolIndex = obj._poolMarker - 1;
 
-                obj._poolSize += size;
+            // apply the constructor
+            obj.prototype.constructor.apply(newObj, arguments);
+
+            return newObj;
+        };
+
+        /*
+         * expands an already created pool
+         *
+         * ]@param {number} size the new size of the pool
+         */
+        obj.expandPool = function (size) {
+            var options = {
+                pool: true
+            };
+
+            for (var i = pool.length, max = pool.length + size; i < max; i++) {
+                pool.push(new obj(options));
             }
 
-            // TODO: test me
-            // TODO: call the object's destructor, if any (guess we'll need to add it)
-            // obj.__proto__.freeFromPool = function() {
-            obj.prototype.freeFromPool = function() {
-                if (obj._poolMarker > 0) {
-                    obj._poolMarker--;
-                }
+            obj._poolSize += size;
+        };
 
-            	let end = pool[obj._poolMarker],
-            	   endIndex = end._poolIndex;
-
-            	pool[obj._poolMarker] = this;
-            	pool[this._poolIndex] = end;
-
-            	end._poolIndex = this._poolIndex;
-            	this._poolIndex = endIndex;
+        // TODO: test me
+        // TODO: call the object's destructor, if any (guess we'll need to add it)
+        // obj.__proto__.freeFromPool = function() {
+        obj.prototype.freeFromPool = function () {
+            if (obj._poolMarker > 0) {
+                obj._poolMarker--;
             }
 
-            // initial expand of the pool
-            obj.expandPool(size);
-        }
-    };
+            let end = pool[obj._poolMarker],
+                endIndex = end._poolIndex;
+
+            pool[obj._poolMarker] = this;
+            pool[this._poolIndex] = end;
+
+            end._poolIndex = this._poolIndex;
+            this._poolIndex = endIndex;
+        };
+
+        // initial expand of the pool
+        obj.expandPool(size);
+    }
+};

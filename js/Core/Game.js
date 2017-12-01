@@ -1,6 +1,5 @@
 /*jshint devel: true, bitwise: false*/
 import ResourceManager from '../Resource/ResourceManager';
-import Binary from '../Binary/Binary';
 import DisplayManager from '../Display/DisplayManager';
 import AudioManager from '../Audio/AudioManager';
 import NM from '../Notification/NotificationManager';
@@ -11,18 +10,21 @@ import Dom from './Dom';
 /**
  * The `Game` class is the central part to AthenaJS
  *
- * @param {Object} options
- * @param {boolean} [options.debug=false] Debug will be enabled if this is true.
- * @param {string} [options.name] The name of the game.
- * @param {string|HTMLElement} [options.target="Dom('div')"] target The DOM target of the game: this is where the game canvas elements will be added.
- * By default the target is a new Div that is appened to the body element.
- * @param {boolean} [options.showFps=false] A little fps counter will be displayed if this is true.
- * @param {number} [options.width=1024] The width of the game display.
- * @param {number} [options.height=768] The height of the game display.
- * @param {Object} [options.resources] An optionnal array of resources of the form:``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
- *
  */
 class Game {
+    /**
+     * Creates a new Game
+     * 
+     * @param {Object} [options={}]
+     * @param {boolean} [options.debug=false] Debug will be enabled if this is true.
+     * @param {string} [options.name] The name of the game.
+     * @param {string|HTMLElement} [options.target="Dom('div')"] target The DOM target of the game: this is where the game canvas elements will be added.
+     * By default the target is a new Div that is appened to the body element.
+     * @param {boolean} [options.showFps=false] A little fps counter will be displayed if this is true.
+     * @param {number} [options.width=1024] The width of the game display.
+     * @param {number} [options.height=768] The height of the game display.
+     * @param {Object} [options.resources] An optionnal array of resources of the form:``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
+     */
     constructor(options = {}) {
         console.log('[Game] Init()'/*, options*/);
 
@@ -110,7 +112,7 @@ class Game {
             });
 
             if (navigator.userAgent.match(/Xbox/)) {
-                this.target.addEventListener('click', (event) => {
+                this.target.addEventListener('click', () => {
                     console.log('toggeling fullscreen');
                     this.toggleFullscreen();
                 });
@@ -210,13 +212,13 @@ class Game {
 
     /**
      * Method that gets called when receiving an event: by default it does nothing
-     * It's up to the developer to overwrite this method on its Game
+     * It's up to the developer to override this method on its Game
      *
      * @param {string} event the event name that got fired.
      *
      */
     onEvent(event) {
-
+        event;
     }
 
 
@@ -278,15 +280,15 @@ class Game {
             property = '';
 
         console.log('adding events');
-        if (typeof document.hidden !== "undefined") {
-            property = "hidden";
-            eventName = "visibilitychange";
-        } else if (typeof document.msHidden !== "undefined") {
-            property = "msHidden";
-            eventName = "msvisibilitychange";
-        } else if (typeof document.webkitHidden !== "undefined") {
-            property = "webkitHidden";
-            eventName = "webkitvisibilitychange";
+        if (typeof document.hidden !== 'undefined') {
+            property = 'hidden';
+            eventName = 'visibilitychange';
+        } else if (typeof document.msHidden !== 'undefined') {
+            property = 'msHidden';
+            eventName = 'msvisibilitychange';
+        } else if (typeof document.webkitHidden !== 'undefined') {
+            property = 'webkitHidden';
+            eventName = 'webkitvisibilitychange';
         }
 
         if (!eventName.length) {
@@ -307,7 +309,7 @@ class Game {
      * Sets a new scene as the current scene
      *
      * @param {Scene} scene instance to set as current Scene
-     * @param {Boolean=false} resetMap set to true to reset the map
+     * @param {Boolean} [resetMap=false] set to true to reset the map
      *
      */
     setScene(scene) {
@@ -384,7 +386,7 @@ class Game {
             if (this.scene === scene) {
                 this._startScene();
             } else {
-                console.warn("[Game] scene", scene, "has finished loading but is not the current scene anymore so it won't be started.");
+                console.warn('[Game] scene', scene, 'has finished loading but is not the current scene anymore so it won\'t be started.');
             }
         }).catch(err => {
             console.error(err);
@@ -398,7 +400,7 @@ class Game {
      *
      * @private
      */
-    _renderSceneLoop(time) {
+    _renderSceneLoop(/*time*/) {
         var scene = this.scene;
 
         if (this.running) {

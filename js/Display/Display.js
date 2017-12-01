@@ -1,20 +1,22 @@
 import FX from '../FX/FX';
-import Easing from '../FX/Easing/Easing';
 import Deferred from '../Core/Deferred';
 import Dom from '../Core/Dom';
 
-/*jshint devel: true*/
 /**
  * The `Display` class creates and manipulates display buffer for the game
  * 
- * @param {Object} options
- * @param {number} [options.width=1024] The width of the display.
- * @param {number} [options.height=768] The height of the display.
- * @param {String} [options.type] What type of rendere to use, only '2d' supported for now.
- * @param {layers} [options.layers] An array describing each layer that will be added: [true, true] will create two background layers, set to true for a foreground layer.
- * @param {String|HTMLElement} target The target where the game DOM element should be appended.
  */
 class Display {
+    /**
+     * Creates a new Display instance
+     * 
+     * @param {Object} options
+     * @param {number} [options.width=1024] The width of the display.
+     * @param {number} [options.height=768] The height of the display.
+     * @param {String} [options.type] What type of rendere to use, only '2d' supported for now.
+     * @param {layers} [options.layers] An array describing each layer that will be added: [true, true] will create two background layers, set to true for a foreground layer.
+     * @param {(String|HTMLElement)} target The target where the game DOM element should be appended.
+     */
     constructor(options, target) {
         console.log('[Display] Init()', options.name/*, options, target*/);
 
@@ -148,7 +150,9 @@ class Display {
             needMargin = navigator.userAgent.match(/Edge|Firefox/),
             isXbox = navigator.userAgent.match(/Edge/),
             screenWidth = screen.width,
-            screenHeight = screen.height;
+            screenHeight = screen.height,
+            newWidth,
+            newHeight;
         // both Firefox & Edge force fullscreen element to full screen size
         // since our canvas element do not necessarilty take the whole screen
         // we have to center them
@@ -163,11 +167,11 @@ class Display {
 
         // use height as base since it's
         if (ratio > 0) {
-            var newHeight = screenHeight,
-                newWidth = newHeight * ratio;
+            newHeight = screenHeight;
+            newWidth = newHeight * ratio;
         } else {
-            var newWidth = screenWidth,
-                newHeight = newWidth * ratio;
+            newWidth = screenWidth;
+            newHeight = newWidth * ratio;
         }
 
         return {
@@ -177,7 +181,7 @@ class Display {
             scaleY: newHeight / height,
             top: needMargin ? (screenHeight - newHeight) / 2 : 0,
             left: needMargin ? (screenWidth - newWidth) / 2 : 0
-        }
+        };
     }
 
     /**
@@ -279,15 +283,14 @@ class Display {
      * @param {CanvasRederingContext} ctx The context to clear
      */
     clearScreen(ctx) {
-        if (0) {
-            // setting canvas width resets imageSmoothingEnable to true
-            ctx.canvas.width = ctx.canvas.width;
+        // if (0) {
+        //     // setting canvas width resets imageSmoothingEnable to true
+        //     ctx.canvas.width = ctx.canvas.width;
 
-            ctx['imageSmoothingEnabled'] = false;
-        } else {
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.clearRect(0, 0, this.width, this.height);
-        }
+        //     ctx['imageSmoothingEnabled'] = false;
+        // } else {
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, this.width, this.height);
     }
 
     /**
@@ -385,11 +388,11 @@ class Display {
             context = this.layers[i];
 
             oldStyle = context.canvas.style.display;
-            context.canvas.style.display = "none";
+            context.canvas.style.display = 'none';
 
             // NOTE: should we hide the canvas before?
             resources.forEach(function (resource) {
-                if (resource.type === "image") {
+                if (resource.type === 'image') {
                     // NOTE: maybe drawing only 1px is enough?
                     context.drawImage(resource.elt, 0, 0);
                 }
@@ -487,6 +490,6 @@ class Display {
 
         this.clearAllScreens();
     }
-};
+}
 
 export default Display;

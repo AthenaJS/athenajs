@@ -1,17 +1,28 @@
 import Display from './Display';
 
 /*jshint devel: true*/
+/**
+ * The DisplayManager handles displays
+ * 
+ * @related {Display}
+ */
 class DisplayManager {
-    constructor(options) {
+    /**
+     * Creates a new DisplayManager
+     * 
+     * @param {any} options 
+     */
+    constructor(/*options*/) {
         console.log('[DisplayManager] Init()'/*, options*/);
-
         this.displays = {};
     }
 
     /**
-     *
-     * @param {*} options
-     * @param {*} target
+     * Adds a new display to the display manager
+     * 
+     * @param {Object} options
+     * @param {String} [options.name] The name of the display.
+     * @param {(HtmlElement|String)} target The DOM element where to create the new display.
      * @returns {Display}
      */
     addDisplay(options, target) {
@@ -22,10 +33,13 @@ class DisplayManager {
         return this.displays[options.name];
     }
 
-    getDisplay(id) {
-        return this.displays[id];
+    /**
+     * 
+     * @param {String} name The name of the new display.
+     */
+    getDisplay(name) {
+        return this.displays[name];
     }
-};
+}
 
-console.log('end DisplayManager');
 export default new DisplayManager();
