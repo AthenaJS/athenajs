@@ -4,12 +4,12 @@ import Dom from '../Core/Dom';
 
 /**
  * The `Display` class creates and manipulates display buffer for the game
- * 
+ *
  */
 class Display {
     /**
      * Creates a new Display instance
-     * 
+     *
      * @param {Object} options
      * @param {number} [options.width=1024] The width of the display.
      * @param {number} [options.height=768] The height of the display.
@@ -38,7 +38,11 @@ class Display {
 
         // we add an extra layer for the map
         this.layers = new Array(options.layers.length + 1);
+        // background status of each layer (so that we don't have to poke into the DOM)
         this.layersIndex = options.layers;
+
+        // keep rendering order of each layer
+        this.sortedLayers = this._sortLayers();
 
         this.prefix = prefix.lowercase;
 
@@ -64,7 +68,7 @@ class Display {
 
     /**
      * Creates a new (offscreen) drawing buffer
-     * 
+     *
      * @param {Number} width width of the buffer
      * @param {iumber} height height of the buffer
      */
@@ -94,9 +98,9 @@ class Display {
 
     /**
      * Handler called when `fullscreenchange` event is triggered by the browser
-     * 
+     *
      * This in turn toggles fullscreen display scaling
-     * 
+     *
      * @private
      */
     _onFullscreenChange() {
@@ -139,7 +143,7 @@ class Display {
     /**
      * Computes the fullscreen size: depending on the browser/device,
      * there are different ways to get correct fullscreen pixel size
-     * 
+     *
      * @param {Number} width initial width of the screen
      * @param {Number} height initial height of the screen
      *
@@ -211,10 +215,10 @@ class Display {
 
     /**
      * Create game layers.
-     * 
+     *
      * This method will create this.layers.length layers plus one more
      * used for post-rendering effects
-     * 
+     *
      * @private
      */
     _createLayers() {
@@ -249,9 +253,9 @@ class Display {
 
     /**
      * Returns the zIndex property of the specified layer canvas
-     * 
+     *
      * @param {Number} layer The layer number.
-     * 
+     *
      * @private
      */
     _getLayerZIndex(layer) {
@@ -266,20 +270,51 @@ class Display {
     }
 
     /**
+     * Sorts the layers by zIndex + DOM position
+     *
+     * @note: We need to keep track of the rendering order of the layers
+     * because the 'post' effects need the composited layer
+     */
+    _sortLayers() {
+        // first we need to render background layers
+        let sortedLayers = [];
+
+        this.layersIndex.forEach((isBackground, index) => {
+            if (isBackground) {
+                sortedLayers.push(index);
+            }
+        });
+        // then map
+        sortedLayers.push(this.layers.length - 1);
+
+        // then forground layers
+        this.layersIndex.forEach((isBackground, index) => {
+            if (!isBackground) {
+                sortedLayers.push(index);
+            }
+        });
+
+        return sortedLayers;
+    }
+
+    /**
      * Changes the zIndex property of the specified layer canvas
-     * 
+     *
      * @param {Number} layer The layer number.
      * @param {Number} zIndex The new zIndex value for this layer
      */
     setLayerZIndex(layer, zIndex) {
         if (layer < this.layers.length) {
             Dom(this.layers[layer].canvas).css('zIndex', zIndex);
+            this.layersIndex[layer] = zIndex === 0;
+            // resort layers
+            this.orderedLayers = this._sortLayers();
         }
     }
 
     /**
      * Clears a canvas display buffer
-     * 
+     *
      * @param {CanvasRederingContext} ctx The context to clear
      */
     clearScreen(ctx) {
@@ -306,7 +341,7 @@ class Display {
 
     /**
      * Changes the (CSS) opacity of a canvas
-     * 
+     *
      * @param {Canvas} canvas The Canvas HTML element.
      * @param {Number} opacity The new opacity value for this canvas.
      */
@@ -352,7 +387,8 @@ class Display {
             this.setCanvasOpacity(this.fxCtx.canvas, 0);
             // merge all canvas into fxCtx one
             for (let i = 0; i < this.layers.length; ++i) {
-                this.fxCtx.drawImage(this.layers[i].canvas, 0, 0);
+                const index = this.sortedLayers[i];
+                this.fxCtx.drawImage(this.layers[index].canvas, 0, 0);
             }
         }
         /* HACK */
@@ -365,16 +401,16 @@ class Display {
 
     /**
      * Prepares the canvas before rendering images.
-     *  
+     *
      * @param {Array} resources Array of resources to use.
-     * 
+     *
      * Explanation: during development, I noticed that the very first time
      * the ctx.drawImage() was used to draw onto a canvas, it took a very long time,
      * like at least 10ms for a very small 32x32 pixels drawImage.
-     * 
+     *
      * Subsequent calls do not have this problem and are instant.
      * Maybe some ColorFormat conversion happens.
-     * 
+     *
      * This method makes sure that when the game starts rendering, we don't have
      * any of these delays that can impact gameplay and alter the gameplay experience
      * in a negative way.
@@ -406,9 +442,9 @@ class Display {
 
     /**
      * Starts an animation on the display
-     * 
+     *
      * @param {String} fxName Name of the effect to apply.
-     * @param {Object} options 
+     * @param {Object} options
      * @param {String} [options.easing='linear'] The easing method to use
      * @param {String} [options.when='pre'] When is the effect applied: can be before the game frame rendering ('pre') or after ('post')
      * @param {any} context The context to bind the Effect to
@@ -452,7 +488,7 @@ class Display {
 
     /**
      * stops current animation
-     * 
+     *
      * TODO
      * @private
      */
@@ -462,7 +498,7 @@ class Display {
 
     /**
      * Executes an effect on a frame at a given time
-     * 
+     *
      * @param {CanvasContext} ctx Context that contains current frame rendering.
      * @param {CanvasContext} fxCtx The context in which to render the transformed frame.
      * @param {any} obj The object on which animation is applied: should be a `Drawable`.
