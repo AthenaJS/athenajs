@@ -5,7 +5,14 @@ import Dom from '../Core/Dom';
 
 /*jshint devel: true*/
 /**
- *
+ * The `Display` class creates and manipulates display buffer for the game
+ * 
+ * @param {Object} options
+ * @param {number} [options.width=1024] The width of the display.
+ * @param {number} [options.height=768] The height of the display.
+ * @param {String} [options.type] What type of rendere to use, only '2d' supported for now.
+ * @param {layers} [options.layers] An array describing each layer that will be added: [true, true] will create two background layers, set to true for a foreground layer.
+ * @param {String|HTMLElement} target The target where the game DOM element should be appended.
  */
 class Display {
     constructor(options, target) {
@@ -53,6 +60,12 @@ class Display {
         };
     }
 
+    /**
+     * Creates a new (offscreen) drawing buffer
+     * 
+     * @param {Number} width width of the buffer
+     * @param {iumber} height height of the buffer
+     */
     getBuffer(width, height) {
         let ctx = Dom('canvas').attr({
             width: width + 'px',
@@ -64,6 +77,9 @@ class Display {
         return ctx;
     }
 
+    /**
+     * Adds cross-browser event listener for the fullscreenchange event
+     */
     _addFullscreenEvents() {
         const target = this.target;
 
@@ -74,6 +90,13 @@ class Display {
         target.addEventListener('MSFullscreenChange', this._onFullscreenChange.bind(this), false);
     }
 
+    /**
+     * Handler called when `fullscreenchange` event is triggered by the browser
+     * 
+     * This in turn toggles fullscreen display scaling
+     * 
+     * @private
+     */
     _onFullscreenChange() {
         var fullscreenElement = document.webkitFullscreenElement || document.fullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
 
@@ -112,7 +135,9 @@ class Display {
     }
 
     /**
-     *
+     * Computes the fullscreen size: depending on the browser/device,
+     * there are different ways to get correct fullscreen pixel size
+     * 
      * @param {Number} width initial width of the screen
      * @param {Number} height initial height of the screen
      *
@@ -155,6 +180,9 @@ class Display {
         }
     }
 
+    /**
+     * Toggles fullscreen display scaling
+     */
     toggleFullscreen() {
         this.isFullscreen = !this.isFullscreen;
 
@@ -177,6 +205,14 @@ class Display {
         }
     }
 
+    /**
+     * Create game layers.
+     * 
+     * This method will create this.layers.length layers plus one more
+     * used for post-rendering effects
+     * 
+     * @private
+     */
     _createLayers() {
         let i;
 
@@ -207,6 +243,13 @@ class Display {
         this.fxCtx['imageSmoothingEnabled'] = false;
     }
 
+    /**
+     * Returns the zIndex property of the specified layer canvas
+     * 
+     * @param {Number} layer The layer number.
+     * 
+     * @private
+     */
     _getLayerZIndex(layer) {
         // normal layer
         if (layer < this.layersIndex.length) {
@@ -218,12 +261,23 @@ class Display {
         }
     }
 
+    /**
+     * Changes the zIndex property of the specified layer canvas
+     * 
+     * @param {Number} layer The layer number.
+     * @param {Number} zIndex The new zIndex value for this layer
+     */
     setLayerZIndex(layer, zIndex) {
         if (layer < this.layers.length) {
             Dom(this.layers[layer].canvas).css('zIndex', zIndex);
         }
     }
 
+    /**
+     * Clears a canvas display buffer
+     * 
+     * @param {CanvasRederingContext} ctx The context to clear
+     */
     clearScreen(ctx) {
         if (0) {
             // setting canvas width resets imageSmoothingEnable to true
@@ -236,6 +290,9 @@ class Display {
         }
     }
 
+    /**
+     * Clears every rendering buffer, including the special fxCtx one
+     */
     clearAllScreens() {
         for (let i = 0; i < this.layers.length; ++i) {
             this.clearScreen(this.layers[i]);
@@ -244,6 +301,12 @@ class Display {
         this.clearScreen(this.fxCtx);
     }
 
+    /**
+     * Changes the (CSS) opacity of a canvas
+     * 
+     * @param {Canvas} canvas The Canvas HTML element.
+     * @param {Number} opacity The new opacity value for this canvas.
+     */
     setCanvasOpacity(canvas, opacity) {
         canvas.style.opacity = opacity;
     }
@@ -297,6 +360,22 @@ class Display {
         }
     }
 
+    /**
+     * Prepares the canvas before rendering images.
+     *  
+     * @param {Array} resources Array of resources to use.
+     * 
+     * Explanation: during development, I noticed that the very first time
+     * the ctx.drawImage() was used to draw onto a canvas, it took a very long time,
+     * like at least 10ms for a very small 32x32 pixels drawImage.
+     * 
+     * Subsequent calls do not have this problem and are instant.
+     * Maybe some ColorFormat conversion happens.
+     * 
+     * This method makes sure that when the game starts rendering, we don't have
+     * any of these delays that can impact gameplay and alter the gameplay experience
+     * in a negative way.
+     */
     prepareCanvas(resources) {
         let context = null,
             i = 0,
@@ -322,6 +401,15 @@ class Display {
         }
     }
 
+    /**
+     * Starts an animation on the display
+     * 
+     * @param {String} fxName Name of the effect to apply.
+     * @param {Object} options 
+     * @param {String} [options.easing='linear'] The easing method to use
+     * @param {String} [options.when='pre'] When is the effect applied: can be before the game frame rendering ('pre') or after ('post')
+     * @param {any} context The context to bind the Effect to
+     */
     animate(fxName, options, context) {
         console.log('animate');
 
@@ -359,10 +447,25 @@ class Display {
         return promise;
     }
 
+    /**
+     * stops current animation
+     * 
+     * TODO
+     * @private
+     */
     stopAnimate(/*fxName*/) {
         console.log('TODO: need to stop animation');
     }
 
+    /**
+     * Executes an effect on a frame at a given time
+     * 
+     * @param {CanvasContext} ctx Context that contains current frame rendering.
+     * @param {CanvasContext} fxCtx The context in which to render the transformed frame.
+     * @param {any} obj The object on which animation is applied: should be a `Drawable`.
+     * @param {any} time Unused.
+     * @param {String} when is this effect executed: 'pre' means before rendering, 'post' means after frame render.
+     */
     executeFx(ctx, fxCtx, obj, time, when) {
         var fxObject;
 
@@ -374,6 +477,9 @@ class Display {
         }
     }
 
+    /**
+     * Clears every display layer and clears fx queues
+     */
     clearDisplay() {
         console.log('clearFX Queue');
         this.fxQueue.pre = {};

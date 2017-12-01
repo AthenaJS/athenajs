@@ -14,7 +14,7 @@ import Dom from './Dom';
  * @param {Object} options
  * @param {boolean} [options.debug=false] Debug will be enabled if this is true.
  * @param {string} [options.name] The name of the game.
- * @param {string|HTMLElement} [options.target="new Dom('div')"] target The DOM target of the game: this is where the game canvas elements will be added.
+ * @param {string|HTMLElement} [options.target="Dom('div')"] target The DOM target of the game: this is where the game canvas elements will be added.
  * By default the target is a new Div that is appened to the body element.
  * @param {boolean} [options.showFps=false] A little fps counter will be displayed if this is true.
  * @param {number} [options.width=1024] The width of the game display.
@@ -118,6 +118,9 @@ class Game {
         }
     }
 
+    /**
+     * Creates the tile inspector, adding it onto the DOM and starts listening for events
+     */
     addInspector() {
         this.moveHandler = (event) => {
             const map = this.scene.map;
@@ -175,6 +178,11 @@ class Game {
         Dom(this.target).css('position', 'relative');
     }
 
+    /**
+     * Toggles the Map tiles inspector
+     * 
+     * @param {Boolean} enable wether to enable the tileInspector
+     */
     toggleTileInspector(enable) {
         if (enable) {
             if (!this.tileInspector) {
@@ -223,6 +231,9 @@ class Game {
         AudioManager.toggleSound(bool);
     }
 
+    /**
+     * Toggles fullscreen status
+     */
     toggleFullscreen() {
         if (this.display) {
             this.display.toggleFullscreen();
@@ -230,18 +241,18 @@ class Game {
     }
 
     /**
-     * Creates a new display
+     * Creates a new display, creating necessary display layers (canvas) using specified
+     * parameters
      *
-     * TODO: DESCRIBE
      * @param {Object} options
-     * @param {String|HTMLElement} The target of the display: this is were canvas elements will be added
+     * @param {Array} [options.layers] an aaray describing which layers should be created on the display and at which position, example: [false, true] will create two layers, one of which will be background
+     * @param {String|HTMLElement} target The target of the display: this is were canvas elements will be appended
      * @private
      *
      */
     createDisplay(options, target) {
         this.display = DisplayManager.addDisplay(options, target);
     }
-
 
     /**
      * INTERNAL: initialize input events
@@ -256,6 +267,12 @@ class Game {
     }
 
 
+    /**
+     * Add HTML5 visibility event handlers so that the game may be paused
+     * when the tab isn't visible anymore
+     * 
+     * @see [Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
+     */
     _addVisibilityEvents() {
         let eventName = '',
             property = '';
@@ -456,51 +473,6 @@ class Game {
             this._renderSceneLoop();
         }
     }
-    // togglePauseGame() {
-    //     if (this.running) {
-    //         console.log('pausing game');
-    //         this.running = false;
-    //         this.scene.pause();
-
-    //         // be sure to render any changes from the scene before stopping refresh
-    //         this.display.renderScene(this.scene);
-
-    //         // then stop render/event loop
-    //         this.stopScene();
-    //     } else {
-    //         console.log('un-pausing game');
-    //         this.running = true;
-    //         this.scene.unpause();
-    //         this._runSceneLoop();
-    //         this._renderSceneLoop();
-    //     }
-    // }
-
-
-    /**
-     * Starts the current scene
-     *
-     * @param {Boolean=false} resetMap resets the map associated to the map
-     *
-     * - loads the scene if not already loaded
-     * - once it's loaded calls scene.start() and start both event & render loops
-     *
-     */
-    // startScene(resetMap = false) {
-    //     console.log('[Game] startScene');
-
-    //     if (this.scene) {
-    //         console.log('[Game] loading scene');
-    //         this.scene.load().then(() => {
-    //             console.log('[Game] Scene', this.scene.name, 'loaded: starting run & render loops');
-    //             this.scene.start(resetMap);
-    //             this._runSceneLoop();
-    //             this._renderSceneLoop();
-    //         });
-    //     } else {
-    //         console.log('[Game] nothing to start: no scene selected!!');
-    //     }
-    // }
 
     /**
      * Stops current scene from running: this will both halt render & event loops
