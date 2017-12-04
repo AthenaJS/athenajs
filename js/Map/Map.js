@@ -20,7 +20,7 @@ window.maps = {};
 class Map {
     /**
      * Creates a new Map
-     * 
+     *
      * @param {Object} options
      * @param {string} options.src The url to an image that will be used for the tiles
      * @param {number} options.tileWidth The width of a tile
@@ -82,13 +82,15 @@ class Map {
 
         this.viewportLimitY = 154;
         this.viewportCenterY = 230;
-
         /* / End Scrolltype */
-        this.scrollOffsetX = 0;
-        this.scrollOffsetY = 0;
 
-        this.scrollTileOffsetX = 0;
-        this.scrollTileOffsetY = 0;
+        // offset related to tileWidth: used if we need to draw partial tiles
+        this.tileOffsetX = 0;
+        this.tileOffsetY = 0;
+
+        // when tileOffset !== 0, the tileWidth/height changes a well
+        this.scrollTileWidth = 0;
+        this.scrollTileHeight = 0;
 
         this.viewportLimits = {
             x1: this.viewportLimitX,
@@ -201,10 +203,10 @@ class Map {
 	 *  - reset windows
 	 *  - reset triggers
 	 *  - reset mapEvents
-	 *  - reset viewport + scrollOffset
+	 *  - reset viewport + tileOffset
 	 *  - sets isDirty to true so that map is redrawn
 	 *
-	 * TODO: scrollOffset shouldn't be 0 but depends on the master's position
+	 * TODO: tileOffset shouldn't be 0 but depends on the master's position
 	 *
 	 */
     reset() {
@@ -230,18 +232,18 @@ class Map {
         // reset mapEvent switches states too (fixes switch that automatically triggers)
         this.mapEvent.reset();
 
-        // and reset viewPort too
+        // and reset viewport too
         this.viewportX = this.options.viewportX || 0;
         this.viewportY = this.options.viewportY || 0;
         this.viewportW = this.options.viewportW || 0;
         this.viewportH = this.options.viewportH || 0;
 
-        // and scroll offset
-        this.scrollOffsetX = 0;
-        this.scrollOffsetY = 0;
+        // and tileOffset
+        this.tileOffsetX = 0;
+        this.tileOffsetY = 0;
 
-        this.scrollTileOffsetX = 0;
-        this.scrollTileOffsetY = 0;
+        this.scrollTileWidth = 0;
+        this.scrollTileHeight = 0;
 
         this.firstCol = (-this.viewportX / this.tileWidth);
         this.firstRow = (-this.viewportY / this.tileHeight);
@@ -1017,35 +1019,24 @@ class Map {
      * @param {CanvasContext} ctx The canvas rendering context to draw the tile into.
      * @param {number} x The horizontal position where to draw the tile.
      * @param {number} y The vertical position where to draw the tile.
-     * @param {Boolean} useScrollOffset If set to true, the tile will be partially rendered
-     * starting at scrollOffsetX. This happens if the tile is at the firstRow/firstCol of the viewport.
+     * @param {Boolean} partialTileX If set to true, the tile will be partially rendered starting at tileOffsetX.
+     * @param {Boolean} partialTileY If set to true, the tile will be partially rendered starting at tileOffsetY.
+     * This happens if the tile is at the firstRow/firstCol of the viewport and viewportX/Y % tileWidth/Height != 0.
      *
      * @note Unless noted otherwise, positions are related to the whole map, and not to the viewport.
      */
-    drawTile(tileNum, ctx, x, y, useScrollOffset) {
+    drawTile(tileNum, ctx, x, y, partialTileX, partialTileY) {
         let currentTile = this.tiles[tileNum];
 
-        if (useScrollOffset) {
-            ctx.drawImage(this.srcBitmap,
-                currentTile.offsetX + this.scrollOffsetX,
-                currentTile.offsetY + this.scrollOffsetY,
-                this.scrollTileOffsetX,
-                this.scrollTileOffsetY,
-                x,
-                y,
-                this.scrollTileOffsetX,
-                this.scrollTileOffsetY);
-        } else {
-            ctx.drawImage(this.srcBitmap,
-                currentTile.offsetX,
-                currentTile.offsetY,
-                currentTile.width,
-                currentTile.height,
-                x,
-                y,
-                currentTile.width,
-                currentTile.height);
-        }
+        ctx.drawImage(this.srcBitmap,
+            currentTile.offsetX + (partialTileX && this.tileOffsetX) || 0,
+            currentTile.offsetY + (partialTileY && this.tileOffsetY) || 0,
+            partialTileX ? this.scrollTileWidth : currentTile.width,
+            partialTileY ? this.scrollTileHeight : currentTile.height,
+            x,
+            y,
+            partialTileX ? this.scrollTileWidth : currentTile.width,
+            partialTileY ? this.scrollTileHeight : currentTile.height);
     }
 
 
@@ -1054,14 +1045,14 @@ class Map {
 	 *
 	 * @private
 	 */
-    _getScrollOffset() {
+    _getTileOffset() {
         let viewportX = Math.abs(this.viewportX),
             viewportY = Math.abs(this.viewportY);
 
-        this.scrollOffsetX = viewportX < this.tileWidth ? viewportX : viewportX % this.tileWidth;
-        this.scrollOffsetY = viewportY < this.tileHeight ? viewportY : viewportY % this.tileHeight;
-        this.scrollTileOffsetX = this.tileWidth - this.scrollOffsetX;
-        this.scrollTileOffsetY = this.tileHeight - this.scrollOffsetY;
+        this.tileOffsetX = viewportX < this.tileWidth ? viewportX : viewportX % this.tileWidth;
+        this.tileOffsetY = viewportY < this.tileHeight ? viewportY : viewportY % this.tileHeight;
+        this.scrollTileWidth = this.tileWidth - this.tileOffsetX;
+        this.scrollTileHeight = this.tileHeight - this.tileOffsetY;
     }
 
 
@@ -1106,24 +1097,26 @@ class Map {
         }
 
         if (this.isDirty || !this.lastCol) {
-            this._getScrollOffset();
+            this._getTileOffset();
 
             for (i = this.firstRow, max = this.lastRow, y = mapOffsetY; i < max; i++) {
+                // if (this.viewportX && i === this.firstRow)
+                //     debugger;
                 for (j = this.firstCol, max2 = this.lastCol, x = mapOffsetX; j < max2; j++) {
                     tileNum = this.map[i * this.numCols + j];
 
                     if (tileNum < 255) { // no tile goes here
                         // TODO: check that viewportY is not zero too ?
-                        this.drawTile(tileNum, ctx, x, y, ((this.viewportY && i === this.firstRow) || (this.viewportX && j === this.firstCol)));
+                        this.drawTile(tileNum, ctx, x, y, !!(this.viewportX && j === this.firstCol), !!(this.viewportY && i === this.firstRow), i === this.firstRow + 2 && j === this.firstCol + 2);
                     }
                     if (this.viewportX && j === this.firstCol) {
-                        x += this.scrollTileOffsetX;
+                        x += this.scrollTileWidth;
                     } else {
                         x += this.tileWidth;
                     }
                 }
-                if (this.viewPortY && i === this.firstRow) {
-                    y += this.scrollTileOffsetY;
+                if (this.viewportY && i === this.firstRow) {
+                    y += this.scrollTileHeight;
                 } else {
                     y += this.tileHeight;
                 }
@@ -1137,8 +1130,6 @@ class Map {
             this.addNewObjectsFromWindow();
 
             this.isDirty = false;
-        } else {
-            // do not draw map otherwise
         }
     }
 
@@ -1312,8 +1303,8 @@ class Map {
         this.numCols = this.width / this.tileWidth | 0;
         this.numRows = this.height / this.tileHeight | 0;
 
-        this.numViewportCols = this.viewportW / this.tileWidth | 0;
-        this.numViewportRows = this.viewportH / this.tileHeight | 0;
+        this.numViewportCols = Math.ceil(this.viewportW / this.tileWidth);
+        this.numViewportRows = Math.ceil(this.viewportH / this.tileHeight);
     }
 
 
@@ -1335,7 +1326,6 @@ class Map {
             this.firstRow = 0;
 
             this.lastCol = this.width / this.tileWidth | 0;
-            // console.log(this.viewportW, '/', this.tileWidth);
             this.lastRow = this.height / this.tileHeight | 0;
         } else {
             this.firstCol = Math.floor(-this.viewportX / this.tileWidth);
@@ -1474,7 +1464,7 @@ class Map {
         for (i = this.firstRow, max = this.lastRow, y = mapOffsetY; i < max; i++) {
             for (j = this.firstCol, max2 = this.lastCol, x = mapOffsetX; j < max2; j++) {
                 w = (this.viewportX && j === this.firstCol) ? this.scrollTileOffsetX : this.tileWidth;
-                h = (this.viewPortY && i === this.firstRow) ? this.scrollTileOffsetY : this.tileHeight;
+                h = (this.viewportY && i === this.firstRow) ? this.scrollTileOffsetY : this.tileHeight;
                 if (this.tileBehaviors[i * this.numCols + j] > 1) {
                     // if (this.tileBehaviors[i * this.numCols + j] > 1) {
                     // 	debugger;
@@ -1495,7 +1485,7 @@ class Map {
                     x += this.tileWidth;
                 }
             }
-            if (this.viewPortY && i === this.firstRow) {
+            if (this.viewportY && i === this.firstRow) {
                 y += this.scrollTileOffsetY;
             } else {
                 y += this.tileHeight;
