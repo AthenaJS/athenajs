@@ -36,7 +36,6 @@ class GroundMove extends Behavior {
     /**
      * Simple onMove handler that checks for a wall or hole
      *
-     * @param {Number} t Current timestamp.
      */
     onUpdate(/*t*/) {
         let sprite = this.sprite,

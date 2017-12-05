@@ -5,8 +5,6 @@ import NM from '../Notification/NotificationManager';
 import FX from '../FX/FX';
 import MapEvent from './MapEvent';
 
-/*jshint devel: true, bitwise: false*/
-
 window.maps = {};
 
 
@@ -29,6 +27,13 @@ class Map {
      * @param {number} options.height The full height of the map
      * @param {number} options.viewportW The width of the viewport: it is usually the same as the game width. Default = map.width
      * @param {number} options.viewportH The height of the viewport: it is usually the same as the game height. Default = map.height
+     * @param {Number} [options.viewportX=0] Initial x viewport (horizontal scrolling position) of the map.
+     * @param {Number} [options.viewportY=0] Initial y viewport (vertical scrolling position) of the map.
+     * @param {Array} [options.tiles] An optionnal array with the tiles to use for the map.
+     * @param {String} [options.name='map'] An optional name for the map.
+     * @param {string} [options.easing='linear'] The linear function to use when scrolling the map. Defaults to linear.
+     * @param {Number} [options.startX=0] The start x position of the master object.
+     * @param {Number} [options.startY=0] The start y position of the master object.
      * @param {ArrayBuffer} options.buffer The buffer containing width \* height bytes container tile numbers followed by width*height bytes for the tile behaviors
      * @example
      * var map = new Map({
@@ -96,7 +101,7 @@ class Map {
             x1: this.viewportLimitX,
             x2: this.viewportW - this.viewportLimitX,
             y1: this.viewportLimitY,
-            y2: this.viewportLimitH - this.viewportLimitY
+            y2: this.viewportH - this.viewportLimitY
         };
 
         /* list of objects sorted by type for faster colision detection */
@@ -426,7 +431,7 @@ class Map {
 	 * Move platform objects onto the map: they must be moved before normal objects are moved
 	 * so that movable objects move related to the platforms
 	 *
-     * @param {Number} current time
+     * @param {Number} timestamp Current time.
 	 */
     movePlatforms(timestamp) {
         this.platforms.forEach(function (obj) {
@@ -683,16 +688,16 @@ class Map {
     /**
     * WIP: Check if user will reach a platform
     *
-    * @param {any} sprite
-    * @param {any} vx
-    * @param {any} vy
-    * @returns {boolean} false (not fully implemented yet)
+    * @param {Drawable} drawable The drawable to use.
+    * @param {Number} vx The current vx of the object.
+    * @param {Number} vy The current vy of the object.
+    * @returns {boolean} false (not fully implemented yet).
     *
     * @private
     *
     */
-    checkForPlatform(object, vx, vy) {
-        let box = object.getHitBox(),
+    checkForPlatform(drawable, vx, vy) {
+        let box = drawable.getHitBox(),
             x = box.x + sprite.x,
             y = box.y + sprite.y;
 
@@ -710,8 +715,8 @@ class Map {
     * getTriggers for map window: `(x, y, x2, y2)`
     *
     * @param {number} x The x coordonate of left top corner of the box to check for.
-    * @param {numer} y The y coordonate of left top corner of the box to check for.
-    * @param {numer} x2 The x coordonate of right bottom corner of the box to check for.
+    * @param {number} y The y coordonate of left top corner of the box to check for.
+    * @param {number} x2 The x coordonate of right bottom corner of the box to check for.
     * @param {number} y2 The y coordonate of right bottom corner of the box to check for.
     *
     * @returns {Array} a list of trigger objects that have not already been triggered
@@ -750,7 +755,7 @@ class Map {
      * @param {Number} y the y index to start checking inside the map
      * @param {Number} behavior the behavior to check for
      *
-     * @returns {Bolean} true if one or more hits were found, false otherwise
+     * @returns {Boolean} true if one or more hits were found, false otherwise
      */
     checkMatrixForCollision(buffer, matrixWidth, x, y, behavior) {
         let cols = matrixWidth / this.tileWidth,
@@ -771,9 +776,9 @@ class Map {
     /**
      * This method returns min(next `Behavior` tile, distance)
      *
-     * @param {Sprite} sprite the sprite to check distance with
-     * @param {Number} distance the maximum (x) distance in pixels
-     * @param {Number} behavior the behavior we want to check for
+     * @param {Sprite} sprite The sprite to check distance with.
+     * @param {Number} distance The maximum (x) distance in pixels.
+     * @param {Number} behavior The behavior we want to check for.
      *
      * Returns the minimum distance
      */
@@ -867,7 +872,7 @@ class Map {
     * WIP: Calculates and sets the object's next y position using its current y, vy and
     * avoids tileTypes tiles (ie: walls, moving platforms)
     *
-    * @param {any} sprite
+    * @param {Drawalbe} sprite
     * @param {any} tileTypes
     * @returns true if the object hit a tile, false otherwise
     *
@@ -975,7 +980,7 @@ class Map {
      * @param {number} x2
      * @param {number} y2
      * @param {number} types
-     * @returns {boolean} True if colision detected
+     * @returns {(Boolean|Object)} True if colision detected
      *
      */
     hitObjectTest(x, y, x2, y2, types) {
@@ -1107,7 +1112,7 @@ class Map {
 
                     if (tileNum < 255) { // no tile goes here
                         // TODO: check that viewportY is not zero too ?
-                        this.drawTile(tileNum, ctx, x, y, !!(this.viewportX && j === this.firstCol), !!(this.viewportY && i === this.firstRow), i === this.firstRow + 2 && j === this.firstCol + 2);
+                        this.drawTile(tileNum, ctx, x, y, !!(this.viewportX && j === this.firstCol), !!(this.viewportY && i === this.firstRow));
                     }
                     if (this.viewportX && j === this.firstCol) {
                         x += this.scrollTileWidth;
@@ -1463,8 +1468,8 @@ class Map {
 
         for (i = this.firstRow, max = this.lastRow, y = mapOffsetY; i < max; i++) {
             for (j = this.firstCol, max2 = this.lastCol, x = mapOffsetX; j < max2; j++) {
-                w = (this.viewportX && j === this.firstCol) ? this.scrollTileOffsetX : this.tileWidth;
-                h = (this.viewportY && i === this.firstRow) ? this.scrollTileOffsetY : this.tileHeight;
+                w = (this.viewportX && j === this.firstCol) ? this.scrollTileWidth : this.tileWidth;
+                h = (this.viewportY && i === this.firstRow) ? this.scrollTileHeight : this.tileHeight;
                 if (this.tileBehaviors[i * this.numCols + j] > 1) {
                     // if (this.tileBehaviors[i * this.numCols + j] > 1) {
                     // 	debugger;
@@ -1480,13 +1485,13 @@ class Map {
                     ctx.fill();
                 }
                 if (this.viewportX && j === this.firstCol) {
-                    x += this.scrollTileOffsetX;
+                    x += this.scrollTileWidth;
                 } else {
                     x += this.tileWidth;
                 }
             }
             if (this.viewportY && i === this.firstRow) {
-                y += this.scrollTileOffsetY;
+                y += this.scrollTileHeight;
             } else {
                 y += this.tileHeight;
             }
@@ -1630,7 +1635,6 @@ class Map {
      * @param {Number} startLine Where to start the copy
      * @param {Number} height How many lines to shift
      * @param {Number} tile tile to use for new lines
-     * @param {Number} behavior behavior to use for new lines
      */
     shift(startLine, height, tile/*, behavior*/) {
         const tiles = new Uint8Array(this.buffer, 0, startLine * this.numCols),

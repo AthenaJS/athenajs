@@ -14,7 +14,8 @@ class Display {
      * @param {number} [options.width=1024] The width of the display.
      * @param {number} [options.height=768] The height of the display.
      * @param {String} [options.type] What type of rendere to use, only '2d' supported for now.
-     * @param {layers} [options.layers] An array describing each layer that will be added: [true, true] will create two background layers, set to true for a foreground layer.
+     * @param {Array<Boolean>} [options.layers] An array describing each layer that will be added: [true, true] will create two background layers, set to true for a foreground layer.
+     * @param {String} options.name The name of the display.
      * @param {(String|HTMLElement)} target The target where the game DOM element should be appended.
      */
     constructor(options, target) {
@@ -70,7 +71,7 @@ class Display {
      * Creates a new (offscreen) drawing buffer
      *
      * @param {Number} width width of the buffer
-     * @param {iumber} height height of the buffer
+     * @param {Number} height height of the buffer
      */
     getBuffer(width, height) {
         let ctx = Dom('canvas').attr({
@@ -315,7 +316,7 @@ class Display {
     /**
      * Clears a canvas display buffer
      *
-     * @param {CanvasRederingContext} ctx The context to clear
+     * @param {RenderingContext} ctx The context to clear
      */
     clearScreen(ctx) {
         // if (0) {
@@ -371,7 +372,6 @@ class Display {
         for (let i = 0; i < this.layers.length - 1; i++) {
             this.clearScreen(this.layers[i]);
         }
-        // this.clearScreen(this.layers[1]);
 
         scene.render(this.layers);
 
@@ -383,7 +383,7 @@ class Display {
         // then apply fx on this one, then render this one onto foremost layer
         /* HACK */
         if (Object.keys(this.fxQueue['post']).length) {
-            this.clearScreen(this.fxCtx, true);
+            this.clearScreen(this.fxCtx);
             this.setCanvasOpacity(this.fxCtx.canvas, 0);
             // merge all canvas into fxCtx one
             for (let i = 0; i < this.layers.length; ++i) {
@@ -447,6 +447,7 @@ class Display {
      * @param {Object} options
      * @param {String} [options.easing='linear'] The easing method to use
      * @param {String} [options.when='pre'] When is the effect applied: can be before the game frame rendering ('pre') or after ('post')
+     * @param {any} [options.context=this] The context (this) to apply to the animation.
      * @param {any} context The context to bind the Effect to
      */
     animate(fxName, options, context) {
@@ -459,7 +460,6 @@ class Display {
             fx;
 
         options.context = context || this;
-        // console.log('animate', this.fxQueue);
 
         if (typeof this.fxQueue[when][fxName] !== 'undefined') {
             console.warn('Fx', fxName, 'already in progress, cannot execute twice');
@@ -499,8 +499,8 @@ class Display {
     /**
      * Executes an effect on a frame at a given time
      *
-     * @param {CanvasContext} ctx Context that contains current frame rendering.
-     * @param {CanvasContext} fxCtx The context in which to render the transformed frame.
+     * @param {RenderingContext} ctx Context that contains current frame rendering.
+     * @param {RenderingContext} fxCtx The context in which to render the transformed frame.
      * @param {any} obj The object on which animation is applied: should be a `Drawable`.
      * @param {any} time Unused.
      * @param {String} when is this effect executed: 'pre' means before rendering, 'post' means after frame render.

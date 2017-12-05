@@ -57,7 +57,7 @@ class FX {
      * Retrieves an easing function
      * 
      * @param {String} easingName The name of the easing function to retrive.
-     * @returns {Function} The easing function, or linear function if it didn't exist
+     * @returns {Function} The easing function, or linear function if it didn't exist.
      */
     getEasing(easingName) {
         // defaults to linear easing if not specified or doesn't exist

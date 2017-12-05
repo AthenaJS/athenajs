@@ -190,6 +190,8 @@ Object.assign(Dom.prototype, {
         this.forEach(node => {
             node.style.display = 'block';
         });
+
+        return this;
     },
 
     /**
@@ -202,6 +204,8 @@ Object.assign(Dom.prototype, {
         this.forEach(node => {
             node.style.display = 'none';
         });
+
+        return this;
     }
 });
 

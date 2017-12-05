@@ -1,4 +1,3 @@
-/*jshint devel: true, bitwise: false*/
 import ResourceManager from '../Resource/ResourceManager';
 import DisplayManager from '../Display/DisplayManager';
 import AudioManager from '../Audio/AudioManager';
@@ -247,7 +246,8 @@ class Game {
      * parameters
      *
      * @param {Object} options
-     * @param {Array} [options.layers] an aaray describing which layers should be created on the display and at which position, example: [false, true] will create two layers, one of which will be background
+     * @param {Array} [options.layers] An aaray describing which layers should be created on the display and at which position, example: [false, true] will create two layers, one of which will be background.
+     * @param {String} options.name The name of the display, eg. `main`.
      * @param {String|HTMLElement} target The target of the display: this is were canvas elements will be appended
      * @private
      *
@@ -261,9 +261,9 @@ class Game {
      * @private
      */
     _initEvents() {
-        Input.init({
+        Input.init(/*{
             joystick: true
-        });
+        }*/);
 
         this._addVisibilityEvents();
     }
@@ -309,7 +309,6 @@ class Game {
      * Sets a new scene as the current scene
      *
      * @param {Scene} scene instance to set as current Scene
-     * @param {Boolean} [resetMap=false] set to true to reset the map
      *
      */
     setScene(scene) {
@@ -396,7 +395,6 @@ class Game {
     /**
      * This is the render scene loop that's get called at up to 60 times per second
      *
-     * @param {any} time since last frame was rendered
      *
      * @private
      */

@@ -5,7 +5,7 @@ import Tile from '../../Map/Tile';
 /**
  * Simple behavior that makes an object bounce on the ground
  *
- * @param {Sprite} sprite The sprite to attach the behavior to.
+ * @param {Drawable} sprite The sprite to attach the behavior to.
  * @param {Object} options The options of the behavior.
  * @param {Number} [options.elasticity=0.80] The elasticity: the closer it is to 1, the higher the bounce.
  * @param {Function} [options.onEnd=undefined] An optional callback to execute when the object stops bouncing.

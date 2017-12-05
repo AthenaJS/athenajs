@@ -1,4 +1,3 @@
-/*jshint devel: true*/
 /**
  * MapEvent handles events that are triggered on the map.
  * Such events can be: checkpoint was reached, new wave needs to
@@ -10,9 +9,13 @@
  * This is a default MapEvent class: games should extend MapEvent
  * to handle whatever events they need.
  *
- * @param {Map} map The [`Map`](#Map) to use
  */
 export default class MapEvent {
+    /**
+     * Creates a new MapEvent
+     * 
+     * @param {Map} map 
+     */
     constructor(map) {
         console.log('[MapEvent] init with map');
         this.map = map || null;

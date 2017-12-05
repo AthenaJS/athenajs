@@ -207,7 +207,7 @@ class Sprite extends Drawable {
      * Loads animations from settings, flipping sprites if needed
      * and sets the last animation of the array as current animation
      *
-     * @param {Object} anims The animations map to load.
+     * @param {Object} [anims] The animations map to load.
      */
     load(anims) {
         // if (!this._settings)
@@ -243,7 +243,7 @@ class Sprite extends Drawable {
      * It's possible to define a new animation that is simply the flip of another one
      * This method copies the frames of the source animation and flips them
      *
-     * @param {Object} animation The animation to create frames for.
+     * @param {Object} anim The animation to create frames for.
      * @param {String} flipFrom The name of the animation to use as reference.
      * @param {Number} flipType The direction of the flip: set to 1 for left/right flip, 2 for top/bottom flip.
      *
@@ -626,10 +626,13 @@ class Sprite extends Drawable {
     /**
      * Runs every registered change callback function
      *
+     **@param {String} oldAnim The previous animation.
+     * @param {String} newAnim The new animation to be played.
+     *  
      * @private
      */
-    _animationChanged(oldAnim) {
-        this.animChangeDef.resolve(oldAnim, this.currentAnimName);
+    _animationChanged(oldAnim, newAnim) {
+        this.animChangeDef.resolve(oldAnim, newAnim/*, this.currentAnimName*/);
     }
 
     /**
@@ -646,7 +649,6 @@ class Sprite extends Drawable {
      * Draws the sprite onto the canvas context passed
      *
      * @param {CanvasRenderingContext2D} destCtx The context where to render the sprite.
-     * @param {Boolean} [debug=false] Whether to show the sprite hit box.
      *
      * @private
      */
@@ -736,8 +738,8 @@ class Sprite extends Drawable {
         if (!canvas) {
             canvas = document.createElement('canvas');
             canvas.id = 'describe';
-            canvas.setAttribute('width', totalWidth);
-            canvas.setAttribute('height', totalHeight);
+            canvas.setAttribute('width', totalWidth.toString());
+            canvas.setAttribute('height', totalHeight.toString());
         }
 
         ctx = Dom('#describe')[0] && Dom('#describe')[0].getContext('2d') || new Dom('canvas').attr('id', 'describe').attr('width', totalWidth).attr('height', totalHeight).css('zIndex', '100').appendTo('body')[0].getContext('2d');

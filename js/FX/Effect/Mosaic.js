@@ -10,6 +10,8 @@ import Effect from './Effect';
 class Mosaic extends Effect {
     /**
      * Creates a new Mosaic effect
+     * 
+     * @param {Object} options
      * @param {Number} options.startValue The start value of the effect.
      * @param {Number} options.endValue The end value of the effect.
      * @param {Number} options.duration The duration of the effect (ms).

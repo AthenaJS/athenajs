@@ -8,17 +8,19 @@ import Input from '../../Input/InputManager';
  *
  * To have a sprite controlled by the user you can simply attach this behavior.
  *
- * @param {Sprite} sprite The sprite to attach the behavior to.
- * @param {InputManager} Input A reference to the InputManager
- * @param {Object} options Parameters specifics to the behavior
- * @param {String} [options.startMovement="idle"] The initial behavior state.
- * @param {String} [options.direction="right"] The initial direction.
- * @param {String} [options.lookDirection="left"] The initial look direction, can be different than direction.
- *
  * @see {Behavior}
  * @extends Behavior
  */
 class PlayerMove extends Behavior {
+    /**
+     * Creates a new PlayerMove behavior.
+     * 
+     * @param {Drawable} sprite The sprite to attach the behavior to.
+     * @param {Object} options Parameters specifics to the behavior
+     * @param {String} [options.startMovement="idle"] The initial behavior state.
+     * @param {String} [options.direction="right"] The initial direction.
+     * @param {String} [options.lookDirection="left"] The initial look direction, can be different than direction.
+     */
     constructor(sprite, options) {
         super(sprite, options);
 
@@ -68,7 +70,7 @@ class PlayerMove extends Behavior {
                 this.goUpOrClimb(false);
             } else if (Input.getKeyStatus(Input.keys.DOWN) === true) {
                 // empty ? => fall (possible ?)
-                this.goDownOrClimb(0);
+                this.goDownOrClimb();
             } else {
                 if (this.currentMovement !== 'climb') {
                     if (!this.currentMovement.match('fire')) {
@@ -119,10 +121,10 @@ class PlayerMove extends Behavior {
                 }
                 // TODO: handle up key to catch the ladder
                 if (!this.fromLadder && Input.getKeyStatus(Input.keys.UP) === true && !this.goUpOrClimb(true)) {
-                    this.jump(this.lookDirection);
+                    this.jump(/*this.lookDirection*/);
                 } else {
                     // console.log('jump 2');
-                    this.jump(this.lookDirection);
+                    this.jump(/*this.lookDirection*/);
                 }
             } else if (!this.currentMovement.match('fire') && !this.currentMovement.match('climb')) {
                 // console.log('cas 2.2', this.currentMovement);

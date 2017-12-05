@@ -3,6 +3,8 @@ import FX from '../FX/FX';
 
 /**
  * The BitmapText class allows to use a spritesheet as a font to draw text onto the screen
+ * 
+ * @extends Drawable
  */
 class BitmapText extends Drawable {
     /**
@@ -30,7 +32,6 @@ class BitmapText extends Drawable {
      *      startY: 36
      *   });
      *
-     * @extends Drawable
      */
     constructor(type = 'BitmapText', options) {
         super(type, options);
@@ -217,7 +218,7 @@ class BitmapText extends Drawable {
     /**
      * Scrolls text from the top, firing an optional callback at the end
      *
-     * @param {Number} The duration of the scrolling in milliseconds.
+     * @param {Number} duration The duration of the scrolling in milliseconds.
      * @param {Function} [callback=undefined] An optional callback to fire when the scrolling is over.
      */
     scrollFromTop(duration, callback) {
@@ -393,7 +394,7 @@ class BitmapText extends Drawable {
             this.clearBuffer();
         }
 
-        this.renderText(this.text);
+        this.renderText();
     }
 
     /**
@@ -424,8 +425,7 @@ class BitmapText extends Drawable {
     /**
      * Draws pre-rendered into destination buffer
      *
-     * @param {CanvasContext} destCtx The new cancas context where to draw the bitmap font.
-     * @param {Boolean} debug Wether to draw debug stuff.
+     * @param {RenderingContext} destCtx The new cancas context where to draw the bitmap font.
      *
      * @note: once added onto the scene, this method is automatically called at each render loop.
      *

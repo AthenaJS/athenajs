@@ -1,6 +1,5 @@
 import Display from './Display';
 
-/*jshint devel: true*/
 /**
  * The DisplayManager handles displays
  * 
@@ -10,7 +9,6 @@ class DisplayManager {
     /**
      * Creates a new DisplayManager
      * 
-     * @param {any} options 
      */
     constructor(/*options*/) {
         console.log('[DisplayManager] Init()'/*, options*/);

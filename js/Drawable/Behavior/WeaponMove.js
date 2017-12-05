@@ -5,7 +5,7 @@ import Tile from '../../Map/Tile';
 /**
  * Simple behavior that moves horizontally until a wall is reached.
  *
- * @param {Sprite} sprite The sprite to attach the behavior to.
+ * @param {Drawable} sprite The sprite to attach the behavior to.
  * @param {Object} options The options of the behavior
  * @param {String} [options.direction="left"] The initial direction of the move, default is `right`.
  *

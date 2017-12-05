@@ -28,8 +28,8 @@ class Custom extends Effect {
     /**
      * Process the custom effect: this method simply calls the user's callback
      * 
-     * @param {CanvasRenderingContext} ctx The `source`rendering context.
-     * @param {CanvasRenderingContext} fxCtx The `destination` context.
+     * @param {RenderingContext} ctx The `source`rendering context.
+     * @param {RenderingContext} fxCtx The `destination` context.
      * 
      * @returns {Boolean} true when the animation has ended.
      */
