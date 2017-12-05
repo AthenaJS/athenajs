@@ -4,6 +4,8 @@ import Deferred from '../Core/Deferred';
 /**
  * Very basic wrapper for canvas drawing methods
  * Incomplete: missing translate, rotates, scale support
+ * 
+ * @extends Drawable
  */
 export default class Canvas extends Drawable {
     /**
@@ -17,7 +19,6 @@ export default class Canvas extends Drawable {
      * @param {Number} [options.y] The vertical position of the element.
      * @param {String} [options.color] The color of the element. Can be changed by subsequent drawing method calls.
      * 
-     * @extends Drawable
      */
     constructor(name, options) {
         super(name, options);
@@ -33,8 +34,7 @@ export default class Canvas extends Drawable {
     /**
      * Canvas's draw method that's called on every frame
      * 
-     * @param {CanvasRenderingContext} ctx The rendering context to use for drawing.
-     * @param {Boolean} debug Draws debug info if set to true.
+     * @param {RenderingContext} ctx The rendering context to use for drawing.
      */
     draw(ctx/*, debug*/) {
         this.ctx = ctx;
@@ -144,7 +144,7 @@ export default class Canvas extends Drawable {
     animate(name, options) {
         if (name !== 'Fade') {
             console.warn('animte() not supported on Canvas objects yet. Effect not applied.');
-            return Deferred.resolve();
+            return Deferred.resolve(true);
         } else {
             return super.animate(name, options);
         }

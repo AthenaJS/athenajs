@@ -1,7 +1,5 @@
 import Behavior from './Behavior';
 
-/*jshint devel: true, bitwise: false*/
-
 function sign(x) {
     return typeof x === 'number' ? x ? x < 0 ? -1 : 1 : x === x ? 0 : NaN : NaN;
 }
@@ -46,7 +44,6 @@ class Path extends Behavior {
      * Move handler: gets the next vx/vy from `this.nodes`
      * and makes sure to call onVXChange/onVYChange at each sign change
      * 
-     * @param {Number} t Current timestamp.
      */
     onUpdate(/*t*/) {
         let sprite = this.sprite,

@@ -5,7 +5,6 @@ import InOut from './InOut';
 import Path from './Path';
 import WeaponMove from './WeaponMove';
 
-/*jshint devel: true, bitwise: false*/
 let behaviors = {};
 
 /**

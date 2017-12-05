@@ -1,5 +1,3 @@
-
-/*jshint devel: true, bitwise: false*/
 class Tile {
     constructor(options) {
         this.offsetX = options.offsetX || 0;

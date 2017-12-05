@@ -1,6 +1,7 @@
 import Behavior from './Behavior';
 import Input from '../../Input/InputManager';
 import AM from '../../Audio/AudioManager';
+import Tile from '../../Map/Tile';
 
 // debug
 window.AM = AM;
@@ -232,7 +233,7 @@ class PlayerMove2 extends Behavior {
             }
         } else if (Input.getKeyStatus(this.actionKeys.UP)) {
             // TODO: can we calculate this ?
-            if (this.statusDirection !== DIR.WALL && !this.sprite.currentMap.checkForTileType(this.sprite, TYPE.LADDER, 20, 5, true)) {
+            if (this.statusDirection !== DIR.WALL && !this.sprite.currentMap.checkForTileType(this.sprite, Tile.TYPE.LADDER, 20, 5, true)) {
                 console.log('face wall');
                 this.faceWall();
             } else {
@@ -264,7 +265,7 @@ class PlayerMove2 extends Behavior {
         this.switchAbove = this.sprite.currentMap.getSwitchAboveMaster();
     }
 
-    idle(direction) {
+    idle(/*direction*/) {
         console.log('[PlayerMove2] Switching to idle mode');
         this.setStatus(STATUS.STANDING);
 
@@ -320,14 +321,14 @@ class PlayerMove2 extends Behavior {
         }
         if (!sprite.vy) {
             if (sprite.vx) {
-                isCollide = sprite.currentMap.setNextX(sprite, TYPE.WALL);
+                isCollide = sprite.currentMap.setNextX(sprite, Tile.TYPE.WALL);
 
                 if (isCollide) {    // collision
                     this.collisionDetected = true;
                 }
             }
         } else {    // we need to do more calcs
-            isCollide = sprite.currentMap.setNextYTop(sprite, TYPE.WALL);
+            isCollide = sprite.currentMap.setNextYTop(sprite, Tile.TYPE.WALL);
         }
         // nextX = sprite.map.max(nextX, wallX - nextX)
         // then check if we hit a wall
@@ -339,6 +340,6 @@ class PlayerMove2 extends Behavior {
         // after moving, we check if we reached or left a platform
         // var bool = sprite.currentMap.checkForPlatform(sprite, x, y);
     }
-};
+}
 
 export default PlayerMove2;

@@ -1,4 +1,3 @@
-/*jshint devel: true, bitwise: false*/
 /**
  * Base class for behaviors.
  *
@@ -14,7 +13,7 @@ class Behavior {
     /**
      * Base class constructor
      * 
-     * @param {Sprite} sprite The sprite to attach the behavior to.
+     * @param {Drawable} sprite The sprite to attach the behavior to.
      * @param {Object} options An hash with behavior-specific properties.
      * @param {Number} [options.gravity=0] The object's gravity.
      * @param {Number} [options.vx=0] The object's horizontal velocity.

@@ -11,6 +11,7 @@ class Fade extends Effect {
     /**
      * Creates a Fade Effect
      * 
+     * @param {Object} options
      * @param {Number} options.startValue the start value of the effect.
      * @param {Number} options.endValue the end value of the effect.
      * @param {Boolean} options.loop Set to true to make the effect loop.
@@ -40,8 +41,8 @@ class Fade extends Effect {
 
     /**
      * 
-     * @param {CanvasRenderingContext} ctx The `source`rendering context.
-     * @param {CanvasRenderingContext} fxCtx The `destination` context.
+     * @param {enderingContext} ctx The `source`rendering context.
+     * @param {RenderingContext} fxCtx The `destination` context.
      * @param {Drawable} obj The Drawable on which to execute the ffect.
      */
     process(ctx, fxCtx, obj) {

@@ -29,7 +29,6 @@ class InOut extends Behavior {
     /**
      * Called when the game wants to update the Drawable's position
      * 
-     * @param {Number} t Current timestamp.
      */
     onUpdate(/*t*/) {
         let sprite = this.sprite,

@@ -158,7 +158,7 @@ class Menu extends Drawable {
     /**
      * Draw method for the Text object
      *
-     * @param {CanvasRenderingContext} destCtx The canvas context where to draw the menu.
+     * @param {RenderingContext} destCtx The canvas context where to draw the menu.
      *
      * @private
      */

@@ -1,6 +1,5 @@
 // import VirtualJoystick from '../lib/virtualJoystick/virtualJoystick';
 
-/*jshint devel: true*/
 /*globals VirtualJoystick*/
 /**
  * Handles keyboard input (joystick input doesn't work correctly yet).

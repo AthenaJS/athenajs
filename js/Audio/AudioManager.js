@@ -31,9 +31,9 @@ export default {
      * Plays the specified sound with `id`.
      * 
      * @param {String} id
-     * @param {Boolean} loop
-     * @param {Number} volume a Number between 0 and 1
-     * @param {Number} panning a Number between 10 (left) and -10 (right)
+     * @param {Boolean} [loop=false]
+     * @param {Number} [volume=1] a Number between 0 and 1
+     * @param {Number} [panning=0] a Number between 10 (left) and -10 (right)
      * @returns the created sound instance
      */
     play: function (id, loop, volume, panning) {

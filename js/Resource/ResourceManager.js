@@ -144,7 +144,7 @@ export default {
      * Add new resource(s) into the specified group
      *
      * @param {Object|Array} resource a single or a group of resources to load
-     * @param {String} group the name of the group to add the resources into
+     * @param {String} [group='any'] the name of the group to add the resources into
      *
      * @returns {Deferred} a new Deferred that will be resolved once the
      * resources have been loaded.

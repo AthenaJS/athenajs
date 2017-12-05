@@ -22,7 +22,7 @@ class Scene {
      * @param {Object} [options.resources] An optional array of resources of the form: ``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
      * @param {number} [options.layers=2] The number of layers: layers are stacked above the backgrounds.
      * @param {number} [options.opacity=1] The default opacity for the scene: can be usefull to have fadeIn effects when starting the scene.
-     * @param {number} [options.hudScene] Scenes can have an option `hud` scene that is automatically rendered on top of it. This allows to easily add score/status elements to games.
+     * @param {Scene} [options.hudScene] Scenes can have an option `hud` scene that is automatically rendered on top of it. This allows to easily add score/status elements to games.
      */
     constructor(options) {
         options = options || {};
@@ -408,7 +408,7 @@ class Scene {
     /**
      * Draws the associated map into the specified canvas context
      *
-     * @param {CanvasContext} destCtx The canvas context where the map should be rendered.
+     * @param {RenderingContext} destCtx The canvas context where the map should be rendered.
      *
      * @private
      */
@@ -424,7 +424,7 @@ class Scene {
     /**
      * Draws every object that is part of the associated map
      *
-     * @param {Array<CanvasRenderingContext>} drawContexts An array with all layers context.
+     * @param {Array<RenderingContext>} drawContexts An array with all layers context.
      *
      * @private
      */
@@ -435,7 +435,7 @@ class Scene {
     /**
      * Draws every object that has been added onto the scene
      *
-     * @param {Array<CanvasRenderingContext>} drawContexts An array with all layers context.
+     * @param {Array<RenderingContext>} drawContexts An array with all layers context.
      *
      * @private
      */
@@ -505,7 +505,7 @@ class Scene {
     /**
      * Set a static (CSS) background image independently of the layers
      *
-     * @param {Image|String} The image to set as background.
+     * @param {(Image|String)} image The image to set as background.
      * @obsolete
      */
     setBackgroundImage(image) {
@@ -641,7 +641,7 @@ class Scene {
     /**
      * This method is responsible for drawing the scene and will be called 60 times a second.
      *
-     * @param {Array<CanvasRenderingContext>} drawContexts The layers array to draw over.
+     * @param {Array<RenderingContext>} drawContexts The layers array to draw over.
      * *note* When the scene is not running, this method isn't called at all.
      */
     render(drawContexts) {

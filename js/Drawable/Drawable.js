@@ -264,7 +264,6 @@ class Drawable {
      *
      * @param {Boolean} isLeft Should we snap to the left?
      * @param {Boolean} isUp Should we snap to the right?
-     * @param {Number} [duration=0] The duration of the snap move in ms.
      */
     snapToMap(isLeft, isUp/*, duration = 0*/) {
         if (!this.currentMap) {
@@ -349,7 +348,7 @@ class Drawable {
     /**
      * Sets a new behavior to the object: this will be called in the move loop
      *
-     * @param {String|Behavior} behavior Either the name of a standard behavior or a Behavior class to use.
+     * @param {(String|Behavior)} behavior Either the name of a standard behavior or a Behavior class to use.
      * @param {Object} [options={}] The options of the behavior (may depend on the behavior type).
      *
      * @related {Behavior}
@@ -377,7 +376,7 @@ class Drawable {
      * 
      * This methods adds a new clipPath to the shape
      *
-     * @param {CanvasRenderingContext} destCtx Context to apply the mask to.
+     * @param {RenderingContext} destCtx Context to apply the mask to.
      * 
      * @private
      */
@@ -401,7 +400,7 @@ class Drawable {
     /**
      * Stops using the mask's clip
      * 
-     * @param {CanvasRenderingContext} destCtx The context.
+     * @param {RenderingContext} destCtx The context.
      * 
      * @private
      */
@@ -571,7 +570,7 @@ class Drawable {
      * This method saves the canvas current globalAlpha property to be
      * able to restore it after the Drawable has been rendered.
      * 
-     * @param {CanvasRenderingContext} ctx Context to use.
+     * @param {RenderingContext} ctx Context to use.
      * @private
      */
     applyCtxAlpha(ctx) {
@@ -582,7 +581,7 @@ class Drawable {
     /**
      * Restores the previous context globalAlpha property.
      * 
-     * @param {CanvasRenderingContext} ctx The context.
+     * @param {RenderingContext} ctx The context.
      */
     restoreCtxAlpha(ctx) {
         ctx.globalAlpha = this._oldAlpha;
@@ -631,7 +630,7 @@ class Drawable {
     /**
      * Draws the sprite hit box
      *
-     * @param {CanvasRenderingContext} The canvas context where to render the hitbox.
+     * @param {RenderingContext} The canvas context where to render the hitbox.
      */
     showHitBox(ctx) {
         if (!this.visible) {
@@ -670,7 +669,7 @@ class Drawable {
     /**
        * Draws a box around objects. This method is called when debugging is enabled.
        *
-       * @param {CanvasRenderingContext} ctx The context where to draw the box.
+       * @param {RenderingContext} ctx The context where to draw the box.
        */
     showObjectBox(ctx) {
         ctx.strokeStyle = 'rgb(0,230,0)';
@@ -835,7 +834,7 @@ class Drawable {
      * In some cases, the game may need to stop effects from running before
      * they are completed. This method proves a way to do so and set an end value.
      *
-     * @param {any} The end value of the animation.
+     * @param {any} setEndValue The end value of the animation.
      */
     stopAnimate(setEndValue) {
         let fxObject = null;
@@ -854,7 +853,7 @@ class Drawable {
     /**
      * Perform each fx remaining in the fxQueue
      *
-     * @param {CanvasContext} ctx Where to perform the rendering.
+     * @param {RenderingContext} ctx Where to perform the rendering.
      * @param {number} time The current time ellapsed since fx queue was started.
      *
      * @private
@@ -934,14 +933,14 @@ class Drawable {
      * 
      * @param {Image} image the image that this object needs to draw: redefine if needed
      */
-    setImage(/*image*/) {
+    setImage(image) {
 
     }
 
     /**
      * Performs common draw effects on canvas here so that each Object doesn't need to reimplement it
      *
-     * @param {CanvasRenderingContext} ctx The context to use for graphic operations.
+     * @param {RenderingContext} ctx The context to use for graphic operations.
      * @private
      */
     _draw(ctx) {

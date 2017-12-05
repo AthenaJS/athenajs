@@ -11,6 +11,7 @@ class Rotate extends Effect {
     /**
      * Creates the Rotate class
      * 
+     * @param {Object} options
     ** @param {Number} options.startValue the start value of the effect.
      * @param {Number} options.endValue the end value of the effect.
      * @param {Boolean} options.loop Set to true to make the effect loop.
@@ -54,8 +55,8 @@ class Rotate extends Effect {
     /**
      * Calculates the new angle
      * 
-     * @param {CanvasRenderingContext} ctx The rendering context (not used in this effect).
-     * @param {CanvasRenderingContext} fxCtx Tje effect rendering context (not used).
+     * @param {RenderingContext} ctx The rendering context (not used in this effect).
+     * @param {RenderingContext} fxCtx Tje effect rendering context (not used).
      * @param {Drawable} obj Drawable on which to apply the rotation.
      * 
      * @returns {Boolean} returns true if the animation has ended.

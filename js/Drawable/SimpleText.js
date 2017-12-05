@@ -243,7 +243,7 @@ export default class SimpleText extends Drawable {
     /**
      * Called on each render loop: renders the object on the destination canvas context
      *
-     * @param {CanvasRenderingContext} destCtx Where to render the object.
+     * @param {RenderingContext} destCtx Where to render the object.
      *
      * @private
      */
