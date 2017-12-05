@@ -719,7 +719,7 @@ class Scene {
      * @param {Drawable} drawable The object to remove from the scene.
      */
     removeObject(drawable) {
-        let layer = this.layers[drawable].layer,
+        let layer = this.layers[drawable.layer],
             foundIndex = layer.indexOf(drawable);
 
         if (foundIndex > -1) {
