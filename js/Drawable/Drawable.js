@@ -85,26 +85,6 @@ class Drawable {
             targetOffsetY: 0,
             wave: options.wave || null
         }, options);
-        /*            {
-                speed: options.speed || 1,
-                visible: options.visible || true,
-                canCollide: options.canCollide || false,
-                plane: options.plane || 0,
-                x: options.x || 0,
-                y: options.y || 0,
-                scale: options.scale || 1.0,
-                angle: 0,
-                movable: typeof options.movable !== 'undefined' ? options.movable : true,
-                gravity: typeof options.gravity !== 'undefined' ? options.gravity : 0,
-                data: options.data || {},
-                path: null,
-                        target: options.target || null,
-                        targetOffsetX: options.targetOffsetX || 0,
-                        targetOffsetY: options.targetOffsetY || 0
-              };*/
-
-        // this._data = options.data || {};
-        // console.log('settings set', this._settings);
 
         this.target = null;
 
@@ -1015,6 +995,11 @@ class Drawable {
         this.children.forEach((child) => {
             child.destroy();
         });
+
+        // triggers the wave end
+        if (this.wave) {
+            this.wave.remove(this);
+        }
     }
 }
 

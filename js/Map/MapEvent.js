@@ -1,3 +1,6 @@
+import RM from '../Resource/ResourceManager';
+import Wave from '../Drawable/Wave';
+
 /**
  * MapEvent handles events that are triggered on the map.
  * Such events can be: checkpoint was reached, new wave needs to
@@ -135,12 +138,11 @@ export default class MapEvent {
                     break;
 
                 case 'wave':
-                    return this.map.handleWave(Object.assign({}, options));
-                    break;
+                    return this.handleWave(Object.assign({}, options));
 
                 case 'explosion':
                     // generate explosion
-                    this.map.scheduleSprite(options.spriteId, options.spriteOptions, 0);
+                    this.scheduleSprite(options.spriteId, options.spriteOptions, 0);
 
                     item = this.getItem(options.targetId);
 
@@ -156,6 +158,63 @@ export default class MapEvent {
             // we need to recheck a non triggered event
             return true;
         }
+    }
+
+    /**
+     * Schedule adding a new object to the map
+     *
+     * @param {String} spriteId The id of the new sprite to add.
+     * @param {Object} spriteOptions The options that will be passed to the object constructor.
+     * @param {number} [delay=0] The delay in milliseconds to wait before adding the object.
+     * @returns {Drawable} the new drawable
+     *
+     */
+    scheduleSprite(spriteId, spriteOptions, delay) {
+        let drawable = RM.newResourceFromPool(spriteId, spriteOptions);
+
+        // No need to call setTimeout if delay is zero
+        if (delay) {
+            // FIXME: if the game is paused before the setTimeout is called
+            // sprite will be added right after in unpaused, potentially before the delay
+            setTimeout(() => {
+                this.map.addObject(drawable);
+            }, delay);
+        } else {
+            this.map.addObject(drawable);
+        }
+
+        return drawable;
+    }
+
+
+    /**
+     * Add a new wave of objects to the map
+	 * Used for example when the player triggers apparition of several enemies or bonuses
+     *
+     * @param {Object} options The options to pass to the wav object
+     * @returns
+     *
+	 * @related {Wave}
+     */
+    handleWave(options) {
+        // console.log('wave');
+        var waveSize = options.size,
+            wave = new Wave(options),
+            i = 0,
+            delay = 0;
+
+        options.spriteOptions.wave = wave;
+
+        for (i = 0; i < waveSize; i++) {
+            this.scheduleSprite(options.spriteId, options.spriteOptions, delay);
+            delay += options.delay || 0;
+        }
+
+        return false;
+    }
+
+    endWave() {
+
     }
 
     triggerEvent(id) {
