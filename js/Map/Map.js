@@ -70,6 +70,10 @@ class Map {
         this.viewportW = options.viewportW || this.width;
         this.viewportH = options.viewportH || this.height;
 
+        // max scrolling position
+        this.xMax = this.width - this.viewportW;
+        this.yMax = this.height - this.viewportH;
+
         // when scrolling we set a new target and keep track of previous start x & y
         this.viewportTargetX = this.viewportTargetY = this.viewportSpeedX = this.viewsportSpeedY = this.viewportStartX = this.viewportStartY = 0;
 
@@ -119,8 +123,6 @@ class Map {
         this.setBuffer(options.buffer);
 
         this.dataUrl = options.dataUrl;
-
-        this.reverse = false;
 
         // viewport bounds
         this.firstRow = this.lastRow = this.firstCol = this.lastCol = 0;
@@ -574,22 +576,24 @@ class Map {
 	 * @param {number} x The horizontal position to move the viewport at.
 	 * @param {number} y The vertical position to move the viewport at.
 	 *
-	 * @note moveTo will do nothing in case the map already has a destination set
+	 * @note moveTo will do nothing in case the map is already scrolling
 	 */
     moveTo(x, y) {
-        // TODO: snap x/y to screen edge
         if (!this.moving) {
-            console.log('moveTo from', this.viewportX, 'to', x);
+            console.log('moveTo from', this.viewportX, 'to', x, y);
             if (this.masterObject) {
                 this.masterObject.savePosition();
             }
 
-            this.viewportTargetX = x > 0 ? 0 : x;
-            // TODO: snap y to edge of the screen
-            this.viewportTargetY = y;
+            // snap X/Y to edge of the map
+            const targetX = x < -this.xMax ? -this.xMax : x;
+            const targetY = y < -this.yMax ? -this.yMax : y;
+
+            this.viewportTargetX = targetX > 0 ? 0 : targetX;
+            this.viewportTargetY = targetY > 0 ? 0 : targetY;
             this.startMoveTime = new Date().getTime();
-            this.viewportSpeedX = x - this.viewportX | 0;
-            this.viewportSpeedY = y - this.viewportY | 0;
+            this.viewportSpeedX = targetX - this.viewportX | 0;
+            this.viewportSpeedY = targetY - this.viewportY | 0;
             this.viewportStartX = this.viewportX;
             this.viewportStartY = this.viewportY;
             this.moving = true;
