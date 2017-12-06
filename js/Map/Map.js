@@ -36,13 +36,16 @@ class Map {
      * @param {Number} [options.startY=0] The start y position of the master object.
      * @param {ArrayBuffer} options.buffer The buffer containing width \* height bytes container tile numbers followed by width*height bytes for the tile behaviors
      * @example
+     * // Creates a new 800x600 map, with a 320x200 viewport and 32x32 tiles
      * var map = new Map({
      *    src: 'mapTiles.jpg',
      *    tileWidth: 32,
      *    tileHeight: 32,
      *    width: 800,
      *    height: 600,
-     *    buffer: new ArrayBuffer(800*600*2)
+     *    viewportW: 320,
+     *    viewportH: 200,
+     *    buffer: new ArrayBuffer(800*600*2),
      * });
      */
     constructor(options) {
@@ -267,7 +270,7 @@ class Map {
     /**
      * saves a refrence to the scene the map is attached to
      *
-     * @param {Scene} scene reference to the scene the map is being attached to
+     * @param {Scene} scene Reference to the scene the map is being attached to.
      */
     setScene(scene) {
         this.scene = scene;
@@ -324,8 +327,8 @@ class Map {
 	 *  - displayed if it is visible (in the viewport)
 	 *  - added to collision group
 	 *
-	 * @param {Drawable} obj A reference to the new object to add
-     * @param {Number} [layerIndex=0] The layer to add the object into
+	 * @param {Drawable} obj A reference to the new object to add.
+     * @param {Number} [layerIndex=0] The layer to add the object into.
 	 *
 	 * @note the object will be added to the correct collision group
 	 * if obj.collideGroup is set
@@ -540,7 +543,7 @@ class Map {
 
     /**
 	 *
-	 * Checks for collisions
+	 * Check for collisions
 	 *
 	 */
     checkCollisions() {
@@ -571,7 +574,9 @@ class Map {
     /**
 	 * Sets a new destination for the viewport: this method doesn't not set it immediately
 	 * but sets a new target instead: if not already moving, new move will happen at each
-	 * render inside the map.update) method
+	 * render inside the map.update) method.
+     * 
+     * This method uses current map.duration and map.easing to perform the move.
 	 *
 	 * @param {number} x The horizontal position to move the viewport at.
 	 * @param {number} y The vertical position to move the viewport at.
@@ -1032,6 +1037,8 @@ class Map {
      * @param {Boolean} partialTileY If set to true, the tile will be partially rendered starting at tileOffsetY.
      * This happens if the tile is at the firstRow/firstCol of the viewport and viewportX/Y % tileWidth/Height != 0.
      *
+     * @private
+     * 
      * @note Unless noted otherwise, positions are related to the whole map, and not to the viewport.
      */
     drawTile(tileNum, ctx, x, y, partialTileX, partialTileY) {
@@ -1070,8 +1077,8 @@ class Map {
 	 *
 	 * @param {CanvasContext} ctx The context of the canvas where to draw the map.
 	 * @param {boolean} showHidden The map only draws the viewport, set this to true to draw the whole map.
-	 * @param {number} [mapOffsetX=0] The x offset where to start drawing the map
-	 * @param {number} [mapOffsetY=0] The y offset where to start drawing the map
+	 * @param {number} [mapOffsetX=0] The x offset where to start drawing the map.
+	 * @param {number} [mapOffsetY=0] The y offset where to start drawing the map.
 	 *
 	 * @private
 	 */
@@ -1147,8 +1154,10 @@ class Map {
 	 * Adds new Objects onto the map if this is the first time we display this window.
 	 *
 	 * Each map is divided into windows: each viewport window is the size of the current viewport
-	 * When drawing a window for the first time, objects found into this window are added to the map
-	 * It can be enemies, etc...
+	 * When drawing a window for the first time, objects found into this window are added onto the map
+	 * It can be enemies, the main player's object, switches, etc...
+     * 
+     * TODO: we check for every window that's visible in the current viewport: there can be several
 	 *
 	 * @private
 	 */
@@ -1175,9 +1184,9 @@ class Map {
     /**
 	 * Draw all objects that are onto the map
 	 *
-	 * @param {Array}  drawContexts The list of draw context
-	 * @param {number} [mapOffsetX=0] The x offset where to start rendering the object
-	 * @param {number} [mapOffsetY=0] The y offset where to start rendering the object
+	 * @param {Array}  drawContexts The list of draw context.
+	 * @param {number} [mapOffsetX=0] The x offset where to start rendering the object.
+	 * @param {number} [mapOffsetY=0] The y offset where to start rendering the object.
 	 *
 	 * @private
 	 */
@@ -1257,8 +1266,8 @@ class Map {
     /**
      * Get the behavior at specified index
      *
-     * @param {Number} col The col number
-     * @param {Number} row The row number
+     * @param {Number} col The col number.
+     * @param {Number} row The row number.
      *
      * @returns {Number} The behavior found at position (col, row)
      */
@@ -1269,8 +1278,8 @@ class Map {
     /**
 	 * Returns index of the tile at pos (x,y) in map array
 	 *
-	 * @param {number} x
-	 * @param {number} y
+	 * @param {number} x Horizontal pixel position.
+	 * @param {number} y Vertical pixel position.
 	 * @returns {Object} Object with i, j tile index
 	 *
 	 */
@@ -1290,8 +1299,8 @@ class Map {
     /**
      * Returns the pixel position of the specified tile
      *
-     * @param {Number} col tile column
-     * @param {Number} row tile row
+     * @param {Number} col Tile column.
+     * @param {Number} row Tile row.
      * @returns {Object} an object with x & y properties set with tile pixel position
      */
     getTilePixelPos(col, row) {
@@ -1421,7 +1430,7 @@ class Map {
      * Add a new wave of objects to the map
 	 * Used for example when the player triggers apparition of several enemies or bonuses
      *
-     * @param {Object} options The options to pass to the wav object
+     * @param {Object} options The options to pass to the wav object.
      * @returns
      *
 	 * @related {Wave}
@@ -1518,7 +1527,7 @@ class Map {
     /**
 	 * WIP/DEBUG: converts current map into a string
 	 *
-	 * @returns {String} The json export of the map
+	 * @returns {String} The json export of the map.
 	 *
 	 * @private
 	 */
@@ -1581,7 +1590,7 @@ class Map {
     /**
      * adds a new tileset for the map
      *
-     * @param {Array} [tiles=[]] The tile descriptions
+     * @param {Array} [tiles=[]] The tile descriptions.
      *
      */
     addTileSet(tiles) {
@@ -1613,10 +1622,10 @@ class Map {
     /**
      * updates individual tile & tile behavior
      *
-     * @param {Number} col the column of the tile to update
-     * @param {Number} row the row of the tile to update
-     * @param {Number} [tileNum=-1] the new tile number to use, the previous one will be kept if tileNum === -1
-     * @param {Number} [behavior=-1] the new tile behavior, the previous value will be kept if behavior === -1
+     * @param {Number} col The column of the tile to update.
+     * @param {Number} row The row of the tile to update.
+     * @param {Number} [tileNum=-1] The new tile number to use, the previous one will be kept if tileNum === -1.
+     * @param {Number} [behavior=-1] The new tile behavior, the previous value will be kept if behavior === -1.
      *
      */
     updateTile(col, row, tileNum = -1, behavior = -1) {
@@ -1636,9 +1645,9 @@ class Map {
     /**
      * shifts map from top to bottom
      *
-     * @param {Number} startLine Where to start the copy
-     * @param {Number} height How many lines to shift
-     * @param {Number} tile tile to use for new lines
+     * @param {Number} startLine Where to start the copy.
+     * @param {Number} height How many lines to shift.
+     * @param {Number} tile Tile to use for new lines.
      */
     shift(startLine, height, tile/*, behavior*/) {
         const tiles = new Uint8Array(this.buffer, 0, startLine * this.numCols),
@@ -1654,7 +1663,7 @@ class Map {
     /**
      * WIP & NOT TESTED: some code to allow resizing a map, was to be used in map editor
      *
-     * @param {string} direction Where to extend the map, can be 'bottomLeft', 'bottomRight', 'topLeft', 'topRight'
+     * @param {string} direction Where to extend the map, can be 'bottomLeft', 'bottomRight', 'topLeft', 'topRight'.
      * @param {Object} options
      *
      * @private
@@ -1762,7 +1771,7 @@ class Map {
             // that's all folks !
             // TODO: test me!
         } else {
-            throw 'resize not support for direction' + direction;
+            throw 'resize not supported for direction' + direction;
         }
     }
 }
