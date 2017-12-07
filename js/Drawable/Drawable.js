@@ -17,7 +17,7 @@ import Deferred from '../Core/Deferred';
 class Drawable {
     /**
      * Creates a new Drawable: this class should be extended before creating an instance
-     * 
+     *
      * @param {string} type The type of object: this describes the type of object
      * @param {Object} options
      * @param {string} [options.objectId] The id of the object. The defaults is type + random timestamp.
@@ -353,11 +353,11 @@ class Drawable {
 
     /**
      * Applies current mask (if any) to the drawing context.
-     * 
+     *
      * This methods adds a new clipPath to the shape
      *
      * @param {RenderingContext} destCtx Context to apply the mask to.
-     * 
+     *
      * @private
      */
     _applyMask(destCtx, x, y) {
@@ -379,9 +379,9 @@ class Drawable {
 
     /**
      * Stops using the mask's clip
-     * 
+     *
      * @param {RenderingContext} destCtx The context.
-     * 
+     *
      * @private
      */
     _undoMask(destCtx) {
@@ -546,10 +546,10 @@ class Drawable {
 
     /**
      * Applies the object's opacity to the canvas rendering context.
-     * 
+     *
      * This method saves the canvas current globalAlpha property to be
      * able to restore it after the Drawable has been rendered.
-     * 
+     *
      * @param {RenderingContext} ctx Context to use.
      * @private
      */
@@ -560,7 +560,7 @@ class Drawable {
 
     /**
      * Restores the previous context globalAlpha property.
-     * 
+     *
      * @param {RenderingContext} ctx The context.
      */
     restoreCtxAlpha(ctx) {
@@ -593,9 +593,9 @@ class Drawable {
 
     /**
      * Returns the object's hitbox.
-     * 
+     *
      * Some drawables (eg. {Sprite} may have different hitbox for different frames.
-     * 
+     *
      * @returns {Object} an object with x, y, x2, Y2 describing the hit box
      */
     getHitBox() {
@@ -907,10 +907,10 @@ class Drawable {
 
     /**
      * Associates an image to the drawable.
-     * 
+     *
      * Some objects (eg. Sprite) need a source sheet image before being able to
      * be rendered onto the display.
-     * 
+     *
      * @param {Image} image the image that this object needs to draw: redefine if needed
      */
     setImage(image) {
@@ -962,9 +962,9 @@ class Drawable {
 
     /**
      * Sends a notification to listeners
-     * 
+     *
      * @note: this is a simple wrapper to the NotificationManageger's notify method
-     * 
+     *
      * @param {String} id name of the event to send
      * @param {Object} data data to send with the event, default = empty object
      */
