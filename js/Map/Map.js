@@ -1,5 +1,4 @@
 import Tile from './Tile';
-import Wave from '../Drawable/Wave';
 import RM from '../Resource/ResourceManager';
 import NM from '../Notification/NotificationManager';
 import FX from '../FX/FX';
@@ -64,14 +63,17 @@ class Map {
         this.addTileSet(options.tiles);
         // this.tiles = options.tiles && this._createTiles(options.tiles) || [];
 
-        this.triggers = options.triggers || {};
-        this.windows = options.windows || {};
-
         // defines viewport window: used for scrolling
         this.viewportX = options.viewportX || 0;
         this.viewportY = options.viewportY || 0;
         this.viewportW = options.viewportW || this.width;
         this.viewportH = options.viewportH || this.height;
+
+        this.triggers = options.triggers || {};
+        this.windows = options.windows || {};
+
+        // max windows
+        this.maxWinX = (this.width / this.viewportW) | 0;
 
         // max scrolling position
         this.xMax = this.width - this.viewportW;
@@ -1143,27 +1145,22 @@ class Map {
                 this.showTileBehaviors(ctx, showHidden, mapOffsetX, mapOffsetY);
             }
 
-            this.addNewObjectsFromWindow();
+            this.checkVisibleWindows();
 
             this.isDirty = false;
         }
     }
 
-
     /**
-	 * Adds new Objects onto the map if this is the first time we display this window.
-	 *
-	 * Each map is divided into windows: each viewport window is the size of the current viewport
-	 * When drawing a window for the first time, objects found into this window are added onto the map
-	 * It can be enemies, the main player's object, switches, etc...
-     *
-     * TODO: we check for every window that's visible in the current viewport: there can be several
-	 *
-	 * @private
-	 */
-    addNewObjectsFromWindow() {
-        let windowNum = ((Math.abs(this.viewportX) / this.viewportW) | 0) + ((Math.abs(this.viewportY) / this.viewportH) | 0),
-            window = this.windows[windowNum];
+     * Add new objects from the viewport window with specified index,
+     * setting window.displayed to true so that objects are only added once
+     * 
+     * @param {Number} windowNum The window index.
+     * 
+     * @private
+     */
+    addNewObjectsFromWindow(windowNum) {
+        const window = this.windows[windowNum];
 
         if (window && window.displayed === false) {
             window.displayed = true;
@@ -1177,6 +1174,30 @@ class Map {
                     this.mapEvent.addItem(item.itemId, obj);
                 }
             });
+        }
+    }
+
+
+    /**
+	 * Adds new Objects onto the map if this is the first time we display this window.
+	 *
+	 * Each map is divided into windows: each viewport window is the size of the current viewport
+	 * When drawing a window for the first time, objects found into this window are added onto the map
+	 * It can be enemies, the main player's object, switches, etc...
+     *
+	 * @private
+	 */
+    checkVisibleWindows() {
+        // calc maxX/maxY
+        const startIndex = ((Math.abs(this.viewportY) / this.viewportH) * this.maxWinX) | 0,
+            max = this.viewportY % this.viewportH ? startIndex + this.maxWinX : startIndex,
+            mod = this.viewportX % this.viewportW;
+
+        for (let i = startIndex; i <= max; i += this.maxWinX) {
+            this.addNewObjectsFromWindow(i);
+            if (mod) {
+                this.addNewObjectsFromWindow(i + 1);
+            }
         }
     }
 
