@@ -37,7 +37,6 @@ export default class Wave {
         switch (this.type) {
             case 'reward':
                 if (this.data) {
-                    debugger;
                     const spriteOptions = this.getSpriteOptions(element, this.data),
                         reward = new (RM.getResourceById(this.data.spriteId))(spriteOptions);
 

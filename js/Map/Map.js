@@ -575,7 +575,7 @@ class Map {
 	 * Sets a new destination for the viewport: this method doesn't not set it immediately
 	 * but sets a new target instead: if not already moving, new move will happen at each
 	 * render inside the map.update) method.
-     * 
+     *
      * This method uses current map.duration and map.easing to perform the move.
 	 *
 	 * @param {number} x The horizontal position to move the viewport at.
@@ -1038,7 +1038,7 @@ class Map {
      * This happens if the tile is at the firstRow/firstCol of the viewport and viewportX/Y % tileWidth/Height != 0.
      *
      * @private
-     * 
+     *
      * @note Unless noted otherwise, positions are related to the whole map, and not to the viewport.
      */
     drawTile(tileNum, ctx, x, y, partialTileX, partialTileY) {
@@ -1156,7 +1156,7 @@ class Map {
 	 * Each map is divided into windows: each viewport window is the size of the current viewport
 	 * When drawing a window for the first time, objects found into this window are added onto the map
 	 * It can be enemies, the main player's object, switches, etc...
-     * 
+     *
      * TODO: we check for every window that's visible in the current viewport: there can be several
 	 *
 	 * @private
@@ -1396,65 +1396,6 @@ class Map {
         } else if ((foundIndex = this.friendBullets.indexOf(drawable)) > -1) {
             this.friendBullets.splice(foundIndex, 1);
         }
-    }
-
-
-    /**
-     * Schedule adding a new object to the map
-     *
-     * @param {String} spriteId The id of the new sprite to add.
-     * @param {Object} spriteOptions The options that will be passed to the object constructor.
-     * @param {number} [delay=0] The delay in milliseconds to wait before adding the object.
-     * @returns {Drawable} the new drawable
-     *
-     */
-    scheduleSprite(spriteId, spriteOptions, delay) {
-        let drawable = RM.newResourceFromPool(spriteId, spriteOptions);
-
-        // No need to call setTimeout if delay is zero
-        if (delay) {
-            // FIXME: if the game is paused before the setTimeout is called
-            // sprite will be added right after in unpaused, potentially before the delay
-            setTimeout(() => {
-                this.addObject(drawable);
-            }, delay);
-        } else {
-            this.addObject(drawable);
-        }
-
-        return drawable;
-    }
-
-
-    /**
-     * Add a new wave of objects to the map
-	 * Used for example when the player triggers apparition of several enemies or bonuses
-     *
-     * @param {Object} options The options to pass to the wav object.
-     * @returns
-     *
-	 * @related {Wave}
-     */
-    handleWave(options) {
-        // console.log('wave');
-        var waveSize = options.size,
-            wave = new Wave(options),
-            i = 0,
-            delay = 0;
-
-        options.spriteOptions.wave = wave;
-
-        for (i = 0; i < waveSize; i++) {
-            this.scheduleSprite(options.spriteId, options.spriteOptions, delay);
-            // setTimeout((function(options, map) { return function() {
-            //     // var sprite = new (RM.getResourceById(options.spriteId))(options.spriteOptions);
-            //     var sprite = RM.newResourceFromPool(options.spriteId, options.spriteOptions);
-            //     map.addSprite(sprite);
-            // };})(options, this.map), delay);
-            delay += options.delay || 0;
-        }
-
-        return false;
     }
 
     /**
