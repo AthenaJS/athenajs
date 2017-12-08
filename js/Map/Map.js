@@ -61,7 +61,6 @@ class Map {
         // DEBUG: usually tiles are loaded from binary files and set as ArrayBuffer
         // but previously tiles could be set from a JSON text file
         this.addTileSet(options.tiles);
-        // this.tiles = options.tiles && this._createTiles(options.tiles) || [];
 
         // defines viewport window: used for scrolling
         this.viewportX = options.viewportX || 0;
@@ -141,7 +140,7 @@ class Map {
 
         // Easing function to use while moving viewport (scrolling)
         // See FX/Easing for a list of available easing functions
-        this.easing = FX.getEasing(options.easing || 'linear');
+        this.setEasing(options.easing);
 
         // used when initiating a new scroll
         this.startMoveTime = null;
@@ -188,6 +187,15 @@ class Map {
     setStartXYFromMaster() {
         this.startX = this.masterObject.x;
         this.startY = this.masterObject.y;
+    }
+
+    /**
+     * Changes the easing function used when scrolling the viewport
+     *
+     * @param {String} easing='linear' The new easing function to use.
+     */
+    setEasing(easing = 'linear') {
+        this.easing = FX.getEasing(easing);
     }
 
     /**
@@ -359,11 +367,14 @@ class Map {
             // console.log('adding', obj.id, 'to friend bullets group!');
             this.friendBullets.push(obj);
         } else if (obj.collideGroup === 3) {
-            console.log('adding platform', obj.id);
+            console.log(`[Map] adding platform ${obj.id}`);
             this.platforms.push(obj);
-        } else {
+        }
+        /*
+        else {
             console.log('no collision or master for', obj.id);
         }
+        */
         /*if (obj.children.length) {
             for (var i = 0; i < obj.children.length; i++) {
                 this.addObject(obj.children[i]);
@@ -586,15 +597,15 @@ class Map {
 	 * @note moveTo will do nothing in case the map is already scrolling
 	 */
     moveTo(x, y) {
-        if (!this.moving) {
-            console.log('moveTo from', this.viewportX, 'to', x, y);
+        // snap X/Y to edge of the map
+        const targetX = x < -this.xMax ? -this.xMax : x;
+        const targetY = y < -this.yMax ? -this.yMax : y;
+
+        if (!this.moving && (this.viewportX !== targetX || this.viewportY !== targetY)) {
+            // console.log('moveTo from', this.viewportX, 'to', x, y);
             if (this.masterObject) {
                 this.masterObject.savePosition();
             }
-
-            // snap X/Y to edge of the map
-            const targetX = x < -this.xMax ? -this.xMax : x;
-            const targetY = y < -this.yMax ? -this.yMax : y;
 
             this.viewportTargetX = targetX > 0 ? 0 : targetX;
             this.viewportTargetY = targetY > 0 ? 0 : targetY;
@@ -1154,9 +1165,9 @@ class Map {
     /**
      * Add new objects from the viewport window with specified index,
      * setting window.displayed to true so that objects are only added once
-     * 
+     *
      * @param {Number} windowNum The window index.
-     * 
+     *
      * @private
      */
     addNewObjectsFromWindow(windowNum) {

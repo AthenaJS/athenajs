@@ -2,15 +2,15 @@ import Effect from './Effect';
 
 /**
  * A Mosaic effect that will apply SNES-[like effects](https://github.com/warpdesign/jquery-mosaic)
- * 
+ *
  * Supported on: `Drawable`, `Scene`
- * 
+ *
  * @extends Effect
  */
 class Mosaic extends Effect {
     /**
      * Creates a new Mosaic effect
-     * 
+     *
      * @param {Object} options
      * @param {Number} options.startValue The start value of the effect.
      * @param {Number} options.endValue The end value of the effect.
@@ -33,7 +33,7 @@ class Mosaic extends Effect {
         this.ratio = this.width / this.height;
         this.diff = (this.endValue * this.width) - (this.startValue * this.width);
 
-        console.log('got ratio=', this.ratio, 'for', this.width, this.height, 'diff', this.diff);
+        // console.log('got ratio=', this.ratio, 'for', this.width, this.height, 'diff', this.diff);
     }
 
     /**
@@ -48,7 +48,7 @@ class Mosaic extends Effect {
 
     /**
      * simulates the mosaic effect by using Canvas'drawImage API
-     * 
+     *
      * @param {CanvasRenderingConbtext} ctx The source drawing context, which happens to be the destination context as well.
      */
     process(ctx/*, fxCtx*/) {

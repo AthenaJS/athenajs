@@ -32,7 +32,7 @@ class SimpleFall extends Behavior {
         this.onEnd = options.onEnd || null;
         this.onGround = options.onGround || null;
 
-        console.log('move initiated', sprite.vx, sprite.vy, this.startVy, sprite.gravity);
+        // console.log('move initiated', sprite.vx, sprite.vy, this.startVy, sprite.gravity);
     }
 
     /**

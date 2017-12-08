@@ -94,10 +94,10 @@ export default {
         let resource = this.getResourceById(id);
 
         if (typeof resource.createFromPool === 'function') {
-            console.log('getting resource from pool!');
+            // console.log('getting resource from pool!');
             return resource.createFromPool.apply(resource, Array.prototype.slice.call(arguments, 1));
         } else {
-            console.log('no pool for this one: using new instead');
+            // console.log('no pool for this one: using new instead');
             return newObject.apply(undefined, [resource].concat(Array.prototype.slice.call(arguments, 1)));
         }
     },
@@ -256,7 +256,7 @@ export default {
         }
 
         if (size === 0) {
-            console.warn('[ResourceManager] no ressource to load');
+            // console.warn('[ResourceManager] no ressource to load');
             // force back loading to false: this happens when scene elements has already
             // been loaded
             this.loading = false;

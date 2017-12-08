@@ -13,7 +13,7 @@ import Dom from './Dom';
 class Game {
     /**
      * Creates a new Game
-     * 
+     *
      * @param {Object} [options={}]
      * @param {boolean} [options.debug=false] Debug will be enabled if this is true.
      * @param {string} [options.name] The name of the game.
@@ -105,14 +105,15 @@ class Game {
                     this.toggleFullscreen();
                 } else if (event.keyCode === 80) {
                     this.togglePause();
-                } else if (event.keyCode === 82) {
-                    this.setScene(this.scene);
                 }
+                //else if (event.keyCode === 82) {
+                //     this.setScene(this.scene);
+                // }
             });
 
             if (navigator.userAgent.match(/Xbox/)) {
                 this.target.addEventListener('click', () => {
-                    console.log('toggeling fullscreen');
+                    console.log('[Game] Toggling fullscreen.');
                     this.toggleFullscreen();
                 });
             }
@@ -181,7 +182,7 @@ class Game {
 
     /**
      * Toggles the Map tiles inspector
-     * 
+     *
      * @param {Boolean} enable wether to enable the tileInspector
      */
     toggleTileInspector(enable) {
@@ -272,14 +273,14 @@ class Game {
     /**
      * Add HTML5 visibility event handlers so that the game may be paused
      * when the tab isn't visible anymore
-     * 
+     *
      * @see [Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
      */
     _addVisibilityEvents() {
         let eventName = '',
             property = '';
 
-        console.log('adding events');
+        console.log('[Game] adding visibility events')
         if (typeof document.hidden !== 'undefined') {
             property = 'hidden';
             eventName = 'visibilitychange';
@@ -295,7 +296,7 @@ class Game {
             console.warn('[Game] Visibility API not available.');
         } else {
             document.addEventListener(eventName, () => {
-                console.log('got visibility event', document[property]);
+                console.log(`[Game] got visibility event ${document[property]}`);
                 if (document[property]) {
                     if (this.running) {
                         this.togglePause();
@@ -312,7 +313,7 @@ class Game {
      *
      */
     setScene(scene) {
-        console.log('[Game] setScene()');
+        console.log(`[Game] setScene: ${scene.name}`);
         if (this.scene !== scene) {
             if (this.scene) {
                 // stops render + input loops
@@ -335,15 +336,13 @@ class Game {
                 //*** this.startScene(resetMap);
                 this._setupScene(scene);
             } else {
-                console.warn('attempt to set non-existing scene:', scene);
+                console.warn('[Game] Attempt to set non-existing scene:', scene);
             }
-        } else {
-            console.log('same scene');
         }
     }
 
     _startScene() {
-        console.log('[Game] _startScene()');
+        // console.log('[Game] _startScene()');
         const hudScene = this.scene.hudScene;
         this.display.clearAllScreens();
         this.scene._start();
@@ -358,7 +357,7 @@ class Game {
     }
 
     _setupScene(scene) {
-        console.log('[Game] _setupScene()');
+        // console.log('[Game] _setupScene()');
         this.scene = scene;
 
         const hudScene = scene.hudScene;

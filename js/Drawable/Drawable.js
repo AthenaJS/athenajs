@@ -60,7 +60,6 @@ class Drawable {
         this.easing = FX.getEasing(options.easing || 'linear');
 
         if (options.behavior) {
-            console.log('need to set move to', options.behavior);
             this.setBehavior(options.behavior, options.behaviorOptions);
         }
 
