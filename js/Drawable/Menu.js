@@ -1,8 +1,6 @@
 import Drawable from './Drawable';
 import SimpleText from './SimpleText';
 
-
-/*jshint devel: true, bitwise: false*/
 /**
  * The menu class allows to quickly add text menu to an Athena Scene
  *
@@ -13,7 +11,7 @@ import SimpleText from './SimpleText';
 class Menu extends Drawable {
     /**
      * Creates a new Menu
-     * 
+     *
      * @param {String} type The type of object.
      * @param {Object} options
      * @param {String} [options.title="Menu Title"] The title of the menu.
@@ -97,7 +95,7 @@ class Menu extends Drawable {
      * @see addMenuItem()
      */
     addMenuItems(items) {
-        console.log('addMenuItems', items);
+        console.log('[Menu] addMenuItems()', items);
 
         items.forEach((item, idx) => {
             this.addMenuItem(item);

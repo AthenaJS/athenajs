@@ -19,8 +19,7 @@ class Display {
      * @param {(String|HTMLElement)} target The target where the game DOM element should be appended.
      */
     constructor(options, target) {
-        console.log('[Display] Init()', options.name/*, options, target*/);
-
+        // console.log('[Display] Init()', options.name/*, options, target*/);
         let prefix = (function () {
             let styles = window.getComputedStyle(document.documentElement, ''),
                 pre = (Array.prototype.slice
@@ -451,8 +450,6 @@ class Display {
      * @param {any} context The context to bind the Effect to
      */
     animate(fxName, options, context) {
-        console.log('animate');
-
         var fxClass = FX.getEffect(fxName),
             promise,
             easing = options.easing || 'linear',
@@ -462,19 +459,18 @@ class Display {
         options.context = context || this;
 
         if (typeof this.fxQueue[when][fxName] !== 'undefined') {
-            console.warn('Fx', fxName, 'already in progress, cannot execute twice');
+            console.warn(`[Display] animate() - ${fxName} already in progress, cannot execute twice.`);
             let def = new Deferred();
             def.resolve();
             promise = def.promise;
 
         } else if (!fxClass) {
-            console.warn('Fx', fxName, 'unknown: did you spell it correctly ?');
+            console.warn(`[Display] animate() - ${fxName} unknown: did you spell it correctly ?`);
         } else {
             fx = new fxClass(options, this);
             fx.setEasing(new FX.getEasing(easing));
 
             promise = fx.start().then(() => {
-                console.log('effect ended, need to stop it', fxName);
                 delete this.fxQueue[when][fxName];
             }).catch(err => {
                 console.error(err);
@@ -520,7 +516,7 @@ class Display {
      * Clears every display layer and clears fx queues
      */
     clearDisplay() {
-        console.log('clearFX Queue');
+        // console.log('[Display] clearDisplay()');
         this.fxQueue.pre = {};
         this.fxQueue.post = {};
 

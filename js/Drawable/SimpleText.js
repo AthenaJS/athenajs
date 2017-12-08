@@ -8,7 +8,7 @@ import Drawable from './Drawable';
  */
 export default class SimpleText extends Drawable {
     /**
-     * 
+     *
      * @param {String} type The type of the graphic object
      * @param {Object} [options={}]
      * @param {String} [options.text=undefined] The initial text. Can be changed later using SimpleText.setText().
@@ -118,7 +118,7 @@ export default class SimpleText extends Drawable {
      *  - this.fakeLineHeight`
      * - `this.fakeHeight`
      * - `this.fakeWidth`
-     * 
+     *
      * This method also sets the canvas'width & height to fit these metrics
      */
     getMetrics() {
@@ -135,7 +135,7 @@ export default class SimpleText extends Drawable {
         ctx.fillStyle = this.color;
         ctx.font = this.font;
         ctx.textBaseline = 'top';
-        console.log('metrics', this.fakeWidth, this.fakeHeight);
+        // console.log(`[SimpleText] metrics ${this.fakeWidth}, ${this.fakeHeight}`);
     }
 
     /**
@@ -161,8 +161,8 @@ export default class SimpleText extends Drawable {
     /**
      * Overrides Drawable's setScene element: we need to have
      * have a scene to be able to calculate metrics
-     * 
-     * @param {*} scene 
+     *
+     * @param {*} scene
      */
     setScene(scene) {
         super.setScene(scene);
@@ -271,7 +271,7 @@ export default class SimpleText extends Drawable {
 
     /**
      * Generates the font css property using current this.fontSize and this.fontFace
-     * 
+     *
      * @private
      */
     _setFont() {

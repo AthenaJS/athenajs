@@ -16,7 +16,7 @@ window.scenes = {};
 class Scene {
     /**
      * Creates a new Scene
-     * 
+     *
      * @param {object} options
      * @param {string} [options.name="Scene"+timestamp] The name of your scene.
      * @param {Object} [options.resources] An optional array of resources of the form: ``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
@@ -27,7 +27,7 @@ class Scene {
     constructor(options) {
         options = options || {};
 
-        console.log('[scene ' + options.name || '' + '] ' + 'Init()', options);
+        // console.log(`[Scene ${options.name}] constructor()`);
 
         this.layers = new Array(options.layers || 2);
 
@@ -124,14 +124,10 @@ class Scene {
     }
 
     fadeInAndOut(inDuration, delay, outDuration) {
-        console.log('starting fadeInOut');
         let def = new Deferred();
         this.fadeIn(inDuration).then(() => {
-            console.log('fadeIn done');
             setTimeout(() => {
-                console.log('calling fade out');
                 this.fadeOut(outDuration).then(() => {
-                    console.log('fadeOut done!');
                     def.resolve();
                 });
             }, delay);
@@ -150,9 +146,8 @@ class Scene {
      *
      */
     _loadResources(res, progressCb) {
-        console.log('[scene ' + this.name + '] ' + 'loading Resources...');
         if (!this.loaded) {
-            console.log('[scene ' + this.name + '] ' + ' seems like the scene needs to be loaded: goooo!');
+            console.log(`[Scene ${this.name}] _loadResources() - Loading scene.`);
             this.readyDef = ResourceManager.addResources(res);
 
             // add the huds resources as well
@@ -169,7 +164,7 @@ class Scene {
 
             ResourceManager.loadResources('any', progressCb);
         } else {
-            console.log('[scene ' + this.name + '] ' + ' seems like the scene has already been loaded: good!');
+            console.log(`[Scene ${this.name}] _loadResources() - Scene is loaded.`);
             // call onLoad to add elements that were added too early
             this._onLoad();
         }
@@ -236,7 +231,7 @@ class Scene {
      * @private
      */
     _load() {
-        console.log('[Scene ' + this.name + '] load()');
+        // console.log('[Scene ' + this.name + '] load()');
         let def = new Deferred();
         if (this.hudScene && !this.hudScene.loaded) {
             this.hudScene._load().then(() => {
@@ -277,7 +272,7 @@ class Scene {
      * @private
      */
     _onLoad() {
-        console.log('[Scene] _onLoad()');
+        // console.log(`[Scene ${this.name}] _onLoad()`);
         this._cacheImages();
         this._getResourcesRef();
         this._prepareCanvas();
@@ -300,7 +295,7 @@ class Scene {
      * @private
      */
     _cacheImages() {
-        console.log('[scene ' + this.name + '] ' + ' caching Images');
+        console.log(`[Scene ${this.name}] caching Images`);
         // var max = this.resources.length,
         //     i,
         //     id;
@@ -381,23 +376,22 @@ class Scene {
      * @param {number} [layerIndex=0] Defines the layer number where to add the objects.
      */
     addObject(objects, layerIndex) {
-        console.log('addObject');
         // attempt to add an object on a scene not ready yet:
         // we load it and postpone the add once the scene ready
         if (!this.loaded) {
-            console.log('addObject: later');
+            // console.log(`[Scene ${this.name}] Not loaded: objects will be loaded after the scene is loaded.`);
             this._objectsToAdd.push(Array.from(arguments));
 
             return;
         }
 
-        console.log('[scene ' + this.name + '] ' + 'addObject', objects, layerIndex);
+        // console.log('[scene ' + this.name + '] ' + 'addObject', objects, layerIndex);
 
         const num = layerIndex || 0;
 
         if (Array.isArray(objects)) {
             for (let obj of objects) {
-                console.log('[scene ' + this.name + '] ' + 'pushing', obj);
+                // console.log('[scene ' + this.name + '] ' + 'pushing', obj);
                 this._addObjectToLayer(num, obj);
             }
         } else {

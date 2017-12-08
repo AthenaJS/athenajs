@@ -7,10 +7,10 @@ var eventCallbacks = {};
 const NotificationManager = {
     /**
      * Notifies all listeners
-     * 
+     *
      * @param {String} eventType The event to send.
      * @param {any} data The data to send with the event.
-     * 
+     *
      * Every listener that has subscribed to this event will be notified.
      */
     notify: function (eventType, data) {
@@ -25,12 +25,12 @@ const NotificationManager = {
     },
     /**
      * Listen to a particular event
-     * 
+     *
      * @param {String} eventType The event to listen to.
      * @param {Function} method The callback function to call when notified.
      */
     listen: function (eventType, method) {
-        console.log('[NM] listening to event', eventType);
+        console.log(`[NotificationManager] listening to event(s) ${eventType}`);
         let eventList = eventType.replace(/\s+/g, ' ').split(' ');
 
         eventList.forEach((eventType) => {

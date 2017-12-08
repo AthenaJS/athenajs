@@ -16,11 +16,11 @@ import Wave from '../Drawable/Wave';
 export default class MapEvent {
     /**
      * Creates a new MapEvent
-     * 
-     * @param {Map} map 
+     *
+     * @param {Map} map
      */
     constructor(map) {
-        console.log('[MapEvent] init with map');
+        console.log('[MapEvent] constructor()');
         this.map = map || null;
         this.reset();
     }
