@@ -3,10 +3,10 @@
     <div class="symbol-heading">
         <div class="symbol">
             <a href="#{.|$id}">
-                <span class="glyphicon glyphicon-link color-gray-light" aria-hidden="true"></span>
+                <span style="display:none;" class="glyphicon glyphicon-link color-gray-light" aria-hidden="true"></span>
                 <code class="symbol-name">{symbol|s|$longname_params}</code>
-                <span class="symbol-sep">{symbol|$type_sep}</span>
-                <code class="symbol-type">{symbol|$type}</code>
+                <span style="display:none;" class="symbol-sep">{symbol|$type_sep}</span>
+                <code style="display:none;" class="symbol-type">{symbol|$type}</code>
             </a>
 
             {symbol|s|$tags}
@@ -23,6 +23,15 @@
             <b>Alias:</b> <code>{symbol.alias|s|$dot_prop}</code>
         </p>
         {/symbol.alias}
+
+        {?template.options.symbolMeta}
+        {?symbol.meta.lineno}
+        <p style="display:none;" class="symbol-meta">
+            {?symbol.meta.filename}<b>File:</b> {symbol.meta.filename}&nbsp;&nbsp;{/symbol.meta.filename}
+            {?symbol.meta.lineno}<b>Line:</b> {symbol.meta.lineno}&nbsp;&nbsp;{/symbol.meta.lineno}
+        </p>
+        {/symbol.meta.lineno}
+        {/template.options.symbolMeta}        
 
     </div>
 
@@ -120,19 +129,9 @@
             {/symbol.examples}
         {/symbol.examples}
 
-        {?template.options.symbolMeta}
-        {?symbol.meta.lineno}
-        <p class="symbol-meta">
-            {?symbol.meta.filename}<b>File:</b> {symbol.meta.filename}&nbsp;&nbsp;{/symbol.meta.filename}
-            {?symbol.meta.lineno}<b>Line:</b> {symbol.meta.lineno}&nbsp;&nbsp;{/symbol.meta.lineno}
-        </p>
-        {/symbol.meta.lineno}
-        {/template.options.symbolMeta}
-
     </div>
 
 </div>
-<hr />
 
 <!--  don't list params for class declarations since we already list
 constructor and its params separately, if this is a class declaration.  -->

@@ -29,9 +29,10 @@ toc:
       Although they can be instanciated, you should extend one of these objects and instanciate it instead, because most
       objects (for example sprites) and different behaviors, spritesheets, and properties.
   - Drawable
-  - Sprite
   - BitmapText
-  - Text
+  - Canvas
+  - Sprite
+  - SimpleText
   - Menu
   - name: Behaviors
     description: |
@@ -54,8 +55,8 @@ toc:
   - AudioManager
   - InputManager
   - ResourceManager
-  - name: Core
+  - name: Util
     description: |
-      These classes provide Core functionnality to AthenaJS
+      These classes provide Dom & Promise helpers to AthenaJS
   - Dom
   - Deferred

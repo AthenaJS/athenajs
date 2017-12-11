@@ -1,15 +1,15 @@
 /**
  * Class that describes a tile
+ * 
+ * @param {Object} options
+ * @param {Number} [options.offsetX=0] The horizontal offset of the tile in the tilesheet.
+ * @param {Number} [options.offsetY=0] The vertical offset of the tile in the tilesheet.
+ * @param {Number} [options.width=16] The tile width in pixels.
+ * @param {Number} [options.height=16] The tile height in pixels.
  */
 class Tile {
     /**
      * Creates a new Tile
-     *
-     * @param {Object} options
-     * @param {Number} [options.offsetX=0] The horizontal offset of the tile in the tilesheet.
-     * @param {Number} [options.offsetY=0] The vertical offset of the tile in the tilesheet.
-     * @param {Number} [options.width=16] The tile width in pixels.
-     * @param {Number} [options.height=16] The tile height in pixels.
      */
     constructor(options) {
         this.offsetX = options.offsetX || 0;
