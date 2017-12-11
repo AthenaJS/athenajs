@@ -1,6 +1,6 @@
 import FX from '../FX/FX';
-import Deferred from '../Core/Deferred';
-import Dom from '../Core/Dom';
+import Deferred from '../Util/Deferred';
+import Dom from '../Util/Dom';
 
 /**
  * The `Display` class creates and manipulates display buffer for the game

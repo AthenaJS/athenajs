@@ -8,7 +8,7 @@ import RM from '../Resource/ResourceManager';
  * Once every enemies of a wave have been destroyed, an action can be triggered,
  * for eg. to drop rewards onto the map.
  */
-export default class Wave {
+class Wave {
     /**
      * Creates a new Wave
      *
@@ -84,3 +84,5 @@ export default class Wave {
         }
     }
 };
+
+export default Wave;

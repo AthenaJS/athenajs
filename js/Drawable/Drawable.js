@@ -2,7 +2,7 @@ import FX from '../FX/FX';
 import Behaviors from './Behavior/Behaviors';
 import NM from '../Notification/NotificationManager';
 import AM from '../Audio/AudioManager';
-import Deferred from '../Core/Deferred';
+import Deferred from '../Util/Deferred';
 
 /*jshint devel: true, bitwise: false*/
 /**
@@ -126,6 +126,7 @@ class Drawable {
      * `speed`,  `visible`, `canCollide`, `plane`, `x`, `y`, `scale`, `angle`, `movable`,
      * `vx` , `vy`, `gravity`, `wave`
      *
+     * @private
      */
     _reset() {
         this.speed = this._settings.speed;

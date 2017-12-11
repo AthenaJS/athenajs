@@ -1,6 +1,6 @@
 import Drawable from './Drawable';
-import Deferred from '../Core/Deferred';
-import Dom from '../Core/Dom';
+import Deferred from '../Util/Deferred';
+import Dom from '../Util/Dom';
 
 /*jshint devel: true, bitwise: false*/
 /**
@@ -20,7 +20,7 @@ import Dom from '../Core/Dom';
 class Sprite extends Drawable {
     /**
      * Creates a new Sprite
-     * 
+     *
      * @param {String} type An identifier for this sprite, can be for example `enemy1`,...
      * @param {Object} options An options hash for the object.
      * @param {String} options.imageId The path to the spritesheet image.
@@ -628,7 +628,7 @@ class Sprite extends Drawable {
      *
      **@param {String} oldAnim The previous animation.
      * @param {String} newAnim The new animation to be played.
-     *  
+     *
      * @private
      */
     _animationChanged(oldAnim, newAnim) {

@@ -3,7 +3,7 @@ import Promise from 'es6-promise';
 /**
  * Simple wrapper for ES6 native Promise
  */
-export default class Deferred {
+class Deferred {
     /**
      * Creates a new Deferred
      */
@@ -16,10 +16,12 @@ export default class Deferred {
 
     /**
      * Creates and immediately resolves a new deferred
-     * 
+     *
      * @param {any} val the value to resolve the promise with
      */
     static resolve(val) {
         return Promise.resolve(val);
     }
 }
+
+export default Deferred;

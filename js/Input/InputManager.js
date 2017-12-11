@@ -20,7 +20,7 @@ const InputManager = {
     /**
      * A list of common keyCodes
      */
-    keys: {
+    KEYS: {
         'UP': 38,
         'DOWN': 40,
         'LEFT': 37,
@@ -100,7 +100,7 @@ const InputManager = {
      */
     _generateKeyCodes: function () {
         for (let i = 65; i < 91; ++i) {
-            this.keys[String.fromCharCode(i)] = i;
+            this.KEYS[String.fromCharCode(i)] = i;
         }
     },
     /**
@@ -246,6 +246,8 @@ const InputManager = {
     /**
      * Checks for a new joystick to be connected onto the machine and changes the inputMode to `gamepad`
      * when a new joypad is detected.
+     *
+     * @private
      */
     _pollNewGamepad: function () {
         let gamepads = (navigator.getGamepads && navigator.getGamepads()) || (navigator.webkitGetGamepads && navigator.webkitGetGamepads()),
@@ -273,11 +275,11 @@ const InputManager = {
         }
     },
     /**
-     *
+     * @private
      */
     _pollGamepad: function () {
         // normal buttons
-        // if (key === this.keys.space) {
+        // if (key === this.KEYS.space) {
         //     if (this.pad.buttons[this.PAD_BUTTONS[key]].pressed === true) {
         //         this.padPressed[key] = true;
         //     } else {
@@ -294,69 +296,69 @@ const InputManager = {
         //     console.log(i, this.pad.buttons[i].pressed.toString());
         // }
 
-        if (this.pad.buttons[12].pressed && !this.latches[this.keys['UP']]) {
-            this.keyPressed[this.keys['UP']] = true;
-            this.keyPressed[this.keys['DOWN']] = false;
-        } else if (this.pad.buttons[13].pressed && !this.latches[this.keys['DOWN']]) {
-            this.latches[this.keys['UP']] = false;
-            this.keyPressed[this.keys['DOWN']] = true;
-            this.keyPressed[this.keys['UP']] = false;
+        if (this.pad.buttons[12].pressed && !this.latches[this.KEYS['UP']]) {
+            this.keyPressed[this.KEYS['UP']] = true;
+            this.keyPressed[this.KEYS['DOWN']] = false;
+        } else if (this.pad.buttons[13].pressed && !this.latches[this.KEYS['DOWN']]) {
+            this.latches[this.KEYS['UP']] = false;
+            this.keyPressed[this.KEYS['DOWN']] = true;
+            this.keyPressed[this.KEYS['UP']] = false;
         } else {
-            this.latches[this.keys['UP']] = false;
-            this.latches[this.keys['DOWN']] = false;
-            this.keyPressed[this.keys['DOWN']] = false;
-            this.keyPressed[this.keys['UP']] = false;
+            this.latches[this.KEYS['UP']] = false;
+            this.latches[this.KEYS['DOWN']] = false;
+            this.keyPressed[this.KEYS['DOWN']] = false;
+            this.keyPressed[this.KEYS['UP']] = false;
         }
 
-        if (this.pad.buttons[15].pressed && !this.latches[this.keys['RIGHT']]) {
-            this.keyPressed[this.keys['RIGHT']] = true;
-            this.keyPressed[this.keys['LEFT']] = false;
+        if (this.pad.buttons[15].pressed && !this.latches[this.KEYS['RIGHT']]) {
+            this.keyPressed[this.KEYS['RIGHT']] = true;
+            this.keyPressed[this.KEYS['LEFT']] = false;
         } else if (this.pad.buttons[14].pressed) {
-            this.latches[this.keys['RIGHT']] = false;
-            this.keyPressed[this.keys['LEFT']] = true;
-            this.keyPressed[this.keys['RIGHT']] = false;
+            this.latches[this.KEYS['RIGHT']] = false;
+            this.keyPressed[this.KEYS['LEFT']] = true;
+            this.keyPressed[this.KEYS['RIGHT']] = false;
         } else {
-            this.latches[this.keys['RIGHT']] = false;
-            this.latches[this.keys['LEFT']] = false;
-            this.keyPressed[this.keys['LEFT']] = false;
-            this.keyPressed[this.keys['RIGHT']] = false;
+            this.latches[this.KEYS['RIGHT']] = false;
+            this.latches[this.KEYS['LEFT']] = false;
+            this.keyPressed[this.KEYS['LEFT']] = false;
+            this.keyPressed[this.KEYS['RIGHT']] = false;
         }
 
-        if (this.pad.buttons[0].pressed && !this.latches[this.keys['SPACE']]) {
-            this.keyPressed[this.keys['SPACE']] = true;
+        if (this.pad.buttons[0].pressed && !this.latches[this.KEYS['SPACE']]) {
+            this.keyPressed[this.KEYS['SPACE']] = true;
         } else if (!this.pad.buttons[0].pressed) {
-            this.latches[this.keys['SPACE']] = false;
-            this.keyPressed[this.keys['SPACE']] = false;
+            this.latches[this.KEYS['SPACE']] = false;
+            this.keyPressed[this.KEYS['SPACE']] = false;
         }
 
-        if (this.pad.buttons[1].pressed && !this.latches[this.keys['CTRL']]) {
-            this.keyPressed[this.keys['CTRL']] = true;
+        if (this.pad.buttons[1].pressed && !this.latches[this.KEYS['CTRL']]) {
+            this.keyPressed[this.KEYS['CTRL']] = true;
         } else if (!this.pad.buttons[1].pressed) {
-            this.latches[this.keys['CTRL']] = false;
-            this.keyPressed[this.keys['CTRL']] = false;
+            this.latches[this.KEYS['CTRL']] = false;
+            this.keyPressed[this.KEYS['CTRL']] = false;
         }
         // stick 1
         /*
         if (this.pad.axes[1] === -1) {
-            this.keyPressed[this.keys['UP']] = true;
-            this.keyPressed[this.keys['DOWN']] = false;
+            this.keyPressed[this.KEYS['UP']] = true;
+            this.keyPressed[this.KEYS['DOWN']] = false;
         } else if (this.pad.axes[1] === 1) {
-            this.keyPressed[this.keys['DOWN']] = true;
-            this.keyPressed[this.keys['UP']] = false;
+            this.keyPressed[this.KEYS['DOWN']] = true;
+            this.keyPressed[this.KEYS['UP']] = false;
         } else {
-            this.keyPressed[this.keys['DOWN']] = false;
-            this.keyPressed[this.keys['UP']] = false;
+            this.keyPressed[this.KEYS['DOWN']] = false;
+            this.keyPressed[this.KEYS['UP']] = false;
         }
 
         if (this.pad.axes[0] === 1) {
-            this.keyPressed[this.keys['RIGHT']] = true;
-            this.keyPressed[this.keys['LEFT']] = false;
+            this.keyPressed[this.KEYS['RIGHT']] = true;
+            this.keyPressed[this.KEYS['LEFT']] = false;
         } else if (this.pad.axes[0] === -1) {
-            this.keyPressed[this.keys['LEFT']] = true;
-            this.keyPressed[this.keys['RIGHT']] = false;
+            this.keyPressed[this.KEYS['LEFT']] = true;
+            this.keyPressed[this.KEYS['RIGHT']] = false;
         } else {
-            this.keyPressed[this.keys['LEFT']] = false;
-            this.keyPressed[this.keys['RIGHT']] = false;
+            this.keyPressed[this.KEYS['LEFT']] = false;
+            this.keyPressed[this.KEYS['RIGHT']] = false;
         }
         */
         this.jPollInterval = requestAnimationFrame(this._pollGamepad.bind(this));
@@ -412,13 +414,13 @@ const InputManager = {
         /* fire button */
         fireJoystick.addEventListener('touchStart', () => {
             if (this.inputMode === 'virtual_joystick') {
-                this.keyPressed[this.keys['CTRL']] = true;
+                this.keyPressed[this.KEYS['CTRL']] = true;
             }
         });
 
         fireJoystick.addEventListener('touchEnd', () => {
             if (this.inputMode === 'virtual_joystick') {
-                this.keyPressed[this.keys['CTRL']] = false;
+                this.keyPressed[this.KEYS['CTRL']] = false;
             }
         });
     },
@@ -463,13 +465,13 @@ const InputManager = {
 
         if (down.length) {
             down.forEach((key) => {
-                this.keyPressed[this.keys[key]] = true;
+                this.keyPressed[this.KEYS[key]] = true;
             });
         }
 
         if (up.length) {
             up.forEach((key) => {
-                this.keyPressed[this.keys[key]] = false;
+                this.keyPressed[this.KEYS[key]] = false;
             });
         }
 
@@ -533,7 +535,7 @@ const InputManager = {
      * Returns an object with the state of all keys
      */
     getAllKeysStatus: function () {
-        const keys = Object.keys(this.keys),
+        const keys = Object.keys(this.KEYS),
             result = {};
 
         for (let i = 0; i < keys.length; ++i) {
@@ -562,21 +564,21 @@ const InputManager = {
     },
 
     isKeyDown: function (key, latch) {
-        var keyCode = typeof key === 'string' && this.keys[key] || key;
+        var keyCode = typeof key === 'string' && this.KEYS[key] || key;
 
         return this.getKeyStatus(keyCode, latch);
     },
 
     /**
      * Install callback that gets called when a key is pressed/released
-     * 
+     *
      * @param {String} space-separated list of keys to listen for
      * @param {String} event to listen for: can be `up` or `down`
      * @param {Function} callback the function to call
      */
     installKeyCallback: function (key, event, callback) {
         key.split(' ').forEach(key => {
-            let keyCode = this.keys[key];
+            let keyCode = this.KEYS[key];
 
             if (!this.keyCb[keyCode]) {
                 this.keyCb[keyCode] = {
@@ -604,10 +606,10 @@ const InputManager = {
 
 // fill in 1-7 keyCodes
 for (let i = 0; i < 10; ++i) {
-    InputManager.keys[i.toString()] = i + 48;
+    InputManager.KEYS[i.toString()] = i + 48;
 }
 
 // fill in a-z keycodes
-[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((char, i) => { InputManager.keys[char] = 65 + i; });
+[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach((char, i) => { InputManager.KEYS[char] = 65 + i; });
 
 export default InputManager;

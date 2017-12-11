@@ -6,7 +6,7 @@ import Drawable from './Drawable';
  *
  * @extends Drawable
  */
-export default class SimpleText extends Drawable {
+class SimpleText extends Drawable {
     /**
      *
      * @param {String} type The type of the graphic object
@@ -278,3 +278,5 @@ export default class SimpleText extends Drawable {
         this.font = `${this.fontSize} ${this.fontFace}`;
     }
 }
+
+export default SimpleText;

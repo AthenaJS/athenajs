@@ -1,16 +1,14 @@
-/* @flow */
 import Promise from 'es6-promise';
 
-/*jshint devel: true, bitwise: false*/
 /**
- * Object that allows sending & receving binary data
+ * Object that allows sending & receving binary data using HTTP
  */
 export default {
     /**
      * Sends binary as POST
-     * 
-     * @param {ArrayBufferView} view
-     * @param {String} url to post binary data to
+     *
+     * @param {ArrayBufferView} view Binary data to send.
+     * @param {String} url Url to post binary data to.
      */
     sendArrayBufferView: function (view, url) {
         const req = new XMLHttpRequest();
@@ -22,9 +20,9 @@ export default {
 
     /**
      * Retrieves binary data from the server
-     * 
-     * @param {String} url to get binary data from
-     * @returns promise that is fullfilled with ArrayBuffer or false if get failed
+     *
+     * @param {String} url Url to get binary data from.
+     * @returns {Promise} promise that is fullfilled with ArrayBuffer or false if get failed
      */
     getArrayBuffer: function (url) {
         return new Promise((resolve, reject) => {

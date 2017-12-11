@@ -1,6 +1,6 @@
 /**
  * `AudioManager` handles playback of audio files loaded using the `ResourceManager`
- * 
+ *
  * @property {Object} audioCache An hash that stores in-use sounds.
  * The key is the id of the sound.
  * @property {boolean} enabled This is set to false when sound playback is disabled.
@@ -12,7 +12,7 @@ export default {
      * Adds a new sound element to the audio cache.
      * *Note* if a sound with the same id has already been added, it will be replaced
      * by the new one.
-     * 
+     *
      * @param {String} id
      * @param {HTMLAudioElement} element
      */
@@ -21,7 +21,7 @@ export default {
     },
     /**
      * Toggles global sound playback
-     * 
+     *
      * @param {Boolean} bool whether to enabled or disable sound playback.
      */
     toggleSound: function (bool) {
@@ -29,12 +29,12 @@ export default {
     },
     /**
      * Plays the specified sound with `id`.
-     * 
-     * @param {String} id
-     * @param {Boolean} [loop=false]
-     * @param {Number} [volume=1] a Number between 0 and 1
-     * @param {Number} [panning=0] a Number between 10 (left) and -10 (right)
-     * @returns the created sound instance
+     *
+     * @param {String} id The id of the sound to play.
+     * @param {Boolean} [loop=false] Set to true to have the sound playback loop.
+     * @param {Number} [volume=1] a Number between 0 and 1.
+     * @param {Number} [panning=0] a Number between 10 (left) and -10 (right).
+     * @returns {Wad} the created sound instance
      */
     play: function (id, loop, volume, panning) {
         let instance = null,
@@ -67,10 +67,11 @@ export default {
     },
     /**
      * Stops playing the sound id
-     * 
-     * @param {String} id
-     * @param {any} instanceId
-     * @returns
+     *
+     * @param {String} id The id of the sound to stop playing.
+     * @param {any} instanceId The instanceId to use, in case several sounds with the same Id are being played.
+     *
+     * @returns {undefined}
      */
     stop: function (id, instanceId) {
         let sound = null;

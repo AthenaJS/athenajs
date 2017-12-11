@@ -14,7 +14,7 @@ import Input from '../../Input/InputManager';
 class PlayerMove extends Behavior {
     /**
      * Creates a new PlayerMove behavior.
-     * 
+     *
      * @param {Drawable} sprite The sprite to attach the behavior to.
      * @param {Object} options Parameters specifics to the behavior
      * @param {String} [options.startMovement="idle"] The initial behavior state.
@@ -48,27 +48,27 @@ class PlayerMove extends Behavior {
      */
     onUpdate(/*t*/) {
         if (this.currentMovement !== 'falling' && !this.currentMovement.match(/jump/) && !this.firing) {
-            // console.log('left', Input.getKeyStatus(Input.keys.LEFT));
+            // console.log('left', Input.getKeyStatus(Input.KEYS.LEFT));
             // direction
             if (Input.isKeyDown('CTRL')) {
-                console.log('jump:', this.lookDirection);
+                console.log('[PlayerMove] jump:', this.lookDirection);
                 this.startJump(this.lookDirection);
-            } else if (Input.getKeyStatus(Input.keys.LEFT) === true) {
-                if (Input.getKeyStatus(Input.keys.UP) === true) {
+            } else if (Input.getKeyStatus(Input.KEYS.LEFT) === true) {
+                if (Input.getKeyStatus(Input.KEYS.UP) === true) {
                     this.startJump('left');
                 } else {
                     this.walkLeft();
                 }
-            } else if (Input.getKeyStatus(Input.keys.RIGHT) === true) {
-                if (Input.getKeyStatus(Input.keys.UP) === true) {
+            } else if (Input.getKeyStatus(Input.KEYS.RIGHT) === true) {
+                if (Input.getKeyStatus(Input.KEYS.UP) === true) {
                     this.startJump('right');
-                    console.log('startJump right', this.fromLadder);
+                    console.log('[PlayerMove] startJump right', this.fromLadder);
                 } else {
                     this.walkRight();
                 }
-            } else if (Input.getKeyStatus(Input.keys.UP) === true) {
+            } else if (Input.getKeyStatus(Input.KEYS.UP) === true) {
                 this.goUpOrClimb(false);
-            } else if (Input.getKeyStatus(Input.keys.DOWN) === true) {
+            } else if (Input.getKeyStatus(Input.KEYS.DOWN) === true) {
                 // empty ? => fall (possible ?)
                 this.goDownOrClimb();
             } else {
@@ -108,19 +108,18 @@ class PlayerMove extends Behavior {
                         break;
 
                     default:
-                        console.log('unhandle fire');
-                        console.log(this.currentMovement);
+                        console.log('[PlayerMove] unhandle fire', this.currentMovement);
                         break;
                 }
             }
         } else {
             if (this.currentMovement.match(/jump/)) {
-                // console.log('***', this.currentMovement, Input.getKeyStatus(Input.keys.SPACE, true));
+                // console.log('***', this.currentMovement, Input.getKeyStatus(Input.KEYS.SPACE, true));
                 if (Input.isKeyDown('SPACE', true)) {
                     this.handleFire();
                 }
                 // TODO: handle up key to catch the ladder
-                if (!this.fromLadder && Input.getKeyStatus(Input.keys.UP) === true && !this.goUpOrClimb(true)) {
+                if (!this.fromLadder && Input.getKeyStatus(Input.KEYS.UP) === true && !this.goUpOrClimb(true)) {
                     this.jump(/*this.lookDirection*/);
                 } else {
                     // console.log('jump 2');
@@ -142,7 +141,7 @@ class PlayerMove extends Behavior {
         let canFire = false,
             that = this;
 
-        console.log('fire direction', this.lookDirection);
+        console.log('[PlayerMove] fire direction', this.lookDirection);
 
         if (this.firing) {
             return;
@@ -259,17 +258,17 @@ class PlayerMove extends Behavior {
             that = this;
 
         if (!this.jumping) {
-            console.log('starting jump', sprite.y);
+            console.log('[PlayerMove] starting jump', sprite.y);
             this.readyToJump = false;
             this.currentMovement = 'startjump';
             this.vx = direction === 'left' ? -2 : 2;
             this.vy = -4;
             this.gravity = 0.098;
 
-            console.log('startJump', this.vy);
+            console.log('[PlayerMove] startJump', this.vy);
 
             sprite.setAnimation('goDown' + direction, function () {
-                console.log('end goDownLeft, ready to jump', this.vy, this.y);
+                console.log('[PlayerMove] end goDownLeft, ready to jump', this.vy, this.y);
                 that.readyToJump = true;
                 that.currentMovement = 'jump' + direction;
                 that.jumping = true;
@@ -316,7 +315,7 @@ class PlayerMove extends Behavior {
             noVy = false;
 
         if (!this.readyToJump) {
-            console.log('not ready to jump', this.fromLadder);
+            console.log('[PlayerMove] not ready to jump', this.fromLadder);
             return;
         }
 
@@ -489,7 +488,7 @@ class PlayerMove extends Behavior {
             diff = onlyClimb ? 0 : 24,
             pos = false;
 
-        if (Input.getKeyStatus(Input.keys.LEFT) === true || Input.getKeyStatus(Input.keys.RIGHT) === true) {
+        if (Input.getKeyStatus(Input.KEYS.LEFT) === true || Input.getKeyStatus(Input.KEYS.RIGHT) === true) {
             return false;
         }
 
@@ -536,14 +535,14 @@ class PlayerMove extends Behavior {
             if (this.currentMovement !== 'climb') {
                 sprite.centerXOverTile(pos);
             }
-            console.log(currentHitBox.x2 + sprite.x - 24, currentHitBox.y2 + sprite.y + this.climbVY);
+            // console.log(currentHitBox.x2 + sprite.x - 24, currentHitBox.y2 + sprite.y + this.climbVY);
             this.climb(0);
         } else {
             // TODO: if (climb) anim(faceLadder)
             if (this.currentMovement === 'climb' || this.currentMovement === 'faceWall') {
                 // debugger;
-                console.log(currentHitBox.x2 + sprite.x - 24, currentHitBox.y2 + sprite.y + this.climbVY);
-                console.log('faceWall');
+                // console.log(currentHitBox.x2 + sprite.x - 24, currentHitBox.y2 + sprite.y + this.climbVY);
+                // console.log('faceWall');
                 pos = sprite.currentMap.hitObjectTest(currentHitBox.x + sprite.x + 24, currentHitBox.y2 + sprite.y + this.climbVY, currentHitBox.x2 + sprite.x - 24, currentHitBox.y2 + sprite.y + this.climbVY, Tile.TYPE.LADDER);
                 this.faceWall();
             } else {
