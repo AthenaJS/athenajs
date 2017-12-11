@@ -1,24 +1,24 @@
 import Drawable from './Drawable';
-import Deferred from '../Core/Deferred';
+import Deferred from '../Util/Deferred';
 
 /**
  * Very basic wrapper for canvas drawing methods
  * Incomplete: missing translate, rotates, scale support
- * 
+ *
  * @extends Drawable
  */
-export default class Canvas extends Drawable {
+class Canvas extends Drawable {
     /**
      * Creates a new Canvas instance
-     * 
+     *
      * @param {String} name The name of the Canvas element.
-     * @param {Object} options 
+     * @param {Object} options
      * @param {Number} [options.width] The width of the Canvas element.
      * @param {Number} [options.height] The height of the Canvas element.
      * @param {Number} [options.x] The horizontal position of the element.
      * @param {Number} [options.y] The vertical position of the element.
      * @param {String} [options.color] The color of the element. Can be changed by subsequent drawing method calls.
-     * 
+     *
      */
     constructor(name, options) {
         super(name, options);
@@ -33,7 +33,7 @@ export default class Canvas extends Drawable {
 
     /**
      * Canvas's draw method that's called on every frame
-     * 
+     *
      * @param {RenderingContext} ctx The rendering context to use for drawing.
      */
     draw(ctx/*, debug*/) {
@@ -54,7 +54,7 @@ export default class Canvas extends Drawable {
 
     /**
      * Renders the Canvas.
-     * 
+     *
      * User should redefine this and put there needed drawing calls
      */
     render() {
@@ -63,7 +63,7 @@ export default class Canvas extends Drawable {
 
     /**
      * Fills the Canvas with specified color
-     * 
+     *
      * @param {String} [color=this.color] The color to used for filling the canvas.
      */
     fill(color) {
@@ -73,7 +73,7 @@ export default class Canvas extends Drawable {
 
     /**
      * Draws a rectangle
-     * 
+     *
      * @param {Number} x The rect's x related to the Canvas'x position.
      * @param {Number} y The rect's y related to the Canvas'x position.
      * @param {Number} width The width of the rectangle.
@@ -89,9 +89,9 @@ export default class Canvas extends Drawable {
 
     /**
      * Draws a circle
-     * 
+     *
      * @param {Number} x The circle's center x related to the Canvas'position.
-     * @param {Number} y The circle's center y related to the Canvas'position. 
+     * @param {Number} y The circle's center y related to the Canvas'position.
      * @param {Number} radius The circle's radius in radian.
      * @param {String} color The circle's color.
      * @param {Number} strokeWidth The circle's line width.
@@ -114,7 +114,7 @@ export default class Canvas extends Drawable {
 
     /**
      * Draws an arc
-     * 
+     *
      * @param {Number} x The arc's center x position, related to the canvas'position.
      * @param {Number} y The arc's center y position, related to the canvas'position.
      * @param {Number} radius The arc's radius, in radian.
@@ -137,7 +137,7 @@ export default class Canvas extends Drawable {
      * Since the Canvas Drawable only supports the Fade effect, we override
      * the Drawable's animate method and print a warning in case the user
      * attempts to run an unsupported animation.
-     * 
+     *
      * @param {String} name The name of the animation to run.
      * @param {Object} options
      */
@@ -152,3 +152,5 @@ export default class Canvas extends Drawable {
 }
 
 window.Canvas = Canvas;
+
+export default Canvas;

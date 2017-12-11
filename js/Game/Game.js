@@ -4,7 +4,7 @@ import AudioManager from '../Audio/AudioManager';
 import NM from '../Notification/NotificationManager';
 import Input from '../Input/InputManager';
 import fpscounter from '../lib/fpscounter/fpscounter.min';
-import Dom from './Dom';
+import Dom from '../Util/Dom';
 
 /**
  * The `Game` class is the central part to AthenaJS
@@ -183,7 +183,7 @@ class Game {
     /**
      * Toggles the Map tiles inspector
      *
-     * @param {Boolean} enable wether to enable the tileInspector
+     * @param {Boolean} enable whether to enable the tileInspector
      */
     toggleTileInspector(enable) {
         if (enable) {
@@ -275,6 +275,7 @@ class Game {
      * when the tab isn't visible anymore
      *
      * @see [Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
+     * @private
      */
     _addVisibilityEvents() {
         let eventName = '',

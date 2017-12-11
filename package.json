@@ -25,6 +25,8 @@
         "start": "webpack --watch",
         "build": "webpack --config webpack.production.config.js",
         "build-docs": "documentation build js/** --watch --config docs/documentation.yml --github --shallow -f html -o docs",
+        "docma": "docma -c ./docma.json",
+        "jsdoc": "jsdoc -c ./jsdoc.json -d ./docs3",
         "check": "tsc --allowJs --checkJs ./js/athena-module.js"
     },
     "devDependencies": {
@@ -37,15 +39,17 @@
         "exports-loader": "0.6.4",
         "imports-loader": "0.7.1",
         "jest-cli": "^21.2.1",
+        "jsdoc": "^3.5.5",
         "typescript": "^2.5.3",
         "uglifyjs-webpack-plugin": "^0.4.6",
         "webpack": "2.3.3",
         "webpack-notifier": "1.5.0"
     },
     "dependencies": {
+        "docma": "^1.5.1",
         "es6-promise": "4.1.0",
-        "whatwg-fetch": "2.0.3",
-        "web-audio-daw": "2.3.1"
+        "web-audio-daw": "2.3.1",
+        "whatwg-fetch": "2.0.3"
     },
     "jest": {
         "transform": {

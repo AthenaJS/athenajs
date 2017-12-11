@@ -7,6 +7,7 @@ import SimpleText from './SimpleText';
  * Each menu entry is called menuItem and is a simple object with the following properties:
  * { text: 'menu text', selectable: true|false, active: true|false, visible: true|false }
  *
+ * @extends Drawable
  */
 class Menu extends Drawable {
     /**

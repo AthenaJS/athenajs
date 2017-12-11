@@ -13,7 +13,7 @@ import Wave from '../Drawable/Wave';
  * to handle whatever events they need.
  *
  */
-export default class MapEvent {
+class MapEvent {
     /**
      * Creates a new MapEvent
      *
@@ -64,10 +64,24 @@ export default class MapEvent {
         this.setSwitch(id, typeof this.switches[id] !== 'undefined' ? !this.switches[id] : true);
     }
 
+    /**
+     * Retrieves a switch from the map using its id
+     *
+     * @param {String} id The switch to retrieve.
+     *
+     * @returns {any} returns the switch or false if it could not be found
+     */
     getSwitch(id) {
         return this.switches[id] || false;
     }
 
+    /**
+     * checks of conditions of specified trigger are valid
+     *
+     * @param {Object} trigger The trigger to check.
+     *
+     * @returns {Boolean} true if the trigger is valid
+     */
     checkConditions(trigger) {
         var conditions = trigger.conditions,
             cond = null,
@@ -192,7 +206,7 @@ export default class MapEvent {
 	 * Used for example when the player triggers apparition of several enemies or bonuses
      *
      * @param {Object} options The options to pass to the wav object
-     * @returns
+     * @returns {Boolean}
      *
 	 * @related {Wave}
      */
@@ -234,3 +248,5 @@ export default class MapEvent {
 
     // }
 }
+
+export default MapEvent;

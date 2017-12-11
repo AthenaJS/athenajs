@@ -8,7 +8,7 @@ export default {
      * Creates a new pool
      *
      * @param {Function} obj the constructor of the object to add a pool for
-     * @param {Number} suze the size of the pool
+     * @param {Number} size the size of the pool
      */
     create: function (obj, size) {
         obj._pool = [];

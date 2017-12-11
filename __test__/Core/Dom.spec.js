@@ -1,4 +1,4 @@
-import Dom from '../../js/Core/Dom';
+import Dom from '../../js/Util/Dom';
 
 beforeEach(() => {
     document.body.innerHTML = '<div id="myDiv"><span class="mySpan" >athena rulez!</span></div>';

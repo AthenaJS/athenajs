@@ -1,6 +1,6 @@
-export { default as Game } from './Core/Game';
+export { default as Game } from './Game/Game';
 
-export { default as Pool } from './Core/Pool';
+export { default as Pool } from './Util/Pool';
 
 export { default as Scene } from './Scene/Scene';
 
@@ -33,7 +33,7 @@ export { default as DisplayManager } from './Display/DisplayManager';
 export { default as Display } from './Display/Display';
 
 export { default as AudioManager } from './Audio/AudioManager';
-export { default as Binary } from './Binary/Binary';
+export { default as Binary } from './Util/Binary';
 
-export { default as Dom } from './Core/Dom';
-export { default as Deferred } from './Core/Deferred';
+export { default as Dom } from './Util/Dom';
+export { default as Deferred } from './Util/Deferred';

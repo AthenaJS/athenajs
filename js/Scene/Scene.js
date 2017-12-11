@@ -2,8 +2,8 @@ import ResourceManager from '../Resource/ResourceManager';
 import Map from '../Map/Map';
 import NM from '../Notification/NotificationManager';
 import Input from '../Input/InputManager';
-import Dom from '../Core/Dom';
-import Deferred from '../Core/Deferred';
+import Dom from '../Util/Dom';
+import Deferred from '../Util/Deferred';
 window.scenes = {};
 
 /**
@@ -174,11 +174,10 @@ class Scene {
 
     /**
      *
-     * loads a resource
+     * Adds a new resource to be loaded later
      *
      * @memberof Scene
      *
-     * // TODO: remove me ?
      */
     load(type, src, id = null) {
         if (this.loaded) {
@@ -194,29 +193,37 @@ class Scene {
     }
 
     /**
-     * loadImage
+     * Adds an image to the scene resource list
      *
-     * @returns
+     * @param {String} src The url of the file to load.
+     * @param {String} id The id to use for the image.
+     *
      * @memberof Scene
+     * @note this method should be called in the `setup` method
      */
     loadImage(src, id = null) {
         this.load('image', src, id || src);
     }
 
     /**
-     * loadAudio
+     * Adds an audio file to the scene resource list
      *
-     * @returns
+     * @param {String} src The url of the file to load.
+     * @param {String} id The id to use for the audio file.
+     *
      * @memberof Scene
+     * @note this method should be called in the `setup` method
      */
     loadAudio(src, id = null) {
         this.load('audio', src, id || src);
     }
 
     /**
-     * loadMap
+     * Adds a map file to the scene resource list
      *
-     * @returns
+     * @param {String} src The url of the file to load.
+     * @param {String} id The id to use for the map.
+     *
      * @memberof Scene
      */
     loadMap(src, id = null) {
@@ -513,9 +520,9 @@ class Scene {
     }
 
     /**
-     * Public setup method: can be overriden.
+     * Public setup method: this method is called right after internal Scene._setup().
      *
-     * This method is called right after internal Scene._setup()
+     * You should overriden it in your own Scene instances.
      */
     setup() {
         if (this.hudScene) {
@@ -524,7 +531,11 @@ class Scene {
     }
 
     /**
-     * Setup scene
+     * Setup scene:
+     *  - empty layers
+     *  - resets map
+     *  - clears input events
+     *  - calls _setup() method on hudScene if it exists
      *
      * @private
      */
@@ -558,9 +569,11 @@ class Scene {
     }
 
     /**
-     *
+     * Internal reset function
      *
      * @memberof Scene
+     *
+     * @private
      */
     _reset() {
         this.debug(false);
@@ -669,16 +682,20 @@ class Scene {
     }
 
     /**
-     * Subscribe to a list of events
+     * Subscribe to a space-separated list of events.
      *
      * @param {String} eventList The list of events to subscribe to as a space separated string.
+     *
+     * @note Events are automatically unbound when changing scene.
      */
     bindEvents(eventList) {
         NM.listen(eventList, this.onEvent.bind(this));
     }
 
     /**
-     * onEvent is called once one of the registered events has been triggered
+     * onEvent is called once one of the registered events has been triggered.
+     *
+     * Override this scene as needed.
      */
     onEvent() {
 

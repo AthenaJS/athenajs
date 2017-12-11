@@ -83,15 +83,15 @@ class PlayerMove2 extends Behavior {
         // fire and action keys are the same here but of course
         // we could imagine having different keys
         this.actionKeys = Object.assign({
-            RIGHT: Input.keys.RIGHT,
-            LEFT: Input.keys.LEFT,
-            UP: Input.keys.UP,
-            DOWN: Input.keys.DOWN,
-            FIRE: Input.keys.CTRL,
-            ACTION: Input.keys.CTRL
+            RIGHT: Input.KEYS.RIGHT,
+            LEFT: Input.KEYS.LEFT,
+            UP: Input.KEYS.UP,
+            DOWN: Input.KEYS.DOWN,
+            FIRE: Input.KEYS.CTRL,
+            ACTION: Input.KEYS.CTRL
         }, options.actionKeys);
 
-        this.keyCodes = [Input.keys.RIGHT, Input.keys];
+        this.keyCodes = [Input.KEYS.RIGHT, Input.KEYS];
 
         // now comes every animations that will configure the player's behavior
         this.animations = Object.assign({

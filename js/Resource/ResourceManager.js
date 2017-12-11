@@ -1,9 +1,9 @@
-import Binary from '../Binary/Binary';
+import Binary from '../Util/Binary';
 import AM from '../Audio/AudioManager';
-import Pool from '../Core/Pool';
+import Pool from '../Util/Pool';
 import Wad from 'web-audio-daw';
-import Deferred from '../Core/Deferred';
-import Dom from '../Core/Dom';
+import Deferred from '../Util/Deferred';
+import Dom from '../Util/Dom';
 
 // build a new object instance without using new
 function newObject(Obj) {

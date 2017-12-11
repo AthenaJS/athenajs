@@ -1,16 +1,16 @@
-import Deferred from '../../Core/Deferred';
+import Deferred from '../../Util/Deferred';
 
 /**
  * The Effect class allows to apply transformations to Scene & Drawable instances.
- * 
+ *
  * An effect can modifiy a properties and/or alter the rendering of a scene.
- * 
+ *
  * Effects can use a custom easing function to allow elastic like animations.
  */
 class Effect {
     /**
      * This the class constructor. Default options are:
-     * 
+     *
      * @param {Object} options
      * @param {Number} options.startValue The start value of the effect.
      * @param {Number} options.endValue The end value of the effect.
@@ -39,7 +39,7 @@ class Effect {
 
     /**
      * Changes the easing function used for the ffect
-     * 
+     *
      * @param {Function} easing The new easing function.
      */
     setEasing(easing) {
@@ -48,7 +48,7 @@ class Effect {
 
     /**
      * Called when the ffect is started.
-     * 
+     *
      * This method can be overriden but the super should always be called
      */
     start() {
@@ -74,7 +74,7 @@ class Effect {
 
     /**
      * Calculates current animation process
-     * 
+     *
      * This method can be overridden but the super should always be calle dfirst
      */
     process(ctx, fxCtx, obj) {
