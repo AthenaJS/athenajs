@@ -38,6 +38,7 @@
     }
 
     function _colorOperators(str) {
+        console.log('color', str);        
         return str.replace(/[.#~:]/g, '<span class="color-blue">$&</span>');
     }
 
@@ -191,6 +192,8 @@
                     : '• ';
 
             if (docma.template.options.outline === 'tree') {
+                console.log(id, badge, symbolName, keywords);
+                console.log(dust.filters.$id(symbol));
                 return _indentGetMenuItem(id, badge, symbolName, keywords);
             }
             // docma.template.options.outline === 'flat'

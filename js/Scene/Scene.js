@@ -176,8 +176,6 @@ class Scene {
      *
      * Adds a new resource to be loaded later
      *
-     * @memberof Scene
-     *
      */
     load(type, src, id = null) {
         if (this.loaded) {
@@ -198,7 +196,6 @@ class Scene {
      * @param {String} src The url of the file to load.
      * @param {String} id The id to use for the image.
      *
-     * @memberof Scene
      * @note this method should be called in the `setup` method
      */
     loadImage(src, id = null) {
@@ -211,7 +208,6 @@ class Scene {
      * @param {String} src The url of the file to load.
      * @param {String} id The id to use for the audio file.
      *
-     * @memberof Scene
      * @note this method should be called in the `setup` method
      */
     loadAudio(src, id = null) {
@@ -224,7 +220,6 @@ class Scene {
      * @param {String} src The url of the file to load.
      * @param {String} id The id to use for the map.
      *
-     * @memberof Scene
      */
     loadMap(src, id = null) {
         this.load('map', src, id || src);
