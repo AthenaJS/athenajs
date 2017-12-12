@@ -37,22 +37,36 @@
         return '';
     }
 
+    function _getSymbolType(symbol) {
+        if (docma.utils.isClass(symbol)) {
+            return 'class';
+        } else if (docma.utils.isGlobal(symbol)) {
+            return 'global';
+        } else {
+            return 'child';
+        }
+    }
+
     function _colorOperators(str) {
-        console.log('color', str);
         return str.replace(/[.#~:]/g, '<span class="color-blue">$&</span>');
     }
 
-    function _indentGetMenuItem(id, badge, symbolName, keywords) {
+    function _indentGetMenuItem(id, badge, symbolName, keywords, type) {
         var ops = /[.#~:]/,
             levels = symbolName.split(ops),
             last = levels[levels.length - 1],
+            refSymbol = _getRefSymbol(symbolName),            
             marginLeft = (levels.length - 1) * 20;
         last = symbolName.slice(-(last.length + 1)); // with operator
-        return '<a href="#' + id + '" class="sidebar-item level-' + (levels.length > 1 ? 'child' : 'root') + '" data-keywords="' + keywords + '">'
+        return '<a href="#' + id + '" class="sidebar-item ' + type + '" data-ref-symbol="' + refSymbol + '" data-keywords="' + keywords + '">'
             + '<span class="inline-block" style="margin-left:' + marginLeft + 'px">'
             + badge + '<span class="item-label">' + _colorOperators(last) + '</span>'
             + '</span>'
             + '</a>';
+    }
+
+    function _getRefSymbol(symbolName) {
+        return symbolName.split('#')[0];
     }
 
     // ---------------------------
@@ -104,7 +118,6 @@
             return nw + symbol.$longname; // docma.utils.getFullName(symbol);
         })
         .addFilter('$longname_params', function (symbol) {
-            console.log(symbol);
             var isCon = docma.utils.isConstructor(symbol),
                 longName = _colorOperators(symbol.$longname); // docma.utils.getFullName(symbol);
             if (symbol.kind === 'function' || isCon) {
@@ -175,7 +188,7 @@
             }
 
             var tags = Array.isArray(symbol) ? symbol : symbol.tags || [],
-                tagTitles = tags.filter((tag) => { console.log(tag); return !tag || tag.originalTitle.match(/obsolete/); } )
+                tagTitles = tags.filter((tag) => { return !tag || tag.originalTitle.match(/obsolete/); } )
                 .map(function (tag) {
                     return open2 + tag.originalTitle + close;
                 });
@@ -189,18 +202,18 @@
             if (!symbol) return symbolName;
             var id = dust.filters.$id(symbol),
                 keywords = docma.utils.getKeywords(symbol),
+                symbolType = _getSymbolType(symbol),
+                refSymbol = _getRefSymbol(symbolName),
                 badge = docma.template.options.badges
                     ? _getSymbolBadge(symbol)
                     : '• ';
 
             if (docma.template.options.outline === 'tree') {
-                console.log(id, badge, symbolName, keywords);
-                console.log(dust.filters.$id(symbol));
-                return _indentGetMenuItem(id, badge, symbolName, keywords);
+                return _indentGetMenuItem(id, badge, symbolName, keywords, symbolType);
             }
             // docma.template.options.outline === 'flat'
             var name = '<span class="item-label">' + dust.filters.$dot_prop(symbolName) + '</span>';
-            return '<a href="#' + id + '" class="sidebar-item" data-keywords="' + keywords + '">' + badge + name + '</a>';
+            return '<a href="#' + id + '" data-ref-symbol="' + refSymbol + '" class="sidebar-item ' + symbolType + '" data-keywords="' + keywords + '">' + badge + name + '</a>';
 
         })
         .addFilter('$get_type', function(symbol) {
@@ -209,6 +222,7 @@
                     return 'constructor';
 
                 case docma.utils.isClass(symbol):
+                case docma.utils.isGlobal(symbol):
                     return 'class';
 
                 default:
@@ -218,6 +232,9 @@
         .addFilter('$get_last_part', function(symbol) {
             var split = symbol.split('#');
             return split.length && split[split.length -1] || symbol;
+        })
+        .addFilter('$ref', function(symbol) {
+            return symbol.$longname.split('#')[0];
         });
 
     // ---------------------------
@@ -313,20 +330,52 @@
         }
 
         if (docma.template.options.collapseSymbols) {
-            // $('#sidebar-wrapper .sidebar-nav')
-            console.log('collapseSymbols');
             $('.sidebar-nav').addClass('collapse-def');
-            // $('#page-content-wrapper').addClass('collapse-def');
+            // click on a class to expand/collapse
+            $('.sidebar-nav-container').on('click', '.sidebar-item', function(event) {
+                console.log('click on sidebar');
+                var hashes = this.href.split('#');
+
+                if ($(this).hasClass('class')) {
+                    // var selector = 'a[href^=#' + hashes[1] + ']';
+                    var ref = $(this).data('refSymbol'),
+                    selector = '[data-ref-symbol=' + ref + ']';
+                    console.log('class', selector, this);
+                    $(this).parents('ul').find(selector).not('.class').toggle();
+                } else {
+                    // hashes = hashes.splice(1);
+                    // click on a method:need to expand the selected method
+                    var selector = '.row a[data-ref-symbol=' + this.hash.substr(1) + ']';
+                    console.log('sel', selector);
+                    $(selector).trigger('click', true);
+                    // console.log('not class');
+                    // console.log("$('.row a[href=#" + hashes.join('#') + "]').trigger('click', true);");
+                    // $('.row a[href=#' + hashes.join('#') + ']').trigger('click', true);
+                    // $('.row a[href=#' + hashes.splice(1).join('#') + ']').trigger('click', true);
+                }
+            });
         }
 
         if (docma.template.options.collapseDefinition) {
-            // $('#sidebar-wrapper .sidebar-nav')
-            console.log('collapseDefinition');
             $('#page-content-wrapper').addClass('collapse-def');
-            $('#page-content-wrapper.collapse-def').on('click', '.symbol-heading', function (event) {
-                // console.log('click', event); event.preventDefault();
-                $(event.currentTarget).next().toggle();
-            })
+            $('#page-content-wrapper.collapse-def').on('click', '.symbol-heading', function (event, showOnly) {
+                console.log('click');
+                if (showOnly) {
+                    $(event.currentTarget).next().show();
+                } else {
+                    $(event.currentTarget).next().toggle();
+                }
+            });
+
+            if (document.location.hash) {
+                // trigger will expand the selected element
+                $('.row .symbol > a[href^=' + document.location.hash + ']').trigger('click', true);
+                // we need to trigger hash change to position the scrolling on this element
+                // because triggring a click won't position the scroll on the triggered anchor
+                var oldLocation = document.location.hash;
+                document.location.hash = '';
+                document.location.hash = oldLocation;
+            }
         }
 
         var pageContentRow = $('#page-content-wrapper').find('.row').first();

@@ -10,8 +10,6 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic");
 @import url("https://fonts.googleapis.com/css?family=Fira+Mono:400");
 
-body{color:red;}
-
 body, html {
     background-color: #fff !important;
     color: #575757;
@@ -105,7 +103,7 @@ pre {
 }
 
 code {
-    // font-size: 82% !important;
+    font-size: 110% !important;
     background-color: @light-base;
     color: @gray-base;
 }
@@ -383,15 +381,19 @@ code.symbol-type {
     }
 }
 
-.sidebar-nav.collapse-def a.level-child{
+.sidebar-nav.collapse-def a{
     display:none;
+}
+
+.sidebar-nav.collapse-def a.class{
+    display:block;
 }
 
 .symbol-meta{
     display:block;
     position:absolute;
     right:0;
-    top:15px;
+    top:22px;
 }
 
 .symbol-container
@@ -411,6 +413,10 @@ code.symbol-name{
 
 #page-content-wrapper{
     max-width:1024px;
+}
+
+#page-content-wrapper.static{
+    margin:auto;
 }
 
 code.symbol-name .params{
