@@ -25,7 +25,7 @@ const createImageBitmap = window.createImageBitmap || function createImageBitmap
  *  - Maps (JSON-based)
  *
  */
-export default {
+const ResourceManager = {
     isLocal: !!document.location.href.match(/^file:\/\//),
     scriptMaxTime: 3000,
     groupMaxTime: 5000,
@@ -620,3 +620,5 @@ export default {
         }
     }
 };
+
+export default ResourceManager;

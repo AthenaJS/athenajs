@@ -31,7 +31,7 @@
     "app": {
         "title": "AthenaJS Documentation",
         "meta": null,
-        "entrance": "api:scene",
+        "entrance": "content:home",
         "routing": "query",
         "server": "static"
     },
@@ -242,6 +242,9 @@
         },
         {
             "util": "./js/Util/**/*.js"
+        },
+        {
+            "home": "README.md"
         }
         ],
     "dest": "./docs2"

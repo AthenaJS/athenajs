@@ -17,7 +17,7 @@ import Dom from '../Util/Dom';
  * @param {boolean} [options.showFps=false] A little fps counter will be displayed if this is true.
  * @param {number} [options.width=1024] The width of the game display.
  * @param {number} [options.height=768] The height of the game display.
- * @param {Object} [options.resources] An optionnal array of resources of the form:``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
+ * @param {Object} [options.resources] An optionnal array of resources of the form:`{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}` that the scene needs.
  */
 class Game {
     /**
@@ -31,7 +31,7 @@ class Game {
      * @param {boolean} [options.showFps=false] A little fps counter will be displayed if this is true.
      * @param {number} [options.width=1024] The width of the game display.
      * @param {number} [options.height=768] The height of the game display.
-     * @param {Object} [options.resources] An optionnal array of resources of the form:``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
+     * @param {Object} [options.resources] An optionnal array of resources of the form:`{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}` that the scene needs.
      */
     constructor(options = {}) {
         console.log('[Game] Init()'/*, options*/);

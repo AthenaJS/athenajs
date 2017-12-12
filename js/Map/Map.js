@@ -12,7 +12,6 @@ window.maps = {};
  * tiles and tilebehaviors. It has a viewport so that only a part of the map can be displayed.
  * A map also contains objects that are added onto the map once the viewport reaches a `block`.
  *
- *
  */
 class Map {
     /**
@@ -896,7 +895,7 @@ class Map {
     *
     * @param {Drawalbe} sprite
     * @param {any} tileTypes
-    * @returns true if the object hit a tile, false otherwise
+    * @returns {boolean} true if the object hit a tile, false otherwise
     *
     */
     setNextYTop(sprite, tileTypes) {
