@@ -4,10 +4,13 @@
 // @import "icomoon.less";
 @import "https://use.fontawesome.com/releases/v5.0.1/css/all.css";
 
-@import "highlight-one-dark.less";
+// @import "highlight-one-dark.less";
+@import (inline) "./highlight-nord.css";
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic");
 @import url("https://fonts.googleapis.com/css?family=Fira+Mono:400");
+
+body{color:red;}
 
 body, html {
     background-color: #fff !important;
@@ -72,9 +75,9 @@ td > p {
     margin: 0;
 }
 
-div {
-    border: 0 none !important;
-}
+// div {
+//     border: 0 none !important;
+// }
 
 blockquote {
     padding: 6px 12px;
@@ -102,12 +105,12 @@ pre {
 }
 
 code {
-    font-size: 82% !important;
+    // font-size: 82% !important;
     background-color: @light-base;
     color: @gray-base;
 }
 
-@symbol-font-size: ceil(@font-size-base * 1.2);
+@symbol-font-size: ceil(@font-size-base * 1);
 .symbol {
     font-size: @symbol-font-size;
     & a {
@@ -165,8 +168,8 @@ code.symbol-type {
 .symbol-container {
     // when a bookmark is clicked, the symbol title will be hidden under the top
     // nav-bar. this will prevent that.
-    padding-top: 40px;
-    margin-top: -40px;
+    padding-top: 60px;
+    margin-top: -60px;
 
     & .symbol-heading {
         & .symbol {
@@ -258,7 +261,7 @@ code.symbol-type {
 // mixins
 
 .space-left-sm {
-    margin-left: 15px;
+    margin-left: 18px;
 }
 .space-left, .space-left-md {
     margin-left: 25px;
@@ -355,6 +358,31 @@ code.symbol-type {
     display:none;
 }
 
+// classes + constructors are initially expanded
+#page-content-wrapper.collapse-def{
+    & .class .symbol-definition,
+    & .constructor .symbol-definition {
+        display:block !important;
+    }
+}
+
+// .symbol-container .color-blue{
+//     float:right;
+//     font-size:50%;
+//     opacity:.4;
+// }
+
+.symbol-container.class .symbol-heading{
+    position:relative;
+}
+
+.symbol-container{
+    &.class .symbol-name .code-blue,
+    &.constructor .symbol-name .code-blue {
+        display:none;
+    }
+}
+
 .sidebar-nav.collapse-def a.level-child{
     display:none;
 }
@@ -363,17 +391,65 @@ code.symbol-type {
     display:block;
     position:absolute;
     right:0;
-    top:10px;
+    top:15px;
 }
 
-// .symbol-container{
-//     position:relative;
-// }
+.symbol-container
+    &.class{
+    position:relative;
+}
 
 code.symbol-name{
     font-weight:normal;
+    background-color:transparent;    
+}
+
+.class .symbol-name{
+    color:black;
+    font-size:120%;
 }
 
 #page-content-wrapper{
     max-width:1024px;
+}
+
+code.symbol-name .params{
+    color:rgba(0,0,0,.5);
+}
+
+.symbol-container.unknown .symbol-heading .symbol{
+    padding:15px 0 5px 0;
+}
+
+code.symbol-name{
+    font-family: @font-family-sans-serif;
+}
+
+.symbol-container.unknown{
+    border-bottom:1px solid rgba(0, 0, 0, 0.1);
+}
+
+.symbol-container.unknown .symbol-meta,
+.symbol-container.constructor .symbol-meta{
+    display:none;
+}
+
+.symbol-container.unknown .symbol:hover{
+    opacity:.7;
+}
+
+.symbol-container.class{
+    margin-top:50px;
+}
+
+.symbol-container.class .symbol-name{
+    font-weight:bold;
+}
+
+.symbol-container.class:first-child{
+    margin-top:0;
+}
+
+.symbol > a{
+    color:black;
 }

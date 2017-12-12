@@ -1,12 +1,13 @@
-<div id="{.|$id}" class="symbol-container">
+<div id="{.|$id}" class="symbol-container {symbol|$get_type}">
 
     <div class="symbol-heading">
         <div class="symbol">
             <a href="#{.|$id}">
                 <span style="display:none;" class="glyphicon glyphicon-link color-gray-light" aria-hidden="true"></span>
-                <code class="symbol-name">{symbol|s|$longname_params}</code>
+                <span class="symbol-name">{symbol|s|$longname_params|$get_last_part}</span>
                 <span style="display:none;" class="symbol-sep">{symbol|$type_sep}</span>
                 <code style="display:none;" class="symbol-type">{symbol|$type}</code>
+                <span style="display:none;" class="color-blue">►</span>
             </a>
 
             {symbol|s|$tags}
@@ -26,7 +27,7 @@
 
         {?template.options.symbolMeta}
         {?symbol.meta.lineno}
-        <p style="display:none;" class="symbol-meta">
+        <p class="symbol-meta">
             {?symbol.meta.filename}<b>File:</b> {symbol.meta.filename}&nbsp;&nbsp;{/symbol.meta.filename}
             {?symbol.meta.lineno}<b>Line:</b> {symbol.meta.lineno}&nbsp;&nbsp;{/symbol.meta.lineno}
         </p>

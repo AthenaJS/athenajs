@@ -11,9 +11,9 @@
         <tbody>
             {#params}
                 <tr>
-                    <td><code>{name|s|$dot_prop}</code></td>
-                    <td><code>{.|$type}</code></td>
-                    <td>{?optional}<code>{.|$def}</code>{/optional}</td>
+                    <td>{name|s|$dot_prop}</td>
+                    <td><span class="color-blue">{.|$type}</span></td>
+                    <td>{?optional}{.|$def}{/optional}</td>
                     <td>{.|s|$param_desc}</td>
                 </tr>
             {/params}
