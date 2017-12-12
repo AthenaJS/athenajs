@@ -38,7 +38,7 @@
     }
 
     function _colorOperators(str) {
-        console.log('color', str);        
+        console.log('color', str);
         return str.replace(/[.#~:]/g, '<span class="color-blue">$&</span>');
     }
 
@@ -66,9 +66,9 @@
         .addFilter('$dot_prop', function (name) {
             var re = /(.*)([.#~:]\w+)/g,
                 match = re.exec(name);
-            if (!match) {
+            // if (!match) {
                 return '<b>' + name + '</b>';
-            }
+            // }
             return '<span class="color-gray">' + _colorOperators(match[1]) + '</span>' + _colorOperators(match[2]);
         })
         .addFilter('$author', function (symbol) {
@@ -104,13 +104,14 @@
             return nw + symbol.$longname; // docma.utils.getFullName(symbol);
         })
         .addFilter('$longname_params', function (symbol) {
+            console.log(symbol);
             var isCon = docma.utils.isConstructor(symbol),
                 longName = _colorOperators(symbol.$longname); // docma.utils.getFullName(symbol);
             if (symbol.kind === 'function' || isCon) {
                 var defVal,
                     defValHtml = '',
                     nw = isCon ? 'new ' : '',
-                    name = nw + longName + '(';
+                    name = nw + longName + '<span class="params">(';
                 if (Array.isArray(symbol.params)) {
                     var params = symbol.params.reduce(function (memo, param) {
                         // ignore params such as options.<property>
@@ -125,7 +126,7 @@
                     }, []).join(', ');
                     name += params;
                 }
-                return name + ')';
+                return name + ')</span>';
             }
             return longName;
         })
@@ -174,7 +175,8 @@
             }
 
             var tags = Array.isArray(symbol) ? symbol : symbol.tags || [],
-                tagTitles = tags.map(function (tag) {
+                tagTitles = tags.filter((tag) => { console.log(tag); return !tag || tag.originalTitle.match(/obsolete/); } )
+                .map(function (tag) {
                     return open2 + tag.originalTitle + close;
                 });
             tagBoxes = tagBoxes.concat(tagTitles);
@@ -200,6 +202,22 @@
             var name = '<span class="item-label">' + dust.filters.$dot_prop(symbolName) + '</span>';
             return '<a href="#' + id + '" class="sidebar-item" data-keywords="' + keywords + '">' + badge + name + '</a>';
 
+        })
+        .addFilter('$get_type', function(symbol) {
+            switch(true) {
+                case docma.utils.isConstructor(symbol):
+                    return 'constructor';
+
+                case docma.utils.isClass(symbol):
+                    return 'class';
+
+                default:
+                    return 'unknown';
+            }
+        })
+        .addFilter('$get_last_part', function(symbol) {
+            var split = symbol.split('#');
+            return split.length && split[split.length -1] || symbol;
         });
 
     // ---------------------------
@@ -306,7 +324,7 @@
             console.log('collapseDefinition');
             $('#page-content-wrapper').addClass('collapse-def');
             $('#page-content-wrapper.collapse-def').on('click', '.symbol-heading', function (event) {
-                console.log('click', event); event.preventDefault();
+                // console.log('click', event); event.preventDefault();
                 $(event.currentTarget).next().toggle();
             })
         }

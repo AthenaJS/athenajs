@@ -67,13 +67,26 @@
                             "href": "?api=scene"
                         },
                         {
+                            "separator": true
+                        },                        
+                        {
                             "label": "Drawable",
                             "href": "?api=drawable"
                         },
                         {
+                            "label": "Behaviors",
+                            "href": "?api=behaviors"
+                        },                        
+                        {
+                            "separator": true
+                        },                        
+                        {
                             "label": "Map",
                             "href": "?api=map"
                         },
+                         {
+                             "separator": true
+                         },
                         {
                             "label": "Input",
                             "href": "?api=input"
@@ -204,8 +217,11 @@
             "scene": "./js/Scene/**/*.js"
         },
         {
-            "drawable": "./js/Drawable/**/*.js"
+            "drawable": "./js/Drawable/*.js"
         },
+        {
+            "behaviors": "./js/Drawable/Behavior/*.js"
+        },        
         {
             "fx": "./js/FX/**/*.js"
         },
