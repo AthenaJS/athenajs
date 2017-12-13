@@ -14,7 +14,7 @@
                     <td>{name|s|$dot_prop}</td>
                     <td><span class="color-blue">{.|$type}</span></td>
                     <td>{?optional}{.|$def}{/optional}</td>
-                    <td>{.|s|$param_desc}</td>
+                    <td>{?description}{.|s|$param_desc}{/description}</td>
                 </tr>
             {/params}
         </tbody>

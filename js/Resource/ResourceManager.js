@@ -33,6 +33,8 @@ const ResourceManager = {
      * This property holds all ressources that have been added to the ResourceManager,
      * grouped by string identifier. By default, a new `any` group is added: any resource
      * that is added with no group gets added this group.
+     * 
+     * @private
      */
     resources: {
         // by default all resources belong to any

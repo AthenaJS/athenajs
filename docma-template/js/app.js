@@ -113,7 +113,10 @@
             var str = !param.optional
                 ? '<span class="boxed bg-red">Required</span>&nbsp;'
                 : '';
-            str += param.description;
+            if (param.description) {
+                str += param.description;
+            }
+
             return docma.utils.parse(str);
         })
         .addFilter('$longname', function (symbol) {
@@ -123,12 +126,12 @@
         })
         .addFilter('$longname_params', function (symbol) {
             var isCon = docma.utils.isConstructor(symbol),
-                longName = _colorOperators(symbol.$longname); // docma.utils.getFullName(symbol);
+                longName = _colorOperators(symbol.name); // docma.utils.getFullName(symbol);
             if (symbol.kind === 'function' || isCon) {
                 var defVal,
                     defValHtml = '',
                     nw = isCon ? 'new ' : '',
-                    name = nw + longName + '<span class="params">(';
+                    name = nw + longName + ' <span class="params">(';
                 if (Array.isArray(symbol.params)) {
                     var params = symbol.params.reduce(function (memo, param) {
                         // ignore params such as options.<property>
@@ -234,9 +237,12 @@
             }
         })
         .addFilter('$get_last_part', function(symbol) {
-            var split = '#';
-            if (!docma.utils.isMethod(symbol)) {
-                var split = symbol.split('.');
+            debugger;
+            var split = '';
+            if (docma.utils.isStatic(symbol)) {
+                split = symbol.split('.');
+            } else {
+                split = symbol.split('#');
             }
 
             return split.length && split[split.length -1] || symbol;
@@ -298,8 +304,24 @@
         docma.template.options.title = docma.app.title || 'Documentation';
     }
 
-    docma.on('render', function (currentRoute) {
+    function sortProperties(members) {
+        // get list of properties
+        var methods = members.filter((member) => member.kind !== 'member'),
+            properties = members.filter((member) => member.kind === 'member');
 
+        return methods.concat(properties);
+    }
+
+    // docma.on('route', function() {
+    //     de
+    //     if (docma.documenation && docma.template.options.propertiesLast) {
+    //         for (var i = 0; i < docma.documentation.length; ++i) {
+    //             docma.documentation[i].$members = sortProperties(docma.documentation[i].$members);
+    //         }
+    //     }
+    // });
+
+    docma.on('render', function (currentRoute) {
         $('[data-toggle="tooltip"]').tooltip({
             container: 'body',
             placement: 'bottom'
@@ -380,14 +402,13 @@
             if (document.location.hash) {
                 var ref = document.location.hash.substr(1).replace(/\./g, '-');
                 // trigger will expand the selected element
-                $('.row .symbol > a[data-ref-symbol^=' + ref + ']').trigger('click', true);
+                $('.row .symbol > a[data-ref-symbol=' + ref + ']').trigger('click', true);
                 // we need to trigger hash change to position the scrolling on this element
                 // because triggring a click won't position the scroll on the triggered anchor
                 var oldLocation = document.location.hash;
                 document.location.hash = '';
                 document.location.hash = oldLocation;
             } else {
-                console.log('scrolling to top');
                 document.body.scrollIntoView(true);
             }
         }

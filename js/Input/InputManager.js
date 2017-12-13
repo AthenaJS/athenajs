@@ -572,7 +572,7 @@ const InputManager = {
     /**
      * Install callback that gets called when a key is pressed/released
      *
-     * @param {String} space-separated list of keys to listen for
+     * @param {String} key space-separated list of keys to listen for
      * @param {String} event to listen for: can be `up` or `down`
      * @param {Function} callback the function to call
      */

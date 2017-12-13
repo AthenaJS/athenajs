@@ -2,7 +2,7 @@ import FX from '../FX';
 
 /**
  * This object contains some built-in easing functions that are used
- * when applying effects adn scrollings in AthenaJS
+ * when applying effects and scrollings in AthenaJS.
  */
 const Easing = {
     'easeInQuad': function (x, t, b, c, d) {

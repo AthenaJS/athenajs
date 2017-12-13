@@ -471,9 +471,17 @@ a.sidebar-item.root:after {
     opacity: .7;
     transition-property:transform;
     transition-duration:100ms;
-    transform-origin:20px 20px;
+    transform-origin:25px 20px;
 }
 
 a.sidebar-item.root.toggled:after{
     transform: rotate(90deg);
+}
+
+.symbol-name{
+    font-weight:bold;
+
+    .params{
+        font-weight:normal;
+    }
 }
