@@ -9,11 +9,7 @@
 
 A simple framework for building 2D games in HTML5 and JavaScript.
 
-- Visit the [API documentation](https://athenajs.github.io/athenajs-documentation/) for a list of classes and methods available
-- Visit the [samples](https://github.com/AthenaJS/athenajs-samples) repository to get started with AthenaJS
-- For an example of a complete game written using AthenaJS check [athenajs-tetris](https://github.com/AthenaJS/athenajs-tetris)
-
-# Features
+## Features
 
  Here is a non-exhaustive list of features of AthenaJS:
 
@@ -26,17 +22,17 @@ A simple framework for building 2D games in HTML5 and JavaScript.
  - Sound support with volume and horizontal panning
  - **Keyboard & Joytisck** input event supported (touch support is planned)
 
-# Install
+## Install
 
 ```
 npm install athenajs --save
 ```
 
-# Quick Start
+## Quick Start
 
 **ES2015**
 
-````javascript
+```javascript
 import { Game, Scene, SimpleText } from 'athenajs';
 
 // create a new game
@@ -59,12 +55,12 @@ myScene = new class MyScene extends Scene{
 
 // play this scene
 myGame.setScene(myScene);
-````
+```
 
 **ES5**
 
 in your html file:
-````html
+```html
 <script type="text/javascript" src="athenajs.js"></script>
 <script type="text/javascript">
     window.onload = function() {
@@ -93,7 +89,7 @@ in your html file:
     // play this scene
     myGame.setScene(myScene);
 </script>
-````
+```
 
 ## Apps written using AthenaJS
 
@@ -102,7 +98,7 @@ in your html file:
 
 ## Contributing
 
-If you are interested in contributing to the AthenaJS code base, simply fork the [repository](https://www.github.com/athenajs/athenajs) and make a pull-request.
+If you are interested in contributing to the AthenaJS code base, simply fork the repository and make a pull-request.
 
 Once you have cloned the repository, simply type:
 
@@ -119,6 +115,10 @@ npm link athenajs
 ````
 
 This will add a link from your project to the global athenajs link that was just created.
+
+## Credits
+
+Athena JS icon by [Icons8](https://icons8.com/). Used under open-source licence.
 
 ## License
 

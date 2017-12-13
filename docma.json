@@ -121,7 +121,7 @@
                     "href": "/blah2"
                 },
                 {
-                    "iconClass": "fas fa-github",
+                    "iconClass": "fab fa-github",
                     "label": "GitHub",
                     "href": "https://github.com/AthenaJS/athenajs"
                 }
@@ -163,7 +163,7 @@
             "util": "./js/Util/**/*.js"
         },
         {
-            "home": "README.md"
+            "home": "INTRO.md"
         }
         ],
     "dest": "./docs"
