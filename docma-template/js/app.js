@@ -348,13 +348,12 @@
             $('.sidebar-nav').addClass('collapse-def');
             // click on a class to expand/collapse
             $('.sidebar-nav-container').on('click', '.sidebar-item', function(event) {
-                console.log('click on sidebar');
                 var selector = '';
                 if ($(this).hasClass('root')) {
                     var ref = $(this).data('refSymbol'),
                     selector = '[data-ref-symbol=' + ref + ']';
-                    console.log('root', selector, this);
                     $(this).parents('ul').find(selector).not('.root').toggle();
+                    $(this).toggleClass('toggled');
                 } else {
                     // hashes = hashes.splice(1);
                     // click on a method:need to expand the selected method
@@ -371,7 +370,6 @@
         if (docma.template.options.collapseDefinition) {
             $('#page-content-wrapper').addClass('collapse-def');
             $('#page-content-wrapper.collapse-def').on('click', '.symbol-heading', function (event, showOnly) {
-                console.log('click');
                 if (showOnly) {
                     $(event.currentTarget).next().show();
                 } else {

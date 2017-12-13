@@ -462,3 +462,18 @@ code.symbol-name{
 #docma-content li{
     line-height:30px;
 }
+
+a.sidebar-item.root:after {
+    content: "►";
+    position: absolute;
+    right: 20px;
+    font-size: 80%;
+    opacity: .7;
+    transition-property:transform;
+    transition-duration:100ms;
+    transform-origin:20px 20px;
+}
+
+a.sidebar-item.root.toggled:after{
+    transform: rotate(90deg);
+}
