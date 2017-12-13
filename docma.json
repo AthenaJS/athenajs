@@ -33,7 +33,7 @@
         "meta": null,
         "entrance": "content:home",
         "routing": "query",
-        "server": "static"
+        "server": "github"
     },
     "template": {
         "path": "./docma-template",
@@ -121,92 +121,6 @@
                     "href": "https://github.com/AthenaJS/athenajs"
                 }
              ]
-            // "navItems": [
-            //     {
-            //         "iconClass": "ico-book",
-            //         "label": "Building Docs",
-            //         "items": [
-            //             {
-            //                 "label": "Guide",
-            //                 "href": "./"
-            //             },
-            //             {
-            //                 "separator": true
-            //             },
-            //             {
-            //                 "label": "Docma (Builder) API",
-            //                 "href": "?api=docma"
-            //             },
-            //             {
-            //                 "label": "Build Configuration",
-            //                 "href": "?api=docma#Docma~BuildConfiguration"
-            //             },
-            //             {
-            //                 "separator": true
-            //             },
-            //             {
-            //                 "label": "Docma CLI",
-            //                 "href": "?content=docma-cli"
-            //             }
-            //         ]
-            //     },
-            //     {
-            //         "iconClass": "ico-mouse-pointer",
-            //         "label": "Templates",
-            //         "items": [
-            //             {
-            //                 "label": "Docma Default Template",
-            //                 "href": "?content=default-template"
-            //             },
-            //             {
-            //                 "separator": true
-            //             },
-            //             {
-            //                 "label": "Creating Docma Templates",
-            //                 "href": "?content=templates"
-            //             },
-            //             {
-            //                 "separator": true
-            //             },
-            //             {
-            //                 "label": "Docma Web API",
-            //                 "href": "?api=docma-web"
-            //             },
-            //             {
-            //                 "label": "Docma Filters",
-            //                 "href": "?content=docma-filters"
-            //             }
-            //         ]
-            //     },
-            //     {
-            //         "iconClass": "ico-md ico-download",
-            //         "label": "Download",
-            //         "href": "index.html",
-            //         "items": [
-            //             {
-            //                 "label": "<code>npm i docma -g</code>"
-            //             },
-            //             {
-            //                 "label": "Docma Releases",
-            //                 "href": "https://github.com/onury/docma/releases",
-            //                 "target": "_blank"
-            //             },
-            //             {
-            //                 "separator": true
-            //             },
-            //             {
-            //                 "label": "Change Log",
-            //                 "href": "?content=changelog"
-            //             }
-            //         ]
-            //     },
-            //     {
-            //         "iconClass": "ico-md ico-github",
-            //         "label": "GitHub",
-            //         "href": "https://github.com/onury/docma",
-            //         "target": "_blank"
-            //     }
-            // ]
         }
     },
     "src": [
@@ -247,5 +161,5 @@
             "home": "README.md"
         }
         ],
-    "dest": "./docs2"
+    "dest": "./docs"
 }
