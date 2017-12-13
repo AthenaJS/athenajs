@@ -5,7 +5,7 @@
  * The key is the id of the sound.
  * @property {boolean} enabled This is set to false when sound playback is disabled.
  */
-export default {
+const AudioManager = {
     audioCache: {},
     enabled: true,
     /**
@@ -92,3 +92,5 @@ export default {
         }
     }
 };
+
+export default AudioManager;

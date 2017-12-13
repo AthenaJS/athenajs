@@ -10,6 +10,7 @@ class Hud {
     /**
      * Creates a new Hud class
      * 
+     * @private
      */
     constructor(options) {
         // super(options);

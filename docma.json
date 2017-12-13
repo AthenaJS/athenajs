@@ -46,6 +46,7 @@
             "symbolMeta": true,
             "collapseSymbols": true,
             "collapseDefinition": true,
+            "propertiesLast": true,
             "search": true,
              "navbar": true,
              "navItems": [
@@ -68,7 +69,7 @@
                         },
                         {
                             "separator": true
-                        },                        
+                        },
                         {
                             "label": "Drawable",
                             "href": "?api=drawable"
@@ -76,10 +77,14 @@
                         {
                             "label": "Behaviors",
                             "href": "?api=behaviors"
-                        },                        
+                        },
+                        {
+                            "label": "Effects",
+                            "href": "?api=fx"
+                        },
                         {
                             "separator": true
-                        },                        
+                        },
                         {
                             "label": "Map",
                             "href": "?api=map"
@@ -88,20 +93,20 @@
                              "separator": true
                          },
                         {
-                            "label": "Input",
-                            "href": "?api=input"
-                        },
-                        {
-                            "label": "Audio",
+                            "label": "AudioManager",
                             "href": "?api=audio"
                         },
                         {
-                            "label": "Resource",
-                            "href": "?api=resource"
+                            "label": "InputManager",
+                            "href": "?api=input"
                         },
                         {
-                            "label": "Notification",
+                            "label": "NotificationManager",
                             "href": "?api=notification"
+                        },
+                        {
+                            "label": "ResourceManager",
+                            "href": "?api=resource"
                         }
                      ]
                  },
