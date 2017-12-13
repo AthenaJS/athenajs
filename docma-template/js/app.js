@@ -374,8 +374,8 @@
                 if ($(this).hasClass('root')) {
                     var ref = $(this).data('refSymbol'),
                     selector = '[data-ref-symbol=' + ref + ']';
-                    $(this).parents('ul').find(selector).not('.root').toggle();
                     $(this).toggleClass('toggled');
+                    $(this).parents('ul').find(selector).not('.root').toggleClass('visible');
                 } else {
                     // hashes = hashes.splice(1);
                     // click on a method:need to expand the selected method

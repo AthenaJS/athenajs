@@ -131,6 +131,8 @@ class Game {
 
     /**
      * Creates the tile inspector, adding it onto the DOM and starts listening for events
+     * 
+     * @private
      */
     addInspector() {
         this.moveHandler = (event) => {
