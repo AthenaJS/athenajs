@@ -10,6 +10,13 @@
  * 
  * @class
  * @constructor
+ * 
+ * @example
+ * 
+ * import {Dom} from 'athenajs';
+ * 
+ * // removes the `foo` class to every `.foo` element
+ * Dom('.foo').removeClass('foo');
  */
 function Dom(selector = null) {
     /* little hack to allow calling Dom without the new keyword */

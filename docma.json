@@ -107,7 +107,14 @@
                         {
                             "label": "ResourceManager",
                             "href": "?api=resource"
-                        }
+                        },
+                        {
+                             "separator": true
+                         },
+                         {
+                            "label": "Utils",
+                            "href": "?api=utils"
+                         }
                      ]
                  },
                  {
@@ -160,7 +167,7 @@
             "notification": "./js/Notification/**/*.js"
         },
         {
-            "util": "./js/Util/**/*.js"
+            "utils": "./js/Util/**/*.js"
         },
         {
             "home": "INTRO.md"
