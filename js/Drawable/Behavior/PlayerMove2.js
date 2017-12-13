@@ -20,8 +20,14 @@ var STATUS = {},
     DIR[dirName] = i;
 });
 
-// possible level
+/**
+ * @private
+ */
 class PlayerMove2 extends Behavior {
+    /**
+     * 
+     * @private
+     */
     constructor(sprite, options) {
         super(sprite, options);
 

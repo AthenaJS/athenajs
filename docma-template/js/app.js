@@ -38,10 +38,8 @@
     }
 
     function _getSymbolType(symbol) {
-        if (docma.utils.isClass(symbol)) {
-            return 'class';
-        } else if (docma.utils.isGlobal(symbol)) {
-            return 'global';
+        if (docma.utils.isClass(symbol) || docma.utils.isGlobal(symbol)) {
+            return 'root';
         } else {
             return 'child';
         }
@@ -55,7 +53,7 @@
         var ops = /[.#~:]/,
             levels = symbolName.split(ops),
             last = levels[levels.length - 1],
-            refSymbol = _getRefSymbol(symbolName),            
+            refSymbol = _getRefSymbol(symbolName),
             marginLeft = (levels.length - 1) * 20;
         last = symbolName.slice(-(last.length + 1)); // with operator
         return '<a href="#' + id + '" class="sidebar-item ' + type + '" data-ref-symbol="' + refSymbol + '" data-keywords="' + keywords + '">'
@@ -66,7 +64,13 @@
     }
 
     function _getRefSymbol(symbolName) {
-        return symbolName.split('#')[0];
+        var docs = docma.documentation,
+            symbol = docma.utils.getSymbolByName(docs, symbolName);
+        if (docma.utils.isStatic(symbol) || docma.utils.isProperty(symbol)) {
+            return symbolName.split('.')[0];
+        } else {
+            return symbolName.split('#')[0];
+        }
     }
 
     // ---------------------------
@@ -230,11 +234,22 @@
             }
         })
         .addFilter('$get_last_part', function(symbol) {
-            var split = symbol.split('#');
+            var split = '#';
+            if (!docma.utils.isMethod(symbol)) {
+                var split = symbol.split('.');
+            }
+
             return split.length && split[split.length -1] || symbol;
         })
         .addFilter('$ref', function(symbol) {
-            return symbol.$longname.split('#')[0];
+            if (docma.utils.isMethod(symbol)) {
+                return symbol.$longname.split('#')[0];
+            } else {
+                return symbol.$longname.split('.')[0];
+            }
+        })
+        .addFilter('$clean_ref', function(symbol) {
+            return symbol.$longname.replace(/\./g, '-');
         });
 
     // ---------------------------
@@ -334,19 +349,16 @@
             // click on a class to expand/collapse
             $('.sidebar-nav-container').on('click', '.sidebar-item', function(event) {
                 console.log('click on sidebar');
-                var hashes = this.href.split('#');
-
-                if ($(this).hasClass('class')) {
-                    // var selector = 'a[href^=#' + hashes[1] + ']';
+                var selector = '';
+                if ($(this).hasClass('root')) {
                     var ref = $(this).data('refSymbol'),
                     selector = '[data-ref-symbol=' + ref + ']';
-                    console.log('class', selector, this);
-                    $(this).parents('ul').find(selector).not('.class').toggle();
+                    console.log('root', selector, this);
+                    $(this).parents('ul').find(selector).not('.root').toggle();
                 } else {
                     // hashes = hashes.splice(1);
                     // click on a method:need to expand the selected method
-                    var selector = '.row a[data-ref-symbol=' + this.hash.substr(1) + ']';
-                    console.log('sel', selector);
+                    selector = '.row a[data-ref-symbol=' + this.hash.substr(1).replace(/\./g, '-') + ']';
                     $(selector).trigger('click', true);
                     // console.log('not class');
                     // console.log("$('.row a[href=#" + hashes.join('#') + "]').trigger('click', true);");
@@ -368,13 +380,17 @@
             });
 
             if (document.location.hash) {
+                var ref = document.location.hash.substr(1).replace(/\./g, '-');
                 // trigger will expand the selected element
-                $('.row .symbol > a[href^=' + document.location.hash + ']').trigger('click', true);
+                $('.row .symbol > a[data-ref-symbol^=' + ref + ']').trigger('click', true);
                 // we need to trigger hash change to position the scrolling on this element
                 // because triggring a click won't position the scroll on the triggered anchor
                 var oldLocation = document.location.hash;
                 document.location.hash = '';
                 document.location.hash = oldLocation;
+            } else {
+                console.log('scrolling to top');
+                document.body.scrollIntoView(true);
             }
         }
 
