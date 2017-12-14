@@ -18,11 +18,11 @@ class Scene {
     /**
      * Creates a new Scene
      *
-     * @param {object} options
-     * @param {string} [options.name="Scene"+timestamp] The name of your scene.
+     * @param {Object} options
+     * @param {String} [options.name="Scene"+timestamp] The name of your scene.
      * @param {Object} [options.resources] An optional array of resources of the form: `{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}` that the scene needs.
-     * @param {number} [options.layers=2] The number of layers: layers are stacked above the backgrounds.
-     * @param {number} [options.opacity=1] The default opacity for the scene: can be usefull to have fadeIn effects when starting the scene.
+     * @param {Number} [options.layers=2] The number of layers: layers are stacked above the backgrounds.
+     * @param {Number} [options.opacity=1] The default opacity for the scene: can be usefull to have fadeIn effects when starting the scene.
      * @param {Scene} [options.hudScene] Scenes can have an option `hud` scene that is automatically rendered on top of it. This allows to easily add score/status elements to games.
      */
     constructor(options) {
@@ -140,8 +140,8 @@ class Scene {
     /**
      * Loads resources
      *
-     * @param {array} res An array of resources to load.
-     * @param {function} [progressCb=undefined] A progress callback function that gets called after each resource has been loaded
+     * @param {Array} res An array of resources to load.
+     * @param {Function} [progressCb=undefined] A progress callback function that gets called after each resource has been loaded
      * @returns {Deferred} `this.readyDef`
      * @private
      *
@@ -376,7 +376,7 @@ class Scene {
      * Add one ore more display objects onto the scene
      *
      * @param {Array|Drawable} objects The object(s) to add onto the scene.
-     * @param {number} [layerIndex=0] Defines the layer number where to add the objects.
+     * @param {Number} [layerIndex=0] Defines the layer number where to add the objects.
      */
     addObject(objects, layerIndex) {
         // attempt to add an object on a scene not ready yet:
@@ -484,7 +484,7 @@ class Scene {
     /**
      * Changes the opacity of the scene
      *
-     * @param {number} opacity The new opacity.
+     * @param {Number} opacity The new opacity.
      */
     setOpacity(opacity) {
         this.opacity = opacity;
@@ -493,7 +493,7 @@ class Scene {
     /**
      * Returns the current opacity of the scene
      *
-     * @returns {number} The current opacity value.
+     * @returns {Number} The current opacity value.
      */
     getOpacity() {
         return this.opacity;
@@ -609,7 +609,7 @@ class Scene {
     /**
      * Get the total playtime
      *
-     * @returns {number} the total playtime in milliseconds
+     * @returns {Number} the total playtime in milliseconds
      */
     getPlayTime() {
         let playTime = null;
@@ -670,7 +670,7 @@ class Scene {
     /**
      * Notify the scene of an event
      *
-     * @param {string} eventType The type of event to trigger.
+     * @param {String} eventType The type of event to trigger.
      * @param {any} data The data (if any) associated with the event.
      */
     notify(eventType, data) {

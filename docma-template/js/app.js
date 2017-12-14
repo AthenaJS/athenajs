@@ -8,6 +8,49 @@
     // HELPER METHODS
     // ---------------------------
 
+    var MDNLinks = {
+        GlobalObjects:{
+            items: [
+                'Object',
+                'Number',
+                'String',
+                'Array',
+                'Function',
+                'Boolean'],
+            baseUrl: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/'
+        },
+        WebAPIS: {
+            items: [
+                'HTMLElement',
+                'Canvas',
+                'RenderingContext',
+                'ArrayBufferView',
+                'ArrayBuffer'
+            ],
+            baseUrl: 'https://developer.mozilla.org/en-US/docs/Web/API/'
+        }
+    };
+
+    function _getTypeMDNLink(str) {
+        var types = str.split(/[|<]/),
+            html = str.replace('<', '&lt;').replace('>', '&gt;');
+
+        types.forEach((type) => {
+            var objectType = type.replace(/[()<>]/g, '');
+
+            Object.keys(MDNLinks).forEach(function(api) {
+                var items = MDNLinks[api].items,
+                    index = items.indexOf(objectType);
+
+                if (index > -1) {
+                    html = html.replace(objectType, '<a href="' + MDNLinks[api].baseUrl + objectType + '">' + objectType + '</a>');
+                }
+            });
+        });
+
+        return html;
+    }
+
     function _getSymbolBadge(symbol) {
         if (!symbol) return '';
 
@@ -100,6 +143,7 @@
                 return returnTypes ? returnTypes : '';
             }
             var types = docma.utils.getTypes(symbol);
+            
             return types ? types : '';
         })
         .addFilter('$type_sep', function (symbol) {
@@ -237,7 +281,6 @@
             }
         })
         .addFilter('$get_last_part', function(symbol) {
-            debugger;
             var split = '';
             if (docma.utils.isStatic(symbol)) {
                 split = symbol.split('.');
@@ -256,6 +299,13 @@
         })
         .addFilter('$clean_ref', function(symbol) {
             return symbol.$longname.replace(/\./g, '-');
+        })
+        .addFilter('$get_mdn_link', function(types) {
+            if (docma.template.options.typeDefinitionLink) {
+                return _getTypeMDNLink(types);
+            } else {
+                return types;
+            }
         });
         // .addFilter('$my_desc', function(symbol) {
         //     debugger;

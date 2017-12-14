@@ -49,7 +49,7 @@ const Pool = {
         /*
          * expands an already created pool
          *
-         * @param {number} size the new size of the pool
+         * @param {Number} size the new size of the pool
          */
         obj.expandPool = function (size) {
             var options = {

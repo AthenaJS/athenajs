@@ -6,7 +6,7 @@
  *
  * As in jQuery, you may manipulate individual Dom elements using [] operator
  *
- * @param {(HTMLElement|string)} [selector=null] The optional selector to use to create the new Dom collection
+ * @param {(HTMLElement|String)} [selector=null] The optional selector to use to create the new Dom collection
  * 
  * @class
  * @constructor

@@ -37,7 +37,7 @@ class MapEvent {
     /**
      * Adds a new [`Drawable`]{#item} onto the map
      *
-     * @param {string} id of the item to add
+     * @param {String} id of the item to add
      * @param {Drawable} item to add
      */
     addItem(id, item) {
@@ -47,7 +47,7 @@ class MapEvent {
     /**
      * Returns an item
      *
-     * @param {string} id of the item to retrieve
+     * @param {String} id of the item to retrieve
      *
      * @returns {Drawable|undefined} The item or undefined if it wasn't handled by the map
      */
@@ -179,7 +179,7 @@ class MapEvent {
      *
      * @param {String} spriteId The id of the new sprite to add.
      * @param {Object} spriteOptions The options that will be passed to the object constructor.
-     * @param {number} [delay=0] The delay in milliseconds to wait before adding the object.
+     * @param {Number} [delay=0] The delay in milliseconds to wait before adding the object.
      * @returns {Drawable} the new drawable
      *
      */

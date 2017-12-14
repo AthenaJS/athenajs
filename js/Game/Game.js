@@ -10,13 +10,13 @@ import Dom from '../Util/Dom';
  * The `Game` class is the central part to AthenaJS
  *
  * @param {Object} [options={}]
- * @param {boolean} [options.debug=false] Debug will be enabled if this is true.
- * @param {string} [options.name] The name of the game.
- * @param {string|HTMLElement} [options.target="Dom('div')"] target The DOM target of the game: this is where the game canvas elements will be added.
+ * @param {Boolean} [options.debug=false] Debug will be enabled if this is true.
+ * @param {String} [options.name] The name of the game.
+ * @param {String|HTMLElement} [options.target="Dom('div')"] target The DOM target of the game: this is where the game canvas elements will be added.
  * By default the target is a new Div that is appened to the body element.
- * @param {boolean} [options.showFps=false] A little fps counter will be displayed if this is true.
- * @param {number} [options.width=1024] The width of the game display.
- * @param {number} [options.height=768] The height of the game display.
+ * @param {Boolean} [options.showFps=false] A little fps counter will be displayed if this is true.
+ * @param {Number} [options.width=1024] The width of the game display.
+ * @param {Number} [options.height=768] The height of the game display.
  * @param {Object} [options.resources] An optionnal array of resources of the form:`{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}` that the scene needs.
  */
 class Game {
@@ -24,13 +24,13 @@ class Game {
      * Creates a new Game
      *
      * @param {Object} [options={}]
-     * @param {boolean} [options.debug=false] Debug will be enabled if this is true.
-     * @param {string} [options.name] The name of the game.
-     * @param {string|HTMLElement} [options.target="Dom('div')"] target The DOM target of the game: this is where the game canvas elements will be added.
+     * @param {Boolean} [options.debug=false] Debug will be enabled if this is true.
+     * @param {String} [options.name] The name of the game.
+     * @param {String|HTMLElement} [options.target="Dom('div')"] target The DOM target of the game: this is where the game canvas elements will be added.
      * By default the target is a new Div that is appened to the body element.
-     * @param {boolean} [options.showFps=false] A little fps counter will be displayed if this is true.
-     * @param {number} [options.width=1024] The width of the game display.
-     * @param {number} [options.height=768] The height of the game display.
+     * @param {Boolean} [options.showFps=false] A little fps counter will be displayed if this is true.
+     * @param {Number} [options.width=1024] The width of the game display.
+     * @param {Number} [options.height=768] The height of the game display.
      * @param {Object} [options.resources] An optionnal array of resources of the form:`{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}` that the scene needs.
      */
     constructor(options = {}) {
@@ -225,7 +225,7 @@ class Game {
      * Method that gets called when receiving an event: by default it does nothing
      * It's up to the developer to override this method on its Game
      *
-     * @param {string} event the event name that got fired.
+     * @param {String} event the event name that got fired.
      *
      */
     onEvent(event) {
@@ -236,7 +236,7 @@ class Game {
     /**
      * Toggles global sound
      *
-     * @param {boolean} bool Weather to enable or disable sound.
+     * @param {Boolean} bool Weather to enable or disable sound.
      *
      */
     toggleSound(bool) {
