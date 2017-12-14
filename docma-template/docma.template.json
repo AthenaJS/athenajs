@@ -1,7 +1,7 @@
 {
-    "name": "Docma Default Template",
-    "author": "Onur Yıldırım (onur@cutepilot.com)",
-    "version": "1.7.0",
+    "name": "Docma AthenaJS Template",
+    "author": "Nicolas Ramz (nicolas.ramz@gmail.com)",
+    "version": "0.1.0",
     "license": "MIT",
     // Main HTML file
     "main": "index.html",
@@ -10,11 +10,14 @@
         "title": "",
         "sidebar": true,
         "collapsed": false,
-        "outline": "flat", // "flat" | "tree"
+        "outline": "tree",
         "badges": true,
         "symbolMeta": false,
         "search": true,
         "navbar": true,
+        "collapseSymbols": true,
+        "collapseDefinition": true,
+        "propertiesLast": true,        
         "navItems": []
     },
     // files to be compiled
