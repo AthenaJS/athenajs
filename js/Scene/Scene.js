@@ -7,8 +7,8 @@ import Deferred from '../Util/Deferred';
 window.scenes = {};
 
 /**
- * The `Scene` is used to display your objects. In AthenaJS you first add objects onto the scene.
- * When you scene is rendered (at 60fps), your objects appear on the screen.
+ * ++The `Scene` is used to display your objects. In AthenaJS you first add objects onto the scene.
+ * ++When you scene is rendered (at 60fps), your objects appear on the screen.
  *
  * Instead of creating a new scene, it is common to extend the Scene class to create your own scene.
  *
