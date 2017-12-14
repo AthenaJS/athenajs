@@ -1,9 +1,10 @@
 /**
  * Pool support for AthenaJS
  *
- * This objects allows to defined and use pools for any type of object
+ * With a Pool objects are defined ahead of time, and any free instance
+ * from the pool is used when you want to use a new object.
  */
-export default {
+const Pool = {
     /**
      * Creates a new pool
      *
@@ -24,6 +25,7 @@ export default {
          *  and calls its constructor.
          *
          *  @returns {Object} an instance of the object from the pool
+         * 
          *
          */
         obj.createFromPool = function () {
@@ -47,7 +49,7 @@ export default {
         /*
          * expands an already created pool
          *
-         * ]@param {number} size the new size of the pool
+         * @param {number} size the new size of the pool
          */
         obj.expandPool = function (size) {
             var options = {
@@ -83,3 +85,5 @@ export default {
         obj.expandPool(size);
     }
 };
+
+export default Pool;

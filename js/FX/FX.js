@@ -13,7 +13,7 @@ const effects = {},
  * 
  * Effects can be applied to Drawable and/or Scene instances.
  * 
- * @see {Effect}
+ * @see {@link #Effect|Effect}
  */
 class FX {
     /**

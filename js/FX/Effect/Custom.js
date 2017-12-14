@@ -3,7 +3,7 @@ import Effect from './Effect';
 /**
  * Custom effect that can be used to do any transformation
  * 
- * Supported on: `Drawable`, `Scene`
+ * Supported on: {@link ?api=drawable#Drawable|`Drawable`}, {@link ?api=scene#Scene|`Scene`}
  * 
  * @extends Effect
  */

@@ -7,8 +7,9 @@ import Deferred from '../Util/Deferred';
 window.scenes = {};
 
 /**
- * ++The `Scene` is used to display your objects. In AthenaJS you first add objects onto the scene.
- * ++When you scene is rendered (at 60fps), your objects appear on the screen.
+ * The `Scene` is used to display your objects. In AthenaJS you first add objects onto the scene.
+ * 
+ * When you scene is rendered (at 60fps), your objects appear on the screen.
  *
  * Instead of creating a new scene, it is common to extend the Scene class to create your own scene.
  *
@@ -19,7 +20,7 @@ class Scene {
      *
      * @param {object} options
      * @param {string} [options.name="Scene"+timestamp] The name of your scene.
-     * @param {Object} [options.resources] An optional array of resources of the form: ``{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}`` that the scene needs.
+     * @param {Object} [options.resources] An optional array of resources of the form: `{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}` that the scene needs.
      * @param {number} [options.layers=2] The number of layers: layers are stacked above the backgrounds.
      * @param {number} [options.opacity=1] The default opacity for the scene: can be usefull to have fadeIn effects when starting the scene.
      * @param {Scene} [options.hudScene] Scenes can have an option `hud` scene that is automatically rendered on top of it. This allows to easily add score/status elements to games.
@@ -73,7 +74,7 @@ class Scene {
     /**
      * Browsers seem to do some conversion the first time drawImage is used from/to canvas
      *
-     * @see [Optimising the canvas element](http://www.warpdesign.fr/my-experience-optimising-the-canvas-html5-element/)
+     * @see {@link http://www.warpdesign.fr/my-experience-optimising-the-canvas-html5-element/|Optimising the canvas element}
      * @private
      *
      */

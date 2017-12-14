@@ -8,7 +8,7 @@ import Input from '../../Input/InputManager';
  *
  * To have a sprite controlled by the user you can simply attach this behavior.
  *
- * @see {Behavior}
+ * @see {@link #Behavior|Behavior}
  * @extends Behavior
  */
 class PlayerMove extends Behavior {

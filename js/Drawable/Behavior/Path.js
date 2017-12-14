@@ -8,7 +8,7 @@ function sign(x) {
  * A Path is a special behavior that uses a pre-defined (recorded) path to move
  * an object.
  *
- * @see {Behavior}
+ * @see {@link #Behavior|Behavior}
  * @extends Behavior
  */
 class Path extends Behavior {

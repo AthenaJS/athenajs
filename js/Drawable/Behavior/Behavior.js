@@ -5,8 +5,9 @@
  *
  * Every behavior should implement these two methods:
  *
- * - onUpdate()
- * - getMapEvent()
+ * - `onUpdate()`
+ * 
+ * - `getMapEvent()`
  *
  */
 class Behavior {

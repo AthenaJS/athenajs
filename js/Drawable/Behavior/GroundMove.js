@@ -8,7 +8,7 @@ import Tile from '../../Map/Tile';
  * axis until a wall or an hole is reached.
  *
  *
- * @see {Behavior}
+ * @see {@link #Behavior|Behavior}
  * @extends Behavior
  */
 class GroundMove extends Behavior {

@@ -5,7 +5,7 @@ import SimpleText from './SimpleText';
  * The menu class allows to quickly add text menu to an Athena Scene
  *
  * Each menu entry is called menuItem and is a simple object with the following properties:
- * { text: 'menu text', selectable: true|false, active: true|false, visible: true|false }
+ * `{ text: 'menu text', selectable: true|false, active: true|false, visible: true|false }`
  *
  * @extends Drawable
  */
@@ -93,7 +93,7 @@ class Menu extends Drawable {
      *
      * @param {Array<Object>} items The list of items to add
      *
-     * @see addMenuItem()
+     * @see {@link #Menu#addMenuItem|`Menu.addMenuItem()`}
      */
     addMenuItems(items) {
         console.log('[Menu] addMenuItems()', items);
