@@ -7,7 +7,7 @@ import fpscounter from '../lib/fpscounter/fpscounter.min';
 import Dom from '../Util/Dom';
 
 /**
- * The `Game` class is the central part to AthenaJS
+ * The `Game` class is the central part to AthenaJS.
  *
  * @param {Object} [options={}]
  * @param {Boolean} [options.debug=false] Debug will be enabled if this is true.
@@ -18,6 +18,14 @@ import Dom from '../Util/Dom';
  * @param {Number} [options.width=1024] The width of the game display.
  * @param {Number} [options.height=768] The height of the game display.
  * @param {Object} [options.resources] An optionnal array of resources of the form:`{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}` that the scene needs.
+ * @example
+ * import { Game } from 'athenajs';
+ *
+ * const myGame = new Game({
+ *    name: 'first-game',
+ *    width: 320,
+ *    height: 200
+ * });
  */
 class Game {
     /**
@@ -32,7 +40,7 @@ class Game {
      * @param {Number} [options.width=1024] The width of the game display.
      * @param {Number} [options.height=768] The height of the game display.
      * @param {Object} [options.resources] An optionnal array of resources of the form:`{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}` that the scene needs.
-     */
+    */
     constructor(options = {}) {
         console.log('[Game] Init()'/*, options*/);
 
