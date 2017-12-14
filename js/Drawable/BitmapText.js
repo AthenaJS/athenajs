@@ -121,6 +121,8 @@ class BitmapText extends Drawable {
 
     /**
      * Resets the bitmapFont to its default options
+     * 
+     * @private
      */
     _reset() {
         super._reset();

@@ -9,7 +9,10 @@ window.maps = {};
 
 /**
  * The `Map` is used to display tile-based backgrounds. It is usually initialized using a buffer containing
- * tiles and tilebehaviors. It has a viewport so that only a part of the map can be displayed.
+ * tiles and tilebehaviors.
+ * 
+ * It has a viewport so that only a part of the map can be displayed.
+ * 
  * A map also contains objects that are added onto the map once the viewport reaches a `block`.
  *
  */

@@ -1,7 +1,7 @@
 import Effect from './Effect';
 
 /**
- * A Mosaic effect that will apply SNES-[like effects](https://github.com/warpdesign/jquery-mosaic)
+ * A Mosaic effect that will apply an {@link https://github.com/warpdesign/jquery-mosaic|SNES-like effects}.
  *
  * Supported on: `Drawable`, `Scene`
  *
@@ -66,5 +66,9 @@ class Mosaic extends Effect {
         return this.ended;
     }
 }
+
+/**
+ * Test :)
+ */
 
 export default Mosaic;

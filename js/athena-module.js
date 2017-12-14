@@ -13,7 +13,7 @@ export { default as Wave } from './Drawable/Wave';
 export { default as Menu } from './Drawable/Menu';
 export { default as Hud } from './Drawable/Hud';
 export { default as BitmapText } from './Drawable/BitmapText';
-export { default as Canvas } from './Drawable/Canvas';
+export { default as Paint } from './Drawable/Paint';
 
 export { default as Behavior } from './Drawable/Behavior/Behavior';
 

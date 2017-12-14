@@ -1,7 +1,7 @@
 import RM from '../Resource/ResourceManager';
 
 /**
- * This class allows to handle wave of Drawables
+ * This class allows to handle wave of Drawables.
  *
  * In AthenaJS, waves of enemies can be triggered by certain action onto the map.
  *
