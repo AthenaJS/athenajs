@@ -23,9 +23,10 @@ class Sprite extends Drawable {
      *
      * @param {String} type An identifier for this sprite, can be for example `enemy1`,...
      * @param {Object} options An options hash for the object.
-     * @param {String} options.imageId The path to the spritesheet image.
+     * @param {String} options.imageId The id to the spritesheet image to use.
      * @param {Object} options.animations A map with a key for each animation of the sprite.
      *
+     * @see {@link #Drawable|Drawable} for additionnal parameters
      * @example
      *
      * let mySprite = new Sprite('gem', {

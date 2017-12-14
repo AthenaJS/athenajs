@@ -12,7 +12,19 @@ window.scenes = {};
  * When you scene is rendered (at 60fps), your objects appear on the screen.
  *
  * Instead of creating a new scene, it is common to extend the Scene class to create your own scene.
- *
+ * @example
+ * import { Scene, SimpleText } from 'athenajs';
+ * 
+ * class MyScene extends Scene{
+ *     start() {
+ *         const myText = new SimpleText('my text', {
+ *             text: 'This is a test',
+ *             color: 'black'
+ *         });
+ *         // add the object onto the scene
+ *         this.addObject(myText);
+ *     }
+ * };
  */
 class Scene {
     /**
