@@ -47,6 +47,7 @@
             "collapseSymbols": true,
             "collapseDefinition": true,
             "propertiesLast": true,
+            "typeDefinitionLink": true,
             "search": true,
              "navbar": true,
              "navItems": [

@@ -2,7 +2,7 @@ export default (superclass) => class extends superclass {
     /**
      * Notify the scene of an event
      * 
-     * @param {string} eventType The type of event to trigger.
+     * @param {String} eventType The type of event to trigger.
      * @param {any} data The data (if any) associated with the event.
      */
     notify(eventType, data) {

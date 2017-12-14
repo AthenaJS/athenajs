@@ -3,7 +3,7 @@
  *
  * @property {Object} audioCache An hash that stores in-use sounds.
  * The key is the id of the sound.
- * @property {boolean} enabled This is set to false when sound playback is disabled.
+ * @property {Boolean} enabled This is set to false when sound playback is disabled.
  */
 const AudioManager = {
     audioCache: {},

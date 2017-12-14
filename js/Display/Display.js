@@ -11,8 +11,8 @@ class Display {
      * Creates a new Display instance
      *
      * @param {Object} options
-     * @param {number} [options.width=1024] The width of the display.
-     * @param {number} [options.height=768] The height of the display.
+     * @param {Number} [options.width=1024] The width of the display.
+     * @param {Number} [options.height=768] The height of the display.
      * @param {String} [options.type] What type of rendere to use, only '2d' supported for now.
      * @param {Array<Boolean>} [options.layers] An array describing each layer that will be added: [true, true] will create two background layers, set to true for a foreground layer.
      * @param {String} options.name The name of the display.

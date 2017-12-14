@@ -18,12 +18,12 @@ class Drawable {
     /**
      * Creates a new Drawable: this class should be extended before creating an instance
      *
-     * @param {string} type The type of object: this describes the type of object
+     * @param {String} type The type of object: this describes the type of object
      * @param {Object} options
-     * @param {string} [options.objectId] The id of the object. The defaults is type + random timestamp.
-     * @param {number} [options.collideGroup=0] The type of collision to use for the object.
-     * @param {boolean} [options.master=false] Set to true if the object should be the master.
-     * @param {boolean} [options.visible=true] An invisible object isn't rendered onto the screen.
+     * @param {String} [options.objectId] The id of the object. The defaults is type + random timestamp.
+     * @param {Number} [options.collideGroup=0] The type of collision to use for the object.
+     * @param {Boolean} [options.master=false] Set to true if the object should be the master.
+     * @param {Boolean} [options.visible=true] An invisible object isn't rendered onto the screen.
      */
     constructor(type, options) {
         this.type = type;

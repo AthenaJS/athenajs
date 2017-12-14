@@ -18,20 +18,20 @@ class Map {
      * Creates a new Map
      *
      * @param {Object} options
-     * @param {string} options.src The url to an image that will be used for the tiles
-     * @param {number} options.tileWidth The width of a tile
-     * @param {number} options.tileHeight The height of a tile
-     * @param {number} options.width The full width of the map
-     * @param {number} options.height The full height of the map
-     * @param {number} options.viewportW The width of the viewport: it is usually the same as the game width. Default = map.width
-     * @param {number} options.viewportH The height of the viewport: it is usually the same as the game height. Default = map.height
+     * @param {String} options.src The url to an image that will be used for the tiles
+     * @param {Number} options.tileWidth The width of a tile
+     * @param {Number} options.tileHeight The height of a tile
+     * @param {Number} options.width The full width of the map
+     * @param {Number} options.height The full height of the map
+     * @param {Number} options.viewportW The width of the viewport: it is usually the same as the game width. Default = map.width
+     * @param {Number} options.viewportH The height of the viewport: it is usually the same as the game height. Default = map.height
      * @param {Number} [options.viewportX=0] Initial x viewport (horizontal scrolling position) of the map.
      * @param {Number} [options.viewportY=0] Initial y viewport (vertical scrolling position) of the map.
      * @param {Array} [options.tiles] An optionnal array with the tiles to use for the map.
      * @param {String} [options.name='map'] An optional name for the map.
-     * @param {string} [options.easing='linear'] The linear function to use when scrolling the map. Defaults to linear.
+     * @param {String} [options.easing='linear'] The linear function to use when scrolling the map. Defaults to linear.
      * @param {Number} [options.startX=0] The start x position of the master object.
-     * @param {Number} [options.startY=0] The start y position of the master object.
+     * @param {Sumber} [options.startY=0] The start y position of the master object.
      * @param {ArrayBuffer} options.buffer The buffer containing width \* height bytes container tile numbers followed by width*height bytes for the tile behaviors
      * @example
      * // Creates a new 800x600 map, with a 320x200 viewport and 32x32 tiles
@@ -418,7 +418,7 @@ class Map {
 	 * Sets current debug status: when set to true outputs more console logs and may also debug visual stuff
 	 * like map tiles and objects onto the map
 	 *
-	 * @param {boolean} isDebug Set to true to enable debug.
+	 * @param {Boolean} isDebug Set to true to enable debug.
 	 *
 	 */
     debug(isDebug) {
@@ -647,9 +647,9 @@ class Map {
     /**
 	 * Checks if tile at position x,y is `TYPE.WALL` and returns true if it is a wall, false otherwise
 	 *
-	 * @param {number} x The x position of the tile to check.
-	 * @param {number} y The y position of the tile to check.
-	 * @returns {boolean} Returns true if the tile is a wall, false otherwise.
+	 * @param {Number} x The x position of the tile to check.
+	 * @param {Number} y The y position of the tile to check.
+	 * @returns {Boolean} Returns true if the tile is a wall, false otherwise.
 	 *
 	 * @related {Tile}
 	 */
@@ -687,7 +687,7 @@ class Map {
     * Checks collisions between master object and enemies, calling hitTest on any enemie
     * that collides with the master
     *
-    * @returns {boolean} Returns true if the masterSprite was hit, false otherwise.
+    * @returns {Boolean} Returns true if the masterSprite was hit, false otherwise.
     *
     */
     checkMasterToEnemiesCollisions() {
@@ -712,7 +712,7 @@ class Map {
     * @param {Drawable} drawable The drawable to use.
     * @param {Number} vx The current vx of the object.
     * @param {Number} vy The current vy of the object.
-    * @returns {boolean} false (not fully implemented yet).
+    * @returns {Boolean} false (not fully implemented yet).
     *
     * @private
     *
@@ -836,8 +836,8 @@ class Map {
     * avoids tileTypes tiles (ie: walls, moving platforms)
     *
     * @param {Drawable} sprite The sprite to get next position of.
-    * @param {number} tileTypes The tileType.
-    * @returns {boolean} Returns true if the object hit the spcified tile, false otherwise
+    * @param {Number} tileTypes The tileType.
+    * @returns {Boolean} Returns true if the object hit the spcified tile, false otherwise
     *
     */
     setNextX(sprite, tileTypes) {
@@ -893,9 +893,9 @@ class Map {
     * WIP: Calculates and sets the object's next y position using its current y, vy and
     * avoids tileTypes tiles (ie: walls, moving platforms)
     *
-    * @param {Drawalbe} sprite
+    * @param {Drawable} sprite
     * @param {any} tileTypes
-    * @returns {boolean} true if the object hit a tile, false otherwise
+    * @returns {Boolean} true if the object hit a tile, false otherwise
     *
     */
     setNextYTop(sprite, tileTypes) {
@@ -968,12 +968,12 @@ class Map {
      * spaceX/spaceY specify how to reduce the players hitbox
      *
      * @param {Drawable} sprite The sprite to check.
-     * @param {number} tileType The tileType to check for.
-     * @param {number} [spaceX=0] The x padding that is accepted: if horizontal position is +/- that spaceX, check will succeed.
-     * @param {number} [spaceY=0] The y padding that is accepted: if vertical position is +/- that spaceX, check will succeed.
-     * @param {boolean} [center=false] Set to true if you want to sprite to be centered on the tile.
+     * @param {Number} tileType The tileType to check for.
+     * @param {Number} [spaceX=0] The x padding that is accepted: if horizontal position is +/- that spaceX, check will succeed.
+     * @param {Number} [spaceY=0] The y padding that is accepted: if vertical position is +/- that spaceX, check will succeed.
+     * @param {Boolean} [center=false] Set to true if you want to sprite to be centered on the tile.
      *
-     * @returns {boolean} True if the tile was found, false otherwise
+     * @returns {Boolean} True if the tile was found, false otherwise
      *
      */
     checkForTileType(sprite, tileType, spaceX = 0, spaceY = 0, center = false) {
@@ -1087,10 +1087,10 @@ class Map {
     /**
 	 * Draws the map, showing the whole map and not only the visible window if showHidden true
 	 *
-	 * @param {CanvasContext} ctx The context of the canvas where to draw the map.
-	 * @param {boolean} showHidden The map only draws the viewport, set this to true to draw the whole map.
-	 * @param {number} [mapOffsetX=0] The x offset where to start drawing the map.
-	 * @param {number} [mapOffsetY=0] The y offset where to start drawing the map.
+	 * @param {RenderingContext} ctx The context of the canvas where to draw the map.
+	 * @param {Boolean} showHidden The map only draws the viewport, set this to true to draw the whole map.
+	 * @param {Number} [mapOffsetX=0] The x offset where to start drawing the map.
+	 * @param {Number} [mapOffsetY=0] The y offset where to start drawing the map.
 	 *
 	 * @private
 	 */
@@ -1635,7 +1635,7 @@ class Map {
     /**
      * WIP & NOT TESTED: some code to allow resizing a map, was to be used in map editor
      *
-     * @param {string} direction Where to extend the map, can be 'bottomLeft', 'bottomRight', 'topLeft', 'topRight'.
+     * @param {String} direction Where to extend the map, can be 'bottomLeft', 'bottomRight', 'topLeft', 'topRight'.
      * @param {Object} options
      *
      * @private
