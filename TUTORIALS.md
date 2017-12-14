@@ -17,23 +17,24 @@ Most of these tutorials can be downloaded on the *athenajs-samples* [https://git
   - [Sprite](?api=drawables#Sprite): stylesheet based image that can have any number of *animations*
   - [SimpleText](?api=drawables#SimpleText): Canvas-based text rendering
   - [BitmapText](?api=drawables#BitmapText): text-rendering using a bitmap font
-  - [Paint](?api=drawables#Paint): for drawing shapes
+  - [Paint](#paint): for drawing shapes
 
 All of the classes extend the [Drawable](?api=drawables#Drawable) class. You can use any number of these elements in your scene, and you can (and **should**) also extend `Drawable` to write your own drawables.
 
 #### Paint
 
-The `Paint` class allows to manipulate drawing HTML5-Canvas functions without having to manipulate the *rendering context* and also benefits fromm every `Drawable` features: animation, colision, etc.
+The [Paint](?api=drawables#Paint) class allows to manipulate drawing HTML5-Canvas functions without having to deal with the *rendering context* and other low-level Canvas stuff.
 
-Paint elements can also be used on Scene as well as on Maps, just like any other Drawable.
+The Paint class also benefits fromm every `Drawable` features: animation, colision, etc.
+
+Paint elements can be used on Scene as well as on Maps, just like any other Drawable.
 
 ```js
+import { Paint } from 'athenajs';
+
 class Smiley extends Paint {
     constructor(options) {
         super(Paint.name, options);
-        // this.vx = 0;
-        // this.vy = 0;
-        // this.gravity = 0.1;
     }
 
     render() {
@@ -47,6 +48,104 @@ class Smiley extends Paint {
     }
 }
 ```
+
+#### Sprite
+
+The [Sprite](?api=drawables#Sprite) class allows to draw sprite-based animations.
+
+A Sprite can have any number of animations each with any number of frames and with a different framerate.
+
+Each frame can also have a different *hitbox*.
+
+To add an animation you can do it the quick and easy way, using the [Sprite.addAnimation](?api=drawables#Sprite#addAnimation) method:
+
+```js
+class MySprite extends Sprite {
+    constructor(options) {
+        super('mySprite', options);
+
+        // add a new run animation that will use the sballer spritesheet
+        this.addAnimation('run', 'sballer', {
+            numFrames: 9,
+            frameWidth: 82,
+            frameHeight: 69,
+            frameDuration: 4
+        });
+    }
+}
+```
+
+This will use the whole frameWidth & frameHeight as hitbox, and automatically set the `run` animation as current animation.
+
+The frameDuration is a multiple of `16ms` so using `frameDuration: 4` would mean that each frame of the animation would last `16*4=56ms`.
+
+You can also pass a *JSON* Object describing each frame to the Sprite's constructor.
+
+For example this code would create a new `Gem` Sprite with a `mainLoop` animation.
+
+```js
+import { Sprite } from 'athenajs';
+
+class Gem extends Sprite {
+    constructor(options = {}) {
+        super('gem', {
+            imageId: 'objects',
+            x: options.x,
+            y: options.y,
+            pool: options.pool,
+            canCollide: true,
+            collideGroup: 1,
+            animations: {
+                mainLoop: {
+                    frameDuration: 4,
+                    frames: [{
+                        offsetX: 136,
+                        offsetY: 189,
+                        width: 31,
+                        height: 31,
+                        hitBox: {
+                            x: 0,
+                            y: 0,
+                            x2: 31,
+                            y2: 31
+                        },
+                        plane: 0
+                    },
+                    {
+                        offsetX: 170,
+                        offsetY: 189,
+                        width: 31,
+                        height: 31,
+                        hitBox: {
+                            x: 0,
+                            y: 0,
+                            x2: 31,
+                            y2: 31
+                        },
+                        plane: 0
+                    },
+                    {
+                        offsetX: 204,
+                        offsetY: 189,
+                        width: 31,
+                        height: 31,
+                        hitBox: {
+                            x: 0,
+                            y: 0,
+                            x2: 31,
+                            y2: 31
+                        },
+                        plane: 0
+                    }],
+                    loop: 1
+                }
+            }
+        });
+    }
+}
+```
+
+Note that the spritesheet used in the sprite must have previously been loaded.
 
 ### Games & Scenes
 
