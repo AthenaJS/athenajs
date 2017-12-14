@@ -256,11 +256,11 @@
         })
         .addFilter('$clean_ref', function(symbol) {
             return symbol.$longname.replace(/\./g, '-');
-        })
-        .addFilter('$my_desc', function(symbol) {
-            debugger;
-            return docma.utils.parse(symbol.classdesc || symbol.description || '');
         });
+        // .addFilter('$my_desc', function(symbol) {
+        //     debugger;
+        //     return docma.utils.parse(symbol.classdesc || symbol.description || '');
+        // });
 
     // ---------------------------
     // INITIALIZATION

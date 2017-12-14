@@ -285,7 +285,7 @@ class Game {
      * Add HTML5 visibility event handlers so that the game may be paused
      * when the tab isn't visible anymore
      *
-     * @see [Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
+     * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API|Page Visibility}
      * @private
      */
     _addVisibilityEvents() {

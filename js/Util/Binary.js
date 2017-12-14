@@ -3,7 +3,7 @@ import Promise from 'es6-promise';
 /**
  * Object that allows sending & receving binary data using HTTP
  */
-export default {
+const Binary = {
     /**
      * Sends binary as POST
      *
@@ -45,3 +45,5 @@ export default {
         });
     }
 };
+
+export default Binary;
