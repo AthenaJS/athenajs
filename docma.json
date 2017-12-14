@@ -121,7 +121,7 @@
                  {
                      "iconClass": "fas fa-code",
                      "label": "Tutorials",
-                     "href": "/blah"
+                     "href": "?content=tutorials"
                  },
                 {
                     "iconClass": "fas fa-gamepad",
@@ -172,6 +172,9 @@
         },
         {
             "home": "INTRO.md"
+        },
+        {
+            "tutorials": "TUTORIALS.md"
         }
         ],
     "dest": "./docs"

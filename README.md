@@ -9,9 +9,10 @@
 
 A simple framework for building 2D games in HTML5 and JavaScript.
 
+- Read the [tutorials](https://athenajs.github.io/athenajs-documentation/?content=tutorials) to get started with AthenaJS
 - Visit the [API documentation](https://athenajs.github.io/athenajs-documentation/) for a list of classes and methods available
-- Visit the [samples](https://github.com/AthenaJS/athenajs-samples) repository to get started with AthenaJS
-- For an example of a complete game written using AthenaJS check [athenajs-tetris](https://github.com/AthenaJS/athenajs-tetris)
+- Clone [samples](https://github.com/AthenaJS/athenajs-samples) repository to get started with AthenaJS
+- For an example of a complete game written using AthenaJS check the [athenajs-tetris](https://github.com/AthenaJS/athenajs-tetris) repository
 
 # Features
 
