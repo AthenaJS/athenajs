@@ -57,6 +57,11 @@
                      "href": "./"
                  },
                  {
+                     "iconClass": "fas fa-code",
+                     "label": "Getting Started",
+                     "href": "?content=start"
+                 },                 
+                 {
                      "iconClass": "fas fa-list",
                      "label": "API",
                      "items": [
@@ -118,11 +123,6 @@
                          }
                      ]
                  },
-                 {
-                     "iconClass": "fas fa-code",
-                     "label": "Tutorials",
-                     "href": "?content=tutorials"
-                 },
                 {
                     "iconClass": "fas fa-gamepad",
                     "label": "AthenaJS Games",
@@ -174,7 +174,7 @@
             "home": "INTRO.md"
         },
         {
-            "tutorials": "TUTORIALS.md"
+            "start": "GETTING_STARTED.md"
         }
         ],
     "dest": "./docs"

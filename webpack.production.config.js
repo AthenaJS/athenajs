@@ -1,8 +1,7 @@
-const path = require('path'),
-    webpack = require('webpack'),
+/*eslint-env node*/
+const webpack = require('webpack'),
     WebpackNotifierPlugin = require('webpack-notifier'),
-    CircularDependencyPlugin = require('circular-dependency-plugin'),
-    UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+    CircularDependencyPlugin = require('circular-dependency-plugin');
 
 module.exports = {
     entry: [
@@ -10,7 +9,7 @@ module.exports = {
     ],
     output: {
         path: __dirname,
-        filename: "dist/athena.js",
+        filename: 'dist/athena.js',
         pathinfo: true,
         library: 'AthenaJS',
         libraryTarget: 'umd'
