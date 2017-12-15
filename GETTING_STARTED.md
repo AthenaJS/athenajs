@@ -1,22 +1,27 @@
 # Getting Started with AthenaJS
 
-On this page you will find some tutorials covering the most important concepts of AthenaJS.
+ - [WebpackStarterTemplate](#webpack-starter-template): a one-command installer to get ready for AthenaJS development
+ - [Games & Scenes](#games-scenes) Athena-JS core concepts: **read this first**!
+ - [Drawables](#drawables): getting started with graphical elements
+ - [Going Further](#going-further)
 
-The easiest way to get started is to clone the athena-starter [https://github.com/AthenaJS/athenajs-starter](repository) and then type:
+## Webpack Starter Template
+
+The easiest way to get started is to clone the athena-starter [https://github.com/AthenaJS/athenajs-webpack-starter](repository) and then type:
 
 ```bash
 npm install && npm start
 ```
 
-This will install all dependecies and then you'll have an empty AthenaJS ready to go.
+This will install all required dependencies and will get you ready to start developing using AthenaJS.
 
 Simply edit index.js and open the `http://127.0.0.1:8888` to test your changes.
 
-## TOC
+The following npm scripts are ready to use:
 
- - [Games & Scenes](#games-scenes) Athena-JS core concepts: **read this first**!
- - [Drawables](#drawables): getting started with graphical elements
- - [Going Further](#going-further)
+ - `npm start`: build development version and watch for file changes
+ - `npm run build`: build a production version of your app
+ - `npm run test`: run test suite with Jest
 
 ## Games & Scenes
 
@@ -25,7 +30,7 @@ At the core level of AthenaJS is the [Game](?api=game) class. This is the entry 
 The game describes your game:
 
  - its size
- - where it will be displayed into the dom
+ - where it will be displayed into the DOM
 
 To create a game you simple create a Game instance:
 
@@ -76,6 +81,8 @@ Here are all these parts glued togeter:
 
 
 ```js
+import { Game, Scene, SimpleText } from 'athenajs';
+
 // create a new game with a 320x200 screen
 const myGame = new Game({
     name: 'my-first-athena-game',
