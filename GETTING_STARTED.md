@@ -124,7 +124,7 @@ myGame.setScene(scene);
 
  The following type of objects have been created on top of the Drawable class and can be used in your games.
 
-  - [Sprite](#sprite): stylesheet based image that can have any number of *animations*
+  - [Sprite](#sprite): stylesheet based image with any number of animations
   - [SimpleText](#simpletext): Canvas-based text rendering
   - [BitmapText](#bitmaptext): text-rendering using a bitmap font
   - [Paint](#paint): for drawing shapes

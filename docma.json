@@ -125,8 +125,8 @@
                  },
                 {
                     "iconClass": "fas fa-gamepad",
-                    "label": "AthenaJS Games",
-                    "href": "/blah2"
+                    "label": "Made with AthenaJS",
+                    "href": "?content=made_with_athenajs"
                 },
                 {
                     "iconClass": "fab fa-github",
@@ -175,6 +175,9 @@
         },
         {
             "start": "GETTING_STARTED.md"
+        },
+        {
+            "made_with_athenajs": "MADE_WITH_ATHENA.md"
         }
         ],
     "dest": "./docs"
