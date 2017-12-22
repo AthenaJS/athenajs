@@ -172,7 +172,7 @@
             "utils": "./js/Util/**/*.js"
         },
         {
-            "home": "INTRO.md"
+            "home": "README.md"
         },
         {
             "start": "GETTING_STARTED.md"
