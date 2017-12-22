@@ -45,7 +45,7 @@ npm install && npm start
 
 This will install the necessary dependencies and configuration files to get you started working with AthenaJS using ES2015 and Webpack and create a development server on `http://127.0.0.1:8888`.
 
-You can then editing the file `js/main.js`.
+You can then edit the file `js/main.js`.
 
 **Manual Way**
 
