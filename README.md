@@ -55,7 +55,7 @@ You can of course install AthenaJS by yourself using `npm`:
 npm install athenajs --save
 ```
 
-Or if you're as old as me, maybe you'll like to do it the way ancients do it :)
+Or if you're as old school as me, maybe you'll like to do it the way ancients do it :)
 
 ```html
 <script type="text/javascript" src="https://npm-cdn.herokuapp.com/athenajs@0.1.0/dist/athena.js"></script>
