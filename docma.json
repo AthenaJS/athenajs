@@ -33,7 +33,8 @@
         "meta": null,
         "entrance": "content:home",
         "routing": "query",
-        "server": "github"
+        "server": "github",
+        "base": "/athenajs-documentation"
     },
     "template": {
         "path": "./docma-template",
