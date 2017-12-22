@@ -9,6 +9,10 @@
 
 A simple framework for building 2D games in HTML5 and JavaScript.
 
+Like this one:
+
+![Gods](https://raw.githubusercontent.com/AthenaJS/athenajs/docs/img/gods.png)
+
 - Read the [tutorials](https://athenajs.github.io/athenajs-documentation/?content=tutorials) to get started with AthenaJS
 - Visit the [API documentation](https://athenajs.github.io/athenajs-documentation/) for a list of classes and methods available
 - Clone [samples](https://github.com/AthenaJS/athenajs-samples) repository to get started with AthenaJS
@@ -29,11 +33,37 @@ A simple framework for building 2D games in HTML5 and JavaScript.
 
 # Install
 
+**Using the webpack starter**
+
+The easiest way to start using AthenaJS is to clone the [athenajs-webpack-starter](https://github.com/AthenaJS/athenajs-webpack-starter):
+
 ```
+git clone https://github.com/AthenaJS/athenajs-webpack-starter.git
+cd athenajs-webpack-starter
+npm install && npm start
+```
+
+This will install the necessary dependencies and configuration files to get you started working with AthenaJS using ES2015 and Webpack and create a development server on `http://127.0.0.1:8888`.
+
+You can then editing the file `js/main.js`.
+
+**Manual Way**
+
+You can of course install AthenaJS by yourself using `npm`:
+
+```bash
 npm install athenajs --save
 ```
 
+Or if you're as old as me, maybe you'll like to do it the way ancients do it :)
+
+```html
+<script type="text/javascript" src="https://npm-cdn.herokuapp.com/athenajs@0.1.0/dist/athena.js"></script>
+```
+
 # Quick Start
+
+Once installed, here is how you may start using AthenaJS:
 
 **ES2015**
 
@@ -69,37 +99,39 @@ in your html file:
 <script type="text/javascript" src="athenajs.js"></script>
 <script type="text/javascript">
     window.onload = function() {
-    var Game = AthenaJS.Game,
-        Scene = AthenaJS.Scene,
-        SimpleText = AthenaJS.SimpleText;
+        var Game = AthenaJS.Game,
+            Scene = AthenaJS.Scene,
+            SimpleText = AthenaJS.SimpleText;
 
-    // create a new game
-    var myGame = new Game({
-        name: 'first-game',
-        width: 320,
-        height: 200
-    });
-    // // create a new empty scene
-    // myScene = new class MyScene extends Scene{
-    //     start() {
-    //         const myText = new SimpleText('my text', {
-    //             text: 'This is a test',
-    //             color: 'black'
-    //         });
-    //         // add the object onto the scene
-    //         this.addObject(myText);
-    //     }
-    // };
+        // create a new game
+        var myGame = new Game({
+            name: 'first-game',
+            width: 320,
+            height: 200
+        });
+        // // create a new empty scene
+        myScene = new class MyScene extends Scene{
+            start() {
+                const myText = new SimpleText('my text', {
+                    text: 'This is a test',
+                    color: 'black'
+                });
+                // add the object onto the scene
+                this.addObject(myText);
+            }
+        };
 
-    // play this scene
-    myGame.setScene(myScene);
+        // play this scene
+        myGame.setScene(myScene);
+    };
 </script>
 ````
 
 ## Apps written using AthenaJS
 
 - [Gods](https://athenajs.github.io/athenajs-documentation/)
-- [Tetris](https://github.com/AthenaJS/athenajs-samples)
+- [Tetris](https://github.com/AthenaJS/athenajs-tetris)
+- [Athena-Samples](https://github.com/AthenaJS/athenajs-samples)
 
 ## Contributing
 
