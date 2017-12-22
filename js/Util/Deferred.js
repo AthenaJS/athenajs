@@ -14,7 +14,7 @@ import Promise from 'es6-promise';
  *   def.resolve('done');
  * }, 5000);
  * 
- * def.then((res) => {
+ * promise.then((res) => {
  *  console.log('message recived', res);
  * });
  * 
