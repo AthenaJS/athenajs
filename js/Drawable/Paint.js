@@ -7,14 +7,14 @@ import Deferred from '../Util/Deferred';
  *
  * @extends Drawable
  */
-class Canvas extends Drawable {
+class Paint extends Drawable {
     /**
-     * Creates a new Canvas instance
+     * Creates a new Paint instance
      *
-     * @param {String} name The name of the Canvas element.
+     * @param {String} name The name of the Paint element.
      * @param {Object} options
-     * @param {Number} [options.width] The width of the Canvas element.
-     * @param {Number} [options.height] The height of the Canvas element.
+     * @param {Number} [options.width] The width of the Paint element.
+     * @param {Number} [options.height] The height of the Paint element.
      * @param {Number} [options.x] The horizontal position of the element.
      * @param {Number} [options.y] The vertical position of the element.
      * @param {String} [options.color] The color of the element. Can be changed by subsequent drawing method calls.
@@ -32,9 +32,13 @@ class Canvas extends Drawable {
     }
 
     /**
-     * Canvas's draw method that's called on every frame
+     * Paint's draw method that's called on every frame:
+     * that's where the magic happens, it simply calls user-defined
+     * render method and translate calls into native canvas calls
      *
      * @param {RenderingContext} ctx The rendering context to use for drawing.
+     * 
+     * @private
      */
     draw(ctx/*, debug*/) {
         this.ctx = ctx;
@@ -53,7 +57,7 @@ class Canvas extends Drawable {
     }
 
     /**
-     * Renders the Canvas.
+     * The render method is called at each frame.
      *
      * User should redefine this and put there needed drawing calls
      */
@@ -62,9 +66,9 @@ class Canvas extends Drawable {
     }
 
     /**
-     * Fills the Canvas with specified color
+     * Fills the Paint with specified color
      *
-     * @param {String} [color=this.color] The color to used for filling the canvas.
+     * @param {String} [color=this.color] The color to used for filling the Paint.
      */
     fill(color) {
         this.ctx.fillStyle = color || this.color;
@@ -74,8 +78,8 @@ class Canvas extends Drawable {
     /**
      * Draws a rectangle
      *
-     * @param {Number} x The rect's x related to the Canvas'x position.
-     * @param {Number} y The rect's y related to the Canvas'x position.
+     * @param {Number} x The rect's x related to the Paint'x position.
+     * @param {Number} y The rect's y related to the Paint'x position.
      * @param {Number} width The width of the rectangle.
      * @param {Number} height The height of the rectangle.
      * @param {String} [color=this.color] The color of the rectangle.
@@ -90,8 +94,8 @@ class Canvas extends Drawable {
     /**
      * Draws a circle
      *
-     * @param {Number} x The circle's center x related to the Canvas'position.
-     * @param {Number} y The circle's center y related to the Canvas'position.
+     * @param {Number} x The circle's center x related to the Paint's position.
+     * @param {Number} y The circle's center y related to the Paint's position.
      * @param {Number} radius The circle's radius in radian.
      * @param {String} color The circle's color.
      * @param {Number} strokeWidth The circle's line width.
@@ -115,8 +119,8 @@ class Canvas extends Drawable {
     /**
      * Draws an arc
      *
-     * @param {Number} x The arc's center x position, related to the canvas'position.
-     * @param {Number} y The arc's center y position, related to the canvas'position.
+     * @param {Number} x The arc's center x position, related to the Paint's position.
+     * @param {Number} y The arc's center y position, related to the Paint's position.
      * @param {Number} radius The arc's radius, in radian.
      * @param {Number} startAngle The arc's start angle, in radian.
      * @param {Number} endAngle The arc's send angle, in radian.
@@ -134,7 +138,7 @@ class Canvas extends Drawable {
     }
 
     /**
-     * Since the Canvas Drawable only supports the Fade effect, we override
+     * Since the Paint Drawable only supports the Fade effect, we override
      * the Drawable's animate method and print a warning in case the user
      * attempts to run an unsupported animation.
      *
@@ -143,7 +147,7 @@ class Canvas extends Drawable {
      */
     animate(name, options) {
         if (name !== 'Fade') {
-            console.warn('animte() not supported on Canvas objects yet. Effect not applied.');
+            console.warn('animte() not supported on Paint objects yet. Effect not applied.');
             return Deferred.resolve(true);
         } else {
             return super.animate(name, options);
@@ -151,6 +155,4 @@ class Canvas extends Drawable {
     }
 }
 
-window.Canvas = Canvas;
-
-export default Canvas;
+export default Paint;
