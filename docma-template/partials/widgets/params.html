@@ -12,7 +12,7 @@
             {#params}
                 <tr>
                     <td>{name|s|$dot_prop}</td>
-                    <td><span class="color-blue">{.|$type|s|$get_mdn_link}</span></td>
+                    <td><span class="color-blue">{.|$type|s|$get_type_link}</span></td>
                     <td>{?optional}{.|$def}{/optional}</td>
                     <td>{?description}{.|s|$param_desc}{/description}</td>
                 </tr>

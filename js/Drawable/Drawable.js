@@ -504,6 +504,8 @@ class Drawable {
 
     /**
      * Returns the angle property of the object.
+     * 
+     * @returns {Number} The angle of the object
      */
     getAngle() {
         return this.angle;

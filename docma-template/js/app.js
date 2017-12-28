@@ -31,16 +31,24 @@
         }
     };
 
-    function _getTypeMDNLink(str) {
+    /**
+     * Find and replace custom API names with ?api= link
+     * 
+     * @param {String} str The html of the object's
+     * @returns {String} The modified html content
+     */
+    function _replaceAPILinks(str) {
         var types = str.split(/[|<]/),
             html = str.replace('<', '&lt;').replace('>', '&gt;');
 
         types.forEach((type) => {
             var objectType = type.replace(/[()<>]/g, '');
 
-            Object.keys(MDNLinks).forEach(function(api) {
-                var items = MDNLinks[api].items,
-                    index = items.indexOf(objectType);
+            Object.keys(docma.apis).forEach(function(api) {
+                var docs = api.documentation,
+                    index = docs.findIndex((doc) => {
+                        return doc.name === objectType;
+                    });
 
                 if (index > -1) {
                     html = html.replace(objectType, '<a href="' + MDNLinks[api].baseUrl + objectType + '">' + objectType + '</a>');
@@ -49,6 +57,65 @@
         });
 
         return html;
+    }
+
+    /**
+     * Find and replace Object types with Documentation links
+     * 
+     * @param {String} str The html of the object's type
+     * @returns {String} The modified html content
+     */
+    function _replaceTypeLinks(str) {
+        var types = str.split(/[|<]/),
+            html = str.replace('<', '&lt;').replace('>', '&gt;'),
+            links = [];
+
+        types.forEach((type) => {
+            var objectType = type.replace(/[()<>]/g, '');
+
+            Object.keys(docma.apis).forEach(function(api) {
+                var docs = docma.apis[api].documentation,
+                    index = docs.findIndex((doc) => {
+                        return doc.name === objectType;
+                    });
+
+                if (index > -1) {
+                    // html = html.replace(objectType, '<a href="' + MDNLinks[api].baseUrl + objectType + '">' + objectType + '</a>');
+                    links.push({
+                        type: objectType,
+                        link: docma.app.base + '?api=' + api + '#' + objectType
+                    });
+                }
+            });
+
+            if (links.length === types.length) {
+                return;
+            }
+
+            // find JavaScript native Object Types
+            Object.keys(MDNLinks).forEach(function(api) {
+                var items = MDNLinks[api].items,
+                    index = items.indexOf(objectType);
+
+                if (index > -1) {
+                    // html = html.replace(objectType, '<a href="' + MDNLinks[api].baseUrl + objectType + '">' + objectType + '</a>');
+                    links.push({
+                        type: objectType,
+                        link: MDNLinks[api].baseUrl + objectType
+                    });
+                }
+            });
+        });
+
+        for (let i = 0; i < links.length; ++i) {
+            html = html.replace(links[i].type, '<a href="' + links[i].link + '">' + links[i].type + '</a>');
+        }
+
+        return html;
+    }
+
+    function _getTypeLink(str) {
+        return _replaceTypeLinks(str);
     }
 
     function _getSymbolBadge(symbol) {
@@ -114,6 +181,20 @@
         } else {
             return symbolName.split('#')[0];
         }
+    }
+
+    function listTypeDesc(list) {
+        if (!list || list.length === 0) return '';
+        var desc;
+        var pList = list.map(function (item) {
+            desc = docma.utils.parse(item.description || '', { keepIfSingle: true });
+            if (desc) desc = '&nbsp;&nbsp;—&nbsp;&nbsp;' + desc;
+            return _getTypeLink(item.type.names.join('|')) + desc; // '<code>' + item.type.names.join('|') + '</code>' + desc;
+        });
+        if (pList.length > 1) {
+            return '<ul>\n' + pList.join('</li>\n<li>') + '\n</ul>';
+        }
+        return pList; // single item
     }
 
     // ---------------------------
@@ -196,15 +277,17 @@
         })
         .addFilter('$extends', function (symbol) {
             var ext = Array.isArray(symbol) ? symbol : symbol.augments;
-            return docma.utils.listType(ext);
+            return ext.map((name) => _getTypeLink(name)).join(', ');
         })
         .addFilter('$returns', function (symbol) {
             var returns = Array.isArray(symbol) ? symbol : symbol.returns;
-            return docma.utils.listTypeDesc(returns);
+            return listTypeDesc(returns);
+            // return docma.utils.listTypeDesc(returns);
         })
         .addFilter('$exceptions', function (symbol) {
             var exceptions = Array.isArray(symbol) ? symbol : symbol.exceptions;
-            return docma.utils.listTypeDesc(exceptions);
+            return listTypeDesc(exceptions);
+            // return docma.utils.listTypeDesc(exceptions);
         })
         // non-standard JSDoc directives are stored in `.tags` property of a
         // symbol. We also add other properties such as .access (if not public),
@@ -300,9 +383,9 @@
         .addFilter('$clean_ref', function(symbol) {
             return symbol.$longname.replace(/\./g, '-');
         })
-        .addFilter('$get_mdn_link', function(types) {
+        .addFilter('$get_type_link', function(types) {
             if (docma.template.options.typeDefinitionLink) {
-                return _getTypeMDNLink(types);
+                return _getTypeLink(types);
             } else {
                 return types;
             }
@@ -426,19 +509,14 @@
             $('.sidebar-nav-container').on('click', '.sidebar-item', function(event) {
                 var selector = '';
                 if ($(this).hasClass('root')) {
-                    var ref = $(this).data('refSymbol'),
+                    var ref = $(this).data('refSymbol');
                     selector = '[data-ref-symbol=' + ref + ']';
                     $(this).toggleClass('toggled');
                     $(this).parents('ul').find(selector).not('.root').toggleClass('visible');
                 } else {
-                    // hashes = hashes.splice(1);
                     // click on a method:need to expand the selected method
                     selector = '.row a[data-ref-symbol=' + this.hash.substr(1).replace(/\./g, '-') + ']';
                     $(selector).trigger('click', true);
-                    // console.log('not class');
-                    // console.log("$('.row a[href=#" + hashes.join('#') + "]').trigger('click', true);");
-                    // $('.row a[href=#' + hashes.join('#') + ']').trigger('click', true);
-                    // $('.row a[href=#' + hashes.splice(1).join('#') + ']').trigger('click', true);
                 }
             });
         }
