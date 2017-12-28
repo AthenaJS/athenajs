@@ -13,7 +13,7 @@ Like this one:
 
 ![Gods](https://raw.githubusercontent.com/AthenaJS/athenajs/docs/img/gods.png)
 
-- Read the [tutorials](https://athenajs.github.io/athenajs-documentation/?content=tutorials) to get started with AthenaJS
+- Read the [tutorials](https://athenajs.github.io/athenajs-documentation/?content=start) to get started with AthenaJS
 - Visit the [API documentation](https://athenajs.github.io/athenajs-documentation/) for a list of classes and methods available
 - Clone [samples](https://github.com/AthenaJS/athenajs-samples) repository to get started with AthenaJS
 - For an example of a complete game written using AthenaJS check the [athenajs-tetris](https://github.com/AthenaJS/athenajs-tetris) repository

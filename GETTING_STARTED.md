@@ -7,7 +7,7 @@
 
 ## Webpack Starter Template
 
-The easiest way to get started is to clone the athena-starter [https://github.com/AthenaJS/athenajs-webpack-starter](repository) and then type:
+The easiest way to get started is to clone the athena-starter [repository](https://github.com/AthenaJS/athenajs-webpack-starter) and then type:
 
 ```bash
 npm install && npm start
@@ -312,10 +312,10 @@ const myText = new SimpleText("nextString", {
 
 ## Going Further
 
-To go further, you can checkout the *athenajs-samples* [https://github.com/AthenaJS/athenajs-samples](repository) which contains more advanced topics like:
+To go further, you can checkout the *athenajs-samples* [repository](https://github.com/AthenaJS/athenajs-samples) which contains more advanced topics like:
 
  - Maps
  - Sound
  - Behaviors
 
-For a complete game using AthenaJS you can have a look at [https://github.com/AthenaJS/athenajs-tetris](AthenaJS-Tetris).
+For a complete game using AthenaJS you can have a look at [AthenaJS-Tetris](https://github.com/AthenaJS/athenajs-tetris).
