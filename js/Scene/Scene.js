@@ -120,6 +120,14 @@ class Scene {
         }
     }
 
+    /**
+     * Executes a fadeIn effect onto the scene
+     *
+     * @see {@link ?api=scene#Scene#animate|Scene#animate}
+     * @param {Number} duration The duration of the fadeIn effect.
+     *
+     * @returns {Promise} a Promise that gets resolved when the effect ends.
+     */
     fadeIn(duration = 1000) {
         return this.animate('Fade', {
             startValue: 0,
@@ -128,6 +136,15 @@ class Scene {
         });
     }
 
+
+    /**
+     * Executes a fadeOut effect onto the scene
+     *
+     * @see {@link ?api=scene#Scene#animate|Scene#animate}
+     * @param {Number} duration The duration of the fadeOut effect.
+     *
+     * @returns {Promise} a Promise that gets resolved when the effect ends.
+     */
     fadeOut(duration) {
         return this.animate('Fade', {
             startValue: 1,
@@ -136,6 +153,16 @@ class Scene {
         });
     }
 
+    /**
+     * Executes a fadeIn, waits for some time, then executes a fade out effect
+     *
+     * @see {@link ?api=scene#Scene#animate|Scene#animate}
+     * @param {Number} inDuration The duration of the fade-in effect.
+     * @param {Number} delay The delay between the two effects.
+     * @param {Number} outDuration The duration of the fadeoutn effect.
+     *
+     * @returns {Promise} a Promise that gets resolved when the effect ends.
+     */
     fadeInAndOut(inDuration, delay, outDuration) {
         let def = new Deferred();
         this.fadeIn(inDuration).then(() => {
@@ -189,6 +216,8 @@ class Scene {
      *
      * Adds a new resource to be loaded later
      *
+     * @private
+     *
      */
     load(type, src, id = null) {
         if (this.loaded) {
@@ -206,10 +235,21 @@ class Scene {
     /**
      * Adds an image to the scene resource list
      *
+     * @see {@link ?api=scene#Scene#loadAudio|Scene#loadAudio}
+     * @see {@link ?api=scene#Scene#loadMap|Scene#loadMap}
      * @param {String} src The url of the file to load.
      * @param {String} id The id to use for the image.
      *
-     * @note this method should be called in the `setup` method
+     * @example
+     *
+     *   setup() {
+     *       this.loadImage('img/bitmapFont.png', 'myFont');
+     *       this.loadImage('img/sprites.png', 'mySheet');
+     *       this.loadImage('img/sballer_sprites.png', 'sballer');
+     *   }
+     *
+     * @note this method should be called in the `setup` method.
+     *
      */
     loadImage(src, id = null) {
         this.load('image', src, id || src);
@@ -218,10 +258,12 @@ class Scene {
     /**
      * Adds an audio file to the scene resource list
      *
+     * @see {@link ?api=scene#Scene#loadImage|Scene#loadImage}
+     * @see {@link ?api=scene#Scene#loadMap|Scene#loadMap}
      * @param {String} src The url of the file to load.
      * @param {String} id The id to use for the audio file.
      *
-     * @note this method should be called in the `setup` method
+     * @note this method should be called in the `setup` method.
      */
     loadAudio(src, id = null) {
         this.load('audio', src, id || src);
@@ -230,6 +272,8 @@ class Scene {
     /**
      * Adds a map file to the scene resource list
      *
+     * @see {@link ?api=scene#Scene#loadImage|Scene#loadImage}
+     * @see {@link ?api=scene#Scene#loadAudio|Scene#loadAudio}
      * @param {String} src The url of the file to load.
      * @param {String} id The id to use for the map.
      *
@@ -530,7 +574,7 @@ class Scene {
     /**
      * Public setup method: this method is called right after internal Scene._setup().
      *
-     * You should overriden it in your own Scene instances.
+     * You should override it in your own Scene instances.
      */
     setup() {
         if (this.hudScene) {
@@ -561,6 +605,11 @@ class Scene {
         }
     }
 
+    /**
+     * Starts the scene: internal
+     *
+     * @private
+    */
     _start() {
         this.running = true;
         this.time = new Date().getTime();
@@ -571,6 +620,11 @@ class Scene {
         }
     }
 
+    /**
+     * Stops the scene from running
+     *
+     * @private
+    */
     _stop() {
         this._reset();
         this.stop();
@@ -658,6 +712,8 @@ class Scene {
      *
      * @param {Array<RenderingContext>} drawContexts The layers array to draw over.
      * *note* When the scene is not running, this method isn't called at all.
+     *
+     * @private
      */
     render(drawContexts) {
         const mapIndex = drawContexts.length - 1;
@@ -671,6 +727,7 @@ class Scene {
     }
 
     /**
+     * Changes a layer's priority: making it a forground or background layer
      *
      * @param {Number} layer Layer number.
      * @param {Boolean} background Set to true to put layer in background, false for foreground.
@@ -703,6 +760,8 @@ class Scene {
     /**
      * onEvent is called once one of the registered events has been triggered.
      *
+     * The onEvent method is passed an event object with `type` and `data` properties.
+     *
      * Override this scene as needed.
      */
     onEvent() {
@@ -713,6 +772,8 @@ class Scene {
      * Attach the specified display to the scene
      *
      * @param {Display} display The display to attach the scene to.
+     *
+     * @private
      */
     setDisplay(display) {
         this.display = display;
@@ -725,8 +786,21 @@ class Scene {
     /**
      * Apply the specified effect to the scene
      *
+     * @see {@link ?api=scene#Scene#fadeIn|Scene#fadeIn}
+     * @see {@link ?api=scene#Scene#fadeOut|Scene#fadeOut}
+     * @see {@link ?api=scene#Scene#fadeInOut|Scene#fadeInOut}
+     *
      * @param {String} fxName The name of the effect to apply.
      * @param {Object} options The options of the effect.
+     *
+     * @returns {Promise} a promise that will be fullfilled when the animation has ended.
+     *
+     * @example
+     * this.animate('Fade', {
+     *    startValue: 0,
+     *    endValue: 1,
+     *    duration: duration
+     * });
      */
     animate(fxName, options) {
         return this.display.animate(fxName, options, this);

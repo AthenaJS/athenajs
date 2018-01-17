@@ -42,6 +42,7 @@ Object.assign(Dom.prototype, {
     /**
      * jQuery-like CSS method to easily set multiple styles on a dom collection
      *
+     * @chainable
      * @param {String|Object} prop or list of properties with their new value
      * @param {String} val value of the property
      * @returns {Dom} `this`
@@ -75,6 +76,7 @@ Object.assign(Dom.prototype, {
     /**
      * Returns a new collection with elements matching the selector found inside current collection
      *
+     * @chainable
      * @param {String} selector the selector to match
      * @returns {Dom} a new Dom collection with found elements
      * 
@@ -96,6 +98,7 @@ Object.assign(Dom.prototype, {
     /**
      * Append current collection to the element with a specific selector
      *
+     * @chainable
      * @param {String|HTMLElement} selector Target element where to append selected elements.
      * It can either be a CSS selector or a DOM HTMLElement.
      * @returns {Dom} `this`
@@ -117,6 +120,7 @@ Object.assign(Dom.prototype, {
     /**
      * Change multiple attributes at once
      *
+     * @chainable
      * @param {String|Object} att attribute name to modify or list of attributes+values to change
      * @param {String} val value of the attribute to set
      * @returns {Dom} `this`
@@ -142,6 +146,7 @@ Object.assign(Dom.prototype, {
     /**
      * Add one or more CSS classes to a DOM collection
      *
+     * @chainable
      * @param {String} name space-separated list of classes to add
      * @returns {Dom} `this`
      *
@@ -160,6 +165,7 @@ Object.assign(Dom.prototype, {
     /**
      * Remove one or more CSS classes to a DOM collection
      *
+     * @chainable
      * @param {String} name Space-separated list of classes to remove.
      * @returns {Dom} `this`
      *
@@ -171,11 +177,14 @@ Object.assign(Dom.prototype, {
         this.forEach((node) => {
             node.classList.remove(...classes);
         });
+
+        return this;
     },
 
     /**
      * Changes innerHTML of a collection
      *
+     * @chainable
      * @param {String} html to set as innerHTML
      * @returns {Dom} `this`
      *
@@ -189,6 +198,8 @@ Object.assign(Dom.prototype, {
 
     /**
      * Shows specified set of elements
+     *
+     * @chainable
      * @returns {Dom} `this`
      *
      * @memberof Dom#
@@ -203,6 +214,8 @@ Object.assign(Dom.prototype, {
 
     /**
      * Hides specified set of elements
+     *
+     * @chainable
      * @returns {Dom} `this`
      *
      * @memberof Dom#

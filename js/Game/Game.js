@@ -49,7 +49,7 @@ class Game {
 
         const target = options.target && new Dom(options.target);
 
-        // weather to display FPS
+        // whether to display FPS
         this.showFps = typeof options.showFps !== 'undefined' ? options.showFps : false;
 
         if (this.showFps) {
@@ -202,7 +202,7 @@ class Game {
     /**
      * Toggles the Map tiles inspector
      *
-     * @param {Boolean} enable whether to enable the tileInspector
+     * @param {Boolean} enable Whether to enable the tileInspector.
      */
     toggleTileInspector(enable) {
         if (enable) {
@@ -221,6 +221,8 @@ class Game {
     /**
      * Get ready for events from NotificationManager
      *
+     * @see {@link ?api=game#Game#onEvent|Game#onEvent}
+     *
      * @param {String} eventList space-separated list of events to listen to
      *
      */
@@ -231,10 +233,21 @@ class Game {
 
     /**
      * Method that gets called when receiving an event: by default it does nothing
-     * It's up to the developer to override this method on its Game
+     * It's up to the developer to override this method on its Game.
+     *
+     * It will be called with an event parameter with the `type` and `data` properties.
+     *
+     * @see {@link ?api=game#Game#bindEvents|Game#bindEvents}
      *
      * @param {String} event the event name that got fired.
      *
+    * @example
+    *
+    * onEvent(event) {
+    *   if (event.type === 'hello') {
+    *       console.log(`hey there ${event.data.name}`);
+    *   }
+    * }
      */
     onEvent(event) {
         event;
@@ -244,7 +257,7 @@ class Game {
     /**
      * Toggles global sound
      *
-     * @param {Boolean} bool Weather to enable or disable sound.
+     * @param {Boolean} bool Whether to enable or disable sound.
      *
      */
     toggleSound(bool) {
@@ -327,9 +340,12 @@ class Game {
     }
 
     /**
-     * Sets a new scene as the current scene
+     * Sets a new scene as the current scene.
      *
-     * @param {Scene} scene instance to set as current Scene
+     * If a scene is currently running it will be stopped,
+     * the new scene will be loaded and then started.
+     *
+     * @param {Scene} scene instance to set as current Scene.
      *
      */
     setScene(scene) {
