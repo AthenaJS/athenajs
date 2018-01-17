@@ -1,5 +1,5 @@
 {?template.options.navbar}
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top {?api}api{/api}">
         <div class="{?boxed}container container-boxed{:else}container-fluid{/boxed}">
             <div class="nav navbar-left nav-left">
                 <div class="navbar-brand">
@@ -27,6 +27,8 @@
                 {/template.options.navItems}
             </ul>
             {/gt}
+
+            <input type="text" class="search-api" id="search-api" placeholder="Search AthenaJS documentation" />
 
         </div>
     </nav>

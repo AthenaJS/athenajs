@@ -133,6 +133,12 @@
                     "iconClass": "fab fa-github",
                     "label": "GitHub",
                     "href": "https://github.com/AthenaJS/athenajs"
+                },
+                {
+                    "iconClass": "fas fa-search",
+                    "label": "",
+                    "onClick": "showSearch(); return false",
+                    "toto": "ahah"
                 }
              ]
         }
@@ -181,5 +187,5 @@
             "made_with_athenajs": "MADE_WITH_ATHENA.md"
         }
         ],
-    "dest": "./docs"
+    "dest": "./tmp"
 }

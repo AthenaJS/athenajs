@@ -2,7 +2,7 @@
     <li role="separator" class="divider"></li>
 {:else}
     <li>
-        <a href="{?href}{href}{:else}#{/href}" target="{target}">
+        <a href="{?href}{href}{:else}#{/href}" {?onClick}onClick="{onClick}"{/onClick} target="{target}">
             {?iconClass}<i class="ico {iconClass}" aria-hidden="true"></i>&nbsp;&nbsp;{/iconClass}{label|s}
         </a>
     </li>

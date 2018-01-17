@@ -458,7 +458,56 @@
     //     }
     // });
 
+    function installSearch() {
+        /** search */
+        var searchInput = document.getElementById('search-api'),
+            docmaMain = document.getElementById('docma-main');
+
+        docsearch({
+         apiKey: '410b8fb234ff5ab408196198a7803054',
+         indexName: 'athenajs_documentation',
+         inputSelector: '#search-api',
+         debug: true,
+         autocompleteOptions: {
+            autoselect: true
+         }
+        });
+
+        window.showSearch = function() {
+            docmaMain.classList.remove('hide-search');
+            searchInput.focus();
+            return false;
+        };
+
+        searchInput.addEventListener('blur', function() {
+            docmaMain.classList.add('hide-search');
+        });
+
+        searchInput.addEventListener('keyup', function(event) {
+            // hide search input on escape press
+            if (event.keyCode === 27) {
+                searchInput.blur();
+            }
+        });
+    }
+
     docma.on('render', function (currentRoute) {
+        installSearch();
+
+        $(document).off('keydown.docma').on('keydown.docma', function(event) {
+            var elt =  event.target || event.srcElement;
+
+            if (elt.isContentEditable || elt.tagName.match(/INPUT|SELECT|TEXTAREA/)) {
+                return;
+            }
+
+            // 's' or '/'
+            if ([83, 47].indexOf(event.keyCode) !== -1) {
+                event.preventDefault();
+                window.showSearch();
+            }
+        });
+
         $('[data-toggle="tooltip"]').tooltip({
             container: 'body',
             placement: 'bottom'
@@ -532,7 +581,9 @@
             });
 
             if (document.location.hash) {
-                var ref = document.location.hash.substr(1).replace(/\./g, '-');
+                var ref = document.location.hash.substr(1).replace(/\./g, '-'),
+                    rootObject = ref.split('#')[0];
+
                 // trigger will expand the selected element
                 $('.row .symbol > a[data-ref-symbol=' + ref + ']').trigger('click', true);
                 // we need to trigger hash change to position the scrolling on this element
@@ -540,6 +591,11 @@
                 var oldLocation = document.location.hash;
                 document.location.hash = '';
                 document.location.hash = oldLocation;
+
+                // expand left part as well
+                $('.sidebar-nav .root[data-ref-symbol=' + rootObject + ']').addClass('toggled');
+                $('.sidebar-nav .child[data-ref-symbol=' + rootObject + ']').addClass('visible');
+                // TODO: scroll to position if needed
             } else {
                 document.body.scrollIntoView(true);
             }
@@ -607,5 +663,4 @@
         });
 
     });
-
 })();

@@ -514,3 +514,76 @@ pre code{
     margin-bottom:16px;
     line-height:24px;
 }
+
+/* search stuff */
+#search-api{
+    clear: both;
+    display: block;
+    width: 84%;
+    border: 1px solid #eee;
+    margin: 5px;
+    padding: 0 5px;
+    height:32px;
+    font-size: 14px;
+    transition-property:height;
+    transition-duration:2s;
+    transition-timing-function: ease-in-out;
+}
+
+#docma-main.hide-search #search-api{
+    height: 0;
+}
+
+.algolia-autocomplete{
+    display:block !important;
+    clear:both;
+}
+
+#docma-main.hide-search .algolia-autocomplete{
+    display:none !important;
+}
+
+ .algolia-autocomplete .algolia-docsearch-suggestion--subcategory-column{
+     word-break:normal !important;
+ }
+
+ .navbar-nav > li:last-child{
+     position:absolute;
+     left:-54px;
+ }
+
+ .navbar-nav{
+     position:relative;
+ }
+
+ .navbar.api .navbar-nav{
+     margin-left:100px;
+ }
+
+ .navbar .algolia-autocomplete{
+     margin-left:165px;
+ }
+
+ .navbar.api .algolia-autocomplete{
+    margin-left: 300px;
+    width: 20%;
+ }
+
+ /* no idea why but results appear incorrectly at the right in this case */
+ .algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu {
+    left: 0!important;
+    right: inherit!important;
+}
+
+.algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu:before {
+    left: 48px;
+}
+
+.ds-suggestion.ds-cursor .algolia-docsearch-suggestion:not(.suggestion-layout-simple) .algolia-docsearch-suggestion--content{
+    background: rgba(143,187,237,.5) !important;
+}
+
+.algolia-autocomplete .algolia-docsearch-suggestion--highlight {
+    background-color:rgba(252, 255, 66, 0.3) !important;
+}
+ /* / search */
