@@ -495,14 +495,14 @@ class Game {
             this.running = false;
             // let the scene have a chance to update display, like showing
             // a pause logo, etc...
-            this.scene.pause(this.running);
+            this.scene.onPause(this.running);
             // and display changes
             this.display.renderScene(this.scene);
             // then immediately stop the scene
             this._stopSceneLoops();
         } else {
             this.running = true;
-            this.scene.pause(this.running);
+            this.scene.onPause(this.running);
 
             this._runSceneLoop();
             this._renderSceneLoop();

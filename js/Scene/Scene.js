@@ -662,13 +662,15 @@ class Scene {
     }
 
     /**
-     * Called when the scene is paused. This may happen for several reasons:
-     * - browser tab is hidden
-     * - debug is enabled and user pressed the p key
+     * Called when the scene's run status changes. This may happen for several reasons:
      *
-     * @param {Boolean} isRunning
+     * - browser tab is hidden
+     *
+     * - debug is enabled and user pressed the `p` key
+     *
+     * @param {Boolean} isRunning the new running status
      */
-    pause(isRunning) {
+    onPause(isRunning) {
         isRunning;
     }
 
@@ -741,6 +743,13 @@ class Scene {
      *
      * @param {String} eventType The type of event to trigger.
      * @param {any} data The data (if any) associated with the event.
+     *
+     * @example
+     *   // sends a new message of type 'ground' with some data
+     *   this.notify('ground', {
+     *      startLine: tilePos.y,
+     *      numRows: this.shape.height / map.tileHeight
+     *  });
      */
     notify(eventType, data) {
         NM.notify(eventType, data);
