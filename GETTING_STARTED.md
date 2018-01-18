@@ -135,7 +135,7 @@ These are of course just examples and you can (and **should**) also extend `Draw
 
 The [Paint](?api=drawable#Paint) class allows to manipulate drawing HTML5-Canvas functions without having to deal with the *rendering context* and other low-level Canvas stuff.
 
-The Paint class also benefits fromm every `Drawable` features: animation, colision, etc.
+The Paint class also benefits from every `Drawable` features: animation, colision, etc.
 
 Paint elements can be used on Scene as well as on Maps, just like any other Drawable.
 
