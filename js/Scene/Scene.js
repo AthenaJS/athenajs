@@ -572,9 +572,28 @@ class Scene {
     }
 
     /**
-     * Public setup method: this method is called right after internal Scene._setup().
+     * Public setup method: this method is called before starting the scene
      *
-     * You should override it in your own Scene instances.
+     * If your scene need some resources (sounds, images), you may load
+     * them from here by calling `loadImage`, `loadAudio`, `loadMap`.
+     *
+     * The scene will only be started after every resource loading from `setup`
+     * has been loaded.
+     *
+     * @see {@link ?api=scene#Scene#loadAudio|Scene#loadAudio}
+     * @see {@link ?api=scene#Scene#loadMap|Scene#loadMap}
+     * @see {@link ?api=scene#Scene#loadMap|Scene#loadImage}
+     * @example
+     *   setup() {
+     *       this.loadImage('img/bitmapFont.png', 'myFont');
+     *       this.loadImage('img/sprites.png', 'mySheet');
+     *       this.loadImage('img/sballer_sprites.png', 'sballer');
+     *   }
+     *
+     *   start() {
+     *       // mySheet has been loaded: the MySprite() object can be added onto the scene
+     *       this.addObject(new MySprite());
+     *   }
      */
     setup() {
         if (this.hudScene) {
@@ -643,8 +662,24 @@ class Scene {
     }
 
     /**
-     * Starts the scene
+     * The start method is called when a scene has been loaded and is ready
+     * to be started.
      *
+     * If you want to create resources that depend on resources that were
+     * loaded in setup method you may add them onto the scene in the start()
+     * method
+     *
+     * @see {@link ?api=scene#Scene#setup|Scene#setup}
+     * @example
+     *  start() {
+     *   // add a new circle object
+     *   this.addObject(new Smiley({
+     *       width: 40,
+     *       height: 40,
+     *       y: 100,
+     *       x: 10
+     *   }));
+     * }
      */
     start() {
     }
@@ -773,7 +808,12 @@ class Scene {
      *
      * The onEvent method is passed an event object with `type` and `data` properties.
      *
-     * Override this scene as needed.
+     * @example
+     * onEvent(event) {
+     *   if (event.type === 'hello') {
+     *       console.log(`hey there ${event.data.name}`);
+     *   }
+     * }
      */
     onEvent() {
 
