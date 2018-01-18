@@ -697,6 +697,8 @@ class Scene {
      * The map, if there is one, is also updated here (viewport, new objects, etc)
      *
      * @param {Number} timestamp current times
+     *
+     * @private
      */
     update(timestamp) {
         this.moveSceneObjects(timestamp);
