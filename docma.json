@@ -121,6 +121,13 @@
                          {
                             "label": "Utils",
                             "href": "?api=utils"
+                         },
+                                                 {
+                             "separator": true
+                         },
+                         {
+                            "label": "Debugger",
+                            "href": "?content=debugging"
                          }
                      ]
                  },
@@ -185,6 +192,9 @@
         },
         {
             "made_with_athenajs": "MADE_WITH_ATHENA.md"
+        },
+        {
+            "debugging": "DEBUGGING.md"
         }
         ],
     "dest": "./tmp"
