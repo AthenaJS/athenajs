@@ -98,7 +98,7 @@ in your html file:
 ````html
 <script type="text/javascript" src="athenajs.js"></script>
 <script type="text/javascript">
-    window.onload = function() {
+    window.onload = function () {
         var Game = AthenaJS.Game,
             Scene = AthenaJS.Scene,
             SimpleText = AthenaJS.SimpleText;
@@ -109,19 +109,32 @@ in your html file:
             width: 320,
             height: 200
         });
-        // // create a new empty scene
-        myScene = new class MyScene extends Scene{
-            start() {
-                const myText = new SimpleText('my text', {
-                    text: 'This is a test',
-                    color: 'black'
-                });
-                // add the object onto the scene
-                this.addObject(myText);
-            }
-        };
 
-        // play this scene
+        // first extend the scene class which results in lots of code in Es5
+        // call Scene constructor from MyScene constructor
+        function MyScene() {
+            Scene.call(this);
+        }
+
+        // inherit from Scene.prototype
+        MyScene.prototype = Object.create(Scene.prototype);
+
+        // redefine the start() method
+        MyScene.prototype.start = function () {
+            var myText = new SimpleText('my text', {
+                text: 'This is a test',
+                color: 'black'
+            });
+            // add the object onto the scene
+            this.addObject(myText);
+        }
+
+        // finally correctly set the constructor to MyScene
+        MyScene.prototype.constructor = MyScene;
+
+        var myScene = new MyScene();
+
+        // // play this scene
         myGame.setScene(myScene);
     };
 </script>
