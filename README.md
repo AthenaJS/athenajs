@@ -142,7 +142,7 @@ in your html file:
 
 ## Apps written using AthenaJS
 
-- [Gods](https://athenajs.github.io/athenajs-documentation/)
+- [Gods](https://athenajs.github.io/athenajs-gods/)
 - [Tetris](https://github.com/AthenaJS/athenajs-tetris)
 - [Athena-Samples](https://github.com/AthenaJS/athenajs-samples)
 
