@@ -63,37 +63,51 @@ in your html file:
 ```html
 <script type="text/javascript" src="athenajs.js"></script>
 <script type="text/javascript">
-    window.onload = function() {
-    var Game = AthenaJS.Game,
-        Scene = AthenaJS.Scene,
-        SimpleText = AthenaJS.SimpleText;
+    window.onload = function () {
+        var Game = AthenaJS.Game,
+            Scene = AthenaJS.Scene,
+            SimpleText = AthenaJS.SimpleText;
 
-    // create a new game
-    var myGame = new Game({
-        name: 'first-game',
-        width: 320,
-        height: 200
-    });
-    // // create a new empty scene
-    // myScene = new class MyScene extends Scene{
-    //     start() {
-    //         const myText = new SimpleText('my text', {
-    //             text: 'This is a test',
-    //             color: 'black'
-    //         });
-    //         // add the object onto the scene
-    //         this.addObject(myText);
-    //     }
-    // };
+        // create a new game
+        var myGame = new Game({
+            name: 'first-game',
+            width: 320,
+            height: 200
+        });
 
-    // play this scene
-    myGame.setScene(myScene);
+        // first extend the scene class which results in lots of code in Es5
+        // call Scene constructor from MyScene constructor
+        function MyScene() {
+            Scene.call(this);
+        }
+
+        // inherit from Scene.prototype
+        MyScene.prototype = Object.create(Scene.prototype);
+
+        // redefine the start() method
+        MyScene.prototype.start = function () {
+            var myText = new SimpleText('my text', {
+                text: 'This is a test',
+                color: 'black'
+            });
+            // add the object onto the scene
+            this.addObject(myText);
+        }
+
+        // finally correctly set the constructor to MyScene
+        MyScene.prototype.constructor = MyScene;
+
+        var myScene = new MyScene();
+
+        // // play this scene
+        myGame.setScene(myScene);
+    };
 </script>
 ```
 
 ## Apps written using AthenaJS
 
-- [Gods](https://athenajs.github.io/athenajs-documentation/)
+- [Gods](https://athenajs.github.io/athenajs-gods/)
 - [Tetris](https://github.com/AthenaJS/athenajs-samples)
 
 ## Contributing
