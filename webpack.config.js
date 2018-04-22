@@ -16,6 +16,7 @@ module.exports = {
         library: 'AthenaJS',
         libraryTarget: 'umd'
     },
+    mode: 'development',
     devtool: 'source-map',
     module: {
         rules: [

@@ -786,9 +786,10 @@ class Drawable {
      */
     animate(fxName, options) {
         let fxClass = FX.getEffect(fxName),
-            promise = new Deferred().resolve(),
+            promise = null,
             easing = options.easing || 'linear',
             fx;
+
 
         if (typeof this.fxQueue[fxName] !== 'undefined') {
             console.warn('Fx', fxName, 'already in progress, cannot execute twice');
@@ -807,7 +808,8 @@ class Drawable {
             this.fxQueue[fxName] = fx;
         }
 
-        return promise;
+        // return effect promuise or immediately resolve promise
+        return promise || Deferred.resolve();
     }
 
     /**
