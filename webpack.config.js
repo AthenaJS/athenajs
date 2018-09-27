@@ -1,9 +1,6 @@
 var path = require('path'),
-    webpack = require('webpack'),
     WebpackNotifierPlugin = require('webpack-notifier'),
     CircularDependencyPlugin = require('circular-dependency-plugin');
-
-console.log(path.join(__dirname, './docs/assets/athenajs.png'));
 
 module.exports = {
     entry: [
@@ -16,20 +13,21 @@ module.exports = {
         library: 'AthenaJS',
         libraryTarget: 'umd'
     },
-    // mode: 'development',
+    mode: 'development',
     devtool: 'source-map',
     module: {
         rules: [
             { test: /fpscounter/, loader: 'exports-loader?fpscounter' },
             { test: /virtualJoystick/, loader: 'exports-loader?VirtualJoystick' },
-            { test: /\.js$/, loader: 'babel-loader', exclude: [/node_modules/] }
+            { test: /\.js$/, loader: 'babel-loader', exclude: [/node_modules/], options: {
+                presets: ['@babel/preset-env'], }
+            }
         ]
     },
     resolve: {
-        modules: ['node_modules'],
-        alias: {
-            'toto': path.resolve(__dirname, './node_modules/athena/js/athena-module.js')
-        }
+        modules: [
+            'node_modules'
+        ]
     },
     plugins: [
         new CircularDependencyPlugin({

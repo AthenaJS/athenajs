@@ -28,21 +28,23 @@
         "check": "tsc --allowJs --checkJs ./js/athena-module.js"
     },
     "devDependencies": {
-        "babel-core": "6.24.1",
-        "babel-jest": "^21.2.0",
-        "babel-loader": "6.4.1",
-        "babel-preset-es2015": "6.24.1",
+        "@babel/core": "^7.1.0",
+        "@babel/preset-env": "^7.1.0",
+        "babel-core": "^7.0.0-bridge.0",
+        "babel-loader": "^8.0.2",
+        "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
         "circular-dependency-plugin": "2.0.0",
-        "exports-loader": "0.6.4",
-        "imports-loader": "0.7.1",
-        "jest-cli": "^21.2.1",
+        "docma": "1.5.2",
+        "exports-loader": "^0.7.0",
+        "imports-loader": "^0.8.0",
+        "jest-cli": "^23.6.0",
         "jsdoc": "^3.5.5",
-        "typescript": "^2.5.3",
-        "uglifyjs-webpack-plugin": "^0.4.6",
-        "webpack": "2.3.3",
-        "webpack-notifier": "1.5.0",
         "node-notifier": "5.1.2",
-        "docma": "1.5.2"
+        "typescript": "^2.5.3",
+        "webpack": "^4.19.1",
+        "webpack-cli": "^3.1.1",
+        "webpack-dev-server": "^3.1.8",
+        "webpack-notifier": "1.5.0"
     },
     "dependencies": {
         "es6-promise": "4.1.0",
@@ -53,5 +55,8 @@
         "transform": {
             "^.+\\.js$": "babel-jest"
         }
+    },
+    "resolutions": {
+        "babel-core": "7.0.0-bridge.0"
     }
 }
