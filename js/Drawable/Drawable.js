@@ -113,6 +113,10 @@ class Drawable {
         }
     }
 
+    getProperty(prop) {
+        return this._settings.data[prop];
+    }
+
     /**
      * User customized reset method
      */
@@ -504,7 +508,7 @@ class Drawable {
 
     /**
      * Returns the angle property of the object.
-     * 
+     *
      * @returns {Number} The angle of the object
      */
     getAngle() {

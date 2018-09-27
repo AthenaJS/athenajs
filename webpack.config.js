@@ -16,7 +16,7 @@ module.exports = {
         library: 'AthenaJS',
         libraryTarget: 'umd'
     },
-    mode: 'development',
+    // mode: 'development',
     devtool: 'source-map',
     module: {
         rules: [
@@ -33,9 +33,9 @@ module.exports = {
     },
     plugins: [
         new CircularDependencyPlugin({
-            // exclude detection of files based on a RegExp 
+            // exclude detection of files based on a RegExp
             exclude: /a\.js/,
-            // add errors to webpack instead of warnings 
+            // add errors to webpack instead of warnings
             failOnError: true
         }),
         new WebpackNotifierPlugin({
