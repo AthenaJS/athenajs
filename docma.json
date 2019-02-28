@@ -37,7 +37,7 @@
         "base": "/athenajs-documentation"
     },
     "template": {
-        "path": "./docma-template",
+        "path": "./docma-template-athenajs",
         "options": {
             "title": "AthenaJS",
             "sidebar": true,
@@ -50,26 +50,26 @@
             "propertiesLast": true,
             "typeDefinitionLink": true,
             "search": true,
-             "navbar": true,
-             "navItems": [
-                 {
-                     "iconClass": "fas fa-home",
-                     "label": "Home",
-                     "href": "./"
-                 },
-                 {
-                     "iconClass": "fas fa-code",
-                     "label": "Getting Started",
-                     "href": "?content=start"
-                 },                 
-                 {
-                     "iconClass": "fas fa-list",
-                     "label": "API",
-                     "items": [
-                         {
-                             "label": "Game",
-                             "href": "?api=game"
-                         },
+            "navbar": true,
+            "navItems": [
+                {
+                    "iconClass": "fas fa-home",
+                    "label": "Home",
+                    "href": "./"
+                },
+                {
+                    "iconClass": "fas fa-code",
+                    "label": "Getting Started",
+                    "href": "?content=start"
+                },
+                {
+                    "iconClass": "fas fa-list",
+                    "label": "API",
+                    "items": [
+                        {
+                            "label": "Game",
+                            "href": "?api=game"
+                        },
                         {
                             "label": "Scene",
                             "href": "?api=scene"
@@ -96,9 +96,9 @@
                             "label": "Map",
                             "href": "?api=map"
                         },
-                         {
-                             "separator": true
-                         },
+                        {
+                            "separator": true
+                        },
                         {
                             "label": "AudioManager",
                             "href": "?api=audio"
@@ -116,14 +116,14 @@
                             "href": "?api=resource"
                         },
                         {
-                             "separator": true
-                         },
-                         {
+                            "separator": true
+                        },
+                        {
                             "label": "Utils",
                             "href": "?api=utils"
-                         }
-                     ]
-                 },
+                        }
+                    ]
+                },
                 {
                     "iconClass": "fas fa-gamepad",
                     "label": "Made with AthenaJS",
@@ -134,7 +134,7 @@
                     "label": "GitHub",
                     "href": "https://github.com/AthenaJS/athenajs"
                 }
-             ]
+            ]
         }
     },
     "src": [
@@ -149,7 +149,7 @@
         },
         {
             "behaviors": "./js/Drawable/Behavior/*.js"
-        },        
+        },
         {
             "fx": "./js/FX/**/*.js"
         },
@@ -180,6 +180,6 @@
         {
             "made_with_athenajs": "MADE_WITH_ATHENA.md"
         }
-        ],
+    ],
     "dest": "./docs"
 }

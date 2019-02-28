@@ -8,3 +8,5 @@ node_modules
 bower_components
 bundle.js
 .happypack
+docma-template-athenajs/template/css/styles.css
+docma-template-athenajs/template/js/app.min.js

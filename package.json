@@ -25,6 +25,7 @@
         "start": "webpack --watch",
         "build": "webpack --config webpack.production.config.js",
         "build-docs": "docma -c ./docma.json",
+        "serve-docs": "docma serve -b athenajs-documentation",
         "check": "tsc --allowJs --checkJs ./js/athena-module.js"
     },
     "devDependencies": {
@@ -33,16 +34,16 @@
         "babel-loader": "6.4.1",
         "babel-preset-es2015": "6.24.1",
         "circular-dependency-plugin": "2.0.0",
+        "docma": "^2.1.0",
         "exports-loader": "0.6.4",
         "imports-loader": "0.7.1",
         "jest-cli": "^21.2.1",
         "jsdoc": "^3.5.5",
+        "node-notifier": "5.1.2",
         "typescript": "^2.5.3",
         "uglifyjs-webpack-plugin": "^0.4.6",
         "webpack": "2.3.3",
-        "webpack-notifier": "1.5.0",
-        "node-notifier": "5.1.2",
-        "docma": "1.5.2"
+        "webpack-notifier": "1.5.0"
     },
     "dependencies": {
         "es6-promise": "4.1.0",

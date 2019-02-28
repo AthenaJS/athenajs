@@ -12,7 +12,7 @@
  * @example
  *
  * // example state of InputManager.keyPressed where `up` key is down and `down` key has just been released:
- * { 32: true, 40: false}
+ * { 32: true, 40: false }
  *
  */
 
@@ -34,7 +34,7 @@ const InputManager = {
      * List of common pad buttons
      */
     PAD_BUTTONS: {
-        32: 1, // Face (main) buttons
+        '32': 1, // Face (main) buttons
         FACE_0: 1,
         FACE_3: 2,
         FACE_4: 3,
@@ -46,10 +46,10 @@ const InputManager = {
         START: 9,
         LEFT_ANALOGUE_STICK: 10, // Analogue sticks (if depressible)
         RIGHT_ANALOGUE_STICK: 11,
-        38: 12, // Directional (discrete) pad
-        40: 13,
-        37: 14,
-        39: 15
+        '38': 12, // Directional (discrete) pad
+        '40': 13,
+        '37': 14,
+        '39': 15
     },
     axes: {
 
@@ -163,14 +163,14 @@ const InputManager = {
             this.playingEvents = false;
             // TODO: reset keys so that movement does not continue
             this.keyPressed = {
-                38: false,
-                40: false,
-                37: false,
-                39: false,
-                32: false,
-                13: false,
-                27: false,
-                17: false
+                '38': false,
+                '40': false,
+                '37': false,
+                '39': false,
+                '32': false,
+                '13': false,
+                '27': false,
+                '17': false
             };
             console.log('[InputManager] Reached the end of recorded events, resetting keys status to default!');
         } else {

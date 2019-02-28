@@ -9,7 +9,7 @@
     // ---------------------------
 
     var MDNLinks = {
-        GlobalObjects:{
+        GlobalObjects: {
             items: [
                 'Object',
                 'Number',
@@ -41,12 +41,12 @@
         var types = str.split(/[|<]/),
             html = str.replace('<', '&lt;').replace('>', '&gt;');
 
-        types.forEach((type) => {
+        types.forEach(function (type) {
             var objectType = type.replace(/[()<>]/g, '');
 
-            Object.keys(docma.apis).forEach(function(api) {
+            Object.keys(docma.apis).forEach(function (api) {
                 var docs = api.documentation,
-                    index = docs.findIndex((doc) => {
+                    index = docs.findIndex(function (doc) {
                         return doc.name === objectType;
                     });
 
@@ -70,12 +70,12 @@
             html = str.replace('<', '&lt;').replace('>', '&gt;'),
             links = [];
 
-        types.forEach((type) => {
+        types.forEach(function (type) {
             var objectType = type.replace(/[()<>]/g, '');
 
-            Object.keys(docma.apis).forEach(function(api) {
+            Object.keys(docma.apis).forEach(function (api) {
                 var docs = docma.apis[api].documentation,
-                    index = docs.findIndex((doc) => {
+                    index = docs.findIndex(function (doc) {
                         return doc.name === objectType;
                     });
 
@@ -93,7 +93,7 @@
             }
 
             // find JavaScript native Object Types
-            Object.keys(MDNLinks).forEach(function(api) {
+            Object.keys(MDNLinks).forEach(function (api) {
                 var items = MDNLinks[api].items,
                     index = items.indexOf(objectType);
 
@@ -107,7 +107,7 @@
             });
         });
 
-        for (let i = 0; i < links.length; ++i) {
+        for (var i = 0; i < links.length; ++i) {
             html = html.replace(links[i].type, '<a href="' + links[i].link + '">' + links[i].type + '</a>');
         }
 
@@ -128,27 +128,27 @@
                 + '</div>';
         }
 
-        if (docma.utils.isClass(symbol)) return html('diamond bg-green', 'Class', 'C');
-        if (docma.utils.isNamespace(symbol)) return html('diamond bg-red', 'Namespace', 'N');
-        if (docma.utils.isModule(symbol)) return html('diamond bg-pink', 'Module', 'M');
-        if (docma.utils.isEnum(symbol)) return html('square bg-purple', 'Enum', 'E');
-        if (docma.utils.isGlobal(symbol)) {
-            if (docma.utils.isMethod(symbol)) return html('diamond bg-accent', 'Global Function', 'G');
+        if (DocmaWeb.Utils.isClass(symbol)) return html('diamond bg-green', 'Class', 'C');
+        if (DocmaWeb.Utils.isNamespace(symbol)) return html('diamond bg-red', 'Namespace', 'N');
+        if (DocmaWeb.Utils.isModule(symbol)) return html('diamond bg-pink', 'Module', 'M');
+        if (DocmaWeb.Utils.isEnum(symbol)) return html('square bg-purple', 'Enum', 'E');
+        if (DocmaWeb.Utils.isGlobal(symbol)) {
+            if (DocmaWeb.Utils.isMethod(symbol)) return html('diamond bg-accent', 'Global Function', 'G');
             return html('diamond bg-red', 'Global Object', 'G');
         }
-        if (docma.utils.isInner(symbol)) {
-            if (docma.utils.isMethod(symbol)) return html('circle bg-gray-dark', 'Inner Method', 'M');
+        if (DocmaWeb.Utils.isInner(symbol)) {
+            if (DocmaWeb.Utils.isMethod(symbol)) return html('circle bg-gray-dark', 'Inner Method', 'M');
             return html('circle bg-gray-dark', 'Inner', 'I');
         }
-        if (docma.utils.isStaticProperty(symbol)) return html('square bg-orange', 'Static Property', 'P');
-        if (docma.utils.isInstanceProperty(symbol)) return html('circle bg-yellow', 'Instance Property', 'P');
-        if (docma.utils.isStaticMethod(symbol)) return html('square bg-accent', 'Static Method', 'M');
-        if (docma.utils.isInstanceMethod(symbol)) return html('circle bg-cyan', 'Instance Method', 'M');
+        if (DocmaWeb.Utils.isStaticProperty(symbol)) return html('square bg-orange', 'Static Property', 'P');
+        if (DocmaWeb.Utils.isInstanceProperty(symbol)) return html('circle bg-yellow', 'Instance Property', 'P');
+        if (DocmaWeb.Utils.isStaticMethod(symbol)) return html('square bg-accent', 'Static Method', 'M');
+        if (DocmaWeb.Utils.isInstanceMethod(symbol)) return html('circle bg-cyan', 'Instance Method', 'M');
         return '';
     }
 
     function _getSymbolType(symbol) {
-        if (docma.utils.isClass(symbol) || docma.utils.isGlobal(symbol)) {
+        if (DocmaWeb.Utils.isClass(symbol) || DocmaWeb.Utils.isGlobal(symbol)) {
             return 'root';
         } else {
             return 'child';
@@ -175,8 +175,8 @@
 
     function _getRefSymbol(symbolName) {
         var docs = docma.documentation,
-            symbol = docma.utils.getSymbolByName(docs, symbolName);
-        if (docma.utils.isStatic(symbol) || docma.utils.isProperty(symbol)) {
+            symbol = DocmaWeb.Utils.getSymbolByName(docs, symbolName);
+        if (DocmaWeb.Utils.isStatic(symbol) || DocmaWeb.Utils.isProperty(symbol)) {
             return symbolName.split('.')[0];
         } else {
             return symbolName.split('#')[0];
@@ -187,7 +187,7 @@
         if (!list || list.length === 0) return '';
         var desc;
         var pList = list.map(function (item) {
-            desc = docma.utils.parse(item.description || '', { keepIfSingle: true });
+            desc = DocmaWeb.Utils.parse(item.description || '', { keepIfSingle: true });
             if (desc) desc = '&nbsp;&nbsp;—&nbsp;&nbsp;' + desc;
             return _getTypeLink(item.type.names.join('|')) + desc; // '<code>' + item.type.names.join('|') + '</code>' + desc;
         });
@@ -209,7 +209,7 @@
             var re = /(.*)([.#~:]\w+)/g,
                 match = re.exec(name);
             // if (!match) {
-                return '<b>' + name + '</b>';
+            return '<b>' + name + '</b>';
             // }
             return '<span class="color-gray">' + _colorOperators(match[1]) + '</span>' + _colorOperators(match[2]);
         })
@@ -218,17 +218,18 @@
             return authors.join(', ');
         })
         .addFilter('$type', function (symbol) {
-            if (docma.utils.isConstructor(symbol)) return '';
+            var docs = docma.documentation;
+            if (DocmaWeb.Utils.isConstructor(symbol)) return '';
             if (symbol.kind === 'function') {
-                var returnTypes = docma.utils.getReturnTypes(symbol);
+                var returnTypes = DocmaWeb.Utils.getReturnTypes(docs, symbol);
                 return returnTypes ? returnTypes : '';
             }
-            var types = docma.utils.getTypes(symbol);
-            
+            var types = DocmaWeb.Utils.getTypes(docs, symbol);
+
             return types ? types : '';
         })
         .addFilter('$type_sep', function (symbol) {
-            if (docma.utils.isConstructor(symbol)) return '';
+            if (DocmaWeb.Utils.isConstructor(symbol)) return '';
             if (symbol.kind === 'function') return '⇒';
             if (symbol.kind === 'class') return ':';
             if (!symbol.type && !symbol.returns) return '';
@@ -242,16 +243,16 @@
                 str += param.description;
             }
 
-            return docma.utils.parse(str);
+            return DocmaWeb.Utils.parse(str);
         })
         .addFilter('$longname', function (symbol) {
             if (typeof symbol === 'string') return symbol;
-            var nw = docma.utils.isConstructor(symbol) ? 'new ' : '';
-            return nw + symbol.$longname; // docma.utils.getFullName(symbol);
+            var nw = DocmaWeb.Utils.isConstructor(symbol) ? 'new ' : '';
+            return nw + symbol.$longname; // DocmaWeb.Utils.getFullName(symbol);
         })
         .addFilter('$longname_params', function (symbol) {
-            var isCon = docma.utils.isConstructor(symbol),
-                longName = _colorOperators(symbol.name); // docma.utils.getFullName(symbol);
+            var isCon = DocmaWeb.Utils.isConstructor(symbol),
+                longName = _colorOperators(symbol.name); // DocmaWeb.Utils.getFullName(symbol);
             if (symbol.kind === 'function' || isCon) {
                 var defVal,
                     defValHtml = '',
@@ -277,17 +278,17 @@
         })
         .addFilter('$extends', function (symbol) {
             var ext = Array.isArray(symbol) ? symbol : symbol.augments;
-            return ext.map((name) => _getTypeLink(name)).join(', ');
+            return ext.map(function (name) { _getTypeLink(name) }).join(', ');
         })
         .addFilter('$returns', function (symbol) {
             var returns = Array.isArray(symbol) ? symbol : symbol.returns;
             return listTypeDesc(returns);
-            // return docma.utils.listTypeDesc(returns);
+            // return DocmaWeb.Utils.listTypeDesc(returns);
         })
         .addFilter('$exceptions', function (symbol) {
             var exceptions = Array.isArray(symbol) ? symbol : symbol.exceptions;
             return listTypeDesc(exceptions);
-            // return docma.utils.listTypeDesc(exceptions);
+            // return DocmaWeb.Utils.listTypeDesc(exceptions);
         })
         // non-standard JSDoc directives are stored in `.tags` property of a
         // symbol. We also add other properties such as .access (if not public),
@@ -302,40 +303,40 @@
                 close = '</span>',
                 tagBoxes = [];
 
-            if (docma.utils.isDeprecated(symbol)) {
+            if (DocmaWeb.Utils.isDeprecated(symbol)) {
                 tagBoxes.push(open6 + 'deprecated' + close);
             }
-            if (docma.utils.isGlobal(symbol) && !docma.utils.isConstructor(symbol)) {
+            if (DocmaWeb.Utils.isGlobal(symbol) && !DocmaWeb.Utils.isConstructor(symbol)) {
                 tagBoxes.push(open + 'global' + close);
             }
-            if (docma.utils.isStatic(symbol)) {
+            if (DocmaWeb.Utils.isStatic(symbol)) {
                 tagBoxes.push(open5 + 'static' + close);
             }
-            if (docma.utils.isPublic(symbol) === false) {
+            if (DocmaWeb.Utils.isPublic(symbol) === false) {
                 tagBoxes.push(open4 + symbol.access + close);
             }
-            if (docma.utils.isNamespace(symbol)) {
+            if (DocmaWeb.Utils.isNamespace(symbol)) {
                 tagBoxes.push(open + 'namespace' + close);
             }
-            if (docma.utils.isReadOnly(symbol)) {
+            if (DocmaWeb.Utils.isReadOnly(symbol)) {
                 tagBoxes.push(open3 + 'readonly' + close);
             }
 
             var tags = Array.isArray(symbol) ? symbol : symbol.tags || [],
-                tagTitles = tags.filter((tag) => { return !tag || tag.originalTitle.match(/obsolete/); } )
-                .map(function (tag) {
-                    return open2 + tag.originalTitle + close;
-                });
+                tagTitles = tags.filter(function (tag) { return !tag || tag.originalTitle.match(/obsolete/); })
+                    .map(function (tag) {
+                        return open2 + tag.originalTitle + close;
+                    });
             tagBoxes = tagBoxes.concat(tagTitles);
             if (tagBoxes.length) return '&nbsp;&nbsp;' + tagBoxes.join('&nbsp;');
             return '';
         })
         .addFilter('$menuitem', function (symbolName) {
             var docs = docma.documentation,
-                symbol = docma.utils.getSymbolByName(docs, symbolName);
+                symbol = DocmaWeb.Utils.getSymbolByName(docs, symbolName);
             if (!symbol) return symbolName;
             var id = dust.filters.$id(symbol),
-                keywords = docma.utils.getKeywords(symbol),
+                keywords = DocmaWeb.Utils.getKeywords(symbol),
                 symbolType = _getSymbolType(symbol),
                 refSymbol = _getRefSymbol(symbolName),
                 badge = docma.template.options.badges
@@ -350,50 +351,50 @@
             return '<a href="#' + id + '" data-ref-symbol="' + refSymbol + '" class="sidebar-item ' + symbolType + '" data-keywords="' + keywords + '">' + badge + name + '</a>';
 
         })
-        .addFilter('$get_type', function(symbol) {
-            switch(true) {
-                case docma.utils.isConstructor(symbol):
+        .addFilter('$get_type', function (symbol) {
+            switch (true) {
+                case DocmaWeb.Utils.isConstructor(symbol):
                     return 'constructor';
 
-                case docma.utils.isClass(symbol):
-                case docma.utils.isGlobal(symbol):
+                case DocmaWeb.Utils.isClass(symbol):
+                case DocmaWeb.Utils.isGlobal(symbol):
                     return 'class';
 
                 default:
                     return 'unknown';
             }
         })
-        .addFilter('$get_last_part', function(symbol) {
+        .addFilter('$get_last_part', function (symbol) {
             var split = '';
-            if (docma.utils.isStatic(symbol)) {
+            if (DocmaWeb.Utils.isStatic(symbol)) {
                 split = symbol.split('.');
             } else {
                 split = symbol.split('#');
             }
 
-            return split.length && split[split.length -1] || symbol;
+            return split.length && split[split.length - 1] || symbol;
         })
-        .addFilter('$ref', function(symbol) {
-            if (docma.utils.isMethod(symbol)) {
+        .addFilter('$ref', function (symbol) {
+            if (DocmaWeb.Utils.isMethod(symbol)) {
                 return symbol.$longname.split('#')[0];
             } else {
                 return symbol.$longname.split('.')[0];
             }
         })
-        .addFilter('$clean_ref', function(symbol) {
+        .addFilter('$clean_ref', function (symbol) {
             return symbol.$longname.replace(/\./g, '-');
         })
-        .addFilter('$get_type_link', function(types) {
+        .addFilter('$get_type_link', function (types) {
             if (docma.template.options.typeDefinitionLink) {
                 return _getTypeLink(types);
             } else {
                 return types;
             }
         });
-        // .addFilter('$my_desc', function(symbol) {
-        //     debugger;
-        //     return docma.utils.parse(symbol.classdesc || symbol.description || '');
-        // });
+    // .addFilter('$my_desc', function(symbol) {
+    //     debugger;
+    //     return DocmaWeb.Utils.parse(symbol.classdesc || symbol.description || '');
+    // });
 
     // ---------------------------
     // INITIALIZATION
@@ -443,8 +444,8 @@
 
     function sortProperties(members) {
         // get list of properties
-        var methods = members.filter((member) => member.kind !== 'member'),
-            properties = members.filter((member) => member.kind === 'member');
+        var methods = members.filter(function (member) { return member.kind !== 'member' }),
+            properties = members.filter(function (member) { return member.kind === 'member' });
 
         return methods.concat(properties);
     }
@@ -506,7 +507,7 @@
         if (docma.template.options.collapseSymbols) {
             $('.sidebar-nav').addClass('collapse-def');
             // click on a class to expand/collapse
-            $('.sidebar-nav-container').on('click', '.sidebar-item', function(event) {
+            $('.sidebar-nav-container').on('click', '.sidebar-item', function (event) {
                 var selector = '';
                 if ($(this).hasClass('root')) {
                     var ref = $(this).data('refSymbol');
