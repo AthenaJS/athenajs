@@ -37,104 +37,112 @@
         "base": "/athenajs-documentation"
     },
     "template": {
-        "path": "./docma-template-athenajs",
+        "path": "docma-template-athenajs",
         "options": {
             "title": "AthenaJS",
-            "sidebar": true,
-            "collapsed": false,
-            "outline": "tree",
-            "badges": true,
-            "symbolMeta": true,
-            "collapseSymbols": true,
-            "collapseDefinition": true,
-            "propertiesLast": true,
-            "typeDefinitionLink": true,
-            "search": true,
-            "navbar": true,
-            "navItems": [
-                {
-                    "iconClass": "fas fa-home",
-                    "label": "Home",
-                    "href": "./"
-                },
-                {
-                    "iconClass": "fas fa-code",
-                    "label": "Getting Started",
-                    "href": "?content=start"
-                },
-                {
-                    "iconClass": "fas fa-list",
-                    "label": "API",
-                    "items": [
-                        {
-                            "label": "Game",
-                            "href": "?api=game"
-                        },
-                        {
-                            "label": "Scene",
-                            "href": "?api=scene"
-                        },
-                        {
-                            "separator": true
-                        },
-                        {
-                            "label": "Drawable",
-                            "href": "?api=drawable"
-                        },
-                        {
-                            "label": "Behaviors",
-                            "href": "?api=behaviors"
-                        },
-                        {
-                            "label": "Effects",
-                            "href": "?api=fx"
-                        },
-                        {
-                            "separator": true
-                        },
-                        {
-                            "label": "Map",
-                            "href": "?api=map"
-                        },
-                        {
-                            "separator": true
-                        },
-                        {
-                            "label": "AudioManager",
-                            "href": "?api=audio"
-                        },
-                        {
-                            "label": "InputManager",
-                            "href": "?api=input"
-                        },
-                        {
-                            "label": "NotificationManager",
-                            "href": "?api=notification"
-                        },
-                        {
-                            "label": "ResourceManager",
-                            "href": "?api=resource"
-                        },
-                        {
-                            "separator": true
-                        },
-                        {
-                            "label": "Utils",
-                            "href": "?api=utils"
-                        }
-                    ]
-                },
-                {
-                    "iconClass": "fas fa-gamepad",
-                    "label": "Made with AthenaJS",
-                    "href": "?content=made_with_athenajs"
-                },
-                {
-                    "iconClass": "fab fa-github",
-                    "label": "GitHub",
-                    "href": "https://github.com/AthenaJS/athenajs"
-                }
-            ]
+            "sidebar": {
+                "enabled": true,
+                "itemsFolded": true,
+                "animations": false,
+                "toolbar": false,
+                "outline": "tree",
+                "badges": true,
+                "search": true
+            },
+            "symbols": {
+                "meta": true
+            },
+            "navbar": {
+                "menu": [
+                    {
+                        "iconClass": "fas fa-home",
+                        "label": "Home",
+                        "href": "./"
+                    },
+                    {
+                        "iconClass": "fas fa-code",
+                        "label": "Getting Started",
+                        "href": "?content=start"
+                    },
+                    {
+                        "iconClass": "fas fa-list",
+                        "label": "API",
+                        "items": [
+                            {
+                                "label": "Game",
+                                "href": "?api=game"
+                            },
+                            {
+                                "label": "Scene",
+                                "href": "?api=scene"
+                            },
+                            {
+                                "separator": true
+                            },
+                            {
+                                "label": "Drawable",
+                                "href": "?api=drawable"
+                            },
+                            {
+                                "label": "Behaviors",
+                                "href": "?api=behaviors"
+                            },
+                            {
+                                "label": "Effects",
+                                "href": "?api=fx"
+                            },
+                            {
+                                "separator": true
+                            },
+                            {
+                                "label": "Map",
+                                "href": "?api=map"
+                            },
+                            {
+                                "separator": true
+                            },
+                            {
+                                "label": "AudioManager",
+                                "href": "?api=audio"
+                            },
+                            {
+                                "label": "InputManager",
+                                "href": "?api=input"
+                            },
+                            {
+                                "label": "NotificationManager",
+                                "href": "?api=notification"
+                            },
+                            {
+                                "label": "ResourceManager",
+                                "href": "?api=resource"
+                            },
+                            {
+                                "separator": true
+                            },
+                            {
+                                "label": "Utils",
+                                "href": "?api=utils"
+                            }
+                        ]
+                    },
+                    {
+                        "iconClass": "fas fa-gamepad",
+                        "label": "Made with AthenaJS",
+                        "href": "?content=made_with_athenajs"
+                    },
+                    {
+                        "iconClass": "fab fa-github",
+                        "label": "GitHub",
+                        "href": "https://github.com/AthenaJS/athenajs"
+                    },
+                    {
+                        "iconClass": "fas fa-search",
+                        "label": "",
+                        "onClick": "showSearch(); return false;"
+                    }
+                ]
+            }
         }
     },
     "src": [

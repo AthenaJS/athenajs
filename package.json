@@ -25,7 +25,7 @@
         "start": "webpack --watch",
         "build": "webpack --config webpack.production.config.js",
         "build-docs": "docma -c ./docma.json",
-        "serve-docs": "docma serve -b athenajs-documentation",
+        "serve-docs": "docma serve -b /athenajs-documentation",
         "check": "tsc --allowJs --checkJs ./js/athena-module.js"
     },
     "devDependencies": {

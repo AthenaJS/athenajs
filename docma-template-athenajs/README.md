@@ -1,10 +1,5 @@
-## Docma AthenaJS Template
+Docma template for AthenaJS which is basically Docma's default [Zebra](https://onury.io/docma/templates/zebra) template with a few modifications:
 
-> © 2017, Nicolas Ramz (@warpdesign). MIT License.
-
-This template is based on Docma's [default template](https://github.com/onury/docma/tree/master/templates/default), it adds options for collapsing symbols, autoscroll to symbol description when reloading the page and some small tweaks.
-
-Read [documentation](https://athenajs.github.io/athenajs-documentation/) and see how it looks.
-
-[docma]:https://github.com/onury/docma
-[template-docs]:https://onury.github.io/docma/?content=default-template
+ - toggle tree when clicking on the full label
+ - use table for parameters which are more easier have a quick glance at
+ - collapse every definition by default
