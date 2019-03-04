@@ -96,6 +96,10 @@
                                 "href": "?api=drawable"
                             },
                             {
+                                "label": "Drawables",
+                                "href": "?api=drawables"
+                            },
+                            {
                                 "label": "Behaviors",
                                 "href": "?api=behaviors"
                             },

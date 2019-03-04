@@ -1,7 +1,7 @@
 {
   "presets": [
     [
-      "es2015",
+      "@babel/preset-env",
       {
         "modules": false
       }
@@ -10,7 +10,7 @@
   "env": {
     "test": {
       "plugins": [
-        "transform-es2015-modules-commonjs"
+        "@babel/plugin-transform-modules-commonjs"
       ]
     }
   }
