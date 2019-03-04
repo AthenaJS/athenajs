@@ -23,6 +23,7 @@
     transition-property: height;
     transition-duration: 2s;
     transition-timing-function: ease-in-out;
+    background-color:white !important;
   }
 
   #docma-main.hide-search #search-api {
@@ -42,9 +43,14 @@
     word-break: normal !important;
   }
   
-  .navbar-list > li:last-child {
-    position: absolute;
-    left: -54px;
+  .navbar-brand {
+    float:none;
+    position:relative;
+  }
+
+  .navbar-menu{
+    float:none;
+    vertical-align: top;
   }
 
   .navbar-list {
@@ -56,12 +62,26 @@
   }
 
   .navbar .algolia-autocomplete {
-    margin-left: 165px;
+    margin-left: 0;
   }
 
   .navbar.api .algolia-autocomplete {
     margin-left: 300px;
     width: 20%;
+  }
+
+  .navbar-menu{
+    float:none;
+  }
+
+  #docma-main .algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu {
+    left: 0!important;
+    right: inherit!important;
+  }
+
+  #docma-main .algolia-autocomplete.algolia-autocomplete-left .ds-dropdown-menu:before,
+  #docma-main .algolia-autocomplete.algolia-autocomplete-right .ds-dropdown-menu:before {
+    left: 15px;
   }
 
   /* no idea why but results appear incorrectly at the right in this case */
@@ -82,3 +102,32 @@
     background-color: rgba(252, 255, 66, 0.3) !important;
   }
   /* / search */
+
+  /* navbar position */
+  #docma-main.toggled .navbar{
+    left: 300px;
+  }
+
+  #docma-main.toggled .navbar .navbar-brand{
+    display:none;
+  }
+
+  .table-bordered > thead > tr > th,
+  .table-bordered > tbody > tr > td {
+    border: 1px solid #e1e7ea;
+  }
+
+  @media (max-width: 768px) {
+    .navbar-list>li>a{
+      padding: 4px 10px 0;
+      font-size:85%;
+    }
+
+    #docma-main.toggled .navbar{
+      left:0;
+    }
+
+    .navbar-brand{
+      display:none;
+    }
+  }

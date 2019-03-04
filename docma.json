@@ -1,5 +1,5 @@
 {
-    "debug": true,
+    "debug": false,
     "jsdoc": {
         "encoding": "utf8",
         "recurse": true,
@@ -40,6 +40,7 @@
         "path": "docma-template-athenajs",
         "options": {
             "title": "AthenaJS",
+            "logo": "img/athena-logo.png",
             "sidebar": {
                 "enabled": true,
                 "itemsFolded": true,
@@ -50,10 +51,16 @@
                 "search": true
             },
             "symbols": {
-                "meta": true
+                "meta": true,
+                "params": "table"
             },
             "navbar": {
                 "menu": [
+                    {
+                        "iconClass": "fas fa-search",
+                        "label": "",
+                        "onClick": "showSearch(); return false;"
+                    },
                     {
                         "iconClass": "fas fa-home",
                         "label": "Home",
@@ -135,11 +142,6 @@
                         "iconClass": "fab fa-github",
                         "label": "GitHub",
                         "href": "https://github.com/AthenaJS/athenajs"
-                    },
-                    {
-                        "iconClass": "fas fa-search",
-                        "label": "",
-                        "onClick": "showSearch(); return false;"
                     }
                 ]
             }

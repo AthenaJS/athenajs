@@ -8,7 +8,6 @@
             apiKey: '410b8fb234ff5ab408196198a7803054',
             indexName: 'athenajs_documentation',
             inputSelector: '#search-api',
-            debug: true,
             autocompleteOptions: {
                 autoselect: true
             }

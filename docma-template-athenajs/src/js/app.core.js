@@ -16,6 +16,7 @@ var app = window.app || {};
     var $nbmBtn, $navOverlay, $navbarMenu, $navbarBrand, $navbarInner, $navbarList;
     var $btnSwitchFold, $btnSwitchOutline;
     var $scopeFilters, $scopeFilterBtns, $kindFilters, $kindFilterBtns;
+    var $docmaMain;
     var navbarMenuActuallWidth;
     var isFilterActive = false;
     // current fold state
@@ -378,6 +379,7 @@ var app = window.app || {};
         });
         $('table:empty').remove();
 
+        $docmaMain = $('#docma-main');
         $wrapper = $('#wrapper');
         $sidebarWrapper = $('#sidebar-wrapper');
         // $pageContentWrapper = $('#page-content-wrapper');
@@ -428,11 +430,11 @@ var app = window.app || {};
             });
 
             // debounce/break navbar menu on window resize
-            var deBreakNavbarMenu = helper.debounce(breakNavbarMenu, 50, false);
-            setTimeout(function () {
-                breakNavbarMenu(); // initial
-                $(window).on('resize', deBreakNavbarMenu);
-            }, 300); // need a bit delay to get proper navbarMenuActuallWidth
+            // var deBreakNavbarMenu = helper.debounce(breakNavbarMenu, 50, false);
+            // setTimeout(function () {
+            //     breakNavbarMenu(); // initial
+            //     $(window).on('resize', deBreakNavbarMenu);
+            // }, 300); // need a bit delay to get proper navbarMenuActuallWidth
 
             // don't navigate to /#
             $navbarList.find('a[href="#"]').on('click', function (event) {
@@ -602,12 +604,14 @@ var app = window.app || {};
             if (!templateOpts.sidebar.collapsed) {
                 $wrapper.addClass('toggled');
                 $sidebarToggle.addClass('toggled');
+                $docmaMain.addClass('toggled');
             }
 
             $sidebarToggle.on('click', function (event) {
                 event.preventDefault();
                 $wrapper.toggleClass('toggled');
                 $sidebarToggle.toggleClass('toggled');
+                $docmaMain.toggleClass('toggled');
             });
 
             $('.chevron').on('click', function () {
@@ -711,18 +715,30 @@ var app = window.app || {};
             }
         });
 
-        if (document.location.hash) {
-            var ref = document.location.hash.substr(1).replace(/\./g, '-');
-            // trigger will expand the selected element
-            $('.row .symbol > a[data-ref-symbol=' + ref + ']').trigger('click', true);
-            // we need to trigger hash change to position the scrolling on this element
-            // because triggring a click won't position the scroll on the triggered anchor
-            var oldLocation = document.location.hash;
-            document.location.hash = '';
-            document.location.hash = oldLocation;
-        } else {
-            document.body.scrollIntoView(true);
+        if (document.location.search.match(/^\?api/)) {
+            var href = document.location.search + document.location.hash;
+            setTimeout(function () {
+                $('a[href$="' + href + '"]').trigger('click', true);
+            }, 1000);
+            // var link = document.querySelector('a[href$="' + href + '"]');
+            // if (link) {
+            //     $(link).trigger('click', true);
+            // }
         }
+        // if (document.location.hash) {
+        //     debugger;
+        //     var ref = document.location.hash.substr(1).replace(/\./g, '-');
+        //     // trigger will expand the selected element
+        //     $('.row .symbol > a[data-ref-symbol=' + ref + ']').trigger('click', true);
+        //     // we need to trigger hash change to position the scrolling on this element
+        //     // because triggring a click won't position the scroll on the triggered anchor
+        //     var oldLocation = document.location.hash;
+        //     document.location.hash = '';
+        //     document.location.hash = oldLocation;
+        // }
+        // else {
+        //     document.body.scrollIntoView(true);
+        // }
 
     });
 

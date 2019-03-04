@@ -89,7 +89,7 @@ body {
 
     box-shadow: 0px 1px 30px 10px rgba(0,0,0,.02);                  // acts like gradient transition to page body
     border-bottom: @navbar-border-bottom solid rgba(0,0,0,0.05);    // acts like shadow
-    height: @navbar-height + @navbar-border-bottom;                   // +2px for border-bottom
+    min-height: @navbar-height + @navbar-border-bottom;                   // +2px for border-bottom
 
     & > .navbar-inner {
         display: block;
