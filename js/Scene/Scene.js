@@ -4,6 +4,8 @@ import NM from '../Notification/NotificationManager';
 import Input from '../Input/InputManager';
 import Dom from '../Util/Dom';
 import Deferred from '../Util/Deferred';
+
+// debug stuff
 window.scenes = {};
 
 /**
@@ -11,7 +13,8 @@ window.scenes = {};
  * 
  * When you scene is rendered (at 60fps), your objects appear on the screen.
  *
- * Instead of creating a new scene, it is common to extend the Scene class to create your own scene.
+ * <blockquote>Instead of creating a new scene, it is common to extend the Scene class to create your own scene.</blockquote>
+ * 
  * @example
  * import { Scene, SimpleText } from 'athenajs';
  * 
@@ -206,10 +209,11 @@ class Scene {
     /**
      * Adds an image to the scene resource list
      *
+     * <blockquote><strong>Note:</strong> this method should be called in the `setup` method.</blockquote>
+     * 
      * @param {String} src The url of the file to load.
      * @param {String} id The id to use for the image.
      *
-     * @note this method should be called in the `setup` method
      */
     loadImage(src, id = null) {
         this.load('image', src, id || src);
@@ -218,10 +222,11 @@ class Scene {
     /**
      * Adds an audio file to the scene resource list
      *
+     * <blockquote><strong>Note</strong> this method should be called in the `setup` method.</blockquote>
+     * 
      * @param {String} src The url of the file to load.
      * @param {String} id The id to use for the audio file.
      *
-     * @note this method should be called in the `setup` method
      */
     loadAudio(src, id = null) {
         this.load('audio', src, id || src);
@@ -692,9 +697,10 @@ class Scene {
     /**
      * Subscribe to a space-separated list of events.
      *
+     * <blockquote><strong>Note:</strong> events are automatically unbound when changing scene.</blockquote>
+     * 
      * @param {String} eventList The list of events to subscribe to as a space separated string.
      *
-     * @note Events are automatically unbound when changing scene.
      */
     bindEvents(eventList) {
         NM.listen(eventList, this.onEvent.bind(this));

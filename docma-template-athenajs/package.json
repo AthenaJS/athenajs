@@ -1,10 +1,10 @@
 {
-  "name": "docma-template-zebra",
-  "version": "2.3.1",
-  "description": "Zebra - Default template for Docma. https://github.com/onury/docma",
-  "repository": "https://github.com/onury/docma/tree/master/templates/zebra",
+  "name": "docma-template-athenajs",
+  "version": "1.0.0",
+  "description": "AthenaJS Docma template - based on default Zebra template https://github.com/onury/docma",
+  "repository": "https://github.com/athenajs/athenajs/tree/master/docma-template-athenajs",
   "license": "MIT",
-  "author": "Onur Yıldırım <onur@cutepilot.com>",
+  "author": "Nicolas RAMZ <nicolas.ramz@gmail.com>",
   "main": "index.js",
   "files": [
     "template/",
@@ -22,14 +22,11 @@
     "template"
   ],
   "peerDependencies": {
-    "docma": ">=2.0.0"
+    "docma": "^3.2.2"
   },
   "devDependencies": {
     "less": "^3.9.0",
     "less-plugin-clean-css": "^1.5.1",
     "uglify-js": "^3.4.9"
-  },
-  "dependencies": {
-    "docma": "^3.2.2"
   }
 }

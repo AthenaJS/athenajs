@@ -10,6 +10,8 @@ class BitmapText extends Drawable {
     /**
      * Creates a new BitmapText Drawable
      * 
+     * <blockquote><strong>Note:</strong> the charset is limited to a subset of ascii right now: a-z 0-9</blockquote>
+     * 
      * @param {String} [type='BitmapText'] The type of the sprite.
      * @param {Object} options The options describing the BitmapText.
      * @param {String} options.imageId The path to the spritesheet file.
@@ -21,7 +23,6 @@ class BitmapText extends Drawable {
      * @param {Number} [options.startY=0] The optinal vertical offset at which to start getting bitmap characters.
      * @param {Number} [options.startX=0] The optinal hoeizontal offset at which to start getting bitmap characters.
      *
-     * @note the charset is limited to a subset of ascii right now: a-z 0-9
      * @example
      *
      *  let myFont = new BitmapText('myFont', {
@@ -238,13 +239,13 @@ class BitmapText extends Drawable {
     /**
      * Scrolls the current text block
      *
+     * <blockquote><strong>Note:</strong> if a scrolling is already in progress, nothing happens</blockquote>
+     * 
      * @param {Object} options
      * @param {Number} options.targetOffsetX The horizontal destination of the scrolling.
      * @param {Number} options.targetOffsetY The vertical destination of the scrolling.
      * @param {Number} options.duration The duration of the scrolling, in milliseconds.
      * @param {Function} [options.callback=undefined] An optional callback function to call when the scrolling is done.
-     *
-     * @note if a scrolling is already in progress, nothing happens
      *
      * @private
      */
@@ -427,9 +428,10 @@ class BitmapText extends Drawable {
     /**
      * Draws pre-rendered into destination buffer
      *
+     * <blockquote><strong>Note:</strong> once added onto the scene, this method is automatically called at each render loop.</blockquote>
+     * 
      * @param {RenderingContext} destCtx The new cancas context where to draw the bitmap font.
      *
-     * @note: once added onto the scene, this method is automatically called at each render loop.
      *
      * @related {Scene}
      *

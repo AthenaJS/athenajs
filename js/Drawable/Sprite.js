@@ -10,9 +10,9 @@ import Dom from '../Util/Dom';
  * Each animation can have a different frameDuration and any number of frames.
  * Each frame may have a different size and a different hitbox
  *
- * @note Since games usually have multiple sprites of the same type, it's common to extend the Sprite class
+ * <blockquote><strong>Note:</strong> Since games usually have multiple sprites of the same type, it's common to extend the Sprite class
  * to generate each sprite type with its own properties and then use these sprites instead of instanciating
- * the Sprite class.
+ * the Sprite class.</blockquote>
  *
  *
  * @extends Drawable

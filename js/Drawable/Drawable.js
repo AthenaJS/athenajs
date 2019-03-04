@@ -13,6 +13,8 @@ import Deferred from '../Util/Deferred';
  * It can also have an optional behavior which tells Athena how
  * to move an object at each frame.
  *
+ * <blockquote>Usually, you don't need to use the `Drawable` class directly:
+ * you can one of the more high-level {@link ?api=drawables|drawables} classes instead.</blockquote>
  */
 class Drawable {
     /**
@@ -167,10 +169,10 @@ class Drawable {
     /**
      * Sets the map of the object.
      *
+     * <blockquote><strong>Note:</strong> you don't usually need to call this method as it's called automatically when adding an object
+     * onto a map.</blockquote>
+     * 
      * @param {Map} map The map of the object.
-     *
-     * @note you don't usually need to call this method as it's called automatically when adding an object
-     * onto a map.
      *
      */
     setMap(map) {
@@ -184,9 +186,10 @@ class Drawable {
     /**
      * Sets the scene of the object.
      *
+     * <blockquote><strong>Note:</strong></blockquote> you don't usually need to call this method as it's called when adding an object onto a scene.
+     * 
      * @param {Scene} scene The scene of the object.
      *
-     * @note you don't usually need to call this method as it's called when adding an object onto a scene.
      */
     setScene(scene) {
         this.currentScene = scene;
@@ -482,9 +485,10 @@ class Drawable {
     /**
      * Change the scale of the object
      *
+     * <blockquote><strong>Note:</strong> it's only used when rendering, collision detection is not using the scale yet.</blockquote>
+     * 
      * @param {number} scale The new scale of the object.
      *
-     * @note: it's only used when rendering, collision detection is not using the scale yet.
      */
     setScale(scale) {
         this.scale = scale;
@@ -493,9 +497,10 @@ class Drawable {
     /**
      * Change the angle of an object
      *
+     * <blockquote><strong>Note:</strong> this property is only used for the rendering and it's ignored for collisions.</blockquote>
+     * 
      * @param {number} angle The new angle of the object. 0 < angle < 360.
      *
-     * @note This property is only used for the rendering and it's ignored for collisions.
      */
     setAngle(angle) {
         // this.angle = angle * Math.PI / 180;
@@ -871,10 +876,11 @@ class Drawable {
      * Add a new Child to the object.
      *
      * Childs are automatically rendered and moved when the parent object is.
-     *
+     * <blockquote><strong>Note:</strong> children are automatically added to the scene/map of the parent object.</blockquote>
+     * 
+     * 
      * @param {Drawable} child The child to add.
      *
-     * @note children are automatically added to the scene/map of the parent object.
      */
     addChild(child) {
         child.setMap(this.currentMap);
@@ -886,9 +892,10 @@ class Drawable {
     /**
      * Remove a child from the object
      *
+     * <blockquote><strong>Note:</strong> removing a child object will call its `destroy` method.</blockquote>
+     * 
      * @param {Drawable} child The child to remove from the object.
      *
-     * @note: removing a child object will call its `destroy` method.
      */
     removeChild(child) {
         let idx = this.children.indexOf(child);
@@ -967,7 +974,7 @@ class Drawable {
     /**
      * Sends a notification to listeners
      *
-     * @note: this is a simple wrapper to the NotificationManageger's notify method
+     * <blockquote><strong>Note:</strong> this is a simple wrapper to the NotificationManageger's notify method.</blockquote>
      *
      * @param {String} id name of the event to send
      * @param {Object} data data to send with the event, default = empty object
@@ -981,7 +988,8 @@ class Drawable {
     /**
      * Destroy is called when an object is removed from a scene or object
      *
-     * @note calling destroy on a parent will automatically call the destroy method of each child.
+     * <blockquote><strong>Note:</strong> calling destroy on a parent will automatically call the destroy method of each child.</blockquote>
+     * 
      */
     destroy() {
         this._destroyed = true;

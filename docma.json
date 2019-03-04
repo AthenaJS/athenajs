@@ -36,6 +36,11 @@
         "server": "github",
         "base": "/athenajs-documentation"
     },
+    "assets": {
+        "/img": [
+            "./img/**/*"
+        ]
+    },
     "template": {
         "path": "docma-template-athenajs",
         "options": {
@@ -155,7 +160,17 @@
             "scene": "./js/Scene/**/*.js"
         },
         {
-            "drawable": "./js/Drawable/*.js"
+            "drawable": "./js/Drawable/Drawable.js"
+        },
+        {
+            "drawables": [
+                "./js/Drawable/Sprite.js",
+                "./js/Drawable/BitmapText.js",
+                "./js/Drawable/Menu.js",
+                "./js/Drawable/Paint.js",
+                "./js/Drawable/Wave.js",
+                "./js/Drawable/SimpleText.js"
+            ]
         },
         {
             "behaviors": "./js/Drawable/Behavior/*.js"

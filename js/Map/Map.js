@@ -335,17 +335,18 @@ class Map {
 
 
     /**
-	 * Add a new graphical object on to the map, it will be:
-	 *  - displayed if it is visible (in the viewport)
-	 *  - added to collision group
-	 *
-	 * @param {Drawable} obj A reference to the new object to add.
+     * Add a new graphical object on to the map, it will be:
+     *  - displayed if it is visible (in the viewport)
+     *  - added to collision group
+     *
+     * <blockquote><strong>Note:</strong> the object will be added to the correct collision group
+     * if `obj.collideGroup` is set.</blockquote>
+     * 
+     * @param {Drawable} obj A reference to the new object to add.
      * @param {Number} [layerIndex=0] The layer to add the object into.
-	 *
-	 * @note the object will be added to the correct collision group
-	 * if obj.collideGroup is set
-	 *
-	 */
+     *
+     *
+     */
     addObject(obj, layerIndex = 0) {
         if (!obj.image && obj.imageId) {
             obj.setImage(RM.getResourceById(obj.imageId));
@@ -401,12 +402,13 @@ class Map {
     /**
 	 * changes current viewport size and position
 	 *
+	 * <blockquote><strong>note:</strong> there is currently no boundaries checks.</blockquote>
+     * 
 	 * @param {number} x Horizontal position of the viewport.
 	 * @param {number} y Vertical position of the viewport.
 	 * @param {number} width Width of the viewport.
 	 * @param {number} height Height of the viewport.
 	 *
-	 * @note there is currently no boundaries checks
 	 *
 	 */
     setViewPort(x, y, width, height) {
@@ -593,10 +595,11 @@ class Map {
      *
      * This method uses current map.duration and map.easing to perform the move.
 	 *
+	 * <bockquote><strong>Note:</strong> moveTo will do nothing in case the map is already scrolling.</blockquote>
+     * 
 	 * @param {number} x The horizontal position to move the viewport at.
 	 * @param {number} y The vertical position to move the viewport at.
 	 *
-	 * @note moveTo will do nothing in case the map is already scrolling
 	 */
     moveTo(x, y) {
         // snap X/Y to edge of the map
@@ -1039,11 +1042,13 @@ class Map {
     /**
      * Draws tile at pixel position (x, y) onto the specified {Canvas} context
      *
-     * @note If offset is true it means scroll is in progress and
+     * <blockquote<strong>Note:</strong> if offset is true it means scroll is in progress and
      * we are drawing the first col: in this case we have to draw
-     * a partial tile and we do not use tileWidth/tileHeight
-     * but this.scrollTileOffsetX instead
+     * a partial tile and we do not use `tileWidth/tileHeight`
+     * but this.scrollTileOffsetX instead</blockquote>
      *
+     * <blockquote>Unless noted otherwise, positions are related to the whole map, and not to the viewport.</blockquote>
+     * 
      * @param {number} tileNum The tile number to draw.
      * @param {CanvasContext} ctx The canvas rendering context to draw the tile into.
      * @param {number} x The horizontal position where to draw the tile.
@@ -1054,7 +1059,6 @@ class Map {
      *
      * @private
      *
-     * @note Unless noted otherwise, positions are related to the whole map, and not to the viewport.
      */
     drawTile(tileNum, ctx, x, y, partialTileX, partialTileY) {
         let currentTile = this.tiles[tileNum];
@@ -1277,10 +1281,11 @@ class Map {
     /**
 	 * Returns the tile at (x, y) pixels
 	 *
+	 * <blockquote><strong>Note:</strong> position is related to the whole map, not the viewport.</blockquote>
+     * 
 	 * @param {number} x The horizontal position in pixels.
 	 * @param {number} y The vertical position in pixels.
 	 *
-	 * @note Position is related to the whole map, not the viewport.
 	 *
 	 * @returns {(Tile|undefined)} The tile that is found at position x, y, undefined if tile `(x, y)` is out of bounds
 	 *
@@ -1411,10 +1416,10 @@ class Map {
     /**
 	 * removeObject from the map
 	 *
+	 * <blockquote><strong>Note:</strong> the object if automatically removed from collision lists.</blockquote>
+     * 
 	 * @param {Drawable} drawable The object to remove from the map.
-	 *
-	 * @note the object if automatically removed from collision lists
-	 *
+     *
 	 */
     removeObject(drawable) {
         let foundIndex = this.objects.indexOf(drawable);
