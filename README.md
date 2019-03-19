@@ -7,11 +7,9 @@
 
 > &copy; 2017, Nicolas Ramz ([@warpdesign](https://www.github.com/warpdesign)). MIT licence.
 
-A simple framework for building 2D games in HTML5 and JavaScript.
+A simple framework for building 2D games in HTML5 and JavaScript like this one:
 
-Like this one:
-
-![Gods](https://raw.githubusercontent.com/AthenaJS/athenajs/docs/img/gods.png)
+[![Gods](https://raw.githubusercontent.com/AthenaJS/athenajs/docs/img/gods.png)](https://athenajs.github.io/athenajs-gods/)
 
 - Read the [tutorials](https://athenajs.github.io/athenajs-documentation/?content=start) to get started with AthenaJS
 - Visit the [API documentation](https://athenajs.github.io/athenajs-documentation/) for a list of classes and methods available
