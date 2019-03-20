@@ -27,7 +27,7 @@ A simple framework for building 2D games in HTML5 and JavaScript like this one:
  - Map VS Sprite and Sprite vs Sprite collision detection
  - Map **Triggers** support
  - Sound support with volume and horizontal panning
- - **Keyboard & Joytisck** input event supported (touch support is planned)
+ - **Keyboard & Joystick** input event supported (touch support is planned)
 
 # Install
 
