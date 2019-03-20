@@ -714,8 +714,10 @@ var app = window.app || {};
         // athenajs: collapse symbols by default
         $('#page-content-wrapper.collapse-def').on('click', '.symbol-heading', function (event, showOnly) {
             if (showOnly) {
+                console.log('showOnly', $(event.currentTarget).next());
                 $(event.currentTarget).next().show();
             } else {
+                console.log('not showOnly', $(event.currentTarget).next());
                 $(event.currentTarget).next().toggle();
             }
         });
@@ -725,6 +727,12 @@ var app = window.app || {};
             setTimeout(function () {
                 $('a[href$="' + href + '"]').trigger('click', true);
             }, 1000);
+
+            $('#sidebar-wrapper').on('click', 'a[data-scope=instance]', function (event) {
+                var href = event.currentTarget.href.split('/').slice(-1);
+                console.log('click left', href, '#page-content-wrapper a[$href="/' + href + '"]');
+                $('#page-content-wrapper a[href$="/' + href + '"]').trigger('click', true);
+            });
             // var link = document.querySelector('a[href$="' + href + '"]');
             // if (link) {
             //     $(link).trigger('click', true);
