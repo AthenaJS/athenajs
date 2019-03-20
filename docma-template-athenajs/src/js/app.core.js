@@ -377,6 +377,7 @@ var app = window.app || {};
         $('table').each(function () {
             $(this).html($.trim($(this).html()));
         });
+
         $('table:empty').remove();
 
         $docmaMain = $('#docma-main');
@@ -391,6 +392,10 @@ var app = window.app || {};
         } else {
             $wrapper.removeClass('trans-all-ease');
             $sidebarWrapper.removeClass('trans-all-ease');
+        }
+
+        if (!isApiRoute) {
+            $docmaMain.removeClass('toggled');
         }
 
         if (!templateOpts.navbar.enabled) {
