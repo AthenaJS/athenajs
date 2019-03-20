@@ -1,0 +1,12 @@
+before_deploy:
+  - npm run build-docs
+deploy:
+  - provider: pages
+    skip_cleanup: true # Don't re-run the tests
+    github_token: $GITHUB_TOKEN
+    keep_history: true
+    repo: AthenaJS/athenajs-documentation
+    local_dir: docs
+    on:
+      tags: true
+      branch: master
