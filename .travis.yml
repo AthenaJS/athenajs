@@ -4,6 +4,7 @@ node_js:
 install:
   - npm install
 before_deploy:
+  - npm run build-docs-template
   - npm run build-docs
 deploy:
   - provider: pages
