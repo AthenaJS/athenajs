@@ -1,0 +1,11 @@
+{?separator}
+<li role="separator" class="divider"></li>
+{:else}
+<li>
+    {?onClick}<a href="" onClick="{onClick}" target="{target}">{:else}<a href="{?href}{href}{:else}#{/href}"
+            target="{target}">{/onClick}
+            {?iconClass}<i class="nav-icon {iconClass}" aria-hidden="true"></i>{/iconClass}
+            {?label}<span class="nav-label">{label|s}</span>{/label}
+        </a>
+</li>
+{/separator}

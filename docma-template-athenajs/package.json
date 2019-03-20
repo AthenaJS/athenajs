@@ -1,0 +1,32 @@
+{
+  "name": "docma-template-athenajs",
+  "version": "1.0.0",
+  "description": "AthenaJS Docma template - based on default Zebra template https://github.com/onury/docma",
+  "repository": "https://github.com/athenajs/athenajs/tree/master/docma-template-athenajs",
+  "license": "MIT",
+  "author": "Nicolas RAMZ <nicolas.ramz@gmail.com>",
+  "main": "index.js",
+  "files": [
+    "template/",
+    "index.js",
+    "helper.js",
+    "LICENSE"
+  ],
+  "scripts": {
+    "less": "lessc ./src/less/styles.less ./template/css/styles.css --clean-css=\"--s1 --advanced\"",
+    "uglify": "uglifyjs ./src/js/app.svg.js ./src/js/app.helper.js ./src/js/app.filters.js ./src/js/app.search.js ./src/js/app.core.js -o ./template/js/app.min.js --comments",
+    "build": "npm run less && npm run uglify"
+  },
+  "keywords": [
+    "docma",
+    "template"
+  ],
+  "peerDependencies": {
+    "docma": "^3.2.2"
+  },
+  "devDependencies": {
+    "less": "^3.9.0",
+    "less-plugin-clean-css": "^1.5.1",
+    "uglify-js": "^3.4.9"
+  }
+}

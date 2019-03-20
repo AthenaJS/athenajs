@@ -16,20 +16,20 @@ module.exports = {
         library: 'AthenaJS',
         libraryTarget: 'umd'
     },
-    mode: 'development',
     devtool: 'source-map',
     module: {
         rules: [
             { test: /fpscounter/, loader: 'exports-loader?fpscounter' },
             { test: /virtualJoystick/, loader: 'exports-loader?VirtualJoystick' },
-            { test: /\.js$/, loader: 'babel-loader', exclude: [/node_modules/] }
+            {
+                test: /\.js$/, loader: 'babel-loader', options: {
+                    presets: ['@babel/preset-env']
+                }, exclude: [/node_modules/]
+            }
         ]
     },
     resolve: {
-        modules: ['node_modules'],
-        alias: {
-            'toto': path.resolve(__dirname, './node_modules/athena/js/athena-module.js')
-        }
+        modules: ['node_modules']
     },
     plugins: [
         new CircularDependencyPlugin({

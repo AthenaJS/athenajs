@@ -272,8 +272,8 @@ class Display {
     /**
      * Sorts the layers by zIndex + DOM position
      *
-     * @note: We need to keep track of the rendering order of the layers
-     * because the 'post' effects need the composited layer
+     * <blockquote><strong>Note:</strong>We need to keep track of the rendering order of the layers
+     * because the 'post' effects need the composited layer</blockquote>
      */
     _sortLayers() {
         // first we need to render background layers
