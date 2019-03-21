@@ -209,33 +209,47 @@ class Drawable {
     }
 
     /**
-     * Moves the object to a new destination.
+     * Moves the object to a new destination using the current easing function
      *
-     * @param {number} x The new horizontal position.
-     * @param {number} y The new vertical position.
+     * @param {number} [x=undefined] The new horizontal position, leave undefined to move along the y axis
+     * @param {number} [y=undefined] The new vertical position, leave undefined to move along the x axis
      * @param {number} [duration=0] The duration of the move, 0 to have the object move immediately to new position.
      *
      * @returns {Drawable} this
      */
-    moveTo(x, y, duration = 0) {
+    moveTo(x = undefined, y = undefined, duration = 0) {
         if (!this.moving) {
             if (duration === 0) {
-                this.x = x;
-                this.y = y;
+                if (typeof x !== 'undefined') {
+                    this.x = x;
+                }
+                if (typeof y !== 'undefined') {
+                    this.y = y;
+                }
+
                 this._onUpdate();
             } else {
                 console.log('moveTo from', this.x, 'to', x);
 
+                // x or y may be undefined but it's intended:
+                // this allows to only move along x or y axis
                 this.targetX = x;
                 this.targetY = y;
+
                 this.duration = duration;
 
-                this.startMoveTime = new Date().getTime();
-                this.targetDistanceX = x - this.x | 0;
-                this.targetDistanceY = y - this.y | 0;
-                this.targetStartX = this.x;
-                this.targetStartY = this.y;
-                this.moving = true;
+                if (typeof x !== 'undefined' || typeof y !== 'undefined') {
+                    this.startMoveTime = new Date().getTime();
+                    if (typeof x !== 'undefined') {
+                        this.targetDistanceX = x - this.x | 0;
+                        this.targetStartX = this.x;
+                    }
+                    if (typeof y !== 'undefined') {
+                        this.targetDistanceY = y - this.y | 0;
+                        this.targetStartY = this.y;
+                    }
+                    this.moving = true;
+                }
             }
         }
 
@@ -309,8 +323,12 @@ class Drawable {
         if (this.moving) {
             this.moving = false;
             if (gotoTarget) {
-                this.x = this.targetX;
-                this.y = this.targetY;
+                if (typeof this.targetX !== 'undefined') {
+                    this.x = this.targetX;
+                }
+                if (typeof this.targetY !== 'undefined') {
+                    this.y = this.targetY;
+                }
             }
         }
     }
@@ -409,14 +427,23 @@ class Drawable {
 
                 if (ellapsedTime >= this.duration) {
                     this.moving = false;
-                    this.x = this.targetX;
-                    this.y = this.targetY;
+                    if (typeof this.targetX !== 'undefined') {
+                        this.x = this.targetX;
+                    }
+                    if (typeof this.targetY !== 'undefined') {
+                        this.y = this.targetY;
+                    }
                     // TODO: send endMove event ?
                 } else {
                     moveProgress = this.easing(t, ellapsedTime, 0, 1, this.duration);
 
-                    this.x = this.targetStartX + moveProgress * this.targetDistanceX | 0;
-                    this.y = this.targetStartY + moveProgress * this.targetDistanceY | 0;
+                    if (typeof this.targetX !== 'undefined') {
+                        this.x = this.targetStartX + moveProgress * this.targetDistanceX | 0;
+                    }
+
+                    if (typeof this.targetY !== 'undefined') {
+                        this.y = this.targetStartY + moveProgress * this.targetDistanceY | 0;
+                    }
                 }
                 // in addition to moving, we need to call the behavior that may cancel current move ?
                 // if (this.behavior) {
