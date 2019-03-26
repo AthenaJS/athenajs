@@ -18,6 +18,7 @@ import Dom from '../Util/Dom';
  * @param {Number} [options.width=1024] The width of the game display.
  * @param {Number} [options.height=768] The height of the game display.
  * @param {Object} [options.resources] An optionnal array of resources of the form:`{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}` that the scene needs.
+ * @param {Array} [options.layers=[false, true]] An array of booleans which specifies the number of layers and their position (true === background layer)
  * @example
  * import { Game } from 'athenajs';
  *
@@ -40,6 +41,7 @@ class Game {
      * @param {Number} [options.width=1024] The width of the game display.
      * @param {Number} [options.height=768] The height of the game display.
      * @param {Object} [options.resources] An optionnal array of resources of the form:`{ id: 'unique id', type: 'image|script|map|audio', src: 'path_to_resource'}` that the scene needs.
+     * @param {Array} [options.layers=[false, true]] An array of booleans which specifies the number of layers and their position (true == background layer)
     */
     constructor(options = {}) {
         console.log('[Game] Init()'/*, options*/);
@@ -69,6 +71,10 @@ class Game {
         }).appendTo('body')[0];
 
         Dom(this.target).addClass('athena-game');
+
+        if (Dom(this.target).css('position') !== 'static') {
+            Dom(this.target).css('position', 'relative');
+        }
 
         this.resources = options.resources;
 

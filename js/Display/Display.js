@@ -37,7 +37,8 @@ class Display {
         })();
 
         // we add an extra layer for the map
-        this.layers = new Array(options.layers.length + 1);
+        this.layers = new Array(options.layers.length);
+
         // background status of each layer (so that we don't have to poke into the DOM)
         this.layersIndex = options.layers;
 
@@ -213,6 +214,22 @@ class Display {
         }
     }
 
+    _createLayer(width, height, zIndex, className = '') {
+        const layer = Dom('canvas').addClass(className).attr({
+            'width': width,
+            'height': height
+        }).css({
+            'width': width + 'px',
+            'height': height + 'px',
+            'position': 'absolute',
+            zIndex
+        }).appendTo(this.target)[0].getContext(this.type);
+
+        layer['imageSmoothingEnabled'] = false;
+
+        return layer;
+    }
+
     /**
      * Create game layers.
      *
@@ -225,30 +242,59 @@ class Display {
         let i;
 
         for (i = 0; i < this.layers.length; ++i) {
-            this.layers[i] = Dom('canvas').addClass('layer_' + i).attr({
-                'width': this.width,
-                'height': this.height
-            }).css({
-                'width': this.width + 'px',
-                'height': this.height + 'px',
-                'position': 'absolute',
-                zIndex: this._getLayerZIndex(i)
-            }).appendTo(this.target)[0].getContext(this.type);
-
-            this.layers[i]['imageSmoothingEnabled'] = false;
+            const zIndex = this._getLayerZIndex(i);
+            const layerName = 'layer_' + zIndex;
+            this.layers[i] = this._createLayer(this.width, this.height, zIndex, layerName);
         }
 
-        this.fxCtx = Dom('canvas').addClass('fx').attr({
-            'width': this.width,
-            'height': this.height
-        }).css({
-            'width': this.width + 'px',
-            'height': this.height + 'px',
-            'position': 'absolute',
-            zIndex: 3
-        }).appendTo(this.target)[0].getContext(this.type);
+        this.fxCtx = this._createLayer(this.width, this.height, 3, 'fx');
+        // Dom('canvas').addClass('fx').attr({
+        //     'width': this.width,
+        //     'height': this.height
+        // }).css({
+        //     'width': this.width + 'px',
+        //     'height': this.height + 'px',
+        //     'position': 'absolute',
+        //     zIndex: 3
+        // }).appendTo(this.target)[0].getContext(this.type);
 
         this.fxCtx['imageSmoothingEnabled'] = false;
+    }
+
+    /**
+     * Adds map sprite layers if needed
+     * 
+     * @param {*} map 
+     */
+    addMapLayers(map) {
+        // first create map sprite layers
+        for (let i = 0; i <= map.layers; ++i) {
+            // add the layer to the list of sprite layers,
+            // last one is the map layer
+            if (i < map.layers) {
+                this.layersIndex.push(false);
+            }
+            const zIndex = this._getLayerZIndex(this.layers.length);
+            const layerName = 'layer_' + zIndex;
+            const layer = this._createLayer(map.width, map.height, zIndex, layerName);
+            this.layers.push(layer);
+        }
+    }
+
+    updateMapLayers(map, x, y) {
+        const start = this.layers.length - 1 - map.layers;
+        for (let i = start; i < this.layers.length; ++i) {
+            let canvas = Dom(this.layers[i].canvas);
+            canvas.attr({
+                'width': map.viewportW,
+                'height': map.viewportH
+            }).css({
+                'width': map.viewportW + 'px',
+                'height': map.viewportH + 'px',
+                'left': x + 'px',
+                'top': y + 'px'
+            });
+        }
     }
 
     /**

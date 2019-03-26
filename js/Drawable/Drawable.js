@@ -431,6 +431,7 @@ class Drawable {
                         this.x = this.targetX;
                     }
                     if (typeof this.targetY !== 'undefined') {
+                        console.log('**');
                         this.y = this.targetY;
                     }
                     // TODO: send endMove event ?
@@ -442,6 +443,7 @@ class Drawable {
                     }
 
                     if (typeof this.targetY !== 'undefined') {
+                        console.log('**');
                         this.y = this.targetStartY + moveProgress * this.targetDistanceY | 0;
                     }
                 }
@@ -467,6 +469,9 @@ class Drawable {
                 });
             }
         }
+        // if (this.id.startsWith('shape')) {
+        //     console.log(this.y);
+        // }
     }
 
     /**

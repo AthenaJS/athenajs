@@ -34,7 +34,8 @@ class Map {
      * @param {String} [options.name='map'] An optional name for the map.
      * @param {String} [options.easing='linear'] The linear function to use when scrolling the map. Defaults to linear.
      * @param {Number} [options.startX=0] The start x position of the master object.
-     * @param {Sumber} [options.startY=0] The start y position of the master object.
+     * @param {Number} [options.startY=0] The start y position of the master object.
+     * @param {Number} [options.layers=1] Number of object layers for the map
      * @param {ArrayBuffer} options.buffer The buffer containing width \* height bytes container tile numbers followed by width*height bytes for the tile behaviors
      * @example
      * // Creates a new 800x600 map, with a 320x200 viewport and 32x32 tiles
@@ -59,6 +60,7 @@ class Map {
         this.tileHeight = options.tileHeight || 32;
         this.width = options.width || 1024;
         this.height = options.height || 1024;
+        this.layers = options.layers || 1;
 
         // DEBUG: usually tiles are loaded from binary files and set as ArrayBuffer
         // but previously tiles could be set from a JSON text file
@@ -773,6 +775,40 @@ class Map {
         return triggers;
     }
 
+    checkMatrixForCollision2(buffer, matrixWidth, startX, endX, startY, endY, behavior) {
+        let matrixCols = matrixWidth / this.tileWidth,
+            matrixRows = buffer.length / matrixCols,
+            moreX = matrixCols === endX - startX,
+            moreY = matrixRows === endY - startY,
+            idx_i = 0,
+            idx_j = 0,
+            hit = false;
+
+        for (var i = 0; i < matrixRows && !hit; ++i) {
+            for (var j = 0; j < matrixCols && !hit; j++) {
+                idx_i = startX + j;
+                idx_j = startY + i;
+
+                hit = hit || buffer[i * matrixCols + j] && (this.getTileBehaviorAtIndex(idx_i, idx_j) === behavior);
+                // si matrixCols === endX - startX
+                if (moreX) {
+                    hit = hit || buffer[i * matrixCols + j] && (this.getTileBehaviorAtIndex(idx_i + 1, idx_j) === behavior);
+                }
+
+                if (moreY) {
+                    // si matrixRows === endY - startY
+                    hit = hit || buffer[i * matrixCols + j] && (this.getTileBehaviorAtIndex(idx_i, idx_j + 1) === behavior);
+                    // si matrixCols === endX - startX
+                    if (moreX) {
+                        hit = hit || buffer[i * matrixCols + j] && (this.getTileBehaviorAtIndex(idx_i + 1, idx_j + 1) === behavior);
+                    }
+                }
+            }
+        }
+
+        return hit ? { i: idx_i, j: idx_j } : false;
+    }
+
     /**
      * Compares a source matrix with map behaviors, looking for hits
      *
@@ -784,20 +820,54 @@ class Map {
      *
      * @returns {Boolean} true if one or more hits were found, false otherwise
      */
-    checkMatrixForCollision(buffer, matrixWidth, x, y, behavior) {
+    checkMatrixForCollision(buffer, matrixWidth, x, y, behavior, debug = false) {
         let cols = matrixWidth / this.tileWidth,
             rows = buffer.length / cols,
             i = 0,
             j = 0,
+            idx_i = 0,
+            idx_j = 0,
             hit = false;
 
-        for (i = 0; i < rows; ++i) {
-            for (j = 0; j < cols; ++j) {
-                hit = hit || (buffer[i * cols + j] && (this.getTileBehaviorAtIndex(x + j, y + i) === behavior));
+        if (debug) {
+            let str = "";
+            console.log('buffer: [', i, ',', j, ']');
+            for (i = 0; i < rows; ++i) {
+                for (j = 0; j < cols; ++j) {
+                    const idx_i = x + j;
+                    const idx_j = y + i;
+                    str += buffer[i * cols + j] + " ";
+                }
+                str += "\n";
+            }
+            console.log(str);
+
+            str = "";
+            console.log('behavior: [', x, ',', y, ']');
+            for (i = 0; i < rows; ++i) {
+                for (j = 0; j < cols; ++j) {
+                    const idx_i = x + j;
+                    const idx_j = y + i;
+                    str += this.getTileBehaviorAtIndex(idx_i, idx_j) + " ";
+                }
+                str += "\n";
+            }
+            console.log(str);
+        }
+
+        for (i = 0; i < rows && !hit; ++i) {
+            for (j = 0; j < cols && !hit; ++j) {
+                idx_i = x + j;
+                idx_j = y + i;
+                // TODO: return the tile index
+
+                if (idx_i >= 0 || idx_j >= 0) {
+                    hit = hit || (buffer[i * cols + j] && (this.getTileBehaviorAtIndex(idx_i, idx_j) === behavior));
+                }
             }
         }
 
-        return hit;
+        return hit ? { i: idx_i, j: idx_j } : false;
     }
 
     /**
@@ -1076,10 +1146,10 @@ class Map {
 
 
     /**
-	 * Internal: calculates scrolling offsets for first cols in case a scrolling is in progress
-	 *
-	 * @private
-	 */
+     * Internal: calculates scrolling offsets for first cols in case a scrolling is in progress
+     *
+     * @private
+     */
     _getTileOffset() {
         let viewportX = Math.abs(this.viewportX),
             viewportY = Math.abs(this.viewportY);
@@ -1092,16 +1162,16 @@ class Map {
 
 
     /**
-	 * Draws the map, showing the whole map and not only the visible window if showHidden true
-	 *
-	 * @param {RenderingContext} ctx The context of the canvas where to draw the map.
-	 * @param {Boolean} showHidden The map only draws the viewport, set this to true to draw the whole map.
-	 * @param {Number} [mapOffsetX=0] The x offset where to start drawing the map.
-	 * @param {Number} [mapOffsetY=0] The y offset where to start drawing the map.
-	 *
-	 * @private
-	 */
-    draw(ctx, showHidden, mapOffsetX = 0, mapOffsetY = 0) {
+     * Draws the map, showing the whole map and not only the visible window if showHidden true
+     *
+     * @param {RenderingContext} ctx The context of the canvas where to draw the map.
+     * @param {Boolean} showHidden The map only draws the viewport, set this to true to draw the whole map.
+     * @param {Number} [mapOffsetX=0] The x offset where to start drawing the map.
+     * @param {Number} [mapOffsetY=0] The y offset where to start drawing the map.
+     *
+     * @private
+     */
+    draw(ctx, showHidden) {
         let i, j, max, max2,
             tileNum = 0,
             x = 0,
@@ -1134,10 +1204,10 @@ class Map {
         if (this.isDirty || !this.lastCol) {
             this._getTileOffset();
 
-            for (i = this.firstRow, max = this.lastRow, y = mapOffsetY; i < max; i++) {
+            for (i = this.firstRow, max = this.lastRow, y = 0; i < max; i++) {
                 // if (this.viewportX && i === this.firstRow)
                 //     debugger;
-                for (j = this.firstCol, max2 = this.lastCol, x = mapOffsetX; j < max2; j++) {
+                for (j = this.firstCol, max2 = this.lastCol, x = 0; j < max2; j++) {
                     tileNum = this.map[i * this.numCols + j];
 
                     if (tileNum < 255) { // no tile goes here
@@ -1159,7 +1229,7 @@ class Map {
 
             /* This should be done in another canvas */
             if (this.isDebug === true) {
-                this.showTileBehaviors(ctx, showHidden, mapOffsetX, mapOffsetY);
+                this.showTileBehaviors(ctx, showHidden);
             }
 
             this.checkVisibleWindows();
@@ -1196,14 +1266,14 @@ class Map {
 
 
     /**
-	 * Adds new Objects onto the map if this is the first time we display this window.
-	 *
-	 * Each map is divided into windows: each viewport window is the size of the current viewport
-	 * When drawing a window for the first time, objects found into this window are added onto the map
-	 * It can be enemies, the main player's object, switches, etc...
+     * Adds new Objects onto the map if this is the first time we display this window.
      *
-	 * @private
-	 */
+     * Each map is divided into windows: each viewport window is the size of the current viewport
+     * When drawing a window for the first time, objects found into this window are added onto the map
+     * It can be enemies, the main player's object, switches, etc...
+     *
+     * @private
+     */
     checkVisibleWindows() {
         // calc maxX/maxY
         const startIndex = ((Math.abs(this.viewportY) / this.viewportH) * this.maxWinX) | 0,
@@ -1220,38 +1290,37 @@ class Map {
 
 
     /**
-	 * Draw all objects that are onto the map
-	 *
-	 * @param {Array}  drawContexts The list of draw context.
-	 * @param {number} [mapOffsetX=0] The x offset where to start rendering the object.
-	 * @param {number} [mapOffsetY=0] The y offset where to start rendering the object.
-	 *
-	 * @private
-	 */
-    drawObjects(drawContexts, mapOffsetX = 0, mapOffsetY = 0) {
+     * Draw all objects that are onto the map
+     *
+     * @param {Array}  drawContexts The list of draw context.
+     *
+     * @private
+     */
+    drawObjects(drawContexts) {
         let i,
             j,
             max = this.objects.length,
             objects = this.objects,
             obj = null,
-            child = null;
+            startIndex = drawContexts.length - (this.layers + 1);
 
         // TODO: only draw visible objects (viewport) + active ones
         for (i = max - 1; i >= 0; i--) {
             obj = objects[i];
-            const drawContext = obj.layer;
-            // update position with map offset in case map should doesn't take the whole scene display
-            if (mapOffsetX || mapOffsetY) {
-                obj.x += mapOffsetX;
-                obj.y += mapOffsetY;
-                if (obj.children.length) {
-                    for (j = 0; j < obj.children.length; ++j) {
-                        child = obj.children[j];
-                        child.x += mapOffsetX;
-                        child.y += mapOffsetY;
-                    }
-                }
-            }
+            const drawContext = startIndex + obj.layer;
+            // update position with map offset in case map doesn't take the whole scene display
+            // if (mapOffsetX || mapOffsetY) {
+            //     obj.x += mapOffsetX;
+            //     obj.y += mapOffsetY;
+            //     if (obj.children.length) {
+            //         for (j = 0; j < obj.children.length; ++j) {
+            //             child = obj.children[j];
+            //             child.x += mapOffsetX;
+            //             child.y += mapOffsetY;
+            //         }
+            //     }
+            // }
+
             obj._draw(drawContexts[drawContext]);
             this.isDebug && obj.showHitBox(drawContexts[drawContext]);
 
@@ -1263,33 +1332,33 @@ class Map {
             }
 
             // restores its position
-            if (mapOffsetX || mapOffsetY) {
-                obj.x -= mapOffsetX;
-                obj.y -= mapOffsetY;
-                if (obj.children.length) {
-                    for (j = 0; j < obj.children.length; ++j) {
-                        child = obj.children[j];
-                        child.x -= mapOffsetX;
-                        child.y -= mapOffsetY;
-                    }
-                }
-            }
+            // if (mapOffsetX || mapOffsetY) {
+            //     obj.x -= mapOffsetX;
+            //     obj.y -= mapOffsetY;
+            //     if (obj.children.length) {
+            //         for (j = 0; j < obj.children.length; ++j) {
+            //             child = obj.children[j];
+            //             child.x -= mapOffsetX;
+            //             child.y -= mapOffsetY;
+            //         }
+            //     }
+            // }
         }
     }
 
 
     /**
-	 * Returns the tile at (x, y) pixels
-	 *
-	 * <blockquote><strong>Note:</strong> position is related to the whole map, not the viewport.</blockquote>
+     * Returns the tile at (x, y) pixels
+     *
+     * <blockquote><strong>Note:</strong> position is related to the whole map, not the viewport.</blockquote>
      * 
-	 * @param {number} x The horizontal position in pixels.
-	 * @param {number} y The vertical position in pixels.
-	 *
-	 *
-	 * @returns {(Tile|undefined)} The tile that is found at position x, y, undefined if tile `(x, y)` is out of bounds
-	 *
-	 */
+     * @param {number} x The horizontal position in pixels.
+     * @param {number} y The vertical position in pixels.
+     *
+     *
+     * @returns {(Tile|undefined)} The tile that is found at position x, y, undefined if tile `(x, y)` is out of bounds
+     *
+     */
     getTileAt(x, y) {
         let i,
             j,
@@ -1315,24 +1384,31 @@ class Map {
     }
 
     /**
-	 * Returns index of the tile at pos (x,y) in map array
-	 *
-	 * @param {number} x Horizontal pixel position.
-	 * @param {number} y Vertical pixel position.
-	 * @returns {Object} Object with i, j tile index
-	 *
-	 */
-    getTileIndexFromPixel(x, y) {
+     * Returns index of the tile at pos (x,y) in map array
+     *
+     * @param {number} x Horizontal pixel position.
+     * @param {number} y Vertical pixel position.
+     * @returns {Object} Object with i, j tile index
+     *
+     */
+    getTileIndexFromPixel(x, y, round = true) {
         let i,
             j;
 
-        i = x / this.tileWidth | 0;
-        j = y / this.tileHeight | 0;
+        i = x / this.tileWidth;
+        j = y / this.tileHeight;
 
-        return {
-            x: i,
-            y: j
-        };
+        if (round) {
+            return {
+                x: i | 0,
+                y: j | 0
+            }
+        } else {
+            return {
+                x: i,
+                y: j
+            }
+        }
     }
 
     /**
@@ -1350,12 +1426,12 @@ class Map {
     }
 
     /**
-	 *
-	 * INTERNAL: Calculates the number of tile rows & cols, and number of rows/cols
-	 * per viewport window
-	 *
-	 * @private
-	 */
+     *
+     * INTERNAL: Calculates the number of tile rows & cols, and number of rows/cols
+     * per viewport window
+     *
+     * @private
+     */
     _calcNumTiles() {
         this.numCols = this.width / this.tileWidth | 0;
         this.numRows = this.height / this.tileHeight | 0;
@@ -1366,15 +1442,15 @@ class Map {
 
 
     /**
-	 * Calculates first/last Row & Cool that is part of current display viewport
-	 * If showHidden is set to true we display the whole map so:
-	 * firstCol = firstRow = 0
-	 * lastCol/lastRow = lastCol/lastRow of the map
-	 *
-	 * @param {Boolean} [showHidden=false] Set to true to get boundaries for the whole map.
-	 *
-	 * @private
-	 */
+     * Calculates first/last Row & Cool that is part of current display viewport
+     * If showHidden is set to true we display the whole map so:
+     * firstCol = firstRow = 0
+     * lastCol/lastRow = lastCol/lastRow of the map
+     *
+     * @param {Boolean} [showHidden=false] Set to true to get boundaries for the whole map.
+     *
+     * @private
+     */
     _getBoundariesTiles(showHidden = false) {
         // TODO: handle boundaries and reverse ?!!
         // offsetX is current x offset in pixel: we need to get the corresponding tile number
@@ -1402,25 +1478,25 @@ class Map {
     }
 
     /**
-	 * Send specified event to the NotificationManager
-	 *
-	 * @param {String} eventType The type of event to send.
-	 * @param {Object} data The data to send with the notification.
-	 *
-	 */
+     * Send specified event to the NotificationManager
+     *
+     * @param {String} eventType The type of event to send.
+     * @param {Object} data The data to send with the notification.
+     *
+     */
     notify(eventType, data) {
         NM.notify(eventType, data);
     }
 
 
     /**
-	 * removeObject from the map
-	 *
-	 * <blockquote><strong>Note:</strong> the object if automatically removed from collision lists.</blockquote>
-     * 
-	 * @param {Drawable} drawable The object to remove from the map.
+     * removeObject from the map
      *
-	 */
+     * <blockquote><strong>Note:</strong> the object if automatically removed from collision lists.</blockquote>
+     * 
+     * @param {Drawable} drawable The object to remove from the map.
+     *
+     */
     removeObject(drawable) {
         let foundIndex = this.objects.indexOf(drawable);
 
@@ -1438,13 +1514,13 @@ class Map {
     }
 
     /**
-	 * DEBUG: draw outline of each tile with a different color, depending
-	 * on the type of tile
-	 *
-	 * @param {CanvasContext} ctx The canvas context to render outline on.
-	 *
-	 */
-    showTileBehaviors(ctx, showHidden, mapOffsetX = 0, mapOffsetY = 0) {
+     * DEBUG: draw outline of each tile with a different color, depending
+     * on the type of tile
+     *
+     * @param {CanvasContext} ctx The canvas context to render outline on.
+     *
+     */
+    showTileBehaviors(ctx, showHidden) {
         let i, j, max, max2,
             x = 0,
             y = 0,
@@ -1459,8 +1535,8 @@ class Map {
 
         i = j = max = max2 = 0;
 
-        for (i = this.firstRow, max = this.lastRow, y = mapOffsetY; i < max; i++) {
-            for (j = this.firstCol, max2 = this.lastCol, x = mapOffsetX; j < max2; j++) {
+        for (i = this.firstRow, max = this.lastRow, y = 0; i < max; i++) {
+            for (j = this.firstCol, max2 = this.lastCol, x = 0; j < max2; j++) {
                 w = (this.viewportX && j === this.firstCol) ? this.scrollTileWidth : this.tileWidth;
                 h = (this.viewportY && i === this.firstRow) ? this.scrollTileHeight : this.tileHeight;
                 if (this.tileBehaviors[i * this.numCols + j] > 1) {
@@ -1493,11 +1569,11 @@ class Map {
 
 
     /**
-	 *
-	 * DEBUG: displays the list of each object and its type/id onto the console
-	 *
-	 * @private
-	 */
+     *
+     * DEBUG: displays the list of each object and its type/id onto the console
+     *
+     * @private
+     */
     getObjectsList() {
         this.objects.forEach((obj, i) => {
             console.log('[' + i + ']', obj.type, '(' + obj.id + ')');
@@ -1505,12 +1581,12 @@ class Map {
     }
 
     /**
-	 * WIP/DEBUG: converts current map into a string
-	 *
-	 * @returns {String} The json export of the map.
-	 *
-	 * @private
-	 */
+     * WIP/DEBUG: converts current map into a string
+     *
+     * @returns {String} The json export of the map.
+     *
+     * @private
+     */
     toString() {
         // exports the options needed to create current map
         // especially usefull when working on a new map with the MapEditor
@@ -1549,13 +1625,13 @@ class Map {
 
 
     /**
-	 * Creates tiles from an array of tiles description
-	 *
-	 * @param {any} tilesArray
-	 * @returns array of tile objects
-	 *
-	 * @private
-	 */
+     * Creates tiles from an array of tiles description
+     *
+     * @param {any} tilesArray
+     * @returns array of tile objects
+     *
+     * @private
+     */
     _createTiles(tilesArray) {
         // TODO: replace with map()
         let tiles = [];

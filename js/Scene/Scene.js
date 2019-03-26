@@ -8,6 +8,8 @@ import Deferred from '../Util/Deferred';
 // debug stuff
 window.scenes = {};
 
+console.log('plop');
+
 /**
  * The `Scene` is used to display your objects. In AthenaJS you first add objects onto the scene.
  * 
@@ -360,6 +362,19 @@ class Scene {
         this.mapOffsetX = x;
         this.mapOffsetY = y;
 
+        // map layer not present
+        if (this.display.layers.length <= this.layers.length + 1) {
+            this.display.addMapLayers(map);
+        }
+
+        this.display.updateMapLayers(map, x, y);
+        // this.display.updateLayerPosSize(this.display.layers.length - 1, {
+        //     width: map.viewportW,
+        //     height: map.viewportH,
+        //     left: x,
+        //     bottom: y
+        // });
+
         // debug stuff
         window.currentMap = this.map;
     }
@@ -432,7 +447,7 @@ class Scene {
         }
 
         this.display.clearScreen(destCtx);
-        this.map.draw(destCtx, false, this.mapOffsetX, this.mapOffsetY);
+        this.map.draw(destCtx, false);
     }
 
     /**
@@ -443,7 +458,7 @@ class Scene {
      * @private
      */
     drawMapObjects(drawContexts) {
-        this.map.drawObjects(drawContexts, this.mapOffsetX, this.mapOffsetY);
+        this.map.drawObjects(drawContexts);
     }
 
     /**
