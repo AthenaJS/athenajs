@@ -330,8 +330,11 @@ class Display {
                 sortedLayers.push(index);
             }
         });
-        // then map
-        sortedLayers.push(this.layers.length - 1);
+
+        // then map layer if available
+        if (this.layersIndex < this.layers.length) {
+            sortedLayers.push(this.layers.length - 1);
+        }
 
         // then forground layers
         this.layersIndex.forEach((isBackground, index) => {
