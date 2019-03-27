@@ -276,9 +276,13 @@ class Display {
             }
             const zIndex = this._getLayerZIndex(this.layers.length);
             const layerName = 'layer_' + zIndex;
+            if (i === map.layers) {
+                layerName += ' map';
+            }
             const layer = this._createLayer(map.width, map.height, zIndex, layerName);
             this.layers.push(layer);
         }
+        this.sortedLayers = this._sortLayers();
     }
 
     updateMapLayers(map, x, y) {
@@ -332,7 +336,7 @@ class Display {
         });
 
         // then map layer if available
-        if (this.layersIndex < this.layers.length) {
+        if (this.layersIndex.length < this.layers.length) {
             sortedLayers.push(this.layers.length - 1);
         }
 
@@ -357,7 +361,7 @@ class Display {
             Dom(this.layers[layer].canvas).css('zIndex', zIndex);
             this.layersIndex[layer] = zIndex === 0;
             // resort layers
-            this.orderedLayers = this._sortLayers();
+            this.sortedLayers = this._sortLayers();
         }
     }
 
@@ -433,10 +437,18 @@ class Display {
         if (Object.keys(this.fxQueue['post']).length) {
             this.clearScreen(this.fxCtx);
             this.setCanvasOpacity(this.fxCtx.canvas, 0);
+            const sceneLayers = scene.layers.length;
             // merge all canvas into fxCtx one
             for (let i = 0; i < this.layers.length; ++i) {
                 const index = this.sortedLayers[i];
-                this.fxCtx.drawImage(this.layers[index].canvas, 0, 0);
+                // map layers may be smaller than the game's canvas
+                if (index >= sceneLayers) {
+                    if (scene.map) {
+                        this.fxCtx.drawImage(this.layers[index].canvas, scene.mapOffsetX, scene.mapOffsetY, scene.map.viewportW, scene.map.viewportH, scene.mapOffsetX, scene.mapOffsetY, scene.map.viewportW, scene.map.viewportH);
+                    }
+                } else {
+                    this.fxCtx.drawImage(this.layers[index].canvas, 0, 0);
+                }
             }
         }
         /* HACK */

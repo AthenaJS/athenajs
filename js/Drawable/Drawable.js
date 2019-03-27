@@ -29,6 +29,7 @@ class Drawable {
      */
     constructor(type, options) {
         this.type = type;
+
         this.id = options.objectId || (this.type + new Date().getTime());
         this.layer = options.layer || 0;
 

@@ -365,6 +365,10 @@ class Scene {
         // map layer not present
         if (this.display.layers.length <= this.layers.length + 1) {
             this.display.addMapLayers(map);
+        } else {
+            // do we need to remove layers ?
+            console.log('more layers than needed: should we remove layers ?');
+            debugger;
         }
 
         this.display.updateMapLayers(map, x, y);

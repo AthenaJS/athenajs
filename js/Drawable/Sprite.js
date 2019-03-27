@@ -690,9 +690,7 @@ class Sprite extends Drawable {
 
         destCtx.setTransform(this.scale, 0, 0, this.scale, drawX + mapOffsetX + subScaledW, drawY + mapOffsetY + subScaledH);
         destCtx.rotate(this.angle);
-        if (this.id.startsWith('shape') && this.y > 60) {
 
-        }
         destCtx.drawImage(this.image, Math.floor(sheetX), Math.floor(sheetY), Math.floor(w), Math.floor(h), Math.floor(-subScaledW), Math.floor(-subScaledH), Math.floor(scaledW), Math.floor(scaledH));
         // destCtx.restore();
 
