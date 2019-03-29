@@ -19,6 +19,9 @@ const Easing = {
             return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
         }
     },
+    'easeOutQuad': function (x, t, b, c, d) {
+        return -c * (t /= d) * (t - 2) + b;
+    },
     'swing': function (x/*, t, b, c, d*/) {
         return 0.5 - Math.cos(x * Math.PI) / 2;
     }
