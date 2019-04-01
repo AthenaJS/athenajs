@@ -818,7 +818,7 @@ class Drawable {
      *
      * @param {String} fxName The name of the effect to use.
      * @param {Object} options The options of the effect.
-     * @param {String} [options.easing="linear"] The easing functions to use, can be: 'linear', 'swing', 'easeInQuad', 'easeOutBounce'.
+     * @param {String} [options.easing="linear"] The easing functions to use, can be: 'linear', 'swing', 'easeInQuad', 'easeOutBounce', 'easeOutQuad'
      *
      * @returns {Promise} a promise that will be fullfilled when the effect has been completed
      */

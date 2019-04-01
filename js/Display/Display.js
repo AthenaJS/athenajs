@@ -50,6 +50,9 @@ class Display {
         this.target = target || Dom('div').attr('id', 'display_' + options.name).appendTo('body')[0];
         this.width = options.width;
         this.height = options.height;
+        this.map = null;
+        this.mapOffsetX = 0;
+        this.mapOffsetY = 0;
 
         this.type = options.type || '2d';
 
@@ -108,31 +111,77 @@ class Display {
         var fullscreenElement = document.webkitFullscreenElement || document.fullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
 
         this.isFullscreen = fullscreenElement === this.target;
+        let left, top, width, height;
+
+        console.log('fullscreenchange', this.isFullScreen);
 
         if (!this.isFullscreen) {
             // Dom(this.target).css({
             //     'transform': 'scale(1.0, 1.0)'
             // });
-            Dom(this.target).css({
+            if (this.map) {
+                left = this.mapOffsetX;
+                top = this.mapOffsetY;
+                width = this.map.viewportW;
+                height = this.map.viewportH;
+                console.log('resize map', left, top, width, height);
+            }
+
+            const canvas = Dom(this.target).css({
                 width: `${this.width}px`,
                 height: `${this.height}px`
-            }).find('canvas').css({
-                width: `${this.width}px`,
-                height: `${this.height}px`,
-                top: 0,
-                left: 0
+            }).find('canvas');
+
+            canvas.forEach((elt) => {
+                if (elt.classList.contains('map')) {
+                    Dom(elt).css({
+                        width: `${width}px`,
+                        height: `${height}px`,
+                        top: `${top}px`,
+                        left: `${left}px`
+                    });
+                } else {
+                    Dom(elt).css({
+                        width: `${this.width}px`,
+                        height: `${this.height}px`,
+                        top: 0,
+                        left: 0
+                    });
+                }
             });
         } else {
             const size = this._getFullScreenSize(this.width, this.height);
-            console.log('size', size.scaleX, size.scaleY);
-            Dom(this.target).css({
+            if (this.map) {
+                left = size.left + this.mapOffsetX * size.scaleX;
+                top = size.top + this.mapOffsetY * size.scaleY;
+                width = this.map.viewportW * size.scaleX;
+                height = this.map.viewportH * size.scaleY;
+                console.log('resize map', left, top, width, height);
+            }
+
+            console.log('size', size, size);
+            const canvas = Dom(this.target).css({
                 width: `${size.width}px`,
                 height: `${size.height}px`
-            }).find('canvas').css({
-                width: size.width + 'px',
-                height: size.height + 'px',
-                top: size.top + 'px',
-                left: size.left + 'px'
+            }).find('canvas');
+
+            canvas.forEach((elt) => {
+                if (elt.classList.contains('map')) {
+                    Dom(elt).css({
+                        width: `${width}px`,
+                        height: `${height}px`,
+                        top: `${top}px`,
+                        left: `${left}px`
+                    });
+                } else {
+                    Dom(elt).css({
+                        width: size.width + 'px',
+                        height: size.height + 'px',
+                        top: size.top + 'px',
+                        left: size.left + 'px'
+                    });
+                }
+
             });
             // Dom(this.target).css({
             //     'transform': `scale(${size.scaleX}, ${size.scaleY})`
@@ -152,7 +201,7 @@ class Display {
      */
     _getFullScreenSize(width, height) {
         var ratio = width / height,
-            needMargin = navigator.userAgent.match(/Edge|Firefox/),
+            needMargin = navigator.userAgent.match(/Edge|Chrome|Firefox/),
             isXbox = navigator.userAgent.match(/Edge/),
             screenWidth = screen.width,
             screenHeight = screen.height,
@@ -180,6 +229,7 @@ class Display {
         }
 
         return {
+            needMargin: needMargin,
             width: newWidth,
             height: newHeight,
             scaleX: newWidth / width,
@@ -275,9 +325,9 @@ class Display {
                 this.layersIndex.push(false);
             }
             const zIndex = this._getLayerZIndex(this.layers.length);
-            const layerName = 'layer_' + zIndex;
-            if (i === map.layers) {
-                layerName += ' map';
+            const layerName = 'map layer_' + zIndex;
+            if (i !== map.layers) {
+                layerName += ' sprites';
             }
             const layer = this._createLayer(map.width, map.height, zIndex, layerName);
             this.layers.push(layer);
@@ -287,6 +337,10 @@ class Display {
 
     updateMapLayers(map, x, y) {
         const start = this.layers.length - 1 - map.layers;
+        this.mapOffsetX = x;
+        this.mapOffsetY = y;
+        this.map = map;
+
         for (let i = start; i < this.layers.length; ++i) {
             let canvas = Dom(this.layers[i].canvas);
             canvas.attr({
