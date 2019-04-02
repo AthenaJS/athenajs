@@ -1,4 +1,5 @@
 import Drawable from './Drawable';
+import Display from '../Display/Display';
 
 /*jshint devel: true, bitwise: false*/
 /**
@@ -54,22 +55,21 @@ class SimpleText extends Drawable {
     /**
      * Generates a new buffer that can hold current text
      *
-     * @param {Display} display The display to get the buffer from.
      */
-    createBuffer(display) {
+    createBuffer() {
         // generate a buffer with enough height to hold every lines of text
         let width = this.fakeWidth || 0,
             height = this.fakeHeight || 0;
         // this.textArray.length * (this.charHeight + this.lineSpacing);
 
-        this.buffer = display.getBuffer(width, height);
+        this.buffer = Display.getBuffer(width, height);
     }
 
     /**
      * Clears the buffer
      */
     clearBuffer() {
-        this.currentScene.display.clearScreen(this.buffer);
+        Display.clearScreen(this.buffer);
     }
 
     /**
@@ -105,7 +105,7 @@ class SimpleText extends Drawable {
         this.lines = this.text.split('\n');
 
         if (!this.buffer) {
-            this.createBuffer(this.currentScene.display);
+            this.createBuffer();
         } else {
             this.clearBuffer();
         }

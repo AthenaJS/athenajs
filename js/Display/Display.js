@@ -76,8 +76,10 @@ class Display {
      * @param {Number} width width of the buffer
      * @param {Number} height height of the buffer
      */
-    getBuffer(width, height) {
-        let ctx = Dom('canvas').attr({
+    static getBuffer(width, height) {
+        let ctx;
+
+        ctx = Dom('canvas').attr({
             width: width + 'px',
             height: height + 'px'
         })[0].getContext('2d');
@@ -424,15 +426,17 @@ class Display {
      *
      * @param {RenderingContext} ctx The context to clear
      */
-    clearScreen(ctx) {
+    static clearScreen(ctx) {
         // if (0) {
         //     // setting canvas width resets imageSmoothingEnable to true
         //     ctx.canvas.width = ctx.canvas.width;
 
         //     ctx['imageSmoothingEnabled'] = false;
         // } else {
+        const canvas = ctx.canvas;
+
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.clearRect(0, 0, this.width, this.height);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     /**
@@ -440,10 +444,10 @@ class Display {
      */
     clearAllScreens() {
         for (let i = 0; i < this.layers.length; ++i) {
-            this.clearScreen(this.layers[i]);
+            Display.clearScreen(this.layers[i]);
         }
 
-        this.clearScreen(this.fxCtx);
+        Display.clearScreen(this.fxCtx);
     }
 
     /**
@@ -462,7 +466,7 @@ class Display {
      * @param {Scene} scene the scene to render
      */
     renderScene(scene) {
-        this.clearScreen(this.fxCtx);
+        Display.clearScreen(this.fxCtx);
 
         // execute pre fx
         // TODO: here we have to make some hack to pre-render all buffers into a single one
@@ -476,7 +480,7 @@ class Display {
         }
 
         for (let i = 0; i < this.layers.length - 1; i++) {
-            this.clearScreen(this.layers[i]);
+            Display.clearScreen(this.layers[i]);
         }
 
         scene.render(this.layers);
@@ -489,7 +493,7 @@ class Display {
         // then apply fx on this one, then render this one onto foremost layer
         /* HACK */
         if (Object.keys(this.fxQueue['post']).length) {
-            this.clearScreen(this.fxCtx);
+            Display.clearScreen(this.fxCtx);
             this.setCanvasOpacity(this.fxCtx.canvas, 0);
             const sceneLayers = scene.layers.length;
             // merge all canvas into fxCtx one
@@ -548,7 +552,7 @@ class Display {
                 }
             });
 
-            this.clearScreen(context);
+            Display.clearScreen(context);
 
             context.canvas.style.display = oldStyle;
         }

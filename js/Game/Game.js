@@ -5,6 +5,11 @@ import NM from '../Notification/NotificationManager';
 import Input from '../Input/InputManager';
 import fpscounter from '../lib/fpscounter/fpscounter.min';
 import Dom from '../Util/Dom';
+import FX from '../FX/FX';
+import Mosaic from '../FX/Effect/Mosaic';
+import Rotate from '../FX/Effect/Rotate';
+import Custom from '../FX/Effect/Custom';
+import Fade from '../FX/Effect/Fade';
 
 /**
  * The `Game` class is the central part to AthenaJS.
@@ -523,5 +528,11 @@ class Game {
     }
 
 }
+
+// Add built-in effects
+FX.addFX('Mosaic', Mosaic);
+FX.addFX('Fade', Fade);
+FX.addFX('Rotate', Rotate);
+FX.addFX('Custom', Custom);
 
 export default Game;

@@ -3,6 +3,7 @@ import Map from '../Map/Map';
 import NM from '../Notification/NotificationManager';
 import Input from '../Input/InputManager';
 import Dom from '../Util/Dom';
+import Display from '../Display/Display';
 import Deferred from '../Util/Deferred';
 
 // debug stuff
@@ -450,7 +451,7 @@ class Scene {
             return;
         }
 
-        this.display.clearScreen(destCtx);
+        Display.clearScreen(destCtx);
         this.map.draw(destCtx, false);
     }
 

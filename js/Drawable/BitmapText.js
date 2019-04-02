@@ -1,4 +1,5 @@
 import Drawable from './Drawable';
+import Display from '../Display/Display';
 import FX from '../FX/FX';
 
 /**
@@ -82,23 +83,21 @@ class BitmapText extends Drawable {
 
     /**
      * Generates a new buffer that can hold current text
-     *
-     * @param {Display} display the display to get the buffer from
      */
-    createBuffer(display) {
+    createBuffer() {
         // generate a buffer with enough height to hold every lines of text
         let width = this.width,
             height = this.height;
         // this.textArray.length * (this.charHeight + this.lineSpacing);
 
-        this.buffer = display.getBuffer(width, height);
+        this.buffer = Display.getBuffer(width, height);
     }
 
     /**
      * Clears the buffer
      */
     clearBuffer() {
-        this.currentScene.display.clearScreen(this.buffer);
+        Display.clearScreen(this.buffer);
     }
 
     /**
@@ -392,7 +391,7 @@ class BitmapText extends Drawable {
 
         // generate wide-enough internal buffer to hold every lines of text
         if (!this.buffer) {
-            this.createBuffer(this.currentScene.display);
+            this.createBuffer();
         } else {
             this.clearBuffer();
         }

@@ -965,12 +965,13 @@ class Drawable {
      * Performs common draw effects on canvas here so that each Object doesn't need to reimplement it
      *
      * @param {RenderingContext} ctx The context to use for graphic operations.
+     * @param {object} [options={}] Optionnal options object that may be specific to a drawable
      * @private
      */
-    _draw(ctx) {
+    _draw(ctx, options = {}) {
         this.applyCtxAlpha(ctx);
         // call object-specific draw-method
-        this.draw(ctx);
+        this.draw(ctx, options);
         this.restoreCtxAlpha(ctx);
     }
 

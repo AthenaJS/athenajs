@@ -1,9 +1,3 @@
-// import Mosaic from 'Mosaic';
-import Fade from './Effect/Fade';
-import Rotate from './Effect/Rotate';
-import Custom from './Effect/Custom';
-import Mosaic from './Effect/Mosaic';
-
 const effects = {},
     easing = {};
 
@@ -66,12 +60,6 @@ class FX {
 }
 
 const instance = new FX();
-
-// Add built-in effects
-instance.addFX('Mosaic', Mosaic);
-instance.addFX('Fade', Fade);
-instance.addFX('Rotate', Rotate);
-instance.addFX('Custom', Custom);
 
 // the FX module exports the `instance` of FX
 export default instance;

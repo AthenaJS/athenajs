@@ -169,6 +169,7 @@
         {
             "drawables": [
                 "./js/Drawable/Sprite.js",
+                "./js/Drawable/DrawableImage.js",
                 "./js/Drawable/BitmapText.js",
                 "./js/Drawable/Menu.js",
                 "./js/Drawable/Paint.js",

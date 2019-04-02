@@ -650,16 +650,20 @@ class Sprite extends Drawable {
      * Draws the sprite onto the canvas context passed
      *
      * @param {CanvasRenderingContext2D} destCtx The context where to render the sprite.
+     * @param {object} [options={}]
+     * @param {boolean} [options.advanceFrame=true] Set to false to skip going to next animation frame
      *
      * @private
      */
-    draw(destCtx/*, debug = false*/) {
+    draw(destCtx, options = {}) {
         if (!this.visible || !this.image || !this.currentAnimName) {
             return;
         }
 
+        const advanceFrame = !!options.advanceFrame;
+
         // auto goto next frame
-        if (this.currentAnimName.length) {
+        if (this.currentAnimName.length && advanceFrame) {
             this.advanceFrame(this.currentAnimName);
         }
 

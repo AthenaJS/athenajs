@@ -20,7 +20,7 @@ class Paint extends Drawable {
      * @param {String} [options.color] The color of the element. Can be changed by subsequent drawing method calls.
      *
      */
-    constructor(name, options) {
+    constructor(name, options = {}) {
         super(name, options);
 
         this.width = options.width || 0;

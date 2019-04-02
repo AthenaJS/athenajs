@@ -1,4 +1,5 @@
 import Effect from './Effect';
+import Display from '../../Display/Display';
 
 /**
  * A Mosaic effect that will apply an {@link https://github.com/warpdesign/jquery-mosaic|SNES-like effects}.
@@ -25,7 +26,7 @@ class Mosaic extends Effect {
         }, options), display);
 
         // TODO: use displayManager to get a buffer
-        this.buffer = display.getBuffer(this.width, this.height);
+        this.buffer = Display.getBuffer(this.width, this.height);
 
         this.startWidth = null;
 
@@ -66,9 +67,5 @@ class Mosaic extends Effect {
         return this.ended;
     }
 }
-
-/**
- * Test :)
- */
 
 export default Mosaic;
